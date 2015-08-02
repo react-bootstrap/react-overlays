@@ -7,7 +7,7 @@ import Transition, {UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING} from
 describe('Transition', function () {
   it('should not transition on mount', function(){
     let instance = render(
-          <Transition in onEnter={()=> { throw new Error('should not Enter'); }}>
+          <Transition in timeout={0} onEnter={()=> { throw new Error('should not Enter'); }}>
             <div></div>
           </Transition>
         );
@@ -19,6 +19,7 @@ describe('Transition', function () {
     let instance = ReactTestUtils.renderIntoDocument(
           <Transition in
             transitionAppear
+            timeout={0}
             onEnter={()=> done()}
           >
             <div></div>
@@ -34,7 +35,7 @@ describe('Transition', function () {
     beforeEach(function(){
       instance = render(
         <Transition
-          duration={10}
+          timeout={10}
           enteredClassName='test-enter'
           enteringClassName='test-entering'
         >
@@ -125,7 +126,7 @@ describe('Transition', function () {
       instance = render(
         <Transition
           in
-          duration={10}
+          timeout={10}
           exitedClassName='test-exit'
           exitingClassName='test-exiting'
         >
@@ -223,7 +224,7 @@ describe('Transition', function () {
             ref="transition"
             unmountOnExit
             in={this.state.in}
-            duration={10}
+            timeout={10}
             {...this.props}
           >
             <div />
@@ -240,7 +241,6 @@ describe('Transition', function () {
       const instance = render(
         <UnmountTransition
           initialIn={false}
-
           onEnter={() => {
             expect(instance.getStatus()).to.equal(EXITED);
             expect(React.findDOMNode(instance)).to.exist;

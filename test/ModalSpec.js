@@ -196,8 +196,8 @@ describe('Modal', function () {
     let instance = render(
       <Modal show
         transition={Transition}
-        dialogTransitionDuration={0}
-        backdropTransitionDuration={0}
+        dialogTransitionTimeout={0}
+        backdropTransitionTimeout={0}
         onHide={()=>{}}
         onExit={increment}
         onExiting={increment}

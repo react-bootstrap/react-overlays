@@ -11,6 +11,15 @@ export const ENTERING = 2;
 export const ENTERED = 3;
 export const EXITING = 4;
 
+/**
+ * The Transition component lets you define and run css transitions with a simple declarative api.
+ * It works similar to React's own [CSSTransitionGroup](http://facebook.github.io/react/docs/animation.html#high-level-api-reactcsstransitiongroup)
+ * but is specifically optimized for transitioning a single child "in" or "out".
+ *
+ * You don't even need to use class based css transitions if you don't want to (but it is easiest).
+ * The extensive set of lifecyle callbacks means you have control over
+ * the transitioning now at each step of the way.
+ */
 class Transition extends React.Component {
   constructor(props, context) {
     super(props, context);

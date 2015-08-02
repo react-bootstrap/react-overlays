@@ -3,7 +3,8 @@ let WebpackDevServer = require('webpack-dev-server');
 let config = require('../webpack/examples.config');
 
 new WebpackDevServer(webpack(config), {
-  publicPath: config.output.publicPath,
+
+  publicPath: '/static/',
   hot: true,
   historyApiFallback: true,
   quiet: false,
