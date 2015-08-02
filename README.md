@@ -2,6 +2,8 @@
 
 Utilities for creating robust overlay components
 
+demos and docs at: http://react-bootstrap.github.io/react-overlays/examples/
+
 ## Install
 
 ```sh
