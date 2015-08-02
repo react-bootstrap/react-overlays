@@ -124,7 +124,7 @@ describe('Transition', function () {
     beforeEach(function(){
       instance = render(
         <Transition
-          in={true}
+          in
           duration={10}
           exitedClassName='test-exit'
           exitingClassName='test-exiting'
@@ -259,8 +259,7 @@ describe('Transition', function () {
     it('should unmount after exiting', done => {
       const instance = render(
         <UnmountTransition
-          initialIn={true}
-
+          initialIn
           onExited={() => {
             expect(instance.getStatus()).to.equal(UNMOUNTED);
             expect(React.findDOMNode(instance)).to.not.exist;

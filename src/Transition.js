@@ -147,7 +147,7 @@ class Transition extends React.Component {
 
     if (node) {
       addEventListener(node, transitionEndEvent, this.nextCallback);
-      setTimeout(this.nextCallback, this.props.duration);
+      setTimeout(this.nextCallback, this.props.timeout);
     } else {
       setTimeout(this.nextCallback, 0);
     }
@@ -206,11 +206,11 @@ Transition.propTypes = {
   transitionAppear: React.PropTypes.bool,
 
   /**
-   * Duration of the animation in milliseconds, to ensure that finishing
-   * callbacks are fired even if the original browser transition end events are
-   * canceled
+   * A Timeout for the animation, in milliseconds, to ensure that a node doesn't
+   * transition indefinately if the browser transitionEnd events are
+   * canceled or interrupted.
    */
-  duration: React.PropTypes.number,
+  timeout: React.PropTypes.number.isRequired,
 
   /**
    * CSS class or classes applied when the component is exited
@@ -260,7 +260,6 @@ function noop() {}
 
 Transition.defaultProps = {
   in: false,
-  duration: 300,
   unmountOnExit: false,
   transitionAppear: false,
 

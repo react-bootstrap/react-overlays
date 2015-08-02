@@ -73,7 +73,7 @@ class ToolTip {
 const OverlayExample = React.createClass({
 
   getInitialState(){
-    return { show: true, placement: 'left' };
+    return { show: false };
   },
 
   toggle(){

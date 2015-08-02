@@ -7,5 +7,5 @@ export default function requiredIf(propType, matcher){
     }
 
     return pt(...args);
-  }
+  };
 }

@@ -3,13 +3,19 @@ import mountable from 'react-prop-types/lib/mountable';
 import ownerDocument from './utils/ownerDocument';
 import getContainer from './utils/getContainer';
 
+/**
+ * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
+ * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
+ * The children of `<Portal/>` component will be appended to the `container` specified.
+ */
 let Portal = React.createClass({
 
   displayName: 'Portal',
 
   propTypes: {
     /**
-     * The DOM Node that the Component will render it's children into
+     * A Node, Component instance, or function that returns either. The `container` will have the Portal children
+     * appended to it.
      */
     container: React.PropTypes.oneOfType([
       mountable,

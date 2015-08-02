@@ -1,10 +1,14 @@
-import baseConfig from './base.config';
 
 export default {
-  ...baseConfig,
 
   output: {
     pathinfo: true
+  },
+
+  module: {
+    loaders: [
+      { test: /\.js/, loader: 'babel-loader', exclude: /node_modules/ },
+    ]
   },
 
   devtool: 'eval'

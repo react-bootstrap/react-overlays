@@ -7,6 +7,14 @@ import { calcOverlayPosition } from './utils/overlayPositionUtils';
 
 import mountable from 'react-prop-types/lib/mountable';
 
+/**
+ * The Position component calulates the corrdinates for its child, to
+ * position it relative to a `target` component or node. Useful for creating callouts and tooltips,
+ * the Position component injects a `style` props with `left` and `top` values for positioning your component.
+ *
+ * It also injects "arrow" `left`, and `top` values for styling callout arrows for giving your components
+ * a sense of directionality.
+ */
 class Position extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -115,7 +123,7 @@ class Position extends React.Component {
 
 Position.propTypes = {
   /**
-   * Function mapping props to DOM node the component is positioned next to
+   * Function mapping props to a DOM node the component is positioned next to
    */
   target: React.PropTypes.func,
   /**

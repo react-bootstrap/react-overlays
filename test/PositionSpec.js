@@ -160,6 +160,7 @@ describe('Position', function () {
         const calculatedPosition = pick(
           instance.refs.overlay.props, Object.keys(expectedPosition)
         );
+
         expect(calculatedPosition).to.eql(expectedPosition);
       });
     }
@@ -167,27 +168,27 @@ describe('Position', function () {
     [
       {
         placement: 'left',
-        noOffset: [50, 200, null, '50%'],
-        offsetBefore: [-200, 50, null, '0%'],
-        offsetAfter: [300, 350, null, '100%']
+        noOffset: [50, 200, undefined, '50%'],
+        offsetBefore: [-200, 50, undefined, '0%'],
+        offsetAfter: [300, 350, undefined, '100%']
       },
       {
         placement: 'top',
-        noOffset: [200, 50, '50%', null],
-        offsetBefore: [50, -200, '0%', null],
-        offsetAfter: [350, 300, '100%', null]
+        noOffset: [200, 50, '50%', undefined],
+        offsetBefore: [50, -200, '0%', undefined],
+        offsetAfter: [350, 300, '100%', undefined]
       },
       {
         placement: 'bottom',
-        noOffset: [200, 350, '50%', null],
-        offsetBefore: [50, 100, '0%', null],
-        offsetAfter: [350, 600, '100%', null]
+        noOffset: [200, 350, '50%', undefined],
+        offsetBefore: [50, 100, '0%', undefined],
+        offsetAfter: [350, 600, '100%', undefined]
       },
       {
         placement: 'right',
-        noOffset: [350, 200, null, '50%'],
-        offsetBefore: [100, 50, null, '0%'],
-        offsetAfter: [600, 350, null, '100%']
+        noOffset: [350, 200, undefined, '50%'],
+        offsetBefore: [100, 50, undefined, '0%'],
+        offsetAfter: [600, 350, undefined, '100%']
       }
     ].forEach(function(testCase) {
       const placement = testCase.placement;

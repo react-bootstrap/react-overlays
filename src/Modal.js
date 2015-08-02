@@ -69,6 +69,19 @@ function onFocus(context, handler) {
 
 let usingTransition = props => !!props.transition;
 
+/**
+ * Love them or hate them, `<Modal/>` provides a solid foundation for creating dialogs, lightboxs, or whatever else.
+ * The Modal component renders its `children` node in front of a backdrop component.
+ *
+ * The Modal offers a few help features over using just a`<Portal/>` and some styles:
+ *
+ * - Manages the backdrop for you.
+ * - It moves focuses to the modal content, keeps it there until the modal is closed.
+ * - It Disables scrolling from the page content while open.
+ * - Appropraite ARIA roles are automatically added.
+ * - Easily plugable animations via a `<Transition/>` component.
+ *
+ */
 const Modal = React.createClass({
 
   propTypes: {
@@ -86,6 +99,11 @@ const Modal = React.createClass({
       React.PropTypes.bool,
       React.PropTypes.oneOf(['static'])
     ]),
+
+    /**
+     * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+     */
+    onEscapeKeyUp: React.PropTypes.func,
 
     /**
      * A callback fired when the backdrop, if specified, is clicked.
@@ -119,16 +137,20 @@ const Modal = React.createClass({
     transition: elementType,
 
     /**
-     * The duration of the dialog transition if specified. This number is used to ensure that transition callbacks are always
+     * The `timeout` of the dialog transition if specified. This number is used to ensure that transition callbacks are always
      * fired, even if browser transition events are canceled.
+     *
+     * See the Transition `timeout` prop for more infomation.
      */
-    dialogTransitionDuration: requiredIf(React.PropTypes.number, usingTransition),
+    dialogTransitionTimeout: requiredIf(React.PropTypes.number, usingTransition),
 
     /**
-     * The duration of the backdrop transition if specified. This number is used to ensure that transition callbacks are always
+     * The `timeou` of the backdrop transition if specified. This number is used to ensure that transition callbacks are always
      * fired, even if browser transition events are canceled.
+     *
+     * See the Transition `timeout` prop for more infomation.
      */
-    backdropTransitionDuration: requiredIf(React.PropTypes.number, usingTransition),
+    backdropTransitionTimeout: requiredIf(React.PropTypes.number, usingTransition),
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and replace it to the last focused element when it closes.
@@ -144,14 +166,16 @@ const Modal = React.createClass({
 
   },
 
-  getDefaultProps(){
+  getDefaultProps() {
+    let noop = ()=>{};
+
     return {
       show: false,
       backdrop: true,
       keyboard: true,
       autoFocus: true,
       enforceFocus: true,
-      onHide: ()=>{}
+      onHide: noop
     };
   },
 
@@ -164,7 +188,7 @@ const Modal = React.createClass({
       children,
       transition: Transition,
       backdrop,
-      dialogTransitionDuration,
+      dialogTransitionTimeout,
       ...props } = this.props;
 
     let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
@@ -183,7 +207,7 @@ const Modal = React.createClass({
       'for more info visit: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute');
 
     let modal = cloneElement(dialog, {
-      //tabIndex: dialog.props.tabIndex != null ? dialog.props.tabIndex : '-1',
+      role: dialog.props.role || 'document',
       modalIsOverflowing: this.state.modalIsOverflowing,
       containerIsOverflowing: this._containerIsOverflowing
     });
@@ -194,7 +218,7 @@ const Modal = React.createClass({
           transitionAppear
           unmountOnExit
           in={show}
-          duration={dialogTransitionDuration}
+          timeout={dialogTransitionTimeout}
           onExit={onExit}
           onExiting={onExiting}
           onExited={this.handleHidden}
@@ -212,6 +236,7 @@ const Modal = React.createClass({
         <div
           tabIndex='-1'
           ref={'modal'}
+          role={props.role || 'dialog'}
           style={props.style}
           className={props.className}
         >
@@ -225,7 +250,7 @@ const Modal = React.createClass({
   renderBackdrop() {
     let {
       transition: Transition,
-      backdropTransitionDuration } = this.props;
+      backdropTransitionTimeout } = this.props;
 
     let backdrop = (
       <div ref="backdrop"
@@ -235,11 +260,11 @@ const Modal = React.createClass({
       />
     );
 
-    if ( Transition){
+    if (Transition) {
       backdrop = (
         <Transition transitionAppear
           in={this.props.show}
-          duration={backdropTransitionDuration}
+          timeout={backdropTransitionTimeout}
         >
           {backdrop}
         </Transition>
@@ -383,6 +408,9 @@ const Modal = React.createClass({
 
   handleDocumentKeyUp(e) {
     if (this.props.keyboard && e.keyCode === 27) {
+      if (this.props.onEscapeKeyUp) {
+        this.props.onEscapeKeyUp(e);
+      }
       this.props.onHide();
     }
   },
