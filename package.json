@@ -2,11 +2,8 @@
   "name": "react-overlays",
   "version": "0.3.0",
   "description": "Utilities for creating robust overlay components",
-  "author": {
-    "name": "Jason Quense",
-    "email": "monastic.panic@gmail.com"
-  },
-  "repository": "jquense/react-overlays",
+  "author": "Jason Quense <monastic.panic@gmail.com>",
+  "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
@@ -21,6 +18,7 @@
     "modal"
   ],
   "scripts": {
+    "prepublish": "npm run test && npm run build",
     "clean": "rimraf lib",
     "clean:examples": "rimraf examples/static",
     "build": "npm run clean && babel src --out-dir lib",

@@ -2,4 +2,4 @@
 .npmignore
 
 src/
-docs/
+examples/
