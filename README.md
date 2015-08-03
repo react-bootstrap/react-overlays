@@ -20,5 +20,5 @@ If you are looking for more complete overlays, modals, or tooltips--something yo
 
 Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patches accompany a `patch` bump.
 
-[build-badge]: https://travis-ci.org/react-bootstrap/react-bootstrap.svg?branch=master
-[build]: https://travis-ci.org/react-bootstrap/react-bootstrap
+[build-badge]: https://travis-ci.org/react-bootstrap/react-overlays.svg?branch=master
+[build]: https://travis-ci.org/react-bootstrap/react-overlays
