@@ -21,9 +21,15 @@ let findContainer = (data, modal)=> {
   return idx;
 };
 
+function remove(arr, item){
+  let i = arr.indexOf(item);
+  if (i !== -1 ){ arr.splice(i, 0); }
+}
 
 /**
  * Proper state managment for containers and the modals in those containers.
+ *
+ * @internal Used by the Modal to ensure proper styling of containers.
  */
 class ModalManager {
 
@@ -31,6 +37,8 @@ class ModalManager {
     this.modals = [];
     this.containers = [];
     this.data = [];
+
+    this._listeners = [];
   }
 
   add(modal, container, className){
@@ -60,6 +68,7 @@ class ModalManager {
       }
     };
 
+
     let style = {
       overflow: 'hidden'
     };
@@ -67,7 +76,8 @@ class ModalManager {
     data.overflowing = container.scrollHeight > containerClientHeight(container);
 
     if (data.overflowing) {
-      //use computed style, if necessary, here to get the real padding
+      // use computed style, here to get the real padding
+      // to add our scrollbar width
       style.paddingRight =
         parseInt(css(container, 'paddingRight') || 0, 10) + getScrollbarSize() + 'px';
     }
@@ -112,13 +122,16 @@ class ModalManager {
     }
   }
 
-  isContainerOverflowing(container){
-    let idx = this.containers.indexOf(container);
-
-    return idx === -1 || this.data[idx].overflowing;
+  listen(handler){
+    this._listeners.push(handler);
+    return ()=> remove(this.listeners, handler);
   }
 
-  isTopModal(modal){
+  _emit(args){
+    this._listeners.forEach(l => l.apply(this, args));
+  }
+
+  isTopModal(modal) {
     return !!this.modals.length
         && this.modals[this.modals.length - 1] === modal;
   }

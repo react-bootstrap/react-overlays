@@ -5,8 +5,7 @@ import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
 import css from 'dom-helpers/style';
 
 describe('ModalManager', ()=> {
-  let container
-    , manager;
+  let container, manager;
 
   beforeEach(()=>{
     manager = new ModalManager();

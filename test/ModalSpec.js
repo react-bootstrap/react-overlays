@@ -11,7 +11,6 @@ let $ = componentOrNode => jquery(React.findDOMNode(componentOrNode));
 describe('Modal', function () {
   let mountPoint;
 
-
   beforeEach(()=>{
     mountPoint = document.createElement('div');
     document.body.appendChild(mountPoint);
@@ -173,6 +172,51 @@ describe('Modal', function () {
       backdrop.style.borderWidth).to.equal('3px');
   });
 
+  it('Should throw with multiple children', function () {
+    expect(function(){
+      render(
+        <Modal show>
+          <strong>Message</strong>
+          <strong>Message</strong>
+        </Modal>
+      , mountPoint);
+    }).to.throw(
+      'Invariant Violation: onlyChild must be passed a children with exactly one child.');
+  });
+
+  it('Should add role to child', function () {
+    let instance = render(
+      <Modal show>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    expect(
+      instance.getDialogElement().getAttribute('role')).to.equal('document');
+  });
+
+  it('Should not add role when SET', function () {
+    let instance = render(
+      <Modal show>
+        <strong role='group'>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    expect(
+      instance.getDialogElement().getAttribute('role')).to.equal('group');
+  });
+
+  it('Should not add role when explicitly `null`', function () {
+    let instance = render(
+      <Modal show>
+        <strong role={null}>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    expect(
+      instance.getDialogElement().getAttribute('role')).to.equal(null);
+  });
+
   it('Should unbind listeners when unmounted', function() {
     render(
         <div>
@@ -198,7 +242,6 @@ describe('Modal', function () {
         transition={Transition}
         dialogTransitionTimeout={0}
         backdropTransitionTimeout={0}
-        onHide={()=>{}}
         onExit={increment}
         onExiting={increment}
         onExited={()=> {
@@ -218,14 +261,13 @@ describe('Modal', function () {
       , mountPoint);
   });
 
-
-
   describe('Focused state', function () {
     let focusableContainer = null;
 
     beforeEach(()=>{
       focusableContainer = document.createElement('div');
       focusableContainer.tabIndex = 0;
+      focusableContainer.className = 'focus-container';
       document.body.appendChild(focusableContainer);
       focusableContainer.focus();
     });
@@ -240,7 +282,7 @@ describe('Modal', function () {
       document.activeElement.should.equal(focusableContainer);
 
       let instance = render(
-        <Modal show onHide={()=>{}} className='modal'>
+        <Modal show className='modal'>
           <strong>Message</strong>
         </Modal>
         , focusableContainer);
@@ -255,7 +297,7 @@ describe('Modal', function () {
 
     it('Should not focus on the Modal when autoFocus is false', function () {
       render(
-        <Modal show autoFocus={false} onHide={()=>{}}>
+        <Modal show autoFocus={false}>
           <strong>Message</strong>
         </Modal>
         , focusableContainer);
@@ -268,7 +310,7 @@ describe('Modal', function () {
       document.activeElement.should.equal(focusableContainer);
 
       render(
-        <Modal show onHide={()=>{}}>
+        <Modal show>
           <input autoFocus />
         </Modal>
         , focusableContainer);
@@ -276,6 +318,20 @@ describe('Modal', function () {
       let input = document.getElementsByTagName('input')[0];
 
       document.activeElement.should.equal(input);
+    });
+
+    it('Should return focus to the modal', function () {
+
+      document.activeElement.should.equal(focusableContainer);
+
+      render(
+        <Modal show className='modal'>
+          <input autoFocus/>
+        </Modal>
+        , focusableContainer);
+
+      focusableContainer.focus();
+      document.activeElement.className.should.contain('modal');
     });
   });
 

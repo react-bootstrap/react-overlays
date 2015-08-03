@@ -1,5 +1,4 @@
 import path from 'path';
-import { jsLoader } from './base.config';
 import testConfig from './test.config';
 
 const paths = {
@@ -15,7 +14,7 @@ export default {
       {
         test: /\.js/,
         include: [paths.SRC, paths.TEST],
-        loader: jsLoader,
+        loader: 'babel-loader',
         exclude: /node_modules/
       }
     ],
