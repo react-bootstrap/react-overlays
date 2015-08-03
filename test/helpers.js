@@ -28,3 +28,31 @@ export function render(element, mountPoint){
 
   return instance;
 }
+
+
+let style;
+let seen = [];
+
+export function injectCss(rules){
+  if ( seen.indexOf(rules) !== -1 ){
+    return;
+  }
+
+  style = style || (function() {
+    let _style = document.createElement('style');
+    _style.appendChild(document.createTextNode(''));
+    document.head.appendChild(_style);
+    return _style;
+  })();
+
+  seen.push(rules);
+  style.innerHTML += '\n' + rules;
+}
+
+injectCss.reset = function(){
+  if ( style ) {
+    document.head.removeChild(style);
+  }
+  style = null;
+  seen = [];
+};

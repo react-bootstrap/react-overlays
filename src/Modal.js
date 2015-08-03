@@ -1,6 +1,5 @@
 /*eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
-import invariant from 'react/lib/invariant';
 import elementType from 'react-prop-types/lib/elementType';
 import requiredIf from './utils/requiredIf';
 
@@ -8,14 +7,12 @@ import ownerDocument from './utils/ownerDocument';
 import ownerWindow from './utils/ownerWindow';
 import addEventListener from './utils/addEventListener';
 import Portal from './Portal';
+import ModalManager from './ModalManager';
 
-import style from 'dom-helpers/style';
-import classes from 'dom-helpers/class';
 import canUseDom from 'dom-helpers/util/inDOM';
 import isWindow from 'dom-helpers/query/isWindow';
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/query/contains';
-import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 /**
  * Gets the correct clientHeight of the modal container
@@ -37,8 +34,7 @@ function getContainer(context){
     ownerDocument(context).body;
 }
 
-
-let currentFocusListener;
+let modalManager = new ModalManager();
 
 /**
  * Firefox doesn't have a focusin event so using capture is easiest way to get bubbling
@@ -51,10 +47,6 @@ function onFocus(context, handler) {
   let useFocusin = !doc.addEventListener;
   let remove;
 
-  if ( currentFocusListener ) {
-    currentFocusListener.remove();
-  }
-
   if (useFocusin) {
     document.attachEvent('onfocusin', handler);
     remove = () => document.detachEvent('onfocusin', handler);
@@ -63,8 +55,7 @@ function onFocus(context, handler) {
     remove = () => document.removeEventListener('focus', handler, true);
   }
 
-  currentFocusListener = { remove };
-  return currentFocusListener;
+  return { remove };
 }
 
 let usingTransition = props => !!props.transition;
@@ -86,6 +77,11 @@ const Modal = React.createClass({
 
   propTypes: {
     ...Portal.propTypes,
+
+    /**
+     * A callback fired when the Modal is opening.
+     */
+    onShow: React.PropTypes.func,
 
     /**
      * A callback fired when either the backdrop is clicked, or the escape key is pressed.
@@ -141,6 +137,8 @@ const Modal = React.createClass({
      * fired, even if browser transition events are canceled.
      *
      * See the Transition `timeout` prop for more infomation.
+     *
+     * @type {number}
      */
     dialogTransitionTimeout: requiredIf(React.PropTypes.number, usingTransition),
 
@@ -149,6 +147,8 @@ const Modal = React.createClass({
      * fired, even if browser transition events are canceled.
      *
      * See the Transition `timeout` prop for more infomation.
+     *
+     * @type {number}
      */
     backdropTransitionTimeout: requiredIf(React.PropTypes.number, usingTransition),
 
@@ -201,10 +201,6 @@ const Modal = React.createClass({
     if (!mountModal) {
       return null;
     }
-
-    invariant(!dialog.ref || typeof dialog.ref === 'function',
-      'In order to use refs on the modal dialog component, you must use the function form instead of a string. \n\n' +
-      'for more info visit: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute');
 
     let modal = cloneElement(dialog, {
       role: dialog.props.role || 'document',
@@ -314,41 +310,16 @@ const Modal = React.createClass({
   },
 
   onShow() {
-    // layout below ordered to avoid layout thrashing (microptimization!)
     let doc = ownerDocument(this);
     let win = ownerWindow(this);
     let container = getContainer(this);
     let containerClassName = this.props.containerClassName;
-    let containerStyle = {
-      overflow: 'hidden'
-    };
 
-    this._containerReset = {
-      overflow: style(container, 'overflow'),
-      paddingRight: style(container, 'paddingRight')
-    };
+    modalManager.add(this, container, containerClassName);
 
-    this._containerIsOverflowing =
-      container.scrollHeight > containerClientHeight(container, this);
+    this._containerIsOverflowing = modalManager.isContainerOverflowing(container);
 
-    if (this._containerIsOverflowing) {
-      let { containerPadding} = this._containerReset;
-
-      containerStyle.paddingRight =
-        parseInt(containerPadding || 0, 10) + getScrollbarSize() + 'px';
-    }
-
-    style(container, containerStyle);
-
-    if (containerClassName) {
-      this._containerClasses = containerClassName.split(/\s+/);
-      this._containerClasses.forEach(
-        classes.addClass.bind(null, container));
-    }
-
-    if (this.props.backdrop) {
-      this.iosClickHack();
-    }
+    this.iosClickHack();
 
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
@@ -366,12 +337,8 @@ const Modal = React.createClass({
   },
 
   onHide() {
-    let container = getContainer(this);
 
-    style(container, this._containerReset);
-
-    (this._containerClasses || []).forEach(
-      classes.removeClass.bind(null, container));
+    modalManager.remove(this);
 
     this._onDocumentKeyupListener.remove();
     this._onWindowResizeListener.remove();
@@ -407,7 +374,7 @@ const Modal = React.createClass({
   },
 
   handleDocumentKeyUp(e) {
-    if (this.props.keyboard && e.keyCode === 27) {
+    if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
       if (this.props.onEscapeKeyUp) {
         this.props.onEscapeKeyUp(e);
       }
@@ -434,10 +401,6 @@ const Modal = React.createClass({
     let focusInModal = current && contains(modalContent, current);
 
     if (modalContent && autoFocus && !focusInModal) {
-      // if ( process.env.NODE_ENV !== 'production') {
-      //   invariant(modalContent.tabIndex != null,
-      //     'The Modal `autoFocus` prop is `true` however the provided dialog component')
-      // }
       this.lastFocus = current;
       modalContent.focus();
     }
@@ -451,20 +414,20 @@ const Modal = React.createClass({
   },
 
   enforceFocus() {
-    if ( !this.isMounted() ) {
+    if (!this.isMounted() || !this.isTopModal()) {
       return;
     }
 
     let active = activeElement(ownerDocument(this));
-    let modal = this.getDialogElement();
+    let modal = React.findDOMNode(this.refs.modal);
 
-    if (modal && modal !== active && !contains(modal, active)){
+    if ( modal && modal !== active && !contains(modal, active)){
       modal.focus();
     }
   },
 
   iosClickHack() {
-    // https://github.com/facebook/react/issues/1169
+    // Support: <= 0.13: https://github.com/facebook/react/issues/1169
     React.findDOMNode(this.refs.backdrop).onclick = function () {};
   },
 
@@ -472,6 +435,10 @@ const Modal = React.createClass({
   getDialogElement(){
     let node = React.findDOMNode(this.refs.modal);
     return node && node.lastChild;
+  },
+
+  isTopModal(){
+    return modalManager.isTopModal(this);
   },
 
   isModalOverflowing() {
@@ -487,5 +454,8 @@ const Modal = React.createClass({
   }
 
 });
+
+
+Modal.manager = modalManager;
 
 export default Modal;

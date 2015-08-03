@@ -11,5 +11,5 @@ export default {
     ]
   },
 
-  devtool: 'eval'
+  devtool: 'inline-source-map'
 };
