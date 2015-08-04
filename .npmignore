@@ -2,4 +2,5 @@
 .npmignore
 
 src/
+lib/
 examples/
