@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import transitionInfo from 'dom-helpers/transition/properties';
 import addEventListener from 'dom-helpers/events/on';
 import classnames from 'classnames';
@@ -84,7 +85,7 @@ class Transition extends React.Component {
 
   performEnter(props) {
     this.cancelNextCallback();
-    const node = React.findDOMNode(this);
+    const node = ReactDOM.findDOMNode(this);
 
     // Not this.props, because we might be about to receive new props.
     props.onEnter(node);
@@ -102,7 +103,7 @@ class Transition extends React.Component {
 
   performExit(props) {
     this.cancelNextCallback();
-    const node = React.findDOMNode(this);
+    const node = ReactDOM.findDOMNode(this);
 
     // Not this.props, because we might be about to receive new props.
     props.onExit(node);
