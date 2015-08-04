@@ -1,7 +1,6 @@
 /*eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
 import elementType from 'react-prop-types/lib/elementType';
-import requiredIf from './utils/requiredIf';
 
 import Portal from './Portal';
 import ModalManager from './ModalManager';
@@ -15,8 +14,6 @@ import contains from 'dom-helpers/query/contains';
 import getContainer from './utils/getContainer';
 
 let modalManager = new ModalManager();
-
-let usingTransition = props => !!props.transition;
 
 /**
  * Love them or hate them, `<Modal/>` provides a solid foundation for creating dialogs, lightboxes, or whatever else.
@@ -96,20 +93,16 @@ const Modal = React.createClass({
      * fired, even if browser transition events are canceled.
      *
      * See the Transition `timeout` prop for more infomation.
-     *
-     * @type {number}
      */
-    dialogTransitionTimeout: requiredIf(React.PropTypes.number, usingTransition),
+    dialogTransitionTimeout: React.PropTypes.number,
 
     /**
-     * The `timeou` of the backdrop transition if specified. This number is used to ensure that transition callbacks are always
+     * The `timeout` of the backdrop transition if specified. This number is used to ensure that transition callbacks are always
      * fired, even if browser transition events are canceled.
      *
      * See the Transition `timeout` prop for more infomation.
-     *
-     * @type {number}
      */
-    backdropTransitionTimeout: requiredIf(React.PropTypes.number, usingTransition),
+    backdropTransitionTimeout: React.PropTypes.number,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and replace it to the last focused element when it closes.

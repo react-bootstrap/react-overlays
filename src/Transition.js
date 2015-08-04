@@ -218,8 +218,11 @@ Transition.propTypes = {
    * A Timeout for the animation, in milliseconds, to ensure that a node doesn't
    * transition indefinately if the browser transitionEnd events are
    * canceled or interrupted.
+   *
+   * By default this is set to a high number (5 seconds) as a failsafe. You should consider
+   * setting this to the duration of your animation (or a bit above it).
    */
-  timeout: React.PropTypes.number.isRequired,
+  timeout: React.PropTypes.number,
 
   /**
    * CSS class or classes applied when the component is exited
@@ -267,10 +270,14 @@ Transition.propTypes = {
 // Name the function so it is clearer in the documentation
 function noop() {}
 
+Transition.displayName = 'Transition';
+
 Transition.defaultProps = {
   in: false,
   unmountOnExit: false,
   transitionAppear: false,
+
+  timeout: 5000,
 
   onEnter: noop,
   onEntering: noop,
