@@ -85,6 +85,8 @@ export default class RootCloseWrapper extends React.Component {
   }
 }
 
+RootCloseWrapper.displayName = 'RootCloseWrapper';
+
 RootCloseWrapper.propTypes = {
   onRootClose: React.PropTypes.func.isRequired
 };

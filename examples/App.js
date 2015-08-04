@@ -46,105 +46,115 @@ const Example = React.createClass({
   render() {
 
     return (
-      <div className='app'>
-        <section >
-          <h2 className='page-header'>
-            <Anchor>Transition</Anchor>
-          </h2>
-          <p dangerouslySetInnerHTML={{__html: TransitionMetadata.Transition.descHtml }}/>
-          <Editor
-            className='overlay-example'
-            lineNumbers={false}
-            lang="js"
-            theme="neo"
-            scope={scope}
-            codeText={TransitionSource}
-            collapsableCode
-          />
-          <PropTable
-            component='Transition'
-            metadata={TransitionMetadata}
-          />
-        </section>
-        <section >
-          <h2 className='page-header'>
-            <Anchor>Portals</Anchor>
-          </h2>
-          <p dangerouslySetInnerHTML={{__html: PortalMetadata.Portal.descHtml }}/>
-          <Editor
-            className='overlay-example'
-            lineNumbers={false}
-            lang="js"
-            theme="neo"
-            scope={scope}
-            codeText={PortalSource}
-            collapsableCode
-          />
-          <PropTable
-            component='Portal'
-            metadata={PortalMetadata}
-          />
-        </section>
-        <section >
-          <h2 className='page-header'>
-            <Anchor>Modals</Anchor>
-          </h2>
-          <p dangerouslySetInnerHTML={{__html: ModalMetadata.Modal.descHtml }}/>
-          <Editor
-            className='overlay-example'
-            lineNumbers={false}
-            lang="js"
-            theme="neo"
-            scope={scope}
-            codeText={ModalExample}
-            collapsableCode
-          />
+      <div className='app row'>
+        <article className='side-panel col-md-2'>
+          <ul className='list-unstyled'>
+            <li><a href='#transition'>Transition</a></li>
+            <li><a href='#portals'>Portals</a></li>
+            <li><a href='#modals'>Modals</a></li>
+            <li><a href='#position'>Position</a></li>
+            <li><a href='#overlay'>Overlay</a></li>
+          </ul>
+        </article>
+        <main className='col-md-10'>
+          <section >
+            <h2 className='page-header'>
+              <Anchor>Transition</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: TransitionMetadata.Transition.descHtml }}/>
+            <Editor
+              className='overlay-example'
+              lineNumbers={false}
+              lang="js"
+              theme="neo"
+              scope={scope}
+              codeText={TransitionSource}
+              collapsableCode
+            />
+            <PropTable
+              component='Transition'
+              metadata={TransitionMetadata}
+            />
+          </section>
+          <section >
+            <h2 className='page-header'>
+              <Anchor>Portals</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: PortalMetadata.Portal.descHtml }}/>
+            <Editor
+              className='overlay-example'
+              lineNumbers={false}
+              lang="js"
+              theme="neo"
+              scope={scope}
+              codeText={PortalSource}
+              collapsableCode
+            />
+            <PropTable
+              component='Portal'
+              metadata={PortalMetadata}
+            />
+          </section>
+          <section >
+            <h2 className='page-header'>
+              <Anchor>Modals</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: ModalMetadata.Modal.descHtml }}/>
+            <Editor
+              className='overlay-example'
+              lineNumbers={false}
+              lang="js"
+              theme="neo"
+              scope={scope}
+              codeText={ModalExample}
+              collapsableCode
+            />
 
-          <PropTable
-            component='Modal'
-            metadata={ModalMetadata}
-          />
-        </section>
+            <PropTable
+              component='Modal'
+              metadata={ModalMetadata}
+            />
+          </section>
+          <section >
+            <h2 className='page-header'>
+              <Anchor>Position</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: PositionMetadata.Position.descHtml }}/>
+            <Editor
+              className='overlay-example'
+              lineNumbers={false}
+              lang="js"
+              theme="neo"
+              scope={scope}
+              codeText={PositionSource}
+              collapsableCode
+            />
+            <PropTable
+              component='Position'
+              metadata={PositionMetadata}
+            />
+          </section>
+          <section>
+            <h2 className='page-header'>
+              <Anchor>Overlay</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: OverlayMetadata.Overlay.descHtml }}/>
+            <Editor
+              className='overlay-example'
+              lineNumbers={false}
+              lang="js"
+              theme="neo"
+              scope={scope}
+              codeText={OverlaySource}
+              collapsableCode
+            />
 
-        <section >
-          <h2 className='page-header'>
-            <Anchor>Position</Anchor>
-          </h2>
-          <p dangerouslySetInnerHTML={{__html: PositionMetadata.Position.descHtml }}/>
-          <Editor
-            className='overlay-example'
-            lineNumbers={false}
-            lang="js"
-            theme="neo"
-            scope={scope}
-            codeText={PositionSource}
-            collapsableCode
-          />
-          <PropTable
-            component='Position'
-            metadata={PositionMetadata}
-          />
-        </section>
-        <section>
-          <h2 className='page-header'>
-            <Anchor>Overlay</Anchor>
-          </h2>
-          <p dangerouslySetInnerHTML={{__html: OverlayMetadata.Overlay.descHtml }}/>
-          <Editor
-            className='overlay-example'
-            lineNumbers={false}
-            lang="js"
-            theme="neo"
-            scope={scope}
-            codeText={OverlaySource}
-            collapsableCode
-          />
-
-          <PropTable
-            component='Overlay'
-            metadata={OverlayMetadata}
-          />
-        </section>
+            <PropTable
+              component='Overlay'
+              metadata={OverlayMetadata}
+            />
+          </section>
+        </main>
       </div>
     );
   }

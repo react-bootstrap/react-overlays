@@ -140,6 +140,8 @@ Position.propTypes = {
   placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left'])
 };
 
+Position.displayName = 'Position';
+
 Position.defaultProps = {
   containerPadding: 0,
   placement: 'right'
