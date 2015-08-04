@@ -6,6 +6,9 @@
   "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
   "main": "lib/index.js",
+  "files": [
+    "lib/"
+  ],
   "keywords": [
     "react-overlays",
     "react-component",
