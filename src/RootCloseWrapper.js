@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import ownerDocument from './utils/ownerDocument';
+
 import addEventListener from './utils/addEventListener';
 import createChainedFunction from './utils/createChainedFunction';
 import ownerDocument from './utils/ownerDocument';

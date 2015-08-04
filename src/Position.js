@@ -1,4 +1,5 @@
 import React, { cloneElement } from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import ownerDocument from './utils/ownerDocument';
 import getContainer from './utils/getContainer';
@@ -108,7 +109,7 @@ class Position extends React.Component {
       return;
     }
 
-    const overlay = React.findDOMNode(this);
+    const overlay = ReactDOM.findDOMNode(this);
     const container = getContainer(this.props.container, ownerDocument(this).body);
 
     this.setState(calcOverlayPosition(
