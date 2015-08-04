@@ -29,8 +29,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    assert.ok(
-      ReactTestUtils.findRenderedDOMComponentWithTag(instance.refs.modal, 'strong'));
+    assert.equal(ReactDOM.findDOMNode(instance.refs.modal).querySelectorAll('strong').length, 1)
   });
 
   it('Should disable scrolling on the modal container while open', function() {
