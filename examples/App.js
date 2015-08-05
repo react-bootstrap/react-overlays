@@ -2,7 +2,6 @@ import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
 import Editor from 'component-playground';
-import hyphenate from 'dom-helpers/util/hyphenateStyle';
 
 import PropTable from './PropTable';
 
