@@ -40,6 +40,25 @@ const Anchor = React.createClass({
   }
 });
 
+const ExampleEditor = React.createClass({
+  propTypes: {
+    codeText: React.PropTypes.string
+  },
+  render() {
+    return (
+      <Editor
+        className='overlay-example'
+        lineNumbers={false}
+        lang="js"
+        theme="neo"
+        scope={scope}
+        codeText={this.props.codeText}
+        collapsableCode
+      />
+    );
+  }
+});
+
 const Example = React.createClass({
 
   render() {
@@ -61,15 +80,7 @@ const Example = React.createClass({
               <Anchor>Transition</Anchor>
             </h2>
             <p dangerouslySetInnerHTML={{__html: TransitionMetadata.Transition.descHtml }}/>
-            <Editor
-              className='overlay-example'
-              lineNumbers={false}
-              lang="js"
-              theme="neo"
-              scope={scope}
-              codeText={TransitionSource}
-              collapsableCode
-            />
+            <ExampleEditor codeText={TransitionSource} />
             <PropTable
               component='Transition'
               metadata={TransitionMetadata}
@@ -80,15 +91,7 @@ const Example = React.createClass({
               <Anchor>Portals</Anchor>
             </h2>
             <p dangerouslySetInnerHTML={{__html: PortalMetadata.Portal.descHtml }}/>
-            <Editor
-              className='overlay-example'
-              lineNumbers={false}
-              lang="js"
-              theme="neo"
-              scope={scope}
-              codeText={PortalSource}
-              collapsableCode
-            />
+            <ExampleEditor codeText={PortalSource} />
             <PropTable
               component='Portal'
               metadata={PortalMetadata}
@@ -99,16 +102,7 @@ const Example = React.createClass({
               <Anchor>Modals</Anchor>
             </h2>
             <p dangerouslySetInnerHTML={{__html: ModalMetadata.Modal.descHtml }}/>
-            <Editor
-              className='overlay-example'
-              lineNumbers={false}
-              lang="js"
-              theme="neo"
-              scope={scope}
-              codeText={ModalExample}
-              collapsableCode
-            />
-
+            <ExampleEditor codeText={ModalExample} />
             <PropTable
               component='Modal'
               metadata={ModalMetadata}
@@ -119,15 +113,7 @@ const Example = React.createClass({
               <Anchor>Position</Anchor>
             </h2>
             <p dangerouslySetInnerHTML={{__html: PositionMetadata.Position.descHtml }}/>
-            <Editor
-              className='overlay-example'
-              lineNumbers={false}
-              lang="js"
-              theme="neo"
-              scope={scope}
-              codeText={PositionSource}
-              collapsableCode
-            />
+            <ExampleEditor codeText={PositionSource} />
             <PropTable
               component='Position'
               metadata={PositionMetadata}
@@ -138,16 +124,7 @@ const Example = React.createClass({
               <Anchor>Overlay</Anchor>
             </h2>
             <p dangerouslySetInnerHTML={{__html: OverlayMetadata.Overlay.descHtml }}/>
-            <Editor
-              className='overlay-example'
-              lineNumbers={false}
-              lang="js"
-              theme="neo"
-              scope={scope}
-              codeText={OverlaySource}
-              collapsableCode
-            />
-
+            <ExampleEditor codeText={OverlaySource} />
             <PropTable
               component='Overlay'
               metadata={OverlayMetadata}
