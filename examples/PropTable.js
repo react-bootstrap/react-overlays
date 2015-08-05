@@ -42,8 +42,7 @@ const PropTable = React.createClass({
     let propsData = this.propsData;
     let composes = this.props.metadata[this.props.component].composes || [];
 
-    console.log(propsData)
-    if ( !Object.keys(propsData).length){
+    if ( !Object.keys(propsData).length ){
       return <span/>;
     }
 
