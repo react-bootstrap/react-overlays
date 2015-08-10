@@ -1,14 +1,7 @@
 import css from 'dom-helpers/style';
 import classes from 'dom-helpers/class';
 import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
-import isWindow from 'dom-helpers/query/isWindow';
-
-function containerClientHeight(container) {
-  let win = isWindow(container);
-  return win
-      ? win.documentElement.clientHeight
-      : container.clientHeight;
-}
+import isOverflowing from './utils/isOverflowing';
 
 let findContainer = (data, modal)=> {
   let idx = -1;
@@ -73,7 +66,7 @@ class ModalManager {
       overflow: 'hidden'
     };
 
-    data.overflowing = container.scrollHeight > containerClientHeight(container);
+    data.overflowing = isOverflowing(container);
 
     if (data.overflowing) {
       // use computed style, here to get the real padding
