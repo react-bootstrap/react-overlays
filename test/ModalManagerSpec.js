@@ -93,6 +93,66 @@ describe('ModalManager', ()=> {
     expect(manager.data.length).to.equal(0);
   });
 
+  describe('container aria-hidden', ()=>{
+    let app;
+
+    beforeEach(()=> {
+      app = document.createElement('div');
+      app.setAttribute('id', 'app-root');
+      container.appendChild(app);
+    });
+
+    it('should add aria-hidden to container siblings', ()=>{
+      manager.add(new Modal({}), container);
+
+      expect(app.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should add aria-hidden to previous modals', ()=>{
+      let modalA = new Modal({});
+      let mount = document.createElement('div');
+
+      modalA.mountNode = mount;
+      container.appendChild(mount);
+
+      manager.add(modalA, container);
+      manager.add(new Modal({}), container);
+
+      expect(app.getAttribute('aria-hidden')).to.equal('true');
+      expect(mount.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should remove aria-hidden on americas next top modal', ()=>{
+      let modalA = new Modal({});
+      let modalB = new Modal({});
+      let mount = document.createElement('div');
+
+      modalA.mountNode = mount;
+      container.appendChild(mount);
+
+      manager.add(modalA, container);
+      manager.add(modalB, container);
+
+      expect(mount.getAttribute('aria-hidden')).to.equal('true');
+
+      manager.remove(modalB, container);
+
+      expect(mount.getAttribute('aria-hidden')).to.equal(null);
+    });
+
+    it('should remove aria-hidden on siblings', ()=>{
+      let modal = new Modal({});
+
+      manager.add(modal, container);
+
+      expect(app.getAttribute('aria-hidden')).to.equal('true');
+
+      manager.remove(modal, container);
+
+      expect(app.getAttribute('aria-hidden')).to.equal(null);
+    });
+  });
+
   describe('container styles', ()=>{
 
     beforeEach(()=> {
