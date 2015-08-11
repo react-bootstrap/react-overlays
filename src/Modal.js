@@ -1,5 +1,6 @@
 /*eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
+import warning from 'warning';
 import elementType from 'react-prop-types/lib/elementType';
 
 import Portal from './Portal';
@@ -154,11 +155,16 @@ const Modal = React.createClass({
       return null;
     }
 
-    if (dialog.props.role === undefined) {
-      dialog = cloneElement(dialog, { role: 'document' });
+    let { role, tabIndex } = dialog.props;
+
+    if (role === undefined || tabIndex === undefined) {
+      dialog = cloneElement(dialog, {
+        role: role === undefined ? 'document' : role,
+        tabIndex: tabIndex == null ? '-1' : tabIndex
+      });
     }
 
-    if ( Transition ) {
+    if (Transition) {
       dialog = (
         <Transition
           transitionAppear
@@ -180,7 +186,6 @@ const Modal = React.createClass({
     return (
       <Portal container={props.container}>
         <div
-          tabIndex='-1'
           ref={'modal'}
           role={props.role || 'dialog'}
           style={props.style}
@@ -318,7 +323,7 @@ const Modal = React.createClass({
     }
   },
 
-  checkForFocus(){
+  checkForFocus() {
     if (canUseDom) {
       this.lastFocus = activeElement();
     }
@@ -326,12 +331,20 @@ const Modal = React.createClass({
 
   focus() {
     let autoFocus = this.props.autoFocus;
-    let modalContent = React.findDOMNode(this.refs.modal);
+    let modalContent = this.getDialogElement();
     let current = activeElement(ownerDocument(this));
     let focusInModal = current && contains(modalContent, current);
 
     if (modalContent && autoFocus && !focusInModal) {
       this.lastFocus = current;
+
+      if (!modalContent.hasAttribute('tabIndex')){
+        modalContent.setAttribute('tabIndex', -1);
+        warning(false,
+          'The modal content node does not accept focus. ' +
+          'For the benefit of assistive technologies, the tabIndex of the node is being set to "-1".');
+      }
+
       modalContent.focus();
     }
   },
@@ -352,9 +365,9 @@ const Modal = React.createClass({
     }
 
     let active = activeElement(ownerDocument(this));
-    let modal = React.findDOMNode(this.refs.modal);
+    let modal = this.getDialogElement();
 
-    if ( modal && modal !== active && !contains(modal, active)){
+    if (modal && modal !== active && !contains(modal, active)) {
       modal.focus();
     }
   },
