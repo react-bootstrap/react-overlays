@@ -282,8 +282,8 @@ describe('Modal', function () {
       document.activeElement.should.equal(focusableContainer);
 
       let instance = render(
-        <Modal show className='modal'>
-          <strong>Message</strong>
+        <Modal show>
+          <strong className='modal'>Message</strong>
         </Modal>
         , focusableContainer);
 
@@ -311,7 +311,9 @@ describe('Modal', function () {
 
       render(
         <Modal show>
-          <input autoFocus />
+          <div className='modal'>
+            <input autoFocus/>
+          </div>
         </Modal>
         , focusableContainer);
 
@@ -325,13 +327,30 @@ describe('Modal', function () {
       document.activeElement.should.equal(focusableContainer);
 
       render(
-        <Modal show className='modal'>
-          <input autoFocus/>
+        <Modal show>
+          <div className='modal'>
+            <input autoFocus/>
+          </div>
         </Modal>
         , focusableContainer);
 
       focusableContainer.focus();
       document.activeElement.className.should.contain('modal');
+    });
+
+    it('Should warn if the modal content is not focusable', function () {
+      let Dialog = ()=> ({ render(){ return <div/>; } });
+
+      sinon.stub(console, 'error');
+
+      render(
+        <Modal show>
+          <Dialog />
+        </Modal>
+        , focusableContainer);
+
+      expect(console.error).to.have.been.calledOnce;
+      console.error.restore();
     });
   });
 
