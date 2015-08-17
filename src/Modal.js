@@ -1,7 +1,6 @@
 /*eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
 import warning from 'warning';
-import ReactDOM from 'react-dom';
 import elementType from 'react-prop-types/lib/elementType';
 
 import Portal from './Portal';
@@ -376,13 +375,13 @@ const Modal = React.createClass({
   iosClickHack() {
     // Support: <= React 0.13: https://github.com/facebook/react/issues/1169
     if (this.refs.backdrop) {
-      ReactDOM.findDOMNode(this.refs.backdrop).onclick = function () {};
+      this.refs.backdrop.onclick = function () {};
     }
   },
 
   //instead of a ref, which might conflict with one the parent applied.
   getDialogElement() {
-    let node = ReactDOM.findDOMNode(this.refs.modal);
+    let node = this.refs.modal;
     return node && node.lastChild;
   },
 
