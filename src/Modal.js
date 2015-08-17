@@ -270,8 +270,6 @@ const Modal = React.createClass({
 
     modalManager.add(this, container, this.props.containerClassName);
 
-    this.iosClickHack();
-
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
 
@@ -369,13 +367,6 @@ const Modal = React.createClass({
 
     if (modal && modal !== active && !contains(modal, active)) {
       modal.focus();
-    }
-  },
-
-  iosClickHack() {
-    // Support: <= React 0.13: https://github.com/facebook/react/issues/1169
-    if (this.refs.backdrop) {
-      this.refs.backdrop.onclick = function () {};
     }
   },
 
