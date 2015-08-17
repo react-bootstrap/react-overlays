@@ -1,4 +1,4 @@
-import React from 'react';
+import ReactDOM from 'react-dom';
 import { cloneElement } from 'react';
 
 export function shouldWarn(about) {
@@ -16,7 +16,7 @@ export function shouldWarn(about) {
  */
 export function render(element, mountPoint){
   let mount = mountPoint || document.createElement('div');
-  let instance = React.render(element, mount);
+  let instance = ReactDOM.render(element, mount);
 
   if (!instance.renderWithProps) {
     instance.renderWithProps = function(newProps) {

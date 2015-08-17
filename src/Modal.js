@@ -270,8 +270,6 @@ const Modal = React.createClass({
 
     modalManager.add(this, container, this.props.containerClassName);
 
-    this.iosClickHack();
-
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
 
@@ -372,16 +370,9 @@ const Modal = React.createClass({
     }
   },
 
-  iosClickHack() {
-    // Support: <= React 0.13: https://github.com/facebook/react/issues/1169
-    if (this.refs.backdrop) {
-      React.findDOMNode(this.refs.backdrop).onclick = function () {};
-    }
-  },
-
   //instead of a ref, which might conflict with one the parent applied.
   getDialogElement() {
-    let node = React.findDOMNode(this.refs.modal);
+    let node = this.refs.modal;
     return node && node.lastChild;
   },
 

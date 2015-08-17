@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react/lib/ReactTestUtils';
 import Modal from '../src/Modal';
 import { render } from './helpers';
@@ -6,7 +7,7 @@ import jquery from 'jquery';
 import simulant from 'simulant';
 import Transition from '../src/Transition';
 
-let $ = componentOrNode => jquery(React.findDOMNode(componentOrNode));
+let $ = componentOrNode => jquery(ReactDOM.findDOMNode(componentOrNode));
 
 describe('Modal', function () {
   let mountPoint;
@@ -17,7 +18,7 @@ describe('Modal', function () {
   });
 
   afterEach(function () {
-    React.unmountComponentAtNode(mountPoint);
+    ReactDOM.unmountComponentAtNode(mountPoint);
     document.body.removeChild(mountPoint);
   });
 
@@ -28,8 +29,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    assert.ok(
-      ReactTestUtils.findRenderedDOMComponentWithTag(instance.refs.modal, 'strong'));
+    assert.equal(ReactDOM.findDOMNode(instance.refs.modal).querySelectorAll('strong').length, 1);
   });
 
   it('Should disable scrolling on the modal container while open', function() {
@@ -57,7 +57,7 @@ describe('Modal', function () {
 
     let instance = render(<Container />, mountPoint);
     let modal = ReactTestUtils.findRenderedComponentWithType(instance, Modal);
-    let backdrop = React.findDOMNode(modal.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(modal.refs.backdrop);
 
     expect($(instance).css('overflow')).to.equal('hidden');
 
@@ -92,7 +92,7 @@ describe('Modal', function () {
 
     let instance = render(<Container />, mountPoint);
     let modal = ReactTestUtils.findRenderedComponentWithType(instance, Modal);
-    let backdrop = React.findDOMNode(modal.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(modal.refs.backdrop);
 
     expect($(instance).hasClass('test test2')).to.be.true;
 
@@ -109,7 +109,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let backdrop = React.findDOMNode(instance.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(instance.refs.backdrop);
 
     ReactTestUtils.Simulate.click(backdrop);
 
@@ -124,7 +124,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let backdrop = React.findDOMNode(instance.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(instance.refs.backdrop);
 
     ReactTestUtils.Simulate.click(backdrop);
   });
@@ -137,7 +137,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let backdrop = React.findDOMNode(instance.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(instance.refs.backdrop);
 
     ReactTestUtils.Simulate.click(backdrop);
 
@@ -152,7 +152,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let backdrop = React.findDOMNode(instance.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(instance.refs.backdrop);
 
     simulant.fire(backdrop, 'keyup', { keyCode: 27 });
   });
@@ -166,7 +166,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let backdrop = React.findDOMNode(instance.refs.backdrop);
+    let backdrop = ReactDOM.findDOMNode(instance.refs.backdrop);
 
     expect(
       backdrop.style.borderWidth).to.equal('3px');
@@ -273,7 +273,7 @@ describe('Modal', function () {
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(focusableContainer);
+      ReactDOM.unmountComponentAtNode(focusableContainer);
       document.body.removeChild(focusableContainer);
     });
 
