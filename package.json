@@ -29,7 +29,7 @@
     "clean:examples": "rimraf examples/static",
     "build": "npm run clean && babel src --out-dir lib",
     "build:examples": "npm run clean:examples && babel-node ./webpack/run-webpack --config docs.config.js",
-    "examples": "npm run clean:examples && babel-node ./examples/server.js",
+    "examples": "npm run clean:examples && webpack-dev-server --hot --inline --progress --history-api-fallback --content-base ./examples --config ./webpack/examples.config.js",
     "lint": "eslint src test",
     "test": "npm run lint && karma start --single-run",
     "tdd": "karma start",
