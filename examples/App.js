@@ -10,12 +10,14 @@ import OverlaySource from '../webpack/example-loader!./Overlay';
 import PortalSource from '../webpack/example-loader!./Portal';
 import PositionSource from '../webpack/example-loader!./Position';
 import TransitionSource from '../webpack/example-loader!./Transition';
+import OverlayTriggerSource from '../webpack/example-loader!./OverlayTrigger';
 
 import PortalMetadata from '../webpack/metadata-loader!react-overlays/Portal';
 import PositionMetadata from '../webpack/metadata-loader!react-overlays/Position';
 import OverlayMetadata from '../webpack/metadata-loader!react-overlays/Overlay';
 import ModalMetadata from '../webpack/metadata-loader!react-overlays/Modal';
 import TransitionMetadata from '../webpack/metadata-loader!react-overlays/Transition';
+import OverlayTriggerMetadata from '../webpack/metadata-loader!react-overlays/OverlayTrigger';
 
 import * as ReactOverlays from 'react-overlays';
 
@@ -72,6 +74,7 @@ const Example = React.createClass({
             <li><a href='#modals'>Modals</a></li>
             <li><a href='#position'>Position</a></li>
             <li><a href='#overlay'>Overlay</a></li>
+            <li><a href='#overlay-trigger'>OverlayTrigger</a></li>
           </ul>
         </article>
         <main className='col-md-10'>
@@ -128,6 +131,17 @@ const Example = React.createClass({
             <PropTable
               component='Overlay'
               metadata={OverlayMetadata}
+            />
+          </section>
+          <section>
+            <h2 className='page-header'>
+              <Anchor>OverlayTrigger</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: OverlayTriggerMetadata.OverlayTrigger.descHtml }}/>
+            <ExampleEditor codeText={OverlayTriggerSource} />
+            <PropTable
+              component='OverlayTrigger'
+              metadata={OverlayTriggerMetadata}
             />
           </section>
         </main>
