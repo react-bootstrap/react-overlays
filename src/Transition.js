@@ -278,7 +278,7 @@ Transition.defaultProps = {
   unmountOnExit: false,
   transitionAppear: false,
 
-  timeout: 5000,
+  timeout: 1000,
 
   onEnter: noop,
   onEntering: noop,
