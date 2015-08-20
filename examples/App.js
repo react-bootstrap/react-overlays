@@ -74,7 +74,7 @@ const Example = React.createClass({
             <li><a href='#modals'>Modals</a></li>
             <li><a href='#position'>Position</a></li>
             <li><a href='#overlay'>Overlay</a></li>
-            <li><a href='#overlay-trigger'>OverlayTrigger</a></li>
+            <li><a href='#overlaytrigger'>OverlayTrigger</a></li>
           </ul>
         </article>
         <main className='col-md-10'>
