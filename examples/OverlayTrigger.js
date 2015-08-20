@@ -70,30 +70,7 @@ class ToolTip {
   }
 }
 
-const OverlayExample = React.createClass({
-
-  getInitialState(){
-    return { show: false };
-  },
-
-  toggle(){
-    let show = this.state.show;
-    let placements = ['left', 'top', 'right', 'bottom'];
-    let placement = this.state.placement;
-
-    placement = placements[placements.indexOf(placement) + 1];
-
-    if (!show) {
-      show = true;
-      placement = placements[0];
-    }
-    else if (!placement) {
-      show = false;
-    }
-
-    return this.setState({ show, placement });
-  },
-
+const OverlayTriggerExample = React.createClass({
   render(){
 
     const tooltip = (
@@ -122,4 +99,4 @@ const OverlayExample = React.createClass({
   }
 });
 
-export default OverlayExample;
+export default OverlayTriggerExample;
