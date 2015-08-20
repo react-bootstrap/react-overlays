@@ -1,6 +1,6 @@
-import metadata from 'react-component-metadata';
-import fs from 'fs';
-import marked from 'marked';
+var metadata = require('react-component-metadata');
+var marked = require('marked');
+var fs = require('fs');
 
 marked.setOptions({
   xhtml: true
@@ -8,13 +8,16 @@ marked.setOptions({
 
 
 // removes doclet syntax from comments
-let cleanDoclets = desc => {
-  let idx = desc.indexOf('@');
+var cleanDoclets = function (desc) {
+  var idx = desc.indexOf('@');
   return (idx === -1 ? desc : desc.substr(0, idx )).trim();
 };
-
-let cleanDocletValue = str => str.trim().replace(/^\{/, '').replace(/\}$/, '');
-let isLiteral = str => (/^('|")/).test(str.trim());
+var cleanDocletValue = function (str) {
+  return str.trim().replace(/^\{/, '').replace(/\}$/, '');
+};
+var isLiteral = function (str) {
+  return (/^('|")/).test(str.trim());
+};
 
 /**
  * parse out description doclets to an object and remove the comment
@@ -35,9 +38,9 @@ function parseDoclets(obj){
  * @param  {String} propName
  */
 function applyPropDoclets(props, propName){
-  let prop = props[propName];
-  let doclets = prop.doclets;
-  let value;
+  var prop = props[propName];
+  var doclets = prop.doclets;
+  var value;
 
   // the @type doclet to provide a prop type
   // Also allows enums (oneOf) if string literals are provided
@@ -61,23 +64,23 @@ function applyPropDoclets(props, propName){
   }
 }
 
-let metaDataLoader = function(){};
+var metaDataLoader = function(){};
 
 metaDataLoader.pitch = function (remainingRequest) {
-  let callback = this.async();
+  var callback = this.async();
 
-  fs.readFile(this.resourcePath, 'utf-8', (err, content) => {
+  fs.readFile(this.resourcePath, 'utf-8', function (err, content) {
     if (err) { return callback(err); }
 
-    let components = metadata(content, { mixins: true });
+    var components = metadata(content, { mixins: true });
 
-    Object.keys(components).forEach(key => {
-      const component = components[key];
+    Object.keys(components).forEach(function (key) {
+      var component = components[key];
 
       parseDoclets(component);
 
-      Object.keys(component.props).forEach(propName => {
-        const prop = component.props[propName];
+      Object.keys(component.props).forEach(function (propName) {
+        var prop = component.props[propName];
 
         parseDoclets(prop);
         applyPropDoclets(component.props, propName);
@@ -88,4 +91,4 @@ metaDataLoader.pitch = function (remainingRequest) {
   });
 };
 
-export default metaDataLoader;
+module.exports = metaDataLoader;
