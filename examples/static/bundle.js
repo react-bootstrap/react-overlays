@@ -233,7 +233,7 @@
 	            null,
 	            _react2['default'].createElement(
 	              'a',
-	              { href: '#overlay-trigger' },
+	              { href: '#overlaytrigger' },
 	              'OverlayTrigger'
 	            )
 	          )
