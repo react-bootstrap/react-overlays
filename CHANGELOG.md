@@ -1,3 +1,10 @@
+v0.4.3 - Sun, 23 Aug 2015 22:54:52 GMT
+--------------------------------------
+
+- [4f7823e](../../commit/4f7823e) [changed] focus target of the modal to its content
+
+
+
 v0.4.2 - Mon, 10 Aug 2015 19:04:31 GMT
 --------------------------------------
 
