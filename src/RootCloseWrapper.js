@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ownerDocument from './utils/ownerDocument';
 import addEventListener from './utils/addEventListener';
-
-
-// TODO: Merge this logic with dropdown logic once #526 is done.
+import createChainedFunction from './utils/createChainedFunction';
+import ownerDocument from './utils/ownerDocument';
 
 // TODO: Consider using an ES6 symbol here, once we use babel-runtime.
 const CLICK_WAS_INSIDE = '__click_was_inside';
@@ -64,11 +62,20 @@ export default class RootCloseWrapper extends React.Component {
   }
 
   render() {
+    const {noWrap, children} = this.props;
+    const child = React.Children.only(children);
+
+    if (noWrap) {
+      return React.cloneElement(child, {
+        onClick: createChainedFunction(suppressRootClose, child.props.onClick)
+      });
+    }
+
     // Wrap the child in a new element, so the child won't have to handle
     // potentially combining multiple onClick listeners.
     return (
       <div onClick={suppressRootClose}>
-        {React.Children.only(this.props.children)}
+        {child}
       </div>
     );
   }
@@ -78,7 +85,8 @@ export default class RootCloseWrapper extends React.Component {
     // stealing the ref from the owner, but we know exactly the DOM structure
     // that will be rendered, so we can just do this to get the child's DOM
     // node for doing size calculations in OverlayMixin.
-    return ReactDOM.findDOMNode(this).firstChild;
+    const node = ReactDOM.findDOMNode(node);
+    return this.props.noWrap ? node : node.firstChild;
   }
 
   componentWillUnmount() {
@@ -89,5 +97,12 @@ export default class RootCloseWrapper extends React.Component {
 RootCloseWrapper.displayName = 'RootCloseWrapper';
 
 RootCloseWrapper.propTypes = {
-  onRootClose: React.PropTypes.func.isRequired
+  onRootClose: React.PropTypes.func.isRequired,
+
+  /**
+   * Passes the suppress click handler directly to the child component instead
+   * of placing it on a wrapping div. Only use when you can be sure the child
+   * properly handle the click event.
+   */
+  noWrap: React.PropTypes.bool
 };
