@@ -33,7 +33,7 @@ export default class RootCloseWrapper extends React.Component {
     let { id, suppressRootClose } = getSuppressRootClose();
 
     this._suppressRootId = id;
-    this._suppressRootClosehHandler = suppressRootClose;
+    this._suppressRootCloseHandler = suppressRootClose;
   }
 
   bindRootCloseHandlers() {
@@ -81,14 +81,14 @@ export default class RootCloseWrapper extends React.Component {
 
     if (noWrap) {
       return React.cloneElement(child, {
-        onClick: createChainedFunction(this._suppressRootClosehHandler, child.props.onClick)
+        onClick: createChainedFunction(this._suppressRootCloseHandler, child.props.onClick)
       });
     }
 
     // Wrap the child in a new element, so the child won't have to handle
     // potentially combining multiple onClick listeners.
     return (
-      <div onClick={this._suppressRootClosehHandler}>
+      <div onClick={this._suppressRootCloseHandler}>
         {child}
       </div>
     );
