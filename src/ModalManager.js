@@ -2,21 +2,22 @@ import css from 'dom-helpers/style';
 import classes from 'dom-helpers/class';
 import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
 import isOverflowing from './utils/isOverflowing';
+import { hideSiblings, showSiblings, ariaHidden } from './utils/manageAriaHidden';
 
-let findContainer = (data, modal)=> {
+function findIndexOf(arr, cb){
   let idx = -1;
-  data.some((d, i)=> {
-    if (d.modals.indexOf(modal) !== -1){
+  arr.some((d, i)=> {
+    if (cb(d, i)) {
       idx = i;
       return true;
     }
   });
   return idx;
-};
+}
 
-function remove(arr, item){
-  let i = arr.indexOf(item);
-  if (i !== -1 ){ arr.splice(i, 0); }
+function findContainer(data, modal) {
+  return findIndexOf(data,
+    d => d.modals.indexOf(modal) !== -1);
 }
 
 /**
@@ -26,12 +27,11 @@ function remove(arr, item){
  */
 class ModalManager {
 
-  constructor(){
+  constructor(hideSiblingNodes = true){
+    this.hideSiblingNodes = hideSiblingNodes;
     this.modals = [];
     this.containers = [];
     this.data = [];
-
-    this._listeners = [];
   }
 
   add(modal, container, className){
@@ -45,7 +45,11 @@ class ModalManager {
     modalIdx = this.modals.length;
     this.modals.push(modal);
 
-    if ( containerIdx !== -1) {
+    if (this.hideSiblingNodes) {
+      hideSiblings(container, modal.mountNode);
+    }
+
+    if (containerIdx !== -1) {
       this.data[containerIdx].modals.push(modal);
       return modalIdx;
     }
@@ -61,10 +65,7 @@ class ModalManager {
       }
     };
 
-
-    let style = {
-      overflow: 'hidden'
-    };
+    let style = { overflow: 'hidden' };
 
     data.overflowing = isOverflowing(container);
 
@@ -110,18 +111,16 @@ class ModalManager {
       data.classes.forEach(
         classes.removeClass.bind(null, container));
 
+      if (this.hideSiblingNodes) {
+        showSiblings(container, modal.mountNode);
+      }
       this.containers.splice(containerIdx, 1);
       this.data.splice(containerIdx, 1);
     }
-  }
-
-  listen(handler){
-    this._listeners.push(handler);
-    return ()=> remove(this.listeners, handler);
-  }
-
-  _emit(args){
-    this._listeners.forEach(l => l.apply(this, args));
+    else if (this.hideSiblingNodes) {
+      //otherwise make sure the next top modal is visible to a SR
+      ariaHidden(false, data.modals[data.modals.length - 1].mountNode);
+    }
   }
 
   isTopModal(modal) {

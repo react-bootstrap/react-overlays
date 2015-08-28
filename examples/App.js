@@ -136,4 +136,4 @@ const Example = React.createClass({
   }
 });
 
-React.render(<Example/>, document.body);
+React.render(<Example/>, document.getElementById('app-container'));
