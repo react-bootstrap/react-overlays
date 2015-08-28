@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import addEventListener from './utils/addEventListener';
 import createChainedFunction from './utils/createChainedFunction';
 import ownerDocument from './utils/ownerDocument';
@@ -6,11 +8,19 @@ import ownerDocument from './utils/ownerDocument';
 // TODO: Consider using an ES6 symbol here, once we use babel-runtime.
 const CLICK_WAS_INSIDE = '__click_was_inside';
 
-function suppressRootClose(event) {
-  // Tag the native event to prevent the root close logic on document click.
-  // This seems safer than using event.nativeEvent.stopImmediatePropagation(),
-  // which is only supported in IE >= 9.
-  event.nativeEvent[CLICK_WAS_INSIDE] = true;
+let counter = 0;
+
+function getSuppressRootClose() {
+  let id = CLICK_WAS_INSIDE + '_' + counter++;
+  return {
+    id,
+    suppressRootClose(event) {
+      // Tag the native event to prevent the root close logic on document click.
+      // This seems safer than using event.nativeEvent.stopImmediatePropagation(),
+      // which is only supported in IE >= 9.
+      event.nativeEvent[id] = true;
+    }
+  };
 }
 
 export default class RootCloseWrapper extends React.Component {
@@ -19,6 +29,11 @@ export default class RootCloseWrapper extends React.Component {
 
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
     this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
+
+    let { id, suppressRootClose } = getSuppressRootClose();
+
+    this._suppressRootId = id;
+    this._suppressRootClosehHandler = suppressRootClose;
   }
 
   bindRootCloseHandlers() {
@@ -33,7 +48,7 @@ export default class RootCloseWrapper extends React.Component {
 
   handleDocumentClick(e) {
     // This is now the native event.
-    if (e[CLICK_WAS_INSIDE]) {
+    if (e[this._suppressRootId]) {
       return;
     }
 
@@ -66,14 +81,14 @@ export default class RootCloseWrapper extends React.Component {
 
     if (noWrap) {
       return React.cloneElement(child, {
-        onClick: createChainedFunction(suppressRootClose, child.props.onClick)
+        onClick: createChainedFunction(this._suppressRootClosehHandler, child.props.onClick)
       });
     }
 
     // Wrap the child in a new element, so the child won't have to handle
     // potentially combining multiple onClick listeners.
     return (
-      <div onClick={suppressRootClose}>
+      <div onClick={this._suppressRootClosehHandler}>
         {child}
       </div>
     );
@@ -84,7 +99,7 @@ export default class RootCloseWrapper extends React.Component {
     // stealing the ref from the owner, but we know exactly the DOM structure
     // that will be rendered, so we can just do this to get the child's DOM
     // node for doing size calculations in OverlayMixin.
-    const node = React.findDOMNode(this);
+    const node = ReactDOM.findDOMNode(this);
     return this.props.noWrap ? node : node.firstChild;
   }
 

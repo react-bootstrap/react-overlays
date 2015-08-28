@@ -1,5 +1,6 @@
 import pick from 'lodash/object/pick';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react/lib/ReactTestUtils';
 
 import Position from '../src/Position';
@@ -14,7 +15,7 @@ describe('Position', function () {
         <span>Text</span>
       </Position>
     );
-    assert.equal(React.findDOMNode(instance).nodeName, 'SPAN');
+    assert.equal(ReactDOM.findDOMNode(instance).nodeName, 'SPAN');
   });
 
   it('Should warn about several children', function () {
@@ -57,7 +58,7 @@ describe('Position', function () {
               <div ref="bar" />
 
               <Position
-                target={() => React.findDOMNode(this.refs[this.state.target])}
+                target={() => this.refs[this.state.target]}
                 fakeProp={this.state.fakeProp}
               >
                 <div />
@@ -102,7 +103,7 @@ describe('Position', function () {
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(mountPoint);
+      ReactDOM.unmountComponentAtNode(mountPoint);
       document.body.removeChild(mountPoint);
     });
 
@@ -135,7 +136,7 @@ describe('Position', function () {
               }}/>
 
               <Position
-                target={() => React.findDOMNode(this.refs.target)}
+                target={() => this.refs.target}
                 container={this}
                 containerPadding={50}
                 placement={placement}
