@@ -20,8 +20,8 @@ class Position extends React.Component {
     super(props, context);
 
     this.state = {
-      positionLeft: null,
-      positionTop: null,
+      positionLeft: 0,
+      positionTop: 0,
       arrowOffsetLeft: null,
       arrowOffsetTop: null
     };
@@ -99,8 +99,8 @@ class Position extends React.Component {
 
     if (!target) {
       this.setState({
-        positionLeft: null,
-        positionTop: null,
+        positionLeft: 0,
+        positionTop: 0,
         arrowOffsetLeft: null,
         arrowOffsetTop: null
       });
