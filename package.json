@@ -39,7 +39,7 @@
     "major": "release major"
   },
   "peerDependencies": {
-    "react": "^0.14.0-alpha"
+    "react": "^0.14.0-rc1"
   },
   "devDependencies": {
     "babel": "5.6.14",
@@ -74,10 +74,10 @@
     "mt-changelog": "^0.6.1",
     "node-libs-browser": "^0.5.2",
     "raw-loader": "^0.5.1",
-    "react": "^0.14.0-beta3",
-    "react-bootstrap": "^0.24.5-react-pre.0",
+    "react": "^0.14.0-rc1",
+    "react-bootstrap": "^0.25.100-react-pre.0",
     "react-component-metadata": "^1.2.2",
-    "react-dom": "^0.14.0-beta3",
+    "react-dom": "^0.14.0-rc1",
     "react-hot-loader": "^1.2.7",
     "release-script": "^0.2.1",
     "rimraf": "^2.4.2",
