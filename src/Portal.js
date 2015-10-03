@@ -20,7 +20,12 @@ let Portal = React.createClass({
     container: React.PropTypes.oneOfType([
       mountable,
       React.PropTypes.func
-    ])
+    ]),
+
+    /**
+     * Classname to use for the Portal Component
+     */
+    className: React.PropTypes.string
   },
 
   componentDidMount() {
@@ -40,6 +45,11 @@ let Portal = React.createClass({
   _mountOverlayTarget() {
     if (!this._overlayTarget) {
       this._overlayTarget = document.createElement('div');
+
+      if (this.props.className) {
+        this._overlayTarget.className = this.props.className;
+      }
+
       this.getContainerDOMNode()
         .appendChild(this._overlayTarget);
     }

@@ -26,7 +26,7 @@ class PortalExample extends React.Component {
           <div className='panel-body'>
             <span>It looks like I will render here.</span>
 
-            <Portal container={()=> this.refs.container}>
+            <Portal className="test-portal-class" container={()=> this.refs.container}>
               { this.state.show && child }
             </Portal>
           </div>
