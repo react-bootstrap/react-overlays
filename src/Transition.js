@@ -73,7 +73,7 @@ class Transition extends React.Component {
       if (this.props.in) {
         this.performEnter(this.props);
       } else {
-        this.setState({status: UNMOUNTED});
+        this.setState({status: UNMOUNTED}); // eslint-disable-line react/no-did-update-set-state
       }
     }
   }
