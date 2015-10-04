@@ -26,7 +26,6 @@
   ],
   "scripts": {
     "prepublish": "npm run test && npm run build",
-    "postinstall": "npm run build",
     "clean": "rimraf lib",
     "clean:examples": "rimraf examples/static",
     "build": "npm run clean && babel src --out-dir lib",
