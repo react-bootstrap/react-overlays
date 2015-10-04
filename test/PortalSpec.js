@@ -75,4 +75,19 @@ describe('Portal', function () {
 
     assert.equal(overlayInstance.refs.p.getOverlayDOMNode().nodeName, 'DIV');
   });
+
+
+  it('Should be able to set a className on a Portal component', function() {
+    let OnlyOverlay = React.createClass({
+      render() {
+        return <Portal ref='p' {...this.props} className="myPortalTestClass">{this.props.overlay}</Portal>;
+      }
+    });
+
+    let overlayInstance = ReactTestUtils.renderIntoDocument(
+        <OnlyOverlay overlay={<div id="test1" />} />
+    );
+
+    assert.equal(overlayInstance.refs.p.getMountNode().className, 'myPortalTestClass');
+  });
 });

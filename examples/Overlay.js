@@ -111,6 +111,7 @@ const OverlayExample = React.createClass({
           placement={this.state.placement}
           container={this}
           target={ props => React.findDOMNode(this.refs.target)}
+          portalClassName="test-portal-class"
         >
           <ToolTip>
             I'm placed to the: <strong>{this.state.placement}</strong>
