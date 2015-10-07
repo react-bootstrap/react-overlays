@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import Position from 'react-overlays/Position';
 import Button from 'react-bootstrap/lib/Button';
 
@@ -80,7 +81,7 @@ const PositionExample = React.createClass({
         <Position
           container={this}
           placement={this.state.placement}
-          target={props => React.findDOMNode(this.refs.target)}
+          target={props => findDOMNode(this.refs.target)}
         >
           <ToolTip>
             I'm placed to the: <strong>{this.state.placement}</strong>

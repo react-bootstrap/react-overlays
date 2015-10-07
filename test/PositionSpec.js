@@ -1,7 +1,7 @@
 import pick from 'lodash/object/pick';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 
 import Position from '../src/Position';
 import overlayPositionUtils from '../src/utils/overlayPositionUtils';

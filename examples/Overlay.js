@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import Overlay from 'react-overlays/Overlay';
 import Button from 'react-bootstrap/lib/Button';
 
@@ -110,7 +111,7 @@ const OverlayExample = React.createClass({
           onHide={() => this.setState({ show: false })}
           placement={this.state.placement}
           container={this}
-          target={ props => React.findDOMNode(this.refs.target)}
+          target={ props => findDOMNode(this.refs.target)}
         >
           <ToolTip>
             I'm placed to the: <strong>{this.state.placement}</strong>

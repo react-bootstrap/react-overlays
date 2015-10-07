@@ -1,7 +1,7 @@
 import React from 'react';
-
+import { findDOMNode } from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
-import Editor from 'component-playground';
+import Editor from '@jquense/component-playground';
 
 import PropTable from './PropTable';
 
@@ -22,7 +22,7 @@ import * as ReactOverlays from 'react-overlays';
 import './styles.less';
 import injectCss from './injectCss';
 
-let scope = { React, Button, injectCss, ...ReactOverlays };
+let scope = { React, findDOMNode, Button, injectCss, ...ReactOverlays };
 
 const Anchor = React.createClass({
   propTypes: {

@@ -1,6 +1,6 @@
 {
   "name": "react-overlays",
-  "version": "0.50.0-alpha4",
+  "version": "0.4.4",
   "description": "Utilities for creating robust overlay components",
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "repository": "react-bootstrap/react-overlays",
@@ -39,7 +39,8 @@
     "major": "release major"
   },
   "peerDependencies": {
-    "react": "^0.14.0-alpha"
+    "react": ">=0.14.0",
+    "react-dom": "^0.14.0"
   },
   "devDependencies": {
     "babel": "5.6.14",
@@ -48,6 +49,7 @@
     "babel-loader": "^5.3.0",
     "babel-plugin-object-assign": "^1.2.1",
     "chai": "^3.2.0",
+    "component-playground": "jquense/component-playground",
     "css-loader": "^0.15.6",
     "es5-shim": "^4.1.7",
     "eslint": "^0.24.0",
@@ -74,10 +76,11 @@
     "mt-changelog": "^0.6.1",
     "node-libs-browser": "^0.5.2",
     "raw-loader": "^0.5.1",
-    "react": "^0.14.0-beta3",
+    "react": "0.14.0",
+    "react-addons-test-utils": "^0.14.0",
     "react-bootstrap": "0.24.5-react-pre.0",
     "react-component-metadata": "^1.2.2",
-    "react-dom": "^0.14.0-beta3",
+    "react-dom": "^0.14.0",
     "react-hot-loader": "^1.2.7",
     "release-script": "^0.2.1",
     "rimraf": "^2.4.2",
@@ -85,8 +88,8 @@
     "sinon": "^1.15.4",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.12.3",
-    "webpack": "^1.9.11",
-    "webpack-dev-server": "^1.9.0",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0",
     "yargs": "^3.14.0"
   },
   "dependencies": {
