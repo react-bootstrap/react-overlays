@@ -52,14 +52,16 @@ const ModalExample = React.createClass({
         <p>Click to get the full Modal experience!</p>
 
         <Modal
+          aria-labelledby='modal-label'
           style={modalStyle}
           backdropStyle={backdropStyle}
           show={this.state.showModal}
           onHide={this.close}
         >
-          <div style={dialogStyle()}>
-            <h4>Text in a modal</h4>
+          <div style={dialogStyle()} >
+            <h4 id='modal-label'>Text in a modal</h4>
             <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+            <input autoFocus/>
             <ModalExample/>
           </div>
         </Modal>

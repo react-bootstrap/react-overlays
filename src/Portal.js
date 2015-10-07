@@ -84,6 +84,10 @@ let Portal = React.createClass({
     return null;
   },
 
+  getMountNode(){
+    return this._overlayTarget;
+  },
+
   getOverlayDOMNode() {
     if (!this.isMounted()) {
       throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
