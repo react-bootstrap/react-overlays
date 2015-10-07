@@ -1,3 +1,11 @@
+v0.5.0 - Wed, 07 Oct 2015 19:40:23 GMT
+--------------------------------------
+
+- [044100b](../../commit/044100b) [added] React 0.14 support
+- [edd316a](../../commit/edd316a) [added] aria-hidden, by default, to modal container siblings.
+
+
+
 v0.4.4 - Mon, 24 Aug 2015 18:34:19 GMT
 --------------------------------------
 
