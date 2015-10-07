@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import addEventListener from './utils/addEventListener';
 import createChainedFunction from './utils/createChainedFunction';
 import ownerDocument from './utils/ownerDocument';
@@ -31,7 +33,8 @@ export default class RootCloseWrapper extends React.Component {
     let { id, suppressRootClose } = getSuppressRootClose();
 
     this._suppressRootId = id;
-    this._suppressRootClosehHandler = suppressRootClose;
+
+    this._suppressRootCloseHandler = suppressRootClose;
   }
 
   bindRootCloseHandlers() {
@@ -79,14 +82,14 @@ export default class RootCloseWrapper extends React.Component {
 
     if (noWrap) {
       return React.cloneElement(child, {
-        onClick: createChainedFunction(this._suppressRootClosehHandler, child.props.onClick)
+        onClick: createChainedFunction(this._suppressRootCloseHandler, child.props.onClick)
       });
     }
 
     // Wrap the child in a new element, so the child won't have to handle
     // potentially combining multiple onClick listeners.
     return (
-      <div onClick={this._suppressRootClosehHandler}>
+      <div onClick={this._suppressRootCloseHandler}>
         {child}
       </div>
     );
@@ -97,7 +100,7 @@ export default class RootCloseWrapper extends React.Component {
     // stealing the ref from the owner, but we know exactly the DOM structure
     // that will be rendered, so we can just do this to get the child's DOM
     // node for doing size calculations in OverlayMixin.
-    const node = React.findDOMNode(this);
+    const node = ReactDOM.findDOMNode(this);
     return this.props.noWrap ? node : node.firstChild;
   }
 
