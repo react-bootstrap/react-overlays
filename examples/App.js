@@ -5,12 +5,15 @@ import Editor from '@jquense/component-playground';
 
 import PropTable from './PropTable';
 
+import AffixSource from '../webpack/example-loader!./Affix';
 import ModalExample from '../webpack/example-loader!./Modal';
 import OverlaySource from '../webpack/example-loader!./Overlay';
 import PortalSource from '../webpack/example-loader!./Portal';
 import PositionSource from '../webpack/example-loader!./Position';
 import TransitionSource from '../webpack/example-loader!./Transition';
 
+import AffixMetadata from '../webpack/metadata-loader!react-overlays/Affix';
+import AutoAffixMetadata from '../webpack/metadata-loader!react-overlays/AutoAffix';
 import PortalMetadata from '../webpack/metadata-loader!react-overlays/Portal';
 import PositionMetadata from '../webpack/metadata-loader!react-overlays/Position';
 import OverlayMetadata from '../webpack/metadata-loader!react-overlays/Overlay';
@@ -18,11 +21,14 @@ import ModalMetadata from '../webpack/metadata-loader!react-overlays/Modal';
 import TransitionMetadata from '../webpack/metadata-loader!react-overlays/Transition';
 
 import * as ReactOverlays from 'react-overlays';
+import getOffset from 'dom-helpers/query/offset';
 
 import './styles.less';
 import injectCss from './injectCss';
 
-let scope = { React, findDOMNode, Button, injectCss, ...ReactOverlays };
+let scope = {
+  React, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset
+};
 
 const Anchor = React.createClass({
   propTypes: {
@@ -72,6 +78,7 @@ const Example = React.createClass({
             <li><a href='#modals'>Modals</a></li>
             <li><a href='#position'>Position</a></li>
             <li><a href='#overlay'>Overlay</a></li>
+            <li><a href='#affixes'>Affixes</a></li>
           </ul>
         </article>
         <main className='col-md-10'>
@@ -128,6 +135,22 @@ const Example = React.createClass({
             <PropTable
               component='Overlay'
               metadata={OverlayMetadata}
+            />
+          </section>
+          <section>
+            <h2 className='page-header'>
+              <Anchor>Affixes</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: AffixMetadata.Affix.descHtml }}/>
+            <p dangerouslySetInnerHTML={{__html: AutoAffixMetadata.AutoAffix.descHtml }}/>
+            <ExampleEditor codeText={AffixSource} />
+            <PropTable
+              component='Affix'
+              metadata={AffixMetadata}
+            />
+            <PropTable
+              component='AutoAffix'
+              metadata={AutoAffixMetadata}
             />
           </section>
         </main>

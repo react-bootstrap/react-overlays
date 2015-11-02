@@ -40,16 +40,17 @@ const PropTable = React.createClass({
 
   render(){
     let propsData = this.propsData;
-    let composes = this.props.metadata[this.props.component].composes || [];
-
     if ( !Object.keys(propsData).length ){
       return <span/>;
     }
 
+    let {component, metadata} = this.props;
+    let composes = metadata[component].composes || [];
+
     return (
       <div>
         <h3>
-          Props
+          {component} Props
           { !!composes.length && [<br/>,
             <small>
               {'Also accepts the same props as: '}
