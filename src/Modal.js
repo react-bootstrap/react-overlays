@@ -276,7 +276,9 @@ const Modal = React.createClass({
   },
 
   componentWillUnmount() {
-    if (this.props.show) {
+    let { show, transition } = this.props;
+
+    if (show || (transition && !this.state.exited)) {
       this.onHide();
     }
   },
