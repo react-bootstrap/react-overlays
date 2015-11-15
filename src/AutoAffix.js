@@ -152,6 +152,7 @@ AutoAffix.propTypes = {
 // This intentionally doesn't inherit default props from `<Affix>`, so that the
 // auto-calculated offsets can apply.
 AutoAffix.defaultProps = {
+  viewportOffsetTop: 0,
   autoWidth: true
 };
 
