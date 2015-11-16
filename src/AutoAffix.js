@@ -32,6 +32,11 @@ class AutoAffix extends React.Component {
     this._windowScrollListener = addEventListener(
       ownerWindow(this), 'scroll', () => this.onWindowScroll()
     );
+
+    this._windowResizeListener = addEventListener(
+      ownerWindow(this), 'resize', () => this.onWindowResize()
+    );
+
     this._documentClickListener = addEventListener(
       ownerDocument(this), 'click', () => this.onDocumentClick()
     );
@@ -59,10 +64,19 @@ class AutoAffix extends React.Component {
     if (this._documentClickListener) {
       this._documentClickListener.remove();
     }
+    if (this._windowResizeListener){
+      this._windowResizeListener.remove();
+    }
   }
 
   onWindowScroll() {
     this.onUpdate();
+  }
+
+  onWindowResize() {
+    if (this.props.autoWidth) {
+      requestAnimationFrame(() => this.onUpdate());
+    }
   }
 
   onDocumentClick() {
@@ -119,12 +133,12 @@ class AutoAffix extends React.Component {
         <div ref="positioner" />
 
         <Affix
+          {...props}
           offsetTop={effectiveOffsetTop}
           viewportOffsetTop={viewportOffsetTop}
           offsetBottom={offsetBottom}
           affixStyle={affixStyle}
           bottomStyle={bottomStyle}
-          {...props}
         >
           {children}
         </Affix>
