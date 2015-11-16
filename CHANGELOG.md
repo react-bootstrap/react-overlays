@@ -1,3 +1,12 @@
+v0.5.2 - Mon, 16 Nov 2015 17:32:27 GMT
+--------------------------------------
+
+- [823d0f8](../../commit/823d0f8) [fixed] fix missing warning dep
+- [1857449](../../commit/1857449) [changed] Friendlier default for AutoAffix
+- [f633476](../../commit/f633476) [fixed] clean up modal styles if unmounted during exit transition
+
+
+
 v0.5.1 - Mon, 02 Nov 2015 16:07:44 GMT
 --------------------------------------
 
