@@ -8,6 +8,7 @@ import { render } from './helpers';
 
 describe('<Affix>', () => {
   let mountPoint;
+  let handlers;
 
   // This makes the window very tall; hopefully enough to exhibit the affix
   // behavior. If this is insufficient, we should modify the Karma config to
@@ -41,9 +42,18 @@ describe('<Affix>', () => {
     Content.renderCount = 0;
     mountPoint = document.createElement('div');
     document.body.appendChild(mountPoint);
+    handlers = {
+      onAffix: sinon.spy(),
+      onAffixed: sinon.spy(),
+      onAffixTop: sinon.spy(),
+      onAffixedTop: sinon.spy(),
+      onAffixBottom: sinon.spy(),
+      onAffixedBottom: sinon.spy()
+    };
   });
 
   afterEach(() => {
+    Object.keys(handlers).forEach(key => handlers[key].reset());
     ReactDOM.unmountComponentAtNode(mountPoint);
     document.body.removeChild(mountPoint);
     window.scrollTo(0, 0);
@@ -58,6 +68,7 @@ describe('<Affix>', () => {
 
     const content =
       ReactTestUtils.findRenderedComponentWithType(instance, Content);
+
     expect(content).to.exist;
   });
 
@@ -76,6 +87,7 @@ describe('<Affix>', () => {
             affixStyle={{color: 'white'}}
             bottomClassName="affix-bottom"
             bottomStyle={{color: 'blue'}}
+            {...handlers}
           >
             <Content style={{height: 100}} />
           </Affix>
@@ -88,14 +100,19 @@ describe('<Affix>', () => {
     });
 
     it('should render correctly at top', (done) => {
-      window.scrollTo(0, 99);
+      window.scrollTo(0, 101);
 
       requestAnimationFrame(() => {
-        expect(node.className).to.equal('affix-top');
-        expect(node.style.position).to.not.be.ok;
-        expect(node.style.top).to.not.be.ok;
-        expect(node.style.color).to.equal('red');
-        done();
+        window.scrollTo(0, 99);
+        requestAnimationFrame(() => {
+          expect(node.className).to.equal('affix-top');
+          expect(node.style.position).to.not.be.ok;
+          expect(node.style.top).to.not.be.ok;
+          expect(node.style.color).to.equal('red');
+          expect(handlers.onAffixTop).to.been.calledOnce;
+          expect(handlers.onAffixedTop).to.been.calledOnce;
+          done();
+        });
       });
     });
 
@@ -106,6 +123,9 @@ describe('<Affix>', () => {
         expect(node.style.position).to.equal('fixed');
         expect(node.style.top).to.not.be.ok;
         expect(node.style.color).to.equal('white');
+
+        expect(handlers.onAffix).to.been.calledOnce;
+        expect(handlers.onAffixed).to.been.calledOnce;
         done();
       });
     });
@@ -117,6 +137,9 @@ describe('<Affix>', () => {
         expect(node.style.position).to.equal('absolute');
         expect(node.style.top).to.equal('9900px');
         expect(node.style.color).to.equal('blue');
+
+        expect(handlers.onAffixBottom).to.been.calledOnce;
+        expect(handlers.onAffixedBottom).to.been.calledOnce;
         done();
       });
     });
@@ -131,6 +154,7 @@ describe('<Affix>', () => {
           <Affix
             offsetTop={100}
             viewportOffsetTop={50}
+            {...handlers}
           >
             <Content />
           </Affix>

@@ -127,7 +127,18 @@ class Affix extends React.Component {
       return;
     }
 
-    this.setState({affixed, position, top});
+    let upperName = affixed === 'affix'
+      ? '' : affixed.charAt(0).toUpperCase() + affixed.substr(1);
+
+    if (this.props['onAffix' + upperName]) {
+      this.props['onAffix' + upperName]();
+    }
+
+    this.setState({affixed, position, top}, ()=>{
+      if (this.props['onAffixed' + upperName]) {
+        this.props['onAffixed' + upperName]();
+      }
+    });
   }
 
   updateStateAtBottom() {
@@ -201,7 +212,14 @@ Affix.propTypes = {
   /**
    * Style to apply when at bottom
    */
-  bottomStyle: React.PropTypes.object
+  bottomStyle: React.PropTypes.object,
+
+  onAffix: React.PropTypes.func,
+  onAffixed: React.PropTypes.func,
+  onAffixTop: React.PropTypes.func,
+  onAffixedTop: React.PropTypes.func,
+  onAffixBottom: React.PropTypes.func,
+  onAffixedBottom: React.PropTypes.func
 };
 
 Affix.defaultProps = {
