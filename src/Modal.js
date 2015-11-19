@@ -296,6 +296,10 @@ const Modal = React.createClass({
       addFocusListener(this.enforceFocus);
 
    this.focus();
+
+   if (this.props.onShow) {
+     this.props.onShow();
+   }
   },
 
   onHide() {
