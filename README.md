@@ -12,7 +12,7 @@ demos and docs at: http://react-bootstrap.github.io/react-overlays/examples/
 npm install --save react-overlays
 ```
 
-All of these utilities have been abstracted out of [react-bootstrap](https://github.com/react-bootstrap/react-bootstrap) in order to provide better access to the generic implementations of these commonly needed components. The included components are building blockings for creating more polished components. Everything is bring-your-own-styles, css or otherwise.
+All of these utilities have been abstracted out of [react-bootstrap](https://github.com/react-bootstrap/react-bootstrap) in order to provide better access to the generic implementations of these commonly needed components. The included components are building blocks for creating more polished components. Everything is bring-your-own-styles, css or otherwise.
 
 If you are looking for more complete overlays, modals, or tooltips--something you can use right out of the box--check out react-boostrap, which is (or soon will be) built on using these components.
 
