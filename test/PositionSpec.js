@@ -216,5 +216,22 @@ describe('Position', function () {
     });
   });
 
+  it('should not forward own props to child', function () {
+    let spiedProps;
+    const Child = (props) => {
+      spiedProps = props;
+      return <div />;
+    };
+
+    ReactTestUtils.renderIntoDocument(
+      <Position target={() => null} childProp="foo">
+        <Child />
+      </Position>
+    );
+
+    expect(spiedProps.target).to.not.exist;
+    expect(spiedProps.childProp).to.equal('foo');
+  });
+
   // ToDo: add remaining tests
 });
