@@ -56,6 +56,8 @@ class Position extends React.Component {
     const {children, className, ...props} = this.props;
     const {positionLeft, positionTop, ...arrowPosition} = this.state;
 
+    Object.keys(Position.propTypes).forEach(key => delete props[key]);
+
     const child = React.Children.only(children);
     return cloneElement(
       child,
