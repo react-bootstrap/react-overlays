@@ -33,26 +33,25 @@ const PlacementStyles = {
 
 
 
-class ToolTip {
-  render(){
-    let placementStyle = PlacementStyles[this.props.placement];
+const ToolTip = props => {
+  let placementStyle = PlacementStyles[props.placement];
 
-    let {
-      style,
-      arrowOffsetLeft: left = placementStyle.left,
-      arrowOffsetTop: top = placementStyle.top,
-      ...props } = this.props;
+  let {
+    style,
+    arrowOffsetLeft: left = placementStyle.left,
+    arrowOffsetTop: top = placementStyle.top,
+    children
+  } = props;
 
-    return (
-      <div style={{...OverlayStyle, ...style}}>
-        <div style={{...CalloutStyle, ...placementStyle, left, top }}/>
-        <div style={{...OverlayInnerStyle}}>
-          { props.children }
-        </div>
+  return (
+    <div style={{...OverlayStyle, ...style}}>
+      <div style={{...CalloutStyle, ...placementStyle, left, top }}/>
+      <div style={{...OverlayInnerStyle}}>
+        {children}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const PositionExample = React.createClass({
 

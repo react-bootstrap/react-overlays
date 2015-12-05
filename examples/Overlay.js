@@ -50,26 +50,25 @@ const PlacementStyles = {
   }
 };
 
-class ToolTip {
-  render(){
-    let placementStyle = PlacementStyles[this.props.placement];
+const ToolTip = props => {
+  let placementStyle = PlacementStyles[props.placement];
 
-    let {
-      style,
-      arrowOffsetLeft: left = placementStyle.arrow.left,
-      arrowOffsetTop: top = placementStyle.arrow.top,
-      ...props } = this.props;
+  let {
+    style,
+    arrowOffsetLeft: left = placementStyle.arrow.left,
+    arrowOffsetTop: top = placementStyle.arrow.top,
+    children
+  } = props;
 
-    return (
-      <div style={{...TooltipStyle, ...placementStyle.tooltip, ...style}}>
-        <div style={{...TooltipArrowStyle, ...placementStyle.arrow, left, top }}/>
-        <div style={TooltipInnerStyle}>
-          { props.children }
-        </div>
+  return (
+    <div style={{...TooltipStyle, ...placementStyle.tooltip, ...style}}>
+      <div style={{...TooltipArrowStyle, ...placementStyle.arrow, left, top }}/>
+      <div style={TooltipInnerStyle}>
+        {children}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const OverlayExample = React.createClass({
 
