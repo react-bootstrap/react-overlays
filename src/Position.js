@@ -92,7 +92,7 @@ class Position extends React.Component {
   updatePosition(placementChanged) {
     const target = this.getTargetSafe();
 
-    if (target === this._lastTarget && !placementChanged) {
+    if (!this.props.shouldUpdatePosition && target === this._lastTarget && !placementChanged) {
       return;
     }
 
@@ -138,14 +138,19 @@ Position.propTypes = {
   /**
    * How to position the component relative to the target
    */
-  placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left'])
+  placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+  /**
+   * Whether the position should be changed on each update
+   */
+  shouldUpdatePosition: React.PropTypes.bool
 };
 
 Position.displayName = 'Position';
 
 Position.defaultProps = {
   containerPadding: 0,
-  placement: 'right'
+  placement: 'right',
+  shouldUpdatePosition: false
 };
 
 export default Position;

@@ -92,6 +92,51 @@ describe('Position', function () {
       expect(overlayPositionUtils.calcOverlayPosition)
         .to.have.been.calledTwice;
     });
+
+    it('Should recalculate position if shouldUpdatePosition prop is true', function () {
+      class Target extends React.Component {
+        constructor(props) {
+          super(props);
+
+          this.state = {
+            target: 'bar',
+            fakeProp: 0
+          };
+        }
+
+        render() {
+          return (
+            <div>
+              <div ref="bar" />
+
+              <Position
+                target={() => this.refs[this.state.target]}
+                shouldUpdatePosition
+                fakeProp={this.state.fakeProp}
+              >
+                <div />
+              </Position>
+            </div>
+          );
+        }
+      }
+
+      const instance = ReactTestUtils.renderIntoDocument(<Target />);
+
+      // Position calculates initial position.
+      expect(Position.prototype.componentWillReceiveProps)
+        .to.have.not.been.called;
+      expect(overlayPositionUtils.calcOverlayPosition)
+        .to.have.been.calledOnce;
+
+      instance.setState({fakeProp: 1});
+
+      // Position receives new props and position should be recalculated
+      expect(Position.prototype.componentWillReceiveProps)
+        .to.have.been.calledOnce;
+      expect(overlayPositionUtils.calcOverlayPosition)
+        .to.have.been.calledTwice;
+    });
   });
 
   describe('position calculation', function () {
