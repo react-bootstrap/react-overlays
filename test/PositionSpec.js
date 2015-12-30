@@ -188,6 +188,14 @@ describe('Position', function () {
               >
                 <FakeOverlay ref="overlay" />
               </Position>
+              <Position
+                target={() => this.refs.target}
+                container={() => this}
+                containerPadding={50}
+                placement={placement}
+              >
+                <FakeOverlay ref="overlay_for_callback_container" />
+              </Position>
             </div>
           );
         }
@@ -203,11 +211,13 @@ describe('Position', function () {
       it('Should calculate the correct position', function() {
         const instance = render(<FakeContainer />, mountPoint);
 
-        const calculatedPosition = pick(
-          instance.refs.overlay.props, Object.keys(expectedPosition)
-        );
+        ['overlay', 'overlay_for_callback_container'].forEach(function(overlayRefName) {
+          const calculatedPosition = pick(
+            instance.refs[overlayRefName].props, Object.keys(expectedPosition)
+          );
+          expect(calculatedPosition).to.eql(expectedPosition);
 
-        expect(calculatedPosition).to.eql(expectedPosition);
+        });
       });
     }
 
@@ -258,6 +268,10 @@ describe('Position', function () {
           );
         });
       });
+    });
+
+    describe('calculate using container callback function', function () {
+
     });
   });
 
