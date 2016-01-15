@@ -1,3 +1,11 @@
+v0.6.0 - Fri, 15 Jan 2016 16:15:50 GMT
+--------------------------------------
+
+- [c0b5890](../../commit/c0b5890) [fixed] Don't forward own props from <Position>
+- [742c3c1](../../commit/742c3c1) [fixed] Modal does not fire show callback
+
+
+
 v0.5.4 - Tue, 17 Nov 2015 20:03:06 GMT
 --------------------------------------
 
