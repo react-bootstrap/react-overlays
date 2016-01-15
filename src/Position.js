@@ -130,8 +130,10 @@ class Position extends React.Component {
 Position.propTypes = {
   /**
    * Function mapping props to a DOM node the component is positioned next to
+   *
    */
   target: React.PropTypes.func,
+
   /**
    * "offsetParent" of the component
    */

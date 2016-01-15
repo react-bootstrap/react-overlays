@@ -40,13 +40,14 @@
     "react-dom": "^0.14.0"
   },
   "devDependencies": {
+    "@jquense/component-playground": "jquense/component-playground",
     "babel": "5.6.14",
-    "babel-core": "5.6.15",
+    "babel-core": "^5.8.34",
     "babel-eslint": "^4.1.6",
     "babel-loader": "^5.3.0",
     "babel-plugin-object-assign": "^1.2.1",
     "chai": "^3.2.0",
-    "component-playground": "jquense/component-playground",
+    "component-metadata-loader": "^2.0.0",
     "css-loader": "^0.15.6",
     "es5-shim": "^4.1.7",
     "eslint": "^1.10.1",

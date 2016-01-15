@@ -103,7 +103,8 @@ class ModalManager {
 
     this.modals.splice(modalIdx, 1);
 
-    //if that was the last modal in a container, clean it up.
+    // if that was the last modal in a container,
+    // clean up the container stylinhg.
     if (data.modals.length === 0){
       Object.keys(data.style).forEach(
         key => container.style[key] = data.style[key]);

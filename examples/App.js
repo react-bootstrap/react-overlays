@@ -12,13 +12,13 @@ import PortalSource from '../webpack/example-loader!./Portal';
 import PositionSource from '../webpack/example-loader!./Position';
 import TransitionSource from '../webpack/example-loader!./Transition';
 
-import AffixMetadata from '../webpack/metadata-loader!react-overlays/Affix';
-import AutoAffixMetadata from '../webpack/metadata-loader!react-overlays/AutoAffix';
-import PortalMetadata from '../webpack/metadata-loader!react-overlays/Portal';
-import PositionMetadata from '../webpack/metadata-loader!react-overlays/Position';
-import OverlayMetadata from '../webpack/metadata-loader!react-overlays/Overlay';
-import ModalMetadata from '../webpack/metadata-loader!react-overlays/Modal';
-import TransitionMetadata from '../webpack/metadata-loader!react-overlays/Transition';
+import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix';
+import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix';
+import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal';
+import PositionMetadata from 'component-metadata-loader?pitch!react-overlays/Position';
+import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay';
+import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal';
+import TransitionMetadata from 'component-metadata-loader?pitch!react-overlays/Transition';
 
 import * as ReactOverlays from 'react-overlays';
 import getOffset from 'dom-helpers/query/offset';

@@ -54,6 +54,9 @@ const Modal = React.createClass({
 
     /**
      * A callback fired when either the backdrop is clicked, or the escape key is pressed.
+     *
+     * The `onHide` callback only signals intent from the Modal,
+     * you must actually set the `show` prop to `false` for the Modal to close.
      */
     onHide: React.PropTypes.func,
 
@@ -102,30 +105,33 @@ const Modal = React.createClass({
     transition: elementType,
 
     /**
-     * The `timeout` of the dialog transition if specified. This number is used to ensure that transition callbacks are always
-     * fired, even if browser transition events are canceled.
+     * The `timeout` of the dialog transition if specified. This number is used to ensure that
+     * transition callbacks are always fired, even if browser transition events are canceled.
      *
      * See the Transition `timeout` prop for more infomation.
      */
     dialogTransitionTimeout: React.PropTypes.number,
 
     /**
-     * The `timeout` of the backdrop transition if specified. This number is used to ensure that transition callbacks are always
-     * fired, even if browser transition events are canceled.
+     * The `timeout` of the backdrop transition if specified. This number is used to
+     * ensure that transition callbacks are always fired, even if browser transition events are canceled.
      *
      * See the Transition `timeout` prop for more infomation.
      */
     backdropTransitionTimeout: React.PropTypes.number,
 
     /**
-     * When `true` The modal will automatically shift focus to itself when it opens, and replace it to the last focused element when it closes.
-     * Generally this should never be set to false as it makes the Modal less accessible to assistive technologies, like screen readers.
+     * When `true` The modal will automatically shift focus to itself when it opens, and
+     * replace it to the last focused element when it closes.
+     * Generally this should never be set to false as it makes the Modal less
+     * accessible to assistive technologies, like screen readers.
      */
     autoFocus: React.PropTypes.bool,
 
     /**
      * When `true` The modal will prevent focus from leaving the Modal while open.
-     * Generally this should never be set to false as it makes the Modal less accessible to assistive technologies, like screen readers.
+     * Generally this should never be set to false as it makes the Modal less
+     * accessible to assistive technologies, like screen readers.
      */
     enforceFocus: React.PropTypes.bool
 
@@ -161,7 +167,6 @@ const Modal = React.createClass({
     let show = !!props.show;
     let dialog = React.Children.only(this.props.children);
 
-    let setMountNode = ref => this.mountNode = (!ref || ref.getMountNode());
 
     const mountModal = show || (Transition && !this.state.exited);
 
@@ -199,7 +204,7 @@ const Modal = React.createClass({
 
     return (
       <Portal
-        ref={setMountNode}
+        ref={this.setMountNode}
         container={props.container}
       >
         <div
@@ -258,7 +263,7 @@ const Modal = React.createClass({
   },
 
   componentDidMount() {
-    if ( this.props.show ){
+    if (this.props.show) {
       this.onShow();
     }
   },
@@ -296,10 +301,6 @@ const Modal = React.createClass({
       addFocusListener(this.enforceFocus);
 
    this.focus();
-
-   if (this.props.onShow) {
-     this.props.onShow();
-   }
   },
 
   onHide() {
@@ -310,6 +311,10 @@ const Modal = React.createClass({
     this._onFocusinListener.remove();
 
     this.restoreLastFocus();
+  },
+
+  setMountNode(ref) {
+    this.mountNode = ref ? ref.getMountNode() : ref;
   },
 
   handleHidden(...args) {

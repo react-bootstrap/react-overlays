@@ -75,7 +75,9 @@ const PositionExample = React.createClass({
         <Button bsStyle='primary' ref='target' onClick={this.toggle}>
           I am an Position target
         </Button>
-
+        <p>
+          keep clicking to see the placement change
+        </p>
 
         <Position
           container={this}

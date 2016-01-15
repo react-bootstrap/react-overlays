@@ -18,7 +18,7 @@ const backdropStyle = {
 };
 
 const dialogStyle = function() {
-  // we use some psuedo random coords so modals
+  // we use some psuedo random coords so nested modals
   // don't sit right on top of each other.
   let top = 50 + rand();
   let left = 50 + rand();
@@ -61,7 +61,6 @@ const ModalExample = React.createClass({
           <div style={dialogStyle()} >
             <h4 id='modal-label'>Text in a modal</h4>
             <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-            <input autoFocus/>
             <ModalExample/>
           </div>
         </Modal>

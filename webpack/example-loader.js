@@ -17,17 +17,13 @@ exampleLoader.pitch = function(remainingRequest){
     this.cachable();
   }
 
-  console.log('start', this.loaders)
   this.loaders.splice(this.loaderIndex + 1, this.loaders.length - this.loaderIndex);
 
-  console.log('after', this.loaders)
   this.loaders.splice(this.loaderIndex, 0, {
     request: require.resolve('raw-loader'),
     path: require.resolve('raw-loader'),
     module: require('raw-loader')
   });
-
-  console.log('end', this.loaders)
 };
 
 module.exports = exampleLoader;
