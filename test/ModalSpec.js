@@ -180,8 +180,7 @@ describe('Modal', function () {
           <strong>Message</strong>
         </Modal>
       , mountPoint);
-    }).to.throw(
-      'Invariant Violation: onlyChild must be passed a children with exactly one child.');
+    }).to.throw(/onlyChild must be passed a children with exactly one child/);
   });
 
   it('Should add role to child', function () {
@@ -253,7 +252,7 @@ describe('Modal', function () {
         onEntering={increment}
         onEntered={()=> {
           increment();
-          instance.setProps({ show: false });
+          instance.renderWithProps({ show: false });
         }}
       >
         <strong>Message</strong>

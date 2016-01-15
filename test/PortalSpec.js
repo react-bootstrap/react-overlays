@@ -21,7 +21,7 @@ describe('Portal', function () {
 
   afterEach(function() {
     if (instance && ReactTestUtils.isCompositeComponent(instance) && instance.isMounted()) {
-      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance));
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
     }
   });
 
