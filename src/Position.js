@@ -135,7 +135,10 @@ Position.propTypes = {
   /**
    * "offsetParent" of the component
    */
-  container: mountable,
+  container: React.PropTypes.oneOfType([
+    mountable,
+    React.PropTypes.func
+  ]),
   /**
    * Minimum spacing in pixels between container border and component border
    */
