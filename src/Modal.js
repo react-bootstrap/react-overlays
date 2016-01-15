@@ -161,7 +161,11 @@ const Modal = React.createClass({
     let show = !!props.show;
     let dialog = React.Children.only(this.props.children);
 
-    let setMountNode = ref => this.mountNode = (!ref || ref.getMountNode());
+    let setMountNode = ref => {
+      if (ref !== null && typeof ref === 'object') {
+        this.mountNode = ref.getMountNode();
+      }
+    }
 
     const mountModal = show || (Transition && !this.state.exited);
 
