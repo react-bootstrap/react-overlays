@@ -33,9 +33,7 @@
     "test": "npm run lint && karma start --single-run",
     "tdd": "karma start",
     "coverage": "COVERAGE=true karma start --single-run",
-    "patch": "release patch",
-    "minor": "release minor",
-    "major": "release major"
+    "release": "release"
   },
   "peerDependencies": {
     "react": ">=0.14.0",
