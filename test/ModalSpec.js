@@ -261,6 +261,30 @@ describe('Modal', function () {
       , mountPoint);
   });
 
+  it('Should fire show callback on mount', function () {
+    let onShowSpy = sinon.spy();
+    render(
+      <Modal show onShow={onShowSpy}>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    expect(onShowSpy).to.have.been.calledOnce;
+  });
+
+  it('Should fire show callback on update', function () {
+    let onShowSpy = sinon.spy();
+    let instance = render(
+      <Modal onShow={onShowSpy}>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    instance.renderWithProps({ show: true });
+
+    expect(onShowSpy).to.have.been.calledOnce;
+  });
+
   describe('Focused state', function () {
     let focusableContainer = null;
 
