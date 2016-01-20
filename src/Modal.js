@@ -133,7 +133,37 @@ const Modal = React.createClass({
      * Generally this should never be set to false as it makes the Modal less
      * accessible to assistive technologies, like screen readers.
      */
-    enforceFocus: React.PropTypes.bool
+    enforceFocus: React.PropTypes.bool,
+
+    /**
+     * Callback fired before the Modal transitions in
+     */
+    onEnter: React.PropTypes.func,
+
+    /**
+     * Callback fired as the Modal begins to transition in
+     */
+    onEntering: React.PropTypes.func,
+
+    /**
+     * Callback fired after the Modal finishes transitioning in
+     */
+    onEntered: React.PropTypes.func,
+
+    /**
+     * Callback fired right before the Modal transitions out
+     */
+    onExit: React.PropTypes.func,
+
+    /**
+     * Callback fired as the Modal begins to transition out
+     */
+    onExiting: React.PropTypes.func,
+
+    /**
+     * Callback fired after the Modal finishes transitioning out
+     */
+    onExited: React.PropTypes.func
 
   },
 
