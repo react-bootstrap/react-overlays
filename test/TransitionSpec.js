@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
 import { render } from './helpers';
+import tsp from 'teaspoon';
 import Transition, {UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING} from
   '../src/Transition';
 
@@ -28,6 +29,31 @@ describe('Transition', function () {
         );
 
     expect(instance.state.status).to.equal(EXITED);
+  });
+
+  it('should flush new props to the DOM before initiating a transition', function(done) {
+    tsp(
+      <Transition
+        in={false}
+        timeout={0}
+        enteringClassName='test-entering'
+        onEnter={node => {
+          expect(node.classList.contains('test-class')).to.equal(true)
+          expect(node.classList.contains('test-entering')).to.equal(false)
+          done()
+        }}
+      >
+        <div></div>
+      </Transition>
+    )
+    .render()
+    .tap(inst => {
+      expect(inst.dom().classList.contains('test-class')).to.equal(false)
+    })
+    .props({
+      in: true,
+      className: 'test-class'
+    })
   });
 
   describe('entering', ()=> {
