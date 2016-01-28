@@ -44,37 +44,49 @@ class Transition extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const status = this.state.status;
-    if (nextProps.in) {
-      if (status === EXITING) {
-        this.performEnter(nextProps);
-      } else if (this.props.unmountOnExit) {
-        if (status === UNMOUNTED) {
-          // Start enter transition in componentDidUpdate.
-          this.setState({status: EXITED});
-        }
-      } else if (status === EXITED) {
-        this.performEnter(nextProps);
+    if (nextProps.in && this.props.unmountOnExit) {
+      if (this.state.status === UNMOUNTED) {
+        // Start enter transition in componentDidUpdate.
+        this.setState({status: EXITED});
       }
-
-      // Otherwise we're already entering or entered.
-    } else {
-      if (status === ENTERING || status === ENTERED) {
-        this.performExit(nextProps);
-      }
-
-      // Otherwise we're already exited or exiting.
+    }
+    else {
+      this._needsUpdate = true
     }
   }
 
   componentDidUpdate() {
-    if (this.props.unmountOnExit && this.state.status === EXITED) {
+    const status = this.state.status;
+
+    if (this.props.unmountOnExit && status === EXITED) {
       // EXITED is always a transitional state to either ENTERING or UNMOUNTED
       // when using unmountOnExit.
       if (this.props.in) {
         this.performEnter(this.props);
       } else {
         this.setState({status: UNMOUNTED});
+      }
+
+      return
+    }
+
+    // guard ensures we are only responding to prop changes
+    if (this._needsUpdate) {
+      this._needsUpdate = false;
+
+      if (this.props.in) {
+        if (status === EXITING) {
+          this.performEnter(this.props);
+        }
+        else if (status === EXITED) {
+          this.performEnter(this.props);
+        }
+        // Otherwise we're already entering or entered.
+      } else {
+        if (status === ENTERING || status === ENTERED) {
+          this.performExit(this.props);
+        }
+        // Otherwise we're already exited or exiting.
       }
     }
   }
