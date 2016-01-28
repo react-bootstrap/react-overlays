@@ -51,8 +51,8 @@ const PropTable = React.createClass({
       <div>
         <h3>
           {component} Props
-          { !!composes.length && [<br/>,
-            <small>
+          { !!composes.length && [<br key='1'/>,
+            <small key='2'>
               {'Also accepts the same props as: '}
               <em>
               { composes.reduce(

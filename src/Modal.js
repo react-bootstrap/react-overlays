@@ -30,11 +30,22 @@ let modalManager = new ModalManager();
  * - Adds the appropriate ARIA roles are automatically.
  * - Easily pluggable animations via a `<Transition/>` component.
  *
+ * Note that, in the same way the backdrop element prevents users from clicking or interacting
+ * with the page content underneath the Modal, Screen readers also need to be signaled to not to
+ * interact with page content while the Modal is open. To do this, we use a common technique of applying
+ * the `aria-hidden='true'` attribute to the non-Modal elements in the Modal `container`. This means that for
+ * a Modal to be truly modal, it should have a `container` that is _outside_ your app's
+ * React hierarchy (such as the default: document.body).
  */
 const Modal = React.createClass({
 
   propTypes: {
     ...Portal.propTypes,
+
+    /**
+     * Set the visibility of the Modal
+     */
+    show: React.PropTypes.bool,
 
     /**
      * A Node, Component instance, or function that returns either. The Modal is appended to it's container element.
@@ -122,15 +133,18 @@ const Modal = React.createClass({
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and
-     * replace it to the last focused element when it closes.
-     * Generally this should never be set to false as it makes the Modal less
+     * replace it to the last focused element when it closes. This also
+     * works correctly with any Modal children that have the `autoFocus` prop.
+     *
+     * Generally this should never be set to `false` as it makes the Modal less
      * accessible to assistive technologies, like screen readers.
      */
     autoFocus: React.PropTypes.bool,
 
     /**
      * When `true` The modal will prevent focus from leaving the Modal while open.
-     * Generally this should never be set to false as it makes the Modal less
+     *
+     * Generally this should never be set to `false` as it makes the Modal less
      * accessible to assistive technologies, like screen readers.
      */
     enforceFocus: React.PropTypes.bool,
