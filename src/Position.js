@@ -9,7 +9,7 @@ import { calcOverlayPosition } from './utils/overlayPositionUtils';
 import mountable from 'react-prop-types/lib/mountable';
 
 /**
- * The Position component calulates the corrdinates for its child, to
+ * The Position component calculates the coordinates for its child, to
  * position it relative to a `target` component or node. Useful for creating callouts and tooltips,
  * the Position component injects a `style` props with `left` and `top` values for positioning your component.
  *
