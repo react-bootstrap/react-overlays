@@ -32,6 +32,13 @@ let Portal = React.createClass({
     this._renderOverlay();
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (this._overlayTarget && nextProps.container !== this.props.container) {
+      this.getContainerDOMNode().removeChild(this._overlayTarget)
+      this.getContainerDOMNode(nextProps).appendChild(this._overlayTarget)
+    }
+  },
+
   componentWillUnmount() {
     this._unrenderOverlay();
     this._unmountOverlayTarget();
@@ -104,8 +111,9 @@ let Portal = React.createClass({
     return null;
   },
 
-  getContainerDOMNode() {
-    return getContainer(this.props.container, ownerDocument(this).body);
+  getContainerDOMNode(props) {
+    props = props || this.props
+    return getContainer(props.container, ownerDocument(this).body);
   }
 });
 

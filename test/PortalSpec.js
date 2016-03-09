@@ -76,4 +76,34 @@ describe('Portal', function () {
 
     assert.equal(overlayInstance.refs.p.getOverlayDOMNode().nodeName, 'DIV');
   });
+
+  it('Should change container on prop change', function() {
+
+    let ContainerTest = React.createClass({
+      getInitialState() {
+        return {}
+      },
+      render() {
+        return (
+          <div>
+            <div ref='d' />
+            <Portal ref='p' {...this.props} container={this.state.container}>
+              {this.props.overlay}
+            </Portal>
+          </div>
+        );
+      }
+    });
+
+    let overlayInstance = ReactTestUtils.renderIntoDocument(
+      <ContainerTest overlay={<div id="test1" />} />
+    );
+
+    assert.equal(overlayInstance.refs.p.getContainerDOMNode().nodeName, 'BODY');
+    overlayInstance.setState({container: overlayInstance.refs.d})
+    assert.equal(overlayInstance.refs.p.getContainerDOMNode().nodeName, 'DIV');
+
+    React.unmountComponentAtNode(React.findDOMNode(overlayInstance).parentNode);
+  });
+
 });
