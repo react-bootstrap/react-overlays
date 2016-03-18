@@ -11,11 +11,11 @@ const CLICK_WAS_INSIDE = '__click_was_inside';
 let counter = 0;
 
 function isLeftClickEvent(event) {
-  return event.button === 0
+  return event.button === 0;
 }
 
 function isModifiedEvent(event) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
+  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
 function getSuppressRootClose() {
@@ -62,7 +62,7 @@ export default class RootCloseWrapper extends React.Component {
     }
     
     if (isModifiedEvent(e) || !isLeftClickEvent(e)) {
-      return
+      return;
     }
     
     this.props.onRootClose();
