@@ -43,8 +43,12 @@ describe('RootCloseWrapper', function () {
     , mountPoint);
 
     simulant.fire(document.getElementById('my-div'), 'click', {button: 1});
-
-    expect(spy).to.have.been.called;
+    
+    expect(spy).to.not.have.been.called;
+    
+    simulant.fire(document.body, 'click', {button: 1});
+    
+    expect(spy).to.not.have.been.called;
   });
 
   it('should close when inside another RootCloseWrapper', () => {
