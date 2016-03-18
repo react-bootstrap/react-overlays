@@ -34,6 +34,23 @@ describe('RootCloseWrapper', function () {
     expect(spy).to.have.been.calledOnce;
   });
 
+  it('should not close when right-clicked outside', () => {
+    let spy = sinon.spy();
+    render(
+      <RootCloseWrapper onRootClose={spy}>
+        <div id='my-div'>hello there</div>
+      </RootCloseWrapper>
+    , mountPoint);
+
+    simulant.fire(document.getElementById('my-div'), 'click', {button: 1});
+
+    expect(spy).to.not.have.been.called;
+
+    simulant.fire(document.body, 'click', {button: 1});
+
+    expect(spy).to.not.have.been.called;
+  });
+
   it('should close when inside another RootCloseWrapper', () => {
     let outerSpy = sinon.spy();
     let innerSpy = sinon.spy();
