@@ -8,8 +8,6 @@
   "main": "lib/index.js",
   "files": [
     "lib/",
-    "LICENSE",
-    "README.md",
     "CHANGELOG.md"
   ],
   "keywords": [
