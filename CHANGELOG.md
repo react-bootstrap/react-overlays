@@ -1,3 +1,16 @@
+## [v0.6.1]
+> 2016-03-28
+
+- **Bugfix:** Flush new props to DOM before initiating transitions ([#60])
+- **Bugfix:** Update `<Portal>` container node when `container` prop changes ([#66])
+- **Bugfix:** Don't invooke close in `<RootCloseWrapper>` on right clicks ([#69])
+
+[v0.6.1]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.0...v0.6.1
+[#60]: https://github.com/react-bootstrap/react-overlays/pull/60
+[#66]: https://github.com/react-bootstrap/react-overlays/pull/66
+[#69]: https://github.com/react-bootstrap/react-overlays/pull/69
+
+
 v0.6.0 - Fri, 15 Jan 2016 16:15:50 GMT
 --------------------------------------
 
