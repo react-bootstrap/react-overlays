@@ -67,6 +67,7 @@
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
     "lodash": "^3.10.0",
+    "lolex": "^1.4.0",
     "marked": "^0.3.5",
     "mocha": "^2.2.5",
     "mt-changelog": "^0.6.1",
