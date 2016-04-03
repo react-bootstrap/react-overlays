@@ -34,8 +34,9 @@ let Portal = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if (this._overlayTarget && nextProps.container !== this.props.container) {
-      this.getContainerDOMNode().removeChild(this._overlayTarget)
-      this.getContainerDOMNode(nextProps).appendChild(this._overlayTarget)
+      this._portalContainerNode.removeChild(this._overlayTarget);
+      this._portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
+      this._portalContainerNode.appendChild(this._overlayTarget);
     }
   },
 
@@ -48,17 +49,17 @@ let Portal = React.createClass({
   _mountOverlayTarget() {
     if (!this._overlayTarget) {
       this._overlayTarget = document.createElement('div');
-      this.getContainerDOMNode()
-        .appendChild(this._overlayTarget);
+      this._portalContainerNode = getContainer(this.props.container, ownerDocument(this).body);
+      this._portalContainerNode.appendChild(this._overlayTarget);
     }
   },
 
   _unmountOverlayTarget() {
     if (this._overlayTarget) {
-      this.getContainerDOMNode()
-        .removeChild(this._overlayTarget);
+      this._portalContainerNode.removeChild(this._overlayTarget);
       this._overlayTarget = null;
     }
+    this._portalContainerNode = null;
   },
 
   _renderOverlay() {
@@ -109,12 +110,8 @@ let Portal = React.createClass({
     }
 
     return null;
-  },
-
-  getContainerDOMNode(props) {
-    props = props || this.props
-    return getContainer(props.container, ownerDocument(this).body);
   }
+
 });
 
 export default Portal;
