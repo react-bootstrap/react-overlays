@@ -1,3 +1,12 @@
+## [v0.6.2]
+> 2016-04-03
+
+- **Bugfix:** Fix unmounting `<Portal>` when parent is unmounted ([#74])
+
+[v0.6.2]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.1...v0.6.2
+[#74]: https://github.com/react-bootstrap/react-overlays/pull/74
+
+
 ## [v0.6.1]
 > 2016-03-28
 
