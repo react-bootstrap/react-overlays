@@ -1,6 +1,6 @@
 {
   "name": "react-overlays",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Utilities for creating robust overlay components",
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "repository": "react-bootstrap/react-overlays",
