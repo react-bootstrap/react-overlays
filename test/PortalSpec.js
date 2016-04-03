@@ -99,11 +99,46 @@ describe('Portal', function () {
       <ContainerTest overlay={<div id="test1" />} />
     );
 
-    assert.equal(overlayInstance.refs.p.getContainerDOMNode().nodeName, 'BODY');
+    assert.equal(overlayInstance.refs.p._portalContainerNode.nodeName, 'BODY');
     overlayInstance.setState({container: overlayInstance.refs.d})
-    assert.equal(overlayInstance.refs.p.getContainerDOMNode().nodeName, 'DIV');
+    assert.equal(overlayInstance.refs.p._portalContainerNode.nodeName, 'DIV');
 
-    React.unmountComponentAtNode(React.findDOMNode(overlayInstance).parentNode);
+    ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(overlayInstance).parentNode);
+  });
+
+  it('Should unmount when parent unmounts', function() {
+
+    let Parent = React.createClass({
+      getInitialState() {
+        return {show: true}
+      },
+      render() {
+        return (
+          <div>
+            {this.state.show && <Child /> || null}
+          </div>
+        )
+      }
+    })
+
+    let Child = React.createClass({
+      render() {
+        return (
+          <div>
+            <div ref='d' />
+            <Portal ref='p' container={() => this.refs.d}>
+              <div id="test1" />
+            </Portal>
+          </div>
+        );
+      }
+    });
+
+    instance = ReactTestUtils.renderIntoDocument(
+      <Parent />
+    );
+
+    instance.setState({show: false});
   });
 
 });
