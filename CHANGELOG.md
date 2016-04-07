@@ -1,3 +1,12 @@
+## [v0.6.3]
+> 2016-04-07
+
+- **Minor:** Update React peer dependency ([#76])
+
+[v0.6.3]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.2...v0.6.3
+[#76]: https://github.com/react-bootstrap/react-overlays/pull/76
+
+
 ## [v0.6.2]
 > 2016-04-03
 
