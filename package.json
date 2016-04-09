@@ -34,8 +34,8 @@
     "release": "release"
   },
   "peerDependencies": {
-    "react": ">=0.14.0",
-    "react-dom": ">=0.14.0"
+    "react": ">=0.14.0 || >=15.0.0",
+    "react-dom": ">=0.14.0 || >=15.0.0"
   },
   "devDependencies": {
     "@jquense/component-playground": "jquense/component-playground",
@@ -72,11 +72,11 @@
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "raw-loader": "^0.5.1",
-    "react": "^0.14.0",
-    "react-addons-test-utils": "^0.14.0",
-    "react-bootstrap": "^0.27.3",
+    "react": "^15.0.0",
+    "react-addons-test-utils": "^15.0.0",
+    "react-bootstrap": "^0.28.5",
     "react-component-metadata": "^1.2.2",
-    "react-dom": "^0.14.0",
+    "react-dom": "^15.0.0",
     "react-hot-loader": "^1.2.7",
     "release-script": "^0.2.1",
     "rimraf": "^2.4.2",
