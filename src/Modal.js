@@ -301,7 +301,7 @@ const Modal = React.createClass({
   },
 
   componentWillUpdate(nextProps){
-    if (nextProps.show) {
+    if (!this.props.show && nextProps.show) {
       this.checkForFocus();
     }
   },
