@@ -8,15 +8,12 @@ const utils = {
   getContainerDimensions(containerNode) {
     let width, height, scroll;
 
+    ({ width, height } = getOffset(containerNode));
     if (containerNode.tagName === 'BODY') {
-      width = window.innerWidth;
-      height = window.innerHeight;
-
       scroll =
         getScrollTop(ownerDocument(containerNode).documentElement) ||
         getScrollTop(containerNode);
     } else {
-      ({ width, height } = getOffset(containerNode));
       scroll = getScrollTop(containerNode);
     }
 
