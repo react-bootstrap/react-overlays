@@ -51,6 +51,23 @@ describe('RootCloseWrapper', function () {
     expect(spy).to.not.have.been.called;
   });
 
+  it('should not close when disabled', () => {
+    let spy = sinon.spy();
+    render(
+      <RootCloseWrapper onRootClose={spy} disabled>
+        <div id='my-div'>hello there</div>
+      </RootCloseWrapper>
+    , mountPoint);
+
+    simulant.fire(document.getElementById('my-div'), 'click');
+
+    expect(spy).to.not.have.been.called;
+
+    simulant.fire(document.body, 'click');
+
+    expect(spy).to.not.have.been.called;
+  });
+
   it('should close when inside another RootCloseWrapper', () => {
     let outerSpy = sinon.spy();
     let innerSpy = sinon.spy();

@@ -61,15 +61,16 @@ export default class RootCloseWrapper extends React.Component {
       return;
     }
 
-    if (isModifiedEvent(e) || !isLeftClickEvent(e)) {
+    if (this.props.disabled || isModifiedEvent(e) || !isLeftClickEvent(e)) {
       return;
     }
 
-    this.props.onRootClose();
+    this.props.onRootClose &&
+      this.props.onRootClose();
   }
 
   handleDocumentKeyUp(e) {
-    if (e.keyCode === 27) {
+    if (e.keyCode === 27 && this.props.onRootClose) {
       this.props.onRootClose();
     }
   }
@@ -124,8 +125,13 @@ export default class RootCloseWrapper extends React.Component {
 RootCloseWrapper.displayName = 'RootCloseWrapper';
 
 RootCloseWrapper.propTypes = {
-  onRootClose: React.PropTypes.func.isRequired,
+  onRootClose: React.PropTypes.func,
 
+  /**
+   * Disable the the RootCloseWrapper, preventing it from triggering
+   * `onRootClose`.
+   */
+  disabled: React.PropTypes.bool,
   /**
    * Passes the suppress click handler directly to the child component instead
    * of placing it on a wrapping div. Only use when you can be sure the child
