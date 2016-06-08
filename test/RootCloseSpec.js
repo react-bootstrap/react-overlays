@@ -25,11 +25,11 @@ describe('RootCloseWrapper', function () {
       </RootCloseWrapper>
     , mountPoint);
 
-    simulant.fire(document.getElementById('my-div'), 'click');
+    simulant.fire(document.getElementById('my-div'), 'mousedown');
 
     expect(spy).to.not.have.been.called;
 
-    simulant.fire(document.body, 'click');
+    simulant.fire(document.body, 'mousedown');
 
     expect(spy).to.have.been.calledOnce;
   });
@@ -42,11 +42,11 @@ describe('RootCloseWrapper', function () {
       </RootCloseWrapper>
     , mountPoint);
 
-    simulant.fire(document.getElementById('my-div'), 'click', {button: 1});
+    simulant.fire(document.getElementById('my-div'), 'mousedown', {button: 1});
 
     expect(spy).to.not.have.been.called;
 
-    simulant.fire(document.body, 'click', {button: 1});
+    simulant.fire(document.body, 'mousedown', {button: 1});
 
     expect(spy).to.not.have.been.called;
   });
@@ -59,11 +59,11 @@ describe('RootCloseWrapper', function () {
       </RootCloseWrapper>
     , mountPoint);
 
-    simulant.fire(document.getElementById('my-div'), 'click');
+    simulant.fire(document.getElementById('my-div'), 'mousedown');
 
     expect(spy).to.not.have.been.called;
 
-    simulant.fire(document.body, 'click');
+    simulant.fire(document.body, 'mousedown');
 
     expect(spy).to.not.have.been.called;
   });
@@ -83,7 +83,7 @@ describe('RootCloseWrapper', function () {
       </RootCloseWrapper>
     , mountPoint);
 
-    simulant.fire(document.getElementById('my-div'), 'click');
+    simulant.fire(document.getElementById('my-div'), 'mousedown');
 
     expect(outerSpy).to.have.not.been.called;
     expect(innerSpy).to.have.been.calledOnce;

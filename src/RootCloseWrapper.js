@@ -35,7 +35,7 @@ export default class RootCloseWrapper extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleDocumentClick = this.handleDocumentClick.bind(this);
+    this.handleDocumentMousedown = this.handleDocumentMousedown.bind(this);
     this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
 
     let { id, suppressRootClose } = getSuppressRootClose();
@@ -48,14 +48,14 @@ export default class RootCloseWrapper extends React.Component {
   bindRootCloseHandlers() {
     const doc = ownerDocument(this);
 
-    this._onDocumentClickListener =
-      addEventListener(doc, 'click', this.handleDocumentClick);
+    this._onDocumentMousedownListener =
+      addEventListener(doc, 'mousedown', this.handleDocumentMousedown);
 
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
   }
 
-  handleDocumentClick(e) {
+  handleDocumentMousedown(e) {
     // This is now the native event.
     if (e[this._suppressRootId]) {
       return;
@@ -76,8 +76,8 @@ export default class RootCloseWrapper extends React.Component {
   }
 
   unbindRootCloseHandlers() {
-    if (this._onDocumentClickListener) {
-      this._onDocumentClickListener.remove();
+    if (this._onDocumentMousedownListener) {
+      this._onDocumentMousedownListener.remove();
     }
 
     if (this._onDocumentKeyupListener) {
@@ -95,14 +95,14 @@ export default class RootCloseWrapper extends React.Component {
 
     if (noWrap) {
       return React.cloneElement(child, {
-        onClick: createChainedFunction(this._suppressRootCloseHandler, child.props.onClick)
+        onMouseDown: createChainedFunction(this._suppressRootCloseHandler, child.props.onMouseDown)
       });
     }
 
     // Wrap the child in a new element, so the child won't have to handle
     // potentially combining multiple onClick listeners.
     return (
-      <div onClick={this._suppressRootCloseHandler}>
+      <div onMouseDown={this._suppressRootCloseHandler}>
         {child}
       </div>
     );
