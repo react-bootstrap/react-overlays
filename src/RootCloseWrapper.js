@@ -35,7 +35,7 @@ export default class RootCloseWrapper extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleDocumentMousedown = this.handleDocumentMousedown.bind(this);
+    this.handleDocumentMouse = this.handleDocumentMouse.bind(this);
     this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
 
     let { id, suppressRootClose } = getSuppressRootClose();
@@ -48,14 +48,14 @@ export default class RootCloseWrapper extends React.Component {
   bindRootCloseHandlers() {
     const doc = ownerDocument(this);
 
-    this._onDocumentMousedownListener =
-      addEventListener(doc, 'mousedown', this.handleDocumentMousedown);
+    this._onDocumentMouseListener =
+      addEventListener(doc, this.props.event, this.handleDocumentMouse);
 
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
   }
 
-  handleDocumentMousedown(e) {
+  handleDocumentMouse(e) {
     // This is now the native event.
     if (e[this._suppressRootId]) {
       return;
@@ -76,8 +76,8 @@ export default class RootCloseWrapper extends React.Component {
   }
 
   unbindRootCloseHandlers() {
-    if (this._onDocumentMousedownListener) {
-      this._onDocumentMousedownListener.remove();
+    if (this._onDocumentMouseListener) {
+      this._onDocumentMouseListener.remove();
     }
 
     if (this._onDocumentKeyupListener) {
@@ -90,19 +90,21 @@ export default class RootCloseWrapper extends React.Component {
   }
 
   render() {
-    const {noWrap, children} = this.props;
+    const {event, noWrap, children} = this.props;
     const child = React.Children.only(children);
+
+    const handlerName = event == 'click' ? 'onClick' : 'onMouseDown';
 
     if (noWrap) {
       return React.cloneElement(child, {
-        onMouseDown: createChainedFunction(this._suppressRootCloseHandler, child.props.onMouseDown)
+        [handlerName]: createChainedFunction(this._suppressRootCloseHandler, child.props[handlerName])
       });
     }
 
     // Wrap the child in a new element, so the child won't have to handle
     // potentially combining multiple onClick listeners.
     return (
-      <div onMouseDown={this._suppressRootCloseHandler}>
+      <div {...{[handlerName]: this._suppressRootCloseHandler}}>
         {child}
       </div>
     );
@@ -137,5 +139,13 @@ RootCloseWrapper.propTypes = {
    * of placing it on a wrapping div. Only use when you can be sure the child
    * properly handle the click event.
    */
-  noWrap: React.PropTypes.bool
+  noWrap: React.PropTypes.bool,
+  /**
+   * Choose which document mouse event to bind to
+   */
+  event: React.PropTypes.oneOf(['click', 'mousedown'])
+};
+
+RootCloseWrapper.defaultProps = {
+  event: 'mousedown'
 };
