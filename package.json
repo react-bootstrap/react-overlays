@@ -38,7 +38,7 @@
     "react-dom": ">=0.14.0"
   },
   "devDependencies": {
-    "@monastic.panic/component-playground": "jquense/component-playground",
+    "@monastic.panic/component-playground": "^2.0.0",
     "babel": "^5.8.38",
     "babel-core": "^5.8.38",
     "babel-eslint": "^6.1.0",
