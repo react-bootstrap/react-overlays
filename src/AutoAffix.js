@@ -116,9 +116,10 @@ class AutoAffix extends React.Component {
   }
 
   render() {
-    const {container, autoWidth, viewportOffsetTop, children, ...props} =
-      this.props;
+    const {autoWidth, viewportOffsetTop, children, ...props} = this.props;
     const {offsetTop, offsetBottom, width} = this.state;
+
+    delete props.container;
 
     const effectiveOffsetTop = Math.max(offsetTop, viewportOffsetTop || 0);
 

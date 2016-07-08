@@ -1,4 +1,4 @@
-import pick from 'lodash/object/pick';
+import pick from 'lodash/pick';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';

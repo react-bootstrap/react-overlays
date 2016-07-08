@@ -1,7 +1,7 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
+import ReactDOM, { findDOMNode } from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
-import Editor from '@jquense/component-playground';
+import Playground from '@monastic.panic/component-playground';
 
 import PropTable from './PropTable';
 
@@ -27,7 +27,7 @@ import './styles.less';
 import injectCss from './injectCss';
 
 let scope = {
-  React, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset
+  React, ReactDOM, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset
 };
 
 const Anchor = React.createClass({
@@ -52,7 +52,7 @@ const ExampleEditor = React.createClass({
   },
   render() {
     return (
-      <Editor
+      <Playground
         className='overlay-example'
         lineNumbers={false}
         lang="js"
@@ -60,6 +60,9 @@ const ExampleEditor = React.createClass({
         scope={scope}
         codeText={this.props.codeText}
         collapsableCode
+        babelConfig={{
+          presets: ['es2015-loose', 'react', 'stage-0']
+        }}
       />
     );
   }
@@ -159,4 +162,4 @@ const Example = React.createClass({
   }
 });
 
-React.render(<Example/>, document.getElementById('app-container'));
+ReactDOM.render(<Example/>, document.getElementById('app-container'));
