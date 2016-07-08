@@ -4,9 +4,9 @@ let config = require('../webpack/examples.config');
 
 new WebpackDevServer(webpack(config), {
 
+  contentBase: 'examples',
   publicPath: '/static/',
   hot: true,
-  historyApiFallback: true,
   quiet: false,
   progress: true,
   stats: {

@@ -30,8 +30,6 @@ describe('<Affix>', () => {
   }
 
   class Content extends React.Component {
-    static renderCount;
-
     render() {
       ++Content.renderCount;
       return <div {...this.props}>Content</div>;

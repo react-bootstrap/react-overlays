@@ -6,7 +6,7 @@ function exampleLoader(source){
 
   source = source
     .replace(/import.+$/gm, '') //remove imports
-    .replace(/export default (\w+)/g, (_, name) => `React.render(<${name}/>, mountNode)`)
+    .replace(/export default (\w+)/g, (_, name) => `ReactDOM.render(<${name}/>, mountNode)`)
     .trim(); //transform export
 
   return source;

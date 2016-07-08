@@ -1,4 +1,4 @@
-import merge from 'lodash/object/merge';
+import merge from 'lodash/merge';
 import React from 'react';
 
 import Label from 'react-bootstrap/lib/Label';

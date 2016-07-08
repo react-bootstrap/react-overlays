@@ -199,26 +199,30 @@ const Modal = React.createClass({
   },
 
   render() {
-    let {
+    const {
+      show,
+      container,
       children,
       transition: Transition,
       backdrop,
       dialogTransitionTimeout,
-      ...props } = this.props;
+      className,
+      style,
+      onExit,
+      onExiting,
+      onEnter,
+      onEntering,
+      onEntered,
+    } = this.props;
 
-    let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
-
-    let show = !!props.show;
-    let dialog = React.Children.only(this.props.children);
-
+    let dialog = React.Children.only(children);
 
     const mountModal = show || (Transition && !this.state.exited);
-
     if (!mountModal) {
       return null;
     }
 
-    let { role, tabIndex } = dialog.props;
+    const { role, tabIndex } = dialog.props;
 
     if (role === undefined || tabIndex === undefined) {
       dialog = cloneElement(dialog, {
@@ -249,13 +253,13 @@ const Modal = React.createClass({
     return (
       <Portal
         ref={this.setMountNode}
-        container={props.container}
+        container={container}
       >
         <div
           ref={'modal'}
-          role={props.role || 'dialog'}
-          style={props.style}
-          className={props.className}
+          role={role || 'dialog'}
+          style={style}
+          className={className}
         >
           { backdrop && this.renderBackdrop() }
           { dialog }
