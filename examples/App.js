@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
-import Playground from '@monastic.panic/component-playground';
+import Playground from '@monastic.panic/component-playground/Playground';
 
 import PropTable from './PropTable';
 
@@ -26,7 +26,7 @@ import getOffset from 'dom-helpers/query/offset';
 import './styles.less';
 import injectCss from './injectCss';
 
-let scope = {
+const scope = {
   React, ReactDOM, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset
 };
 
