@@ -147,5 +147,5 @@ RootCloseWrapper.propTypes = {
 };
 
 RootCloseWrapper.defaultProps = {
-  event: 'mousedown'
+  event: 'click'
 };

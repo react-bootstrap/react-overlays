@@ -18,7 +18,7 @@ describe('RootCloseWrapper', function () {
   });
 
   describe('using default event', () => {
-    shouldCloseOn(undefined, 'mousedown');
+    shouldCloseOn(undefined, 'click');
   });
 
   describe('using click event', () => {
