@@ -9,10 +9,13 @@ import overlayPositionUtils from '../src/utils/overlayPositionUtils';
 import {render} from './helpers';
 
 describe('Position', function () {
+  // Swallow extra props.
+  const Span = () => <span />;
+
   it('Should output a child', function () {
     let instance = ReactTestUtils.renderIntoDocument(
       <Position>
-        <span>Text</span>
+        <Span>Text</Span>
       </Position>
     );
     assert.equal(ReactDOM.findDOMNode(instance).nodeName, 'SPAN');
@@ -22,8 +25,8 @@ describe('Position', function () {
     expect(() => {
       ReactTestUtils.renderIntoDocument(
         <Position>
-          <span>Text</span>
-          <span>Another Text</span>
+          <Span>Text</Span>
+          <Span>Another Text</Span>
         </Position>
       );
     }).to.throw(Error, /onlyChild must be passed a children with exactly one child/);
@@ -61,7 +64,7 @@ describe('Position', function () {
                 target={() => this.refs[this.state.target]}
                 fakeProp={this.state.fakeProp}
               >
-                <div />
+                <Span />
               </Position>
             </div>
           );
@@ -114,7 +117,7 @@ describe('Position', function () {
                 shouldUpdatePosition
                 fakeProp={this.state.fakeProp}
               >
-                <div />
+                <Span />
               </Position>
             </div>
           );

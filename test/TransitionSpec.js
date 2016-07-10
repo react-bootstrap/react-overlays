@@ -246,13 +246,16 @@ describe('Transition', function () {
       }
 
       render() {
+        const { ...props } = this.props;
+        delete props.initialIn;
+
         return (
           <Transition
             ref="transition"
             unmountOnExit
             in={this.state.in}
             timeout={10}
-            {...this.props}
+            {...props}
           >
             <div />
           </Transition>

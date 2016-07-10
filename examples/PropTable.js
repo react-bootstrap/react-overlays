@@ -121,9 +121,9 @@ const PropTable = React.createClass({
   },
 
   getType(prop) {
-    let type = prop.type || {};
-    let name = this.getDisplayTypeName(type.name);
-    let doclets = prop.doclets || {};
+    const type = prop.type || {};
+    const name = this.getDisplayTypeName(type.name);
+    const doclets = prop.doclets || {};
 
     switch (name) {
       case 'object':
@@ -139,9 +139,9 @@ const PropTable = React.createClass({
           return i === (list.length - 1) ? current : current.concat(' | ');
         }, []);
       case 'array':
-        let child = this.getType({ type: type.value });
-
-        return <span>{'array<'}{ child }{'>'}</span>;
+        return (
+          <span>{'array<'}{this.getType({ type: type.value })}{'>'}</span>
+        );
       case 'enum':
         return this.renderEnum(type);
       case 'custom':
