@@ -1,5 +1,5 @@
 /* eslint no-var: 0, babel/object-shorthand: 0 */
-require('babel/register');
+require('babel-core/register');
 
 var webpackConfig = require('./webpack/test.config.js');
 var isCI = process.env.CONTINUOUS_INTEGRATION === 'true';
