@@ -1,10 +1,8 @@
-import ReactDOM from 'react-dom';
 import { cloneElement } from 'react';
+import ReactDOM from 'react-dom';
 
 export function shouldWarn(about) {
-  console.warn.called.should.be.true;
-  console.warn.calledWithMatch(about).should.be.true;
-  console.warn.reset();
+  console.error.expected.push(about);
 }
 
 /**

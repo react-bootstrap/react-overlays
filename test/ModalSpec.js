@@ -1,13 +1,16 @@
+import jQuery from 'jquery';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
-import Modal from '../src/Modal';
-import { render } from './helpers';
-import jquery from 'jquery';
+import ReactDOM from 'react-dom';
 import simulant from 'simulant';
+
+import Modal from '../src/Modal';
+
 import Transition from '../src/Transition';
 
-let $ = componentOrNode => jquery(ReactDOM.findDOMNode(componentOrNode));
+import { render, shouldWarn } from './helpers';
+
+const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode));
 
 describe('Modal', function () {
   let mountPoint;
@@ -362,18 +365,15 @@ describe('Modal', function () {
     });
 
     it('Should warn if the modal content is not focusable', function () {
-      let Dialog = ()=> ({ render(){ return <div/>; } });
+      shouldWarn('The modal content node does not accept focus');
 
-      sinon.stub(console, 'error');
+      const Dialog = () => <div />;
 
       render(
         <Modal show>
           <Dialog />
         </Modal>
         , focusableContainer);
-
-      expect(console.error).to.have.been.calledOnce;
-      console.error.restore();
     });
   });
 
