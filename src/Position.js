@@ -60,6 +60,7 @@ class Position extends React.Component {
     delete props.target;
     delete props.container;
     delete props.containerPadding;
+    delete props.shouldUpdatePosition;
 
     const child = React.Children.only(children);
     return cloneElement(

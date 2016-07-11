@@ -1,4 +1,5 @@
 import 'es5-shim';
+
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
 
@@ -8,17 +9,36 @@ chai.use(sinonChai);
 global.expect = chai.expect;
 global.assert = chai.assert;
 
-beforeEach(function() {
-  sinon.stub(console, 'warn');
+beforeEach(() => {
+  sinon.stub(console, 'error', msg => {
+    let expected = false;
+
+    console.error.expected.forEach(about => {
+      if (msg.indexOf(about) !== -1) {
+        console.error.warned[about] = true;
+        expected = true;
+      }
+    });
+
+    if (expected) {
+      return;
+    }
+
+    console.error.threw = true;
+    throw new Error(msg);
+  });
+
+  console.error.expected = [];
+  console.error.warned = Object.create(null);
+  console.error.threw = false;
 });
 
-afterEach(function() {
-  if (typeof console.warn.restore === 'function') {
-    assert(!console.warn.called, () => {
-      return `${console.warn.getCall(0).args[0]} \nIn '${this.currentTest.fullTitle()}'`;
-    });
-    console.warn.restore();
+afterEach(() => {
+  if (!console.error.threw && console.error.expected.length) {
+    expect(console.error.warned).to.have.keys(console.error.expected);
   }
+
+  console.error.restore();
 });
 
 describe('Process environment for tests', function () {
