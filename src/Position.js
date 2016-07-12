@@ -1,20 +1,20 @@
+import classNames from 'classnames';
 import React, { cloneElement } from 'react';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
-import ownerDocument from './utils/ownerDocument';
-import getContainer from './utils/getContainer';
-
-import { calcOverlayPosition } from './utils/overlayPositionUtils';
-
 import mountable from 'react-prop-types/lib/mountable';
 
+import calculatePosition from './utils/calculatePosition';
+import getContainer from './utils/getContainer';
+import ownerDocument from './utils/ownerDocument';
+
 /**
- * The Position component calculates the coordinates for its child, to
- * position it relative to a `target` component or node. Useful for creating callouts and tooltips,
- * the Position component injects a `style` props with `left` and `top` values for positioning your component.
+ * The Position component calculates the coordinates for its child, to position
+ * it relative to a `target` component or node. Useful for creating callouts
+ * and tooltips, the Position component injects a `style` props with `left` and
+ * `top` values for positioning your component.
  *
- * It also injects "arrow" `left`, and `top` values for styling callout arrows for giving your components
- * a sense of directionality.
+ * It also injects "arrow" `left`, and `top` values for styling callout arrows
+ * for giving your components a sense of directionality.
  */
 class Position extends React.Component {
   constructor(props, context) {
@@ -32,7 +32,7 @@ class Position extends React.Component {
   }
 
   componentDidMount() {
-    this.updatePosition();
+    this.updatePosition(this.getTarget());
   }
 
   componentWillReceiveProps() {
@@ -42,14 +42,8 @@ class Position extends React.Component {
   componentDidUpdate(prevProps) {
     if (this._needsFlush) {
       this._needsFlush = false;
-      this.updatePosition(prevProps.placement !== this.props.placement);
+      this.maybeUpdatePosition(this.props.placement !== prevProps.placement);
     }
-  }
-
-  componentWillUnmount() {
-    // Probably not necessary, but just in case holding a reference to the
-    // target causes problems somewhere.
-    this._lastTarget = null;
   }
 
   render() {
@@ -68,7 +62,8 @@ class Position extends React.Component {
       {
         ...props,
         ...arrowPosition,
-        //do we need to also forward positionLeft and positionTop if they are set to style?
+        // FIXME: Don't forward `positionLeft` and `positionTop` via both props
+        // and `props.style`.
         positionLeft,
         positionTop,
         className: classNames(className, child.props.className),
@@ -81,27 +76,27 @@ class Position extends React.Component {
     );
   }
 
-  getTargetSafe() {
-    if (!this.props.target) {
-      return null;
-    }
-
-    const target = this.props.target(this.props);
-    if (!target) {
-      // This is so we can just use === check below on all falsy targets.
-      return null;
-    }
-
-    return target;
+  getTarget() {
+    const { target } = this.props;
+    const targetElement = typeof target === 'function' ? target() : target;
+    return targetElement && ReactDOM.findDOMNode(targetElement) || null;
   }
 
-  updatePosition(placementChanged) {
-    const target = this.getTargetSafe();
+  maybeUpdatePosition(placementChanged) {
+    const target = this.getTarget();
 
-    if (!this.props.shouldUpdatePosition && target === this._lastTarget && !placementChanged) {
+    if (
+      !this.props.shouldUpdatePosition &&
+      target === this._lastTarget &&
+      !placementChanged
+    ) {
       return;
     }
 
+    this.updatePosition(target);
+  }
+
+  updatePosition(target) {
     this._lastTarget = target;
 
     if (!target) {
@@ -116,9 +111,11 @@ class Position extends React.Component {
     }
 
     const overlay = ReactDOM.findDOMNode(this);
-    const container = getContainer(this.props.container, ownerDocument(this).body);
+    const container = getContainer(
+      this.props.container, ownerDocument(this).body
+    );
 
-    this.setState(calcOverlayPosition(
+    this.setState(calculatePosition(
       this.props.placement,
       overlay,
       target,
@@ -130,17 +127,18 @@ class Position extends React.Component {
 
 Position.propTypes = {
   /**
-   * Function mapping props to a DOM node the component is positioned next to
-   *
+   * A node, element, or function that returns either. The child will be
+   * be positioned next to the `target` specified.
    */
-  target: React.PropTypes.func,
+  target: React.PropTypes.oneOfType([
+    mountable, React.PropTypes.func
+  ]),
 
   /**
    * "offsetParent" of the component
    */
   container: React.PropTypes.oneOfType([
-    mountable,
-    React.PropTypes.func
+    mountable, React.PropTypes.func
   ]),
   /**
    * Minimum spacing in pixels between container border and component border

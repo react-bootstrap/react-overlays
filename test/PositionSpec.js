@@ -4,9 +4,8 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
 
 import Position from '../src/Position';
-import overlayPositionUtils from '../src/utils/overlayPositionUtils';
 
-import {render} from './helpers';
+import { render } from './helpers';
 
 describe('Position', function () {
   // Swallow extra props.
@@ -34,13 +33,13 @@ describe('Position', function () {
 
   describe('position recalculation', function () {
     beforeEach(function () {
-      sinon.spy(overlayPositionUtils, 'calcOverlayPosition');
       sinon.spy(Position.prototype, 'componentWillReceiveProps');
+      sinon.spy(Position.prototype, 'updatePosition');
     });
 
     afterEach(function () {
-      overlayPositionUtils.calcOverlayPosition.restore();
       Position.prototype.componentWillReceiveProps.restore();
+      Position.prototype.updatePosition.restore();
     });
 
     it('Should only recalculate when target changes', function () {
@@ -76,7 +75,7 @@ describe('Position', function () {
       // Position calculates initial position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.not.been.called;
-      expect(overlayPositionUtils.calcOverlayPosition)
+      expect(Position.prototype.updatePosition)
         .to.have.been.calledOnce;
 
       instance.setState({target: 'bar'});
@@ -84,7 +83,7 @@ describe('Position', function () {
       // Position receives new props and recalculates position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledOnce;
-      expect(overlayPositionUtils.calcOverlayPosition)
+      expect(Position.prototype.updatePosition)
         .to.have.been.calledTwice;
 
       instance.setState({fakeProp: 1});
@@ -92,7 +91,7 @@ describe('Position', function () {
       // Position receives new props but should not recalculate position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledTwice;
-      expect(overlayPositionUtils.calcOverlayPosition)
+      expect(Position.prototype.updatePosition)
         .to.have.been.calledTwice;
     });
 
@@ -129,7 +128,7 @@ describe('Position', function () {
       // Position calculates initial position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.not.been.called;
-      expect(overlayPositionUtils.calcOverlayPosition)
+      expect(Position.prototype.updatePosition)
         .to.have.been.calledOnce;
 
       instance.setState({fakeProp: 1});
@@ -137,7 +136,7 @@ describe('Position', function () {
       // Position receives new props and position should be recalculated
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledOnce;
-      expect(overlayPositionUtils.calcOverlayPosition)
+      expect(Position.prototype.updatePosition)
         .to.have.been.calledTwice;
     });
   });
