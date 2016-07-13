@@ -1,3 +1,12 @@
+## [v0.6.5]
+> 2016-07-13
+
+- **Bugfix:** Make `target` on `<Portal>` work like `container` ([#102])
+
+[v0.6.5]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.4...v0.6.5
+[#102]: https://github.com/react-bootstrap/react-overlays/pull/102
+
+
 ## [v0.6.4]
 > 2016-07-11
 
