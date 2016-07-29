@@ -1,7 +1,7 @@
 /*eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
 import warning from 'warning';
-import mountable from 'react-prop-types/lib/mountable';
+import componentOrElement from 'react-prop-types/lib/componentOrElement';
 import elementType from 'react-prop-types/lib/elementType';
 
 import Portal from './Portal';
@@ -54,7 +54,7 @@ const Modal = React.createClass({
      * page content can be placed behind a virtual backdrop as well as a visual one.
      */
     container: React.PropTypes.oneOfType([
-      mountable,
+      componentOrElement,
       React.PropTypes.func
     ]),
 

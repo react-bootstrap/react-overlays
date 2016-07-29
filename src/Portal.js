@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import mountable from 'react-prop-types/lib/mountable';
+import componentOrElement from 'react-prop-types/lib/componentOrElement';
 import ownerDocument from './utils/ownerDocument';
 import getContainer from './utils/getContainer';
 
@@ -19,7 +19,7 @@ let Portal = React.createClass({
      * appended to it.
      */
     container: React.PropTypes.oneOfType([
-      mountable,
+      componentOrElement,
       React.PropTypes.func
     ])
   },

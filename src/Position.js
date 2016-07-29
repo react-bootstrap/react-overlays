@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { cloneElement } from 'react';
 import ReactDOM from 'react-dom';
-import mountable from 'react-prop-types/lib/mountable';
+import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
 import calculatePosition from './utils/calculatePosition';
 import getContainer from './utils/getContainer';
@@ -131,14 +131,14 @@ Position.propTypes = {
    * be positioned next to the `target` specified.
    */
   target: React.PropTypes.oneOfType([
-    mountable, React.PropTypes.func
+    componentOrElement, React.PropTypes.func
   ]),
 
   /**
    * "offsetParent" of the component
    */
   container: React.PropTypes.oneOfType([
-    mountable, React.PropTypes.func
+    componentOrElement, React.PropTypes.func
   ]),
   /**
    * Minimum spacing in pixels between container border and component border
