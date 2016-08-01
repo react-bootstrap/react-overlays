@@ -121,11 +121,13 @@ Overlay.propTypes = {
    *
    * @type func
    */
-  onHide(props, name, cname) {
-    let pt = React.PropTypes.func;
+  onHide(props, ...args) {
+    let propType = React.PropTypes.func;
+    if (props.rootClose) {
+      propType = propType.isRequired;
+    }
 
-    if (props.rootClose) pt = pt.isRequired
-    return pt(props, name, cname)
+    return propType(props, ...args)
   },
 
   /**

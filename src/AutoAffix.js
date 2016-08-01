@@ -1,7 +1,7 @@
 import getOffset from 'dom-helpers/query/offset';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import React from 'react';
-import mountable from 'react-prop-types/lib/mountable';
+import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
 import Affix from './Affix';
 import addEventListener from './utils/addEventListener';
@@ -155,7 +155,7 @@ AutoAffix.propTypes = {
    * of viewport, or a function that returns it
    */
   container: React.PropTypes.oneOfType([
-    mountable,
+    componentOrElement,
     React.PropTypes.func
   ]),
   /**
