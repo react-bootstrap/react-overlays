@@ -1,3 +1,12 @@
+## [v0.6.6]
+> 2016-08-01
+
+- **Bugfix:** Don't trigger PropTypes warning ([#105])
+
+[v0.6.6]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.5...v0.6.6
+[#105]: https://github.com/react-bootstrap/react-overlays/pull/105
+
+
 ## [v0.6.5]
 > 2016-07-13
 
