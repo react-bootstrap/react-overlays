@@ -81,6 +81,38 @@ describe('RootCloseWrapper', function () {
       expect(spy).to.not.have.been.called;
     });
 
+    it('should close when disabled removed on updated', () => {
+      const spy = sinon.spy();
+
+      const wrapper = render(
+        <RootCloseWrapper onRootClose={spy} event={eventProp} >
+          <div id='my-div'>hello there</div>
+        </RootCloseWrapper>
+      , mountPoint);
+
+      wrapper.renderWithProps({ onRootClose: spy, event: eventProp, disabled: undefined });
+
+      simulant.fire(document.body, eventName);
+
+      expect(spy).to.have.been.called;
+    });
+
+    it('should not close when disabled added on update', () => {
+
+      let spy = sinon.spy();
+      const wrapper = render(
+        <RootCloseWrapper onRootClose={spy} event={eventProp}>
+          <div id='my-div'>hello there</div>
+        </RootCloseWrapper>
+      , mountPoint);
+
+      wrapper.renderWithProps({ onRootClose: spy, event: eventProp, disabled: true });
+
+      simulant.fire(document.body, eventName);
+
+      expect(spy).to.not.have.been.called;
+    });
+
     it('should close when inside another RootCloseWrapper', () => {
       let outerSpy = sinon.spy();
       let innerSpy = sinon.spy();
