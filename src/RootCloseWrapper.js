@@ -86,7 +86,22 @@ export default class RootCloseWrapper extends React.Component {
   }
 
   componentDidMount() {
-    this.bindRootCloseHandlers();
+    if (!this.props.disabled) {
+      this.bindRootCloseHandlers();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { disabled } = this.props;
+    const { disabled: prevDisabled } = prevProps;
+
+    if (disabled !== prevDisabled) {
+      if (disabled) {
+        this.unbindRootCloseHandlers();
+      } else {
+        this.bindRootCloseHandlers();
+      }
+    }
   }
 
   render() {
