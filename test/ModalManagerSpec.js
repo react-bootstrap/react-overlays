@@ -183,6 +183,17 @@ describe('ModalManager', ()=> {
       expect(container.style.overflow).to.equal('hidden');
     });
 
+    it('should respect handleContainerOverflow', ()=>{
+      let modal = new Modal({});
+
+      expect(container.style.overflow).to.equal('');
+
+      new ModalManager({ hideContainerOverflow: false })
+        .add(modal, container);
+
+      expect(container.style.overflow).to.equal('');
+    });
+
     it('should set add to existing container padding', ()=>{
       let modal = new Modal({});
       manager.add(modal, container);
