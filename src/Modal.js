@@ -80,6 +80,16 @@ const Modal = React.createClass({
     ]),
 
     /**
+     * A function that returns a backdrop component. Useful for custom
+     * backdrop rendering.
+     *
+     * ```js
+     *  renderBackdrop={props => <MyBackdrop {...props} />}
+     * ```
+     */
+    renderBackdrop: React.PropTypes.func,
+
+    /**
      * A callback fired when the escape key, if specified in `keyboard`, is pressed.
      */
     onEscapeKeyUp: React.PropTypes.func,
@@ -177,8 +187,13 @@ const Modal = React.createClass({
     /**
      * Callback fired after the Modal finishes transitioning out
      */
-    onExited: React.PropTypes.func
+    onExited: React.PropTypes.func,
 
+    /**
+     * A ModalManager instance used to track and manage the state of open
+     * Modals. Useful when customizing how modals interact within a container
+     */
+    manager: React.PropTypes.bool.isRequired,
   },
 
   getDefaultProps() {
@@ -190,7 +205,9 @@ const Modal = React.createClass({
       keyboard: true,
       autoFocus: true,
       enforceFocus: true,
-      onHide: noop
+      onHide: noop,
+      manager: modalManager,
+      renderBackdrop: (props) => <div {...props} />
     };
   },
 
@@ -212,7 +229,7 @@ const Modal = React.createClass({
       onExiting,
       onEnter,
       onEntering,
-      onEntered,
+      onEntered
     } = this.props;
 
     let dialog = React.Children.only(children);
@@ -270,6 +287,9 @@ const Modal = React.createClass({
 
   renderBackdrop() {
     let {
+      backdropStyle,
+      backdropClassName,
+      renderBackdrop,
       transition: Transition,
       backdropTransitionTimeout } = this.props;
 
@@ -287,7 +307,12 @@ const Modal = React.createClass({
           in={this.props.show}
           timeout={backdropTransitionTimeout}
         >
-          {backdrop}
+          {renderBackdrop({
+            ref: ref => this.backdrop = ref,
+            style: backdropStyle,
+            className: backdropClassName,
+            onClick: this.handleBackdropClick
+          })}
         </Transition>
       );
     }
@@ -340,7 +365,7 @@ const Modal = React.createClass({
     let doc = ownerDocument(this);
     let container = getContainer(this.props.container, doc.body);
 
-    modalManager.add(this, container, this.props.containerClassName);
+    this.props.manager.add(this, container, this.props.containerClassName);
 
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
@@ -356,7 +381,7 @@ const Modal = React.createClass({
   },
 
   onHide() {
-    modalManager.remove(this);
+    this.props.manager.remove(this);
 
     this._onDocumentKeyupListener.remove();
 
@@ -457,12 +482,11 @@ const Modal = React.createClass({
   },
 
   isTopModal() {
-    return modalManager.isTopModal(this);
+    return this.props.manager.isTopModal(this);
   }
 
 });
 
-
-Modal.manager = modalManager;
+Modal.Manager = ModalManager;
 
 export default Modal;
