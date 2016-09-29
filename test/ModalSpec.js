@@ -287,6 +287,41 @@ describe('Modal', function () {
     expect(onShowSpy).to.have.been.calledOnce;
   });
 
+  it('Should accept role on the Modal', function () {
+    let instance = render(
+      <Modal role="alertdialog" show>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    let attr = instance.refs.modal.attributes.getNamedItem('role').value;
+    expect(attr).to.equal('alertdialog');
+  });
+
+  it('Should accept the `aria-describedby` property on the Modal', function () {
+
+    let instance = render(
+      <Modal aria-describedby="modal-description" show>
+        <strong id="modal-description">Message</strong>
+      </Modal>
+    , mountPoint);
+
+    let attr = instance.refs.modal.attributes.getNamedItem('aria-describedby').value;
+    expect(attr).to.equal('modal-description');
+  });
+
+  it('Should accept the `tabIndex` property on the Modal', function () {
+
+    let instance = render(
+      <Modal tabIndex="0" show>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    let attr = instance.refs.modal.attributes.getNamedItem('tabIndex').value;
+    expect(attr).to.equal('0');
+  });
+
   describe('Focused state', function () {
     let focusableContainer = null;
 

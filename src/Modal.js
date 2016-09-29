@@ -14,6 +14,7 @@ import canUseDom from 'dom-helpers/util/inDOM';
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/query/contains';
 import getContainer from './utils/getContainer';
+import ariaAttributes from './utils/ariaAttributes';
 
 let modalManager = new ModalManager();
 
@@ -239,6 +240,13 @@ const Modal = React.createClass({
       return null;
     }
 
+    const ariaProps = {};
+
+    ariaAttributes
+      .forEach(propName => {
+        ariaProps[propName] = this.props[propName];
+    });
+
     const { role, tabIndex } = dialog.props;
 
     if (role === undefined || tabIndex === undefined) {
@@ -267,20 +275,27 @@ const Modal = React.createClass({
       );
     }
 
+    const modalProps = Object.assign(
+      {},
+      {
+        ref: 'modal',
+        role: role || 'dialog',
+        style: style,
+        className: className
+      },
+      ariaProps
+    )
+
     return (
       <Portal
         ref={this.setMountNode}
         container={container}
       >
-        <div
-          ref={'modal'}
-          role={role || 'dialog'}
-          style={style}
-          className={className}
-        >
-          { backdrop && this.renderBackdrop() }
-          { dialog }
-        </div>
+        {React.createElement('div',
+          modalProps,
+          backdrop && this.renderBackdrop(),
+          dialog
+        )}
       </Portal>
     );
   },
