@@ -28,7 +28,7 @@ describe('Position', function () {
           <Span>Another Text</Span>
         </Position>
       );
-    }).to.throw(Error, /onlyChild must be passed a children with exactly one child/);
+    }).to.throw(Error, /expected to receive a single React element child/);
   });
 
   describe('position recalculation', function () {

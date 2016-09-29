@@ -188,7 +188,7 @@ describe('ModalManager', ()=> {
 
       expect(container.style.overflow).to.equal('');
 
-      new ModalManager({ hideContainerOverflow: false })
+      new ModalManager({ handleContainerOverflow: false })
         .add(modal, container);
 
       expect(container.style.overflow).to.equal('');

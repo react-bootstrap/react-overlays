@@ -193,7 +193,7 @@ const Modal = React.createClass({
      * A ModalManager instance used to track and manage the state of open
      * Modals. Useful when customizing how modals interact within a container
      */
-    manager: React.PropTypes.bool.isRequired,
+    manager: React.PropTypes.object.isRequired,
   },
 
   getDefaultProps() {
@@ -293,8 +293,11 @@ const Modal = React.createClass({
       transition: Transition,
       backdropTransitionTimeout } = this.props;
 
+    const backdropRef = ref => this.backdrop = ref;
+
     let backdrop = (
-      <div ref="backdrop"
+      <div
+        ref={backdropRef}
         style={this.props.backdropStyle}
         className={this.props.backdropClassName}
         onClick={this.handleBackdropClick}
@@ -308,7 +311,7 @@ const Modal = React.createClass({
           timeout={backdropTransitionTimeout}
         >
           {renderBackdrop({
-            ref: ref => this.backdrop = ref,
+            ref: backdropRef,
             style: backdropStyle,
             className: backdropClassName,
             onClick: this.handleBackdropClick
@@ -366,7 +369,7 @@ const Modal = React.createClass({
     let container = getContainer(this.props.container, doc.body);
 
     this.props.manager.add(this, container, this.props.containerClassName);
-
+    
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
 

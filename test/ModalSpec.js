@@ -183,7 +183,7 @@ describe('Modal', function () {
           <strong>Message</strong>
         </Modal>
       , mountPoint);
-    }).to.throw(/onlyChild must be passed a children with exactly one child/);
+    }).to.throw(/expected to receive a single React element child/);
   });
 
   it('Should add role to child', function () {
@@ -348,8 +348,7 @@ describe('Modal', function () {
       document.activeElement.should.equal(input);
     });
 
-    it('Should return focus to the modal', function () {
-
+    it('Should return focus to the modal', () => {
       document.activeElement.should.equal(focusableContainer);
 
       render(
@@ -360,7 +359,9 @@ describe('Modal', function () {
         </Modal>
         , focusableContainer);
 
+
       focusableContainer.focus();
+
       document.activeElement.className.should.contain('modal');
     });
 
