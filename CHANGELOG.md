@@ -1,3 +1,13 @@
+## [v0.6.8]
+> 2016-09-30
+
+- **Feature:** Remove wrapping DOM element in `<RootCloseWrapper>` ([#116])
+- **Bugfix:** Do not bind listeners for `<RootCloseWrapper>` when `disabled` is set ([#116])
+
+[v0.6.8]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.7...v0.6.8
+[#116]: https://github.com/react-bootstrap/react-overlays/pull/116
+
+
 ## [v0.6.7]
 > 2016-09-29
 
