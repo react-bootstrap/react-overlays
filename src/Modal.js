@@ -272,7 +272,7 @@ const Modal = React.createClass({
     const propTypes = Object.keys(Modal.propTypes);
     const newProps = {};
     keys.map(function (prop) {
-      if (propTypes.indexOf(prop) === -1) {
+      if (!propTypes.includes(prop)) {
         newProps[prop] = _props[prop];
       }
     });
@@ -380,7 +380,7 @@ const Modal = React.createClass({
     let container = getContainer(this.props.container, doc.body);
 
     this.props.manager.add(this, container, this.props.containerClassName);
-    
+
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
 
