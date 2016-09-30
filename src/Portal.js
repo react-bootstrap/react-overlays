@@ -102,11 +102,7 @@ let Portal = React.createClass({
     }
 
     if (this._overlayInstance) {
-      if (this._overlayInstance.getWrappedDOMNode) {
-        return this._overlayInstance.getWrappedDOMNode();
-      } else {
-        return ReactDOM.findDOMNode(this._overlayInstance);
-      }
+      return ReactDOM.findDOMNode(this._overlayInstance);
     }
 
     return null;
