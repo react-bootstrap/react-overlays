@@ -66,7 +66,8 @@ export default class RootCloseWrapper extends React.Component {
       this.props.disabled ||
       isModifiedEvent(e) ||
       !isLeftClickEvent(e) ||
-      contains(ReactDOM.findDOMNode(this), e.target)
+      contains(ReactDOM.findDOMNode(this), e.target) ||
+      !contains(ownerDocument(this), e.target)
     ) {
       return;
     }
