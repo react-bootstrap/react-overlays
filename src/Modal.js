@@ -14,7 +14,6 @@ import canUseDom from 'dom-helpers/util/inDOM';
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/query/contains';
 import getContainer from './utils/getContainer';
-import ariaAttributes from './utils/ariaAttributes';
 
 let modalManager = new ModalManager();
 
@@ -234,18 +233,12 @@ const Modal = React.createClass({
     } = this.props;
 
     let dialog = React.Children.only(children);
+    const _props = this.props;
 
     const mountModal = show || (Transition && !this.state.exited);
     if (!mountModal) {
       return null;
     }
-
-    const ariaProps = {};
-
-    ariaAttributes
-      .forEach(propName => {
-        ariaProps[propName] = this.props[propName];
-    });
 
     const { role, tabIndex } = dialog.props;
 
@@ -275,27 +268,30 @@ const Modal = React.createClass({
       );
     }
 
-    const modalProps = Object.assign(
-      {},
-      {
-        ref: 'modal',
-        role: role || 'dialog',
-        style: style,
-        className: className
-      },
-      ariaProps
-    )
+    const keys = Object.keys(_props);
+    const propTypes = Object.keys(Modal.propTypes);
+    const newProps = {};
+    keys.map(function (prop) {
+      if (propTypes.indexOf(prop) === -1) {
+        newProps[prop] = _props[prop];
+      }
+    });
 
     return (
       <Portal
         ref={this.setMountNode}
         container={container}
       >
-        {React.createElement('div',
-          modalProps,
-          backdrop && this.renderBackdrop(),
-          dialog
-        )}
+        <div
+          ref={'modal'}
+          role={role || 'dialog'}
+          {...newProps}
+          style={style}
+          className={className}
+        >
+          { backdrop && this.renderBackdrop() }
+          { dialog }
+        </div>
       </Portal>
     );
   },
