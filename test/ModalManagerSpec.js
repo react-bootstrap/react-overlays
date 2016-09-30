@@ -183,7 +183,7 @@ describe('ModalManager', ()=> {
       expect(container.style.overflow).to.equal('hidden');
     });
 
-    xit('should respect handleContainerOverflow', ()=>{
+    it('should respect handleContainerOverflow', ()=>{
       let modal = new Modal({});
 
       expect(container.style.overflow).to.equal('');
