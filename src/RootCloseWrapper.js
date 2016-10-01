@@ -44,8 +44,11 @@ export default class RootCloseWrapper extends React.Component {
   bindRootCloseHandlers() {
     const doc = ownerDocument(this);
 
+    // Use capture for this listener so it fires before React's listener, to
+    // avoid false positives in the contains() check below if the target DOM
+    // element is removed in the React mouse callback.
     this._onDocumentMouseListener =
-      addEventListener(doc, this.props.event, this.handleDocumentMouse);
+      addEventListener(doc, this.props.event, this.handleDocumentMouse, true);
 
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
@@ -66,8 +69,7 @@ export default class RootCloseWrapper extends React.Component {
       this.props.disabled ||
       isModifiedEvent(e) ||
       !isLeftClickEvent(e) ||
-      contains(ReactDOM.findDOMNode(this), e.target) ||
-      !contains(ownerDocument(this), e.target)
+      contains(ReactDOM.findDOMNode(this), e.target)
     ) {
       return;
     }
