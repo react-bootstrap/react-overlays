@@ -1,3 +1,12 @@
+## [v0.6.9]
+> 2016-10-01
+
+- **Bugfix:** Don't spuriously trigger `onRootClose` when React event handler unmounts event target ([#117])
+
+[v0.6.9]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.8...v0.6.9
+[#117]: https://github.com/react-bootstrap/react-overlays/pull/117
+
+
 ## [v0.6.8]
 > 2016-09-30
 
