@@ -14,76 +14,82 @@ function isModifiedEvent(event) {
 }
 
 export default class RootCloseWrapper extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
-    this.handleDocumentMouse = this.handleDocumentMouse.bind(this);
-    this.handleDocumentKeyUp = this.handleDocumentKeyUp.bind(this);
+    this.preventMouseRootClose = false;
   }
 
   componentDidMount() {
     if (!this.props.disabled) {
-      this.bindRootCloseHandlers();
+      this.addEventListeners();
     }
   }
 
   componentDidUpdate(prevProps) {
     if (!this.props.disabled && prevProps.disabled) {
-      this.bindRootCloseHandlers();
+      this.addEventListeners();
     } else if (this.props.disabled && !prevProps.disabled) {
-      this.unbindRootCloseHandlers();
+      this.removeEventListeners();
     }
   }
 
   componentWillUnmount() {
     if (!this.props.disabled) {
-      this.unbindRootCloseHandlers();
+      this.removeEventListeners();
     }
   }
 
-  bindRootCloseHandlers() {
+  addEventListeners() {
+    const { event } = this.props;
     const doc = ownerDocument(this);
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
     // element is removed in the React mouse callback.
-    this._onDocumentMouseListener =
-      addEventListener(doc, this.props.event, this.handleDocumentMouse, true);
+    this.documentMouseCaptureListener =
+      addEventListener(doc, event, this.handleMouseCapture, true);
 
-    this._onDocumentKeyupListener =
-      addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
+    this.documentMouseListener =
+      addEventListener(doc, event, this.handleMouse);
+
+    this.documentKeyupListener =
+      addEventListener(doc, 'keyup', this.handleKeyUp);
   }
 
-  unbindRootCloseHandlers() {
-    if (this._onDocumentMouseListener) {
-      this._onDocumentMouseListener.remove();
+  removeEventListeners() {
+    if (this.documentMouseCaptureListener) {
+      this.documentMouseCaptureListener.remove();
     }
 
-    if (this._onDocumentKeyupListener) {
-      this._onDocumentKeyupListener.remove();
+    if (this.documentMouseListener) {
+      this.documentMouseListener.remove();
+    }
+
+    if (this.documentKeyupListener) {
+      this.documentKeyupListener.remove();
     }
   }
 
-  handleDocumentMouse(e) {
-    if (
-      this.props.disabled ||
+  handleMouseCapture = (e) => {
+    this.preventMouseRootClose = (
       isModifiedEvent(e) ||
       !isLeftClickEvent(e) ||
       contains(ReactDOM.findDOMNode(this), e.target)
-    ) {
-      return;
-    }
+    );
+  };
 
-    if (this.props.onRootClose) {
+  handleMouse = () => {
+    if (!this.preventMouseRootClose && this.props.onRootClose) {
       this.props.onRootClose();
     }
-  }
+  };
 
-  handleDocumentKeyUp(e) {
+  handleKeyUp = (e) => {
     if (e.keyCode === 27 && this.props.onRootClose) {
       this.props.onRootClose();
     }
-  }
+  };
 
   render() {
     return this.props.children;
