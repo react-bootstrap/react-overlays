@@ -1,3 +1,12 @@
+## [v0.6.10]
+> 2016-10-03
+
+- **Bugfix:** Don't fire `onRootClose` in capture phase to avoid race conditions with React events ([#118])
+
+[v0.6.10]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.9...v0.6.10
+[#118]: https://github.com/react-bootstrap/react-overlays/pull/118
+
+
 ## [v0.6.9]
 > 2016-10-01
 
