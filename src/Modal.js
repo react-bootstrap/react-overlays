@@ -271,8 +271,8 @@ const Modal = React.createClass({
     const keys = Object.keys(_props);
     const propTypes = Object.keys(Modal.propTypes);
     const newProps = {};
-    keys.map(function (prop) {
-      if (!propTypes.includes(prop)) {
+    keys.map((prop) => {
+      if (propTypes.indexOf(prop) === -1) {
         newProps[prop] = _props[prop];
       }
     });
