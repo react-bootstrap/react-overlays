@@ -211,12 +211,12 @@ const Modal = React.createClass({
     };
   },
 
-  omitProps(props, desiredProps) {
+  omitProps(props, propTypes) {
 
     const keys = Object.keys(props);
     const newProps = {};
     keys.map((prop) => {
-      if (desiredProps.indexOf(prop) === -1) {
+      if (!Object.prototype.hasOwnProperty.call(propTypes, prop)) {
         newProps[prop] = props[prop];
       }
     });
@@ -246,7 +246,7 @@ const Modal = React.createClass({
     } = this.props;
 
     let dialog = React.Children.only(children);
-    const filteredProps = this.omitProps(this.props, Object.keys(Modal.propTypes))
+    const filteredProps = this.omitProps(this.props, Modal.propTypes)
 
     const mountModal = show || (Transition && !this.state.exited);
     if (!mountModal) {
