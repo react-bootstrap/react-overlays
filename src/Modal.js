@@ -211,6 +211,19 @@ const Modal = React.createClass({
     };
   },
 
+  omitProps(props, desiredProps) {
+
+    const keys = Object.keys(props);
+    const newProps = {};
+    keys.map((prop) => {
+      if (desiredProps.indexOf(prop) === -1) {
+        newProps[prop] = props[prop];
+      }
+    });
+
+    return newProps;
+  },
+
   getInitialState(){
     return {exited: !this.props.show};
   },
@@ -233,7 +246,7 @@ const Modal = React.createClass({
     } = this.props;
 
     let dialog = React.Children.only(children);
-    const _props = this.props;
+    const filteredProps = this.omitProps(this.props, Object.keys(Modal.propTypes))
 
     const mountModal = show || (Transition && !this.state.exited);
     if (!mountModal) {
@@ -268,15 +281,6 @@ const Modal = React.createClass({
       );
     }
 
-    const keys = Object.keys(_props);
-    const propTypes = Object.keys(Modal.propTypes);
-    const newProps = {};
-    keys.map((prop) => {
-      if (propTypes.indexOf(prop) === -1) {
-        newProps[prop] = _props[prop];
-      }
-    });
-
     return (
       <Portal
         ref={this.setMountNode}
@@ -285,7 +289,7 @@ const Modal = React.createClass({
         <div
           ref={'modal'}
           role={role || 'dialog'}
-          {...newProps}
+          {...filteredProps}
           style={style}
           className={className}
         >
