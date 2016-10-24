@@ -28,7 +28,7 @@ describe('Position', function () {
           <Span>Another Text</Span>
         </Position>
       );
-    }).to.throw(Error, /expected to receive a single React element child/);
+    }).to.throw(/React.Children.only expected to receive a single React element child./);
   });
 
   describe('position recalculation', function () {

@@ -211,6 +211,19 @@ const Modal = React.createClass({
     };
   },
 
+  omitProps(props, propTypes) {
+
+    const keys = Object.keys(props);
+    const newProps = {};
+    keys.map((prop) => {
+      if (!Object.prototype.hasOwnProperty.call(propTypes, prop)) {
+        newProps[prop] = props[prop];
+      }
+    });
+
+    return newProps;
+  },
+
   getInitialState(){
     return {exited: !this.props.show};
   },
@@ -233,6 +246,7 @@ const Modal = React.createClass({
     } = this.props;
 
     let dialog = React.Children.only(children);
+    const filteredProps = this.omitProps(this.props, Modal.propTypes)
 
     const mountModal = show || (Transition && !this.state.exited);
     if (!mountModal) {
@@ -275,6 +289,7 @@ const Modal = React.createClass({
         <div
           ref={'modal'}
           role={role || 'dialog'}
+          {...filteredProps}
           style={style}
           className={className}
         >
@@ -369,7 +384,7 @@ const Modal = React.createClass({
     let container = getContainer(this.props.container, doc.body);
 
     this.props.manager.add(this, container, this.props.containerClassName);
-    
+
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
 

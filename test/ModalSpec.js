@@ -32,7 +32,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    assert.equal(instance.refs.modal.querySelectorAll('strong').length, 1);
+    expect(instance.refs.modal.querySelectorAll('strong').length).to.equal(1);
   });
 
   it('Should disable scrolling on the modal container while open', function() {
@@ -164,13 +164,12 @@ describe('Modal', function () {
   it('Should set backdrop Style', function () {
 
     let instance = render(
-      <Modal show bsClass='mymodal' backdropStyle={{ borderWidth: '3px' }}>
+      <Modal show className='mymodal' backdrop backdropStyle={{ borderWidth: '3px' }}>
         <strong>Message</strong>
       </Modal>
     , mountPoint);
 
     let backdrop = instance.backdrop;
-
     expect(
       backdrop.style.borderWidth).to.equal('3px');
   });
@@ -183,7 +182,7 @@ describe('Modal', function () {
           <strong>Message</strong>
         </Modal>
       , mountPoint);
-    }).to.throw(/expected to receive a single React element child/);
+    }).to.throw(/React.Children.only expected to receive a single React element child./);
   });
 
   it('Should add role to child', function () {
@@ -285,6 +284,29 @@ describe('Modal', function () {
     instance.renderWithProps({ show: true });
 
     expect(onShowSpy).to.have.been.calledOnce;
+  });
+
+  it('Should accept role on the Modal', function () {
+    let instance = render(
+      <Modal role="alertdialog" show>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    let attr = instance.refs.modal.attributes.getNamedItem('role').value;
+    expect(attr).to.equal('alertdialog');
+  });
+
+  it('Should accept the `aria-describedby` property on the Modal', function () {
+
+    let instance = render(
+      <Modal aria-describedby="modal-description" show>
+        <strong id="modal-description">Message</strong>
+      </Modal>
+    , mountPoint);
+
+    let attr = instance.refs.modal.attributes.getNamedItem('aria-describedby').value;
+    expect(attr).to.equal('modal-description');
   });
 
   describe('Focused state', function () {
