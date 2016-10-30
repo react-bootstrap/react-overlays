@@ -113,7 +113,7 @@ const OverlayExample = React.createClass({
           target={ props => findDOMNode(this.refs.target)}
         >
           <ToolTip>
-            I'm placed to the: <strong>{this.state.placement}</strong>
+            I&rsquo;m placed to the: <strong>{this.state.placement}</strong>
           </ToolTip>
         </Overlay>
       </div>
