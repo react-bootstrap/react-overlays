@@ -79,15 +79,15 @@ export default class RootCloseWrapper extends React.Component {
     );
   };
 
-  handleMouse = () => {
+  handleMouse = (e) => {
     if (!this.preventMouseRootClose && this.props.onRootClose) {
-      this.props.onRootClose();
+      this.props.onRootClose(e);
     }
   };
 
   handleKeyUp = (e) => {
     if (e.keyCode === 27 && this.props.onRootClose) {
-      this.props.onRootClose();
+      this.props.onRootClose(e);
     }
   };
 
