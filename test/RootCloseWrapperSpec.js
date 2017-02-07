@@ -45,6 +45,9 @@ describe('RootCloseWrapper', function () {
       simulant.fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;
+      expect(spy.getCall(0).args.length).to.be.eql(1);
+      expect(spy.getCall(0).args[0]).to.not.be.undefined;
+      expect(spy.getCall(0).args[0]).to.not.be.null;
     });
 
     it('should not close when right-clicked outside', () => {
