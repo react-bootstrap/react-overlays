@@ -4,6 +4,8 @@ import RootCloseWrapper from '../src/RootCloseWrapper';
 import { render } from './helpers';
 import simulant from 'simulant';
 
+const escapeKeyCode = 27;
+
 describe('RootCloseWrapper', function () {
   let mountPoint;
 
@@ -29,10 +31,6 @@ describe('RootCloseWrapper', function () {
     shouldCloseOn('mousedown', 'mousedown');
   });
 
-  describe('using keyup event', () => {
-    shouldCloseOnKeyUp('keyup');
-  });
-
   function shouldCloseOn(eventProp, eventName) {
     it('should close when clicked outside', () => {
       let spy = sinon.spy();
@@ -50,7 +48,7 @@ describe('RootCloseWrapper', function () {
 
       expect(spy).to.have.been.calledOnce;
 
-      assert.oneOf(spy.getCall(0).args[0].type, ['click', 'mousedown'] );
+      expect(innerSpy.getCall(0).args[0].type).to.be.oneOf(['click', 'mousedown']);
     });
 
     it('should not close when right-clicked outside', () => {
@@ -107,11 +105,11 @@ describe('RootCloseWrapper', function () {
       expect(outerSpy).to.have.not.been.called;
       expect(innerSpy).to.have.been.calledOnce;
 
-      assert.oneOf(innerSpy.getCall(0).args[0].type, ['click', 'mousedown']  );
+      expect(innerSpy.getCall(0).args[0].type).to.be.oneOf(['click', 'mousedown'])
     });
   }
 
-  function shouldCloseOnKeyUp(eventName) {
+  describe('using keyup event', () => {
     it('should close when escape keyup', () => {
       let spy = sinon.spy();
       render(
@@ -122,37 +120,41 @@ describe('RootCloseWrapper', function () {
 
       expect(spy).to.not.have.been.called;
 
-      simulant.fire(document.body, eventName, {keyCode: 27});
+      simulant.fire(document.body, 'keyup', {keyCode: escapeKeyCode});
 
       expect(spy).to.have.been.calledOnce;
 
-      assert.equal(spy.getCall(0).args[0].type, 'keyup' );
-      assert.equal(spy.getCall(0).args[0].keyCode, 27 );
+      expect(spy.getCall(0).args.length).to.be.eql(1);
+      expect(spy.getCall(0).args[0]).to.not.be.undefined;
+      expect(spy.getCall(0).args[0]).to.not.be.null;
+      expect(spy.getCall(0).args[0].keyCode).to.be.eql(escapeKeyCode);
+      expect(spy.getCall(0).args[0].type).to.be.eql('keyup');
     });
 
-  // TODO: Update code to make this pass
-  //   it('should close when inside another RootCloseWrapper', () => {
-  //         let outerSpy = sinon.spy();
-  //         let innerSpy = sinon.spy();
+    it('should close when inside another RootCloseWrapper', () => {
+      let outerSpy = sinon.spy();
+      let innerSpy = sinon.spy();
 
-  //         render(
-  //           <RootCloseWrapper onRootClose={outerSpy}>
-  //             <div>
-  //               <div id='my-div'>hello there</div>
-  //               <RootCloseWrapper onRootClose={innerSpy}>
-  //                 <div id='my-other-div'>hello there</div>
-  //               </RootCloseWrapper>
-  //             </div>
-  //           </RootCloseWrapper>
-  //         );
+      render(
+        <RootCloseWrapper onRootClose={outerSpy}>
+          <div>
+            <div id='my-div'>hello there</div>
+            <RootCloseWrapper onRootClose={innerSpy}>
+              <div id='my-other-div'>hello there</div>
+            </RootCloseWrapper>
+          </div>
+        </RootCloseWrapper>
+      );
 
-  //         simulant.fire(document.body, eventName, {keyCode: 27});
+      simulant.fire(document.body, 'keyup', {keyCode: escapeKeyCode});
 
-  //         expect(outerSpy).to.have.not.been.called;
-  //         expect(innerSpy).to.have.been.calledOnce;
+      // TODO: Update library to make this expectation pass.
+      // expect(outerSpy).to.have.not.been.called;
+      expect(innerSpy).to.have.been.calledOnce;
 
-  //         assert.equal(innerSpy.getCall(0).args[0].type, 'keyup' );
-  //         assert.equal(innerSpy.getCall(0).args[0].keyCode, 27 );
-  //       });
-  }
+      expect(innerSpy.getCall(0).args.length).to.be.eql(1);
+      expect(innerSpy.getCall(0).args[0].keyCode).to.be.eql(escapeKeyCode);
+      expect(innerSpy.getCall(0).args[0].type).to.be.eql('keyup');
+    });
+  });
 });
