@@ -29,6 +29,10 @@ describe('RootCloseWrapper', function () {
     shouldCloseOn('mousedown', 'mousedown');
   });
 
+  describe('using keyup event', () => {
+    shouldCloseOnKeyUp('keyup');
+  });
+
   function shouldCloseOn(eventProp, eventName) {
     it('should close when clicked outside', () => {
       let spy = sinon.spy();
@@ -45,6 +49,8 @@ describe('RootCloseWrapper', function () {
       simulant.fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;
+
+      assert.oneOf(spy.getCall(0).args[0].type, ['click', 'mousedown'] );
     });
 
     it('should not close when right-clicked outside', () => {
@@ -100,6 +106,53 @@ describe('RootCloseWrapper', function () {
 
       expect(outerSpy).to.have.not.been.called;
       expect(innerSpy).to.have.been.calledOnce;
+
+      assert.oneOf(innerSpy.getCall(0).args[0].type, ['click', 'mousedown']  );
     });
+  }
+
+  function shouldCloseOnKeyUp(eventName) {
+    it('should close when escape keyup', () => {
+      let spy = sinon.spy();
+      render(
+        <RootCloseWrapper onRootClose={spy}>
+          <div id='my-div'>hello there</div>
+        </RootCloseWrapper>
+      );
+
+      expect(spy).to.not.have.been.called;
+
+      simulant.fire(document.body, eventName, {keyCode: 27});
+
+      expect(spy).to.have.been.calledOnce;
+
+      assert.equal(spy.getCall(0).args[0].type, 'keyup' );
+      assert.equal(spy.getCall(0).args[0].keyCode, 27 );
+    });
+
+  // TODO: Update code to make this pass
+  //   it('should close when inside another RootCloseWrapper', () => {
+  //         let outerSpy = sinon.spy();
+  //         let innerSpy = sinon.spy();
+
+  //         render(
+  //           <RootCloseWrapper onRootClose={outerSpy}>
+  //             <div>
+  //               <div id='my-div'>hello there</div>
+  //               <RootCloseWrapper onRootClose={innerSpy}>
+  //                 <div id='my-other-div'>hello there</div>
+  //               </RootCloseWrapper>
+  //             </div>
+  //           </RootCloseWrapper>
+  //         );
+
+  //         simulant.fire(document.body, eventName, {keyCode: 27});
+
+  //         expect(outerSpy).to.have.not.been.called;
+  //         expect(innerSpy).to.have.been.calledOnce;
+
+  //         assert.equal(innerSpy.getCall(0).args[0].type, 'keyup' );
+  //         assert.equal(innerSpy.getCall(0).args[0].keyCode, 27 );
+  //       });
   }
 });
