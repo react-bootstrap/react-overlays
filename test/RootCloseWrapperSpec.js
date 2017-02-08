@@ -48,7 +48,7 @@ describe('RootCloseWrapper', function () {
 
       expect(spy).to.have.been.calledOnce;
 
-      expect(innerSpy.getCall(0).args[0].type).to.be.oneOf(['click', 'mousedown']);
+      expect(spy.getCall(0).args[0].type).to.be.oneOf(['click', 'mousedown']);
     });
 
     it('should not close when right-clicked outside', () => {
