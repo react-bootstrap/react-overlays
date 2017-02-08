@@ -124,11 +124,9 @@ describe('RootCloseWrapper', function () {
 
       expect(spy).to.have.been.calledOnce;
 
-      expect(spy.getCall(0).args.length).to.be.eql(1);
-      expect(spy.getCall(0).args[0]).to.not.be.undefined;
-      expect(spy.getCall(0).args[0]).to.not.be.null;
-      expect(spy.getCall(0).args[0].keyCode).to.be.eql(escapeKeyCode);
-      expect(spy.getCall(0).args[0].type).to.be.eql('keyup');
+      expect(spy.getCall(0).args.length).to.be.equal(1);
+      expect(spy.getCall(0).args[0].keyCode).to.be.equal(escapeKeyCode);
+      expect(spy.getCall(0).args[0].type).to.be.equal('keyup');
     });
 
     it('should close when inside another RootCloseWrapper', () => {
@@ -148,13 +146,13 @@ describe('RootCloseWrapper', function () {
 
       simulant.fire(document.body, 'keyup', {keyCode: escapeKeyCode});
 
-      // TODO: Update library to make this expectation pass.
+      // TODO: Update to match expectations.
       // expect(outerSpy).to.have.not.been.called;
       expect(innerSpy).to.have.been.calledOnce;
 
-      expect(innerSpy.getCall(0).args.length).to.be.eql(1);
-      expect(innerSpy.getCall(0).args[0].keyCode).to.be.eql(escapeKeyCode);
-      expect(innerSpy.getCall(0).args[0].type).to.be.eql('keyup');
+      expect(innerSpy.getCall(0).args.length).to.be.equal(1);
+      expect(innerSpy.getCall(0).args[0].keyCode).to.be.equal(escapeKeyCode);
+      expect(innerSpy.getCall(0).args[0].type).to.be.equal('keyup');
     });
   });
 });
