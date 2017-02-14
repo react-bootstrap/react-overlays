@@ -4,6 +4,8 @@ import RootCloseWrapper from '../src/RootCloseWrapper';
 import { render } from './helpers';
 import simulant from 'simulant';
 
+const escapeKeyCode = 27;
+
 describe('RootCloseWrapper', function () {
   let mountPoint;
 
@@ -45,6 +47,8 @@ describe('RootCloseWrapper', function () {
       simulant.fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;
+
+      expect(spy.getCall(0).args[0].type).to.be.oneOf(['click', 'mousedown']);
     });
 
     it('should not close when right-clicked outside', () => {
@@ -100,6 +104,55 @@ describe('RootCloseWrapper', function () {
 
       expect(outerSpy).to.have.not.been.called;
       expect(innerSpy).to.have.been.calledOnce;
+
+      expect(innerSpy.getCall(0).args[0].type).to.be.oneOf(['click', 'mousedown'])
     });
   }
+
+  describe('using keyup event', () => {
+    it('should close when escape keyup', () => {
+      let spy = sinon.spy();
+      render(
+        <RootCloseWrapper onRootClose={spy}>
+          <div id='my-div'>hello there</div>
+        </RootCloseWrapper>
+      );
+
+      expect(spy).to.not.have.been.called;
+
+      simulant.fire(document.body, 'keyup', {keyCode: escapeKeyCode});
+
+      expect(spy).to.have.been.calledOnce;
+
+      expect(spy.getCall(0).args.length).to.be.equal(1);
+      expect(spy.getCall(0).args[0].keyCode).to.be.equal(escapeKeyCode);
+      expect(spy.getCall(0).args[0].type).to.be.equal('keyup');
+    });
+
+    it('should close when inside another RootCloseWrapper', () => {
+      let outerSpy = sinon.spy();
+      let innerSpy = sinon.spy();
+
+      render(
+        <RootCloseWrapper onRootClose={outerSpy}>
+          <div>
+            <div id='my-div'>hello there</div>
+            <RootCloseWrapper onRootClose={innerSpy}>
+              <div id='my-other-div'>hello there</div>
+            </RootCloseWrapper>
+          </div>
+        </RootCloseWrapper>
+      );
+
+      simulant.fire(document.body, 'keyup', {keyCode: escapeKeyCode});
+
+      // TODO: Update to match expectations.
+      // expect(outerSpy).to.have.not.been.called;
+      expect(innerSpy).to.have.been.calledOnce;
+
+      expect(innerSpy.getCall(0).args.length).to.be.equal(1);
+      expect(innerSpy.getCall(0).args[0].keyCode).to.be.equal(escapeKeyCode);
+      expect(innerSpy.getCall(0).args[0].type).to.be.equal('keyup');
+    });
+  });
 });

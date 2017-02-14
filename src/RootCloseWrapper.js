@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import addEventListener from './utils/addEventListener';
 import ownerDocument from './utils/ownerDocument';
 
+const escapeKeyCode = 27;
+
 function isLeftClickEvent(event) {
   return event.button === 0;
 }
@@ -79,15 +81,15 @@ export default class RootCloseWrapper extends React.Component {
     );
   };
 
-  handleMouse = () => {
+  handleMouse = (e) => {
     if (!this.preventMouseRootClose && this.props.onRootClose) {
-      this.props.onRootClose();
+      this.props.onRootClose(e);
     }
   };
 
   handleKeyUp = (e) => {
-    if (e.keyCode === 27 && this.props.onRootClose) {
-      this.props.onRootClose();
+    if (e.keyCode === escapeKeyCode && this.props.onRootClose) {
+      this.props.onRootClose(e);
     }
   };
 
