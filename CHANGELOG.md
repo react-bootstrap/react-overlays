@@ -1,3 +1,14 @@
+## [v0.6.11]
+> 2017-02-13
+
+- **Feature:** Allow accessibility attributes on `<Modal>` root element ([#114])
+- **Feature:** Expose triggering event in `onRootClose` callback ([#142])
+
+[v0.6.11]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.10...v0.6.11
+[#114]: https://github.com/react-bootstrap/react-overlays/pull/114
+[#142]: https://github.com/react-bootstrap/react-overlays/pull/142
+
+
 ## [v0.6.10]
 > 2016-10-03
 
