@@ -25,12 +25,14 @@ class Transition extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    const { transitionAppear, unmountOnExit, mountOnEnter } = props;
+
     let initialStatus;
     if (props.in) {
       // Start enter transition in componentDidMount.
-      initialStatus = props.transitionAppear ? EXITED : ENTERED;
+      initialStatus = transitionAppear ? EXITED : ENTERED;
     } else {
-      initialStatus = props.unmountOnExit ? UNMOUNTED : EXITED;
+      initialStatus = unmountOnExit || mountOnEnter ? UNMOUNTED : EXITED;
     }
     this.state = {status: initialStatus};
 
@@ -44,50 +46,40 @@ class Transition extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.in && this.props.unmountOnExit) {
-      if (this.state.status === UNMOUNTED) {
-        // Start enter transition in componentDidUpdate.
-        this.setState({status: EXITED});
-      }
-    }
-    else {
-      this._needsUpdate = true
+    this._propsUpdated = true
+
+    if (nextProps.in && this.state.status === UNMOUNTED) {
+      // Start enter transition in componentDidUpdate.
+      this.setState({ status: EXITED });
     }
   }
 
   componentDidUpdate() {
     const status = this.state.status;
 
-    if (this.props.unmountOnExit && status === EXITED) {
-      // EXITED is always a transitional state to either ENTERING or UNMOUNTED
-      // when using unmountOnExit.
-      if (this.props.in) {
-        this.performEnter(this.props);
-      } else {
-        this.setState({status: UNMOUNTED});
-      }
+    // EXITED is always a transitional state to either ENTERING or UNMOUNTED
+    // when using unmountOnExit.
+    const needsTransitionalUpdate = (
+      this.props.unmountOnExit &&
+      status === EXITED
+    )
 
+    if (!this._propsUpdated && !needsTransitionalUpdate) {
       return
     }
 
-    // guard ensures we are only responding to prop changes
-    if (this._needsUpdate) {
-      this._needsUpdate = false;
+    this._propsUpdated = false;
 
-      if (this.props.in) {
-        if (status === EXITING) {
-          this.performEnter(this.props);
-        }
-        else if (status === EXITED) {
-          this.performEnter(this.props);
-        }
-        // Otherwise we're already entering or entered.
-      } else {
-        if (status === ENTERING || status === ENTERED) {
-          this.performExit(this.props);
-        }
-        // Otherwise we're already exited or exiting.
+    if (this.props.in) {
+      if (status === EXITING || status === EXITED) {
+        this.performEnter(this.props);
       }
+    }
+    else if (needsTransitionalUpdate) {
+      this.setState({ status: UNMOUNTED });
+    }
+    else if (status === ENTERING || status === ENTERED) {
+      this.performExit(this.props);
     }
   }
 
@@ -215,6 +207,11 @@ Transition.propTypes = {
    * Show the component; triggers the enter or exit animation
    */
   in: React.PropTypes.bool,
+
+  /**
+   * Wait until the first "enter" transition to mount the component (add it to the DOM)
+   */
+  mountOnEnter: React.PropTypes.bool,
 
   /**
    * Unmount the component (remove it from the DOM) when it is not shown

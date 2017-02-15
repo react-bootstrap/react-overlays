@@ -1,34 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
-import { render } from './helpers';
 import tsp from 'teaspoon';
-import Transition, {UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING} from
-  '../src/Transition';
 
-describe('Transition', function () {
-  it('should not transition on mount', function(){
-    let instance = render(
-          <Transition in timeout={0} onEnter={()=> { throw new Error('should not Enter'); }}>
-            <div></div>
-          </Transition>
-        );
+import { render } from './helpers';
+import Transition, { UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING }
+  from '../src/Transition';
 
-    expect(instance.state.status).to.equal(ENTERED);
+describe('Transition', () => {
+  it('should not transition on mount', () => {
+    let instance = tsp(
+      <Transition
+        in
+        timeout={0}
+        onEnter={()=> { throw new Error('should not Enter'); }}
+      >
+        <div></div>
+      </Transition>
+    )
+    .render()
+
+    expect(instance.state('status')).to.equal(ENTERED);
   });
 
-  it('should transition on mount with transitionAppear', done =>{
-    let instance = ReactTestUtils.renderIntoDocument(
-          <Transition in
-            transitionAppear
-            timeout={0}
-            onEnter={()=> done()}
-          >
-            <div></div>
-          </Transition>
-        );
+  it('should transition on mount with transitionAppear', done => {
+    let instance = tsp(
+      <Transition in
+        transitionAppear
+        timeout={0}
+        onEnter={()=> done()}
+      >
+        <div></div>
+      </Transition>
+    )
+    .render();
 
-    expect(instance.state.status).to.equal(EXITED);
+    expect(instance.state('status')).to.equal(EXITED);
   });
 
   it('should flush new props to the DOM before initiating a transition', function(done) {
@@ -56,11 +62,11 @@ describe('Transition', function () {
     })
   });
 
-  describe('entering', ()=> {
+  describe('entering', () => {
     let instance;
 
-    beforeEach(function(){
-      instance = render(
+    beforeEach(() => {
+      instance = tsp(
         <Transition
           timeout={10}
           enteredClassName='test-enter'
@@ -68,16 +74,17 @@ describe('Transition', function () {
         >
           <div/>
         </Transition>
-      );
+      )
+      .render();
     });
 
     it('should fire callbacks', done => {
       let onEnter = sinon.spy();
       let onEntering = sinon.spy();
 
-      expect(instance.state.status).to.equal(EXITED);
+      expect(instance.state('status')).to.equal(EXITED);
 
-      instance = instance.renderWithProps({
+      instance.props({
         in: true,
 
         onEnter,
@@ -96,23 +103,23 @@ describe('Transition', function () {
     it('should move to each transition state', done => {
       let count = 0;
 
-      expect(instance.state.status).to.equal(EXITED);
+      expect(instance.state('status')).to.equal(EXITED);
 
-      instance = instance.renderWithProps({
+      instance.props({
         in: true,
 
         onEnter(){
           count++;
-          expect(instance.state.status).to.equal(EXITED);
+          expect(instance.state('status')).to.equal(EXITED);
         },
 
         onEntering(){
           count++;
-          expect(instance.state.status).to.equal(ENTERING);
+          expect(instance.state('status')).to.equal(ENTERING);
         },
 
         onEntered(){
-          expect(instance.state.status).to.equal(ENTERED);
+          expect(instance.state('status')).to.equal(ENTERED);
           expect(count).to.equal(2);
           done();
         }
@@ -122,9 +129,9 @@ describe('Transition', function () {
     it('should apply classes at each transition state', done => {
       let count = 0;
 
-      expect(instance.state.status).to.equal(EXITED);
+      expect(instance.state('status')).to.equal(EXITED);
 
-      instance = instance.renderWithProps({
+      instance.props({
         in: true,
 
         onEnter(node){
@@ -149,8 +156,8 @@ describe('Transition', function () {
   describe('exiting', ()=> {
     let instance;
 
-    beforeEach(function(){
-      instance = render(
+    beforeEach(() => {
+      instance = tsp(
         <Transition
           in
           timeout={10}
@@ -159,16 +166,17 @@ describe('Transition', function () {
         >
           <div/>
         </Transition>
-      );
+      )
+      .render();
     });
 
     it('should fire callbacks', done => {
       let onExit = sinon.spy();
       let onExiting = sinon.spy();
 
-      expect(instance.state.status).to.equal(ENTERED);
+      expect(instance.state('status')).to.equal(ENTERED);
 
-      instance = instance.renderWithProps({
+      instance.props({
         in: false,
 
         onExit,
@@ -187,23 +195,23 @@ describe('Transition', function () {
     it('should move to each transition state', done => {
       let count = 0;
 
-      expect(instance.state.status).to.equal(ENTERED);
+      expect(instance.state('status')).to.equal(ENTERED);
 
-      instance = instance.renderWithProps({
+      instance.props({
         in: false,
 
         onExit(){
           count++;
-          expect(instance.state.status).to.equal(ENTERED);
+          expect(instance.state('status')).to.equal(ENTERED);
         },
 
         onExiting(){
           count++;
-          expect(instance.state.status).to.equal(EXITING);
+          expect(instance.state('status')).to.equal(EXITING);
         },
 
         onExited(){
-          expect(instance.state.status).to.equal(EXITED);
+          expect(instance.state('status')).to.equal(EXITED);
           expect(count).to.equal(2);
           done();
         }
@@ -213,9 +221,9 @@ describe('Transition', function () {
     it('should apply classes at each transition state', done => {
       let count = 0;
 
-      expect(instance.state.status).to.equal(ENTERED);
+      expect(instance.state('status')).to.equal(ENTERED);
 
-      instance = instance.renderWithProps({
+      instance.props({
         in: false,
 
         onExit(node){
@@ -236,6 +244,80 @@ describe('Transition', function () {
       });
     });
   });
+
+  describe('mountOnEnter', () => {
+    class MountTransition extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {in: props.initialIn};
+      }
+
+      render() {
+        const { ...props } = this.props;
+        delete props.initialIn;
+
+        return (
+          <Transition
+            ref="transition"
+            mountOnEnter
+            in={this.state.in}
+            timeout={10}
+            {...props}
+          >
+            <div />
+          </Transition>
+        );
+      }
+
+      getStatus() {
+        return this.refs.transition.state.status;
+      }
+    }
+
+    it('should mount when entering', done => {
+      const instance = tsp(
+        <MountTransition
+          initialIn={false}
+          onEnter={() => {
+            expect(instance.unwrap().getStatus()).to.equal(EXITED);
+            expect(instance.dom()).to.exist;
+            done();
+          }}
+        />
+      )
+      .render();
+
+      expect(instance.unwrap().getStatus()).to.equal(UNMOUNTED);
+
+      expect(instance.dom()).to.not.exist;
+
+      instance.props({ in: true });
+    });
+
+    it('should stay mounted after exiting', done => {
+      const instance = tsp(
+        <MountTransition
+          initialIn={false}
+          onEntered={() => {
+            expect(instance.unwrap().getStatus()).to.equal(ENTERED);
+            expect(instance.dom()).to.exist;
+
+            instance.state({ in: false });
+          }}
+          onExited={() => {
+            expect(instance.unwrap().getStatus()).to.equal(EXITED);
+            expect(instance.dom()).to.exist;
+
+            done();
+          }}
+        />
+      )
+      .render();
+
+      expect(instance.dom()).to.not.exist;
+      instance.state({ in: true });
+    });
+  })
 
   describe('unmountOnExit', () => {
     class UnmountTransition extends React.Component {
