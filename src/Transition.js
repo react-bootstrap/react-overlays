@@ -1,10 +1,10 @@
+import classnames from 'classnames';
+import addEventListener from 'dom-helpers/events/on';
+import transitionInfo from 'dom-helpers/transition/properties';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import transitionInfo from 'dom-helpers/transition/properties';
-import addEventListener from 'dom-helpers/events/on';
-import classnames from 'classnames';
 
-let transitionEndEvent = transitionInfo.end;
+const transitionEndEvent = transitionInfo.end;
 
 export const UNMOUNTED = 0;
 export const EXITED = 1;
@@ -18,109 +18,101 @@ export const EXITING = 4;
  * but is specifically optimized for transitioning a single child "in" or "out".
  *
  * You don't even need to use class based css transitions if you don't want to (but it is easiest).
- * The extensive set of lifecyle callbacks means you have control over
+ * The extensive set of lifecycle callbacks means you have control over
  * the transitioning now at each step of the way.
  */
 class Transition extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    const { transitionAppear, unmountOnExit, mountOnEnter } = props;
-
     let initialStatus;
+    this.nextStatus = null;
+
     if (props.in) {
-      // Start enter transition in componentDidMount.
-      initialStatus = transitionAppear ? EXITED : ENTERED;
+      if (props.transitionAppear) {
+        initialStatus = EXITED;
+        this.nextStatus = ENTERING;
+      } else {
+        initialStatus = ENTERED;
+      }
     } else {
-      initialStatus = unmountOnExit || mountOnEnter ? UNMOUNTED : EXITED;
+      if (props.unmountOnExit || props.mountOnEnter) {
+        initialStatus = UNMOUNTED;
+      } else {
+        initialStatus = EXITED;
+      }
     }
-    this.state = {status: initialStatus};
+
+    this.state = { status: initialStatus };
 
     this.nextCallback = null;
   }
 
   componentDidMount() {
-    if (this.props.transitionAppear && this.props.in) {
-      this.performEnter(this.props);
-    }
+    this.updateStatus();
   }
 
   componentWillReceiveProps(nextProps) {
-    this._propsUpdated = true
+    const { status } = this.state;
 
-    if (nextProps.in && this.state.status === UNMOUNTED) {
-      // Start enter transition in componentDidUpdate.
-      this.setState({ status: EXITED });
+    if (nextProps.in) {
+      if (status === UNMOUNTED) {
+        this.setState({ status: EXITED });
+      }
+      if (status !== ENTERING && status !== ENTERED) {
+        this.nextStatus = ENTERING;
+      }
+    } else {
+      if (status === ENTERING || status === ENTERED) {
+        this.nextStatus = EXITING;
+      }
     }
   }
 
   componentDidUpdate() {
-    const status = this.state.status;
-
-    // EXITED is always a transitional state to either ENTERING or UNMOUNTED
-    // when using unmountOnExit.
-    const needsTransitionalUpdate = (
-      this.props.unmountOnExit &&
-      status === EXITED
-    )
-
-    if (!this._propsUpdated && !needsTransitionalUpdate) {
-      return
-    }
-
-    this._propsUpdated = false;
-
-    if (this.props.in) {
-      if (status === EXITING || status === EXITED) {
-        this.performEnter(this.props);
-      }
-    }
-    else if (needsTransitionalUpdate) {
-      this.setState({ status: UNMOUNTED });
-    }
-    else if (status === ENTERING || status === ENTERED) {
-      this.performExit(this.props);
-    }
+    this.updateStatus();
   }
 
   componentWillUnmount() {
     this.cancelNextCallback();
   }
 
-  performEnter(props) {
-    this.cancelNextCallback();
-    const node = ReactDOM.findDOMNode(this);
+  updateStatus() {
+    if (this.nextStatus !== null) {
+      // nextStatus will always be ENTERING or EXITING.
+      this.cancelNextCallback();
+      const node = ReactDOM.findDOMNode(this);
 
-    // Not this.props, because we might be about to receive new props.
-    props.onEnter(node);
+      if (this.nextStatus === ENTERING) {
+        this.props.onEnter(node);
 
-    this.safeSetState({status: ENTERING}, () => {
-      this.props.onEntering(node);
+        this.safeSetState({status: ENTERING}, () => {
+          this.props.onEntering(node);
 
-      this.onTransitionEnd(node, () => {
-        this.safeSetState({status: ENTERED}, () => {
-          this.props.onEntered(node);
+          this.onTransitionEnd(node, () => {
+            this.safeSetState({status: ENTERED}, () => {
+              this.props.onEntered(node);
+            });
+          });
         });
-      });
-    });
-  }
+      } else {
+        this.props.onExit(node);
 
-  performExit(props) {
-    this.cancelNextCallback();
-    const node = ReactDOM.findDOMNode(this);
+        this.safeSetState({status: EXITING}, () => {
+          this.props.onExiting(node);
 
-    // Not this.props, because we might be about to receive new props.
-    props.onExit(node);
-
-    this.safeSetState({status: EXITING}, () => {
-      this.props.onExiting(node);
-
-      this.onTransitionEnd(node, () => {
-        this.safeSetState({status: EXITED}, () => {
-          this.props.onExited(node);
+          this.onTransitionEnd(node, () => {
+            this.safeSetState({status: EXITED}, () => {
+              this.props.onExited(node);
+            });
+          });
         });
-      });
-    });
+      }
+
+      this.nextStatus = null;
+    } else if (this.props.unmountOnExit && this.state.status === EXITED) {
+      this.setState({ status: UNMOUNTED });
+    }
   }
 
   cancelNextCallback() {
