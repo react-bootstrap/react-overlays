@@ -62,7 +62,7 @@ class Transition extends React.Component {
       // EXITED is always a transitional state to either ENTERING or UNMOUNTED
       // when using unmountOnExit.
       if (this.props.in) {
-        this.performEnter(this.props);
+        setTimeout(() => this.performEnter(this.props), 0);
       } else {
         this.setState({status: UNMOUNTED});
       }
