@@ -15,7 +15,11 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
-export default class RootCloseWrapper extends React.Component {
+/**
+ * The `<RootCloseWrapper/>` registers your callback on the document when rendered. Powers the
+ * `<Overlay/>` component.
+ */
+class RootCloseWrapper extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -101,16 +105,21 @@ export default class RootCloseWrapper extends React.Component {
 RootCloseWrapper.displayName = 'RootCloseWrapper';
 
 RootCloseWrapper.propTypes = {
+  /**
+   * Callback fired after click or mousedown.
+   */
   onRootClose: React.PropTypes.func,
+  /**
+   * Children to render.
+   */
   children: React.PropTypes.element,
-
   /**
    * Disable the the RootCloseWrapper, preventing it from triggering
    * `onRootClose`.
    */
   disabled: React.PropTypes.bool,
   /**
-   * Choose which document mouse event to bind to
+   * Choose which document mouse event to bind to.
    */
   event: React.PropTypes.oneOf(['click', 'mousedown'])
 };
@@ -118,3 +127,5 @@ RootCloseWrapper.propTypes = {
 RootCloseWrapper.defaultProps = {
   event: 'click'
 };
+
+export default RootCloseWrapper;
