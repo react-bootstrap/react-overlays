@@ -17,7 +17,8 @@ function isModifiedEvent(event) {
 
 /**
  * The `<RootCloseWrapper/>` registers your callback on the document when rendered. Powers the
- * `<Overlay/>` component.
+ * `<Overlay/>` component. This is used achieve modal style behavior where your callback is
+ * triggered when the user tries to interact with the rest of the document or hits the `esc` key.
  */
 class RootCloseWrapper extends React.Component {
   constructor(props, context) {
@@ -106,7 +107,7 @@ RootCloseWrapper.displayName = 'RootCloseWrapper';
 
 RootCloseWrapper.propTypes = {
   /**
-   * Callback fired after click or mousedown.
+   * Callback fired after click or mousedown. Also triggers when user hits `esc`.
    */
   onRootClose: React.PropTypes.func,
   /**
@@ -114,8 +115,7 @@ RootCloseWrapper.propTypes = {
    */
   children: React.PropTypes.element,
   /**
-   * Disable the the RootCloseWrapper, preventing it from triggering
-   * `onRootClose`.
+   * Disable the the RootCloseWrapper, preventing it from triggering `onRootClose`.
    */
   disabled: React.PropTypes.bool,
   /**
