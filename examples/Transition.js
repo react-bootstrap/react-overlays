@@ -1,6 +1,7 @@
 import React from 'react';
-import Transition from 'react-overlays/Transition';
 import Button from 'react-bootstrap/lib/Button';
+import Transition from 'react-overlays/lib/Transition';
+
 import injectCss from './injectCss';
 
 const FADE_DURATION = 200;

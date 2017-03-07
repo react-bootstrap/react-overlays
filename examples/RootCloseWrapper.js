@@ -5,19 +5,21 @@ import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 class RootCloseWrapperExample extends React.Component {
   constructor(...args){
     super(...args);
+
     this.state = { show: false };
 
-    this.show = ()=> this.setState({ show: true });
-    this.hide = ()=> this.setState({ show: false });
+    this.show = () => this.setState({ show: true });
+    this.hide = () => this.setState({ show: false });
   }
 
   render() {
     return (
-      <div className='rootclosewrapper-example'>
+      <div className='root-close-wrapper-example'>
         <Button bsStyle='primary' onClick={this.show}>
           Render RootCloseWrapper
         </Button>
-        { this.state.show &&
+
+        {this.state.show && (
           <RootCloseWrapper onRootClose={this.hide}>
             <div className='panel panel-default'>
               <div className='panel-body'>
@@ -25,7 +27,7 @@ class RootCloseWrapperExample extends React.Component {
               </div>
             </div>
           </RootCloseWrapper>
-        }
+        )}
       </div>
     );
   }

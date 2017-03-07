@@ -16,9 +16,10 @@ function isModifiedEvent(event) {
 }
 
 /**
- * The `<RootCloseWrapper/>` registers your callback on the document when rendered. Powers the
- * `<Overlay/>` component. This is used achieve modal style behavior where your callback is
- * triggered when the user tries to interact with the rest of the document or hits the `esc` key.
+ * The `<RootCloseWrapper/>` component registers your callback on the document
+ * when rendered. Powers the `<Overlay/>` component. This is used achieve modal
+ * style behavior where your callback is triggered when the user tries to
+ * interact with the rest of the document or hits the `esc` key.
  */
 class RootCloseWrapper extends React.Component {
   constructor(props, context) {
