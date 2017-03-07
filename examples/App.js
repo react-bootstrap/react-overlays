@@ -11,6 +11,7 @@ import OverlaySource from '../webpack/example-loader!./Overlay';
 import PortalSource from '../webpack/example-loader!./Portal';
 import PositionSource from '../webpack/example-loader!./Position';
 import TransitionSource from '../webpack/example-loader!./Transition';
+import RootCloseWrapperSource from '../webpack/example-loader!./RootCloseWrapper';
 
 import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix';
 import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix';
@@ -19,6 +20,7 @@ import PositionMetadata from 'component-metadata-loader?pitch!react-overlays/Pos
 import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay';
 import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal';
 import TransitionMetadata from 'component-metadata-loader?pitch!react-overlays/Transition';
+import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper';
 
 import * as ReactOverlays from 'react-overlays';
 import getOffset from 'dom-helpers/query/offset';
@@ -82,6 +84,7 @@ const Example = React.createClass({
             <li><a href='#position'>Position</a></li>
             <li><a href='#overlay'>Overlay</a></li>
             <li><a href='#affixes'>Affixes</a></li>
+            <li><a href='#rootclosewrapper'>RootCloseWrapper</a></li>
           </ul>
         </article>
         <main className='col-md-10'>
@@ -154,6 +157,17 @@ const Example = React.createClass({
             <PropTable
               component='AutoAffix'
               metadata={AutoAffixMetadata}
+            />
+          </section>
+          <section>
+            <h2 className='page-header'>
+              <Anchor>RootCloseWrapper</Anchor>
+            </h2>
+            <p dangerouslySetInnerHTML={{__html: RootCloseWrapperMetadata.RootCloseWrapper.descHtml }}/>
+            <ExampleEditor codeText={RootCloseWrapperSource} />
+            <PropTable
+              component='RootCloseWrapper'
+              metadata={RootCloseWrapperMetadata}
             />
           </section>
         </main>
