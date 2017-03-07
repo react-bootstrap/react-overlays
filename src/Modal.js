@@ -158,6 +158,12 @@ const Modal = React.createClass({
      * accessible to assistive technologies, like screen readers.
      */
     enforceFocus: React.PropTypes.bool,
+    
+    /**
+     * When `true` The modal will restore focus to previously focused element once
+     * modal is hidden
+     */
+    restoreFocus: React.PropTypes.bool,
 
     /**
      * Callback fired before the Modal transitions in
@@ -205,6 +211,7 @@ const Modal = React.createClass({
       keyboard: true,
       autoFocus: true,
       enforceFocus: true,
+      restoreFocus: true,
       onHide: noop,
       manager: modalManager,
       renderBackdrop: (props) => <div {...props} />
@@ -405,7 +412,9 @@ const Modal = React.createClass({
 
     this._onFocusinListener.remove();
 
-    this.restoreLastFocus();
+    if (this.props.restoreFocus) {
+      this.restoreLastFocus();
+    }
   },
 
   setMountNode(ref) {
