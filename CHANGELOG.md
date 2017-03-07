@@ -1,3 +1,14 @@
+## [v0.6.12]
+> 2017-03-06
+
+- **Feature:** Add `mountOnEnter` to `<Transition>` ([#144])
+- **Feature:** Add `restoreFocus` to `<Modal>` ([#145])
+
+[v0.6.12]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.11...v0.6.12
+[#144]: https://github.com/react-bootstrap/react-overlays/pull/144
+[#145]: https://github.com/react-bootstrap/react-overlays/pull/145
+
+
 ## [v0.6.11]
 > 2017-02-13
 
