@@ -1,7 +1,7 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import Position from 'react-overlays/Position';
 import Button from 'react-bootstrap/lib/Button';
+import Position from 'react-overlays/lib/Position';
 
 
 const OverlayStyle = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import Overlay from 'react-overlays/Overlay';
 import Button from 'react-bootstrap/lib/Button';
+import Overlay from 'react-overlays/lib/Overlay';
 
 // Styles Mostly from Bootstrap
 const TooltipStyle = {

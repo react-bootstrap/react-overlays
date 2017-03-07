@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import Portal from 'react-overlays/Portal';
+import Portal from 'react-overlays/lib/Portal';
 
 class PortalExample extends React.Component {
 
