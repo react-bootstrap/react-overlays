@@ -76,7 +76,7 @@ class Overlay extends React.Component {
     }
 
     // This goes after everything else because it adds a wrapping div.
-    if (rootClose) {      
+    if (rootClose) {
       child = (
         <RootCloseWrapper
           onRootClose={props.onHide}
