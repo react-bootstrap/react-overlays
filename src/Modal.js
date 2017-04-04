@@ -294,7 +294,7 @@ const Modal = React.createClass({
         container={container}
       >
         <div
-          ref={(ref) => {this.modalNode = ref}}
+          ref={this.setModalNode}
           role={role || 'dialog'}
           {...filteredProps}
           style={style}
@@ -419,6 +419,10 @@ const Modal = React.createClass({
 
   setMountNode(ref) {
     this.mountNode = ref ? ref.getMountNode() : ref;
+  },
+    
+  setModalNode(ref) {
+    this.modalNode = ref;
   },
 
   handleHidden(...args) {
