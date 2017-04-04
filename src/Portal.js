@@ -24,14 +24,6 @@ let Portal = React.createClass({
     ])
   },
 
-  componentDidMount() {
-    this._renderOverlay();
-  },
-
-  componentDidUpdate() {
-    this._renderOverlay();
-  },
-
   componentWillReceiveProps(nextProps) {
     if (this._overlayTarget && nextProps.container !== this.props.container) {
       this._portalContainerNode.removeChild(this._overlayTarget);
@@ -89,6 +81,7 @@ let Portal = React.createClass({
   },
 
   render() {
+    this._renderOverlay();
     return null;
   },
 
