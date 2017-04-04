@@ -294,7 +294,7 @@ const Modal = React.createClass({
         container={container}
       >
         <div
-          ref={(ref) => {this.modalNode = ref}
+          ref={(ref) => {this.modalNode = ref}}
           role={role || 'dialog'}
           {...filteredProps}
           style={style}
