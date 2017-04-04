@@ -78,7 +78,10 @@ class Overlay extends React.Component {
     // This goes after everything else because it adds a wrapping div.
     if (rootClose) {
       child = (
-        <RootCloseWrapper onRootClose={props.onHide}>
+        <RootCloseWrapper
+          onRootClose={props.onHide}
+          event={props.event}
+        >
           {child}
         </RootCloseWrapper>
       );
@@ -163,7 +166,12 @@ Overlay.propTypes = {
   /**
    * Callback fired after the Overlay finishes transitioning out
    */
-  onExited: React.PropTypes.func
+  onExited: React.PropTypes.func,
+
+  /**
+   * Choose which document mouse event to bind the RootCloseWrapper to.
+   */
+  event: RootCloseWrapper.propTypes.event
 };
 
 
