@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
@@ -76,13 +77,13 @@ class Position extends React.Component {
     );
   }
 
-  getTarget() {
+  getTarget = () => {
     const { target } = this.props;
     const targetElement = typeof target === 'function' ? target() : target;
     return targetElement && ReactDOM.findDOMNode(targetElement) || null;
   }
 
-  maybeUpdatePosition(placementChanged) {
+  maybeUpdatePosition = (placementChanged) => {
     const target = this.getTarget();
 
     if (
@@ -130,28 +131,28 @@ Position.propTypes = {
    * A node, element, or function that returns either. The child will be
    * be positioned next to the `target` specified.
    */
-  target: React.PropTypes.oneOfType([
-    componentOrElement, React.PropTypes.func
+  target: PropTypes.oneOfType([
+    componentOrElement, PropTypes.func
   ]),
 
   /**
    * "offsetParent" of the component
    */
-  container: React.PropTypes.oneOfType([
-    componentOrElement, React.PropTypes.func
+  container: PropTypes.oneOfType([
+    componentOrElement, PropTypes.func
   ]),
   /**
    * Minimum spacing in pixels between container border and component border
    */
-  containerPadding: React.PropTypes.number,
+  containerPadding: PropTypes.number,
   /**
    * How to position the component relative to the target
    */
-  placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+  placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
   /**
    * Whether the position should be changed on each update
    */
-  shouldUpdatePosition: React.PropTypes.bool
+  shouldUpdatePosition: PropTypes.bool
 };
 
 Position.displayName = 'Position';
