@@ -6,21 +6,21 @@ import Portal from '../src/Portal';
 describe('Portal', function () {
   let instance;
 
-  let Overlay = React.createClass({
+  class Overlay extends React.Component {
     render() {
       return (
         <div>
           <Portal ref='p' {...this.props}>{this.props.overlay}</Portal>
         </div>
       );
-    },
-    getOverlayDOMNode(){
+    }
+    getOverlayDOMNode = () => {
       return this.refs.p.getOverlayDOMNode();
     }
-  });
+  }
 
   afterEach(function() {
-    if (instance && ReactTestUtils.isCompositeComponent(instance) && instance.isMounted()) {
+    if (instance && ReactTestUtils.isCompositeComponent(instance) && instance._isMounted) {
       ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
     }
   });
@@ -36,11 +36,11 @@ describe('Portal', function () {
   });
 
   it('Should render overlay into container (ReactComponent)', function() {
-    let Container = React.createClass({
+    class Container extends React.Component {
       render() {
         return <Overlay container={this} overlay={<div id="test1" />} />;
       }
-    });
+    }
 
     instance = ReactTestUtils.renderIntoDocument(
       <Container />
@@ -50,11 +50,11 @@ describe('Portal', function () {
   });
 
   it('Should not render a null overlay', function() {
-    let Container = React.createClass({
+    class Container extends React.Component {
       render() {
         return <Overlay ref='overlay' container={this} overlay={null} />;
       }
-    });
+    }
 
     instance = ReactTestUtils.renderIntoDocument(
       <Container />
@@ -64,11 +64,11 @@ describe('Portal', function () {
   });
 
   it('Should render only an overlay', function() {
-    let OnlyOverlay = React.createClass({
+    class OnlyOverlay extends React.Component {
       render() {
         return <Portal ref='p' {...this.props}>{this.props.overlay}</Portal>;
       }
-    });
+    }
 
     let overlayInstance = ReactTestUtils.renderIntoDocument(
       <OnlyOverlay overlay={<div id="test1" />} />
@@ -79,10 +79,8 @@ describe('Portal', function () {
 
   it('Should change container on prop change', function() {
 
-    let ContainerTest = React.createClass({
-      getInitialState() {
-        return {}
-      },
+    class ContainerTest extends React.Component {
+      state = {};
       render() {
         return (
           <div>
@@ -93,7 +91,7 @@ describe('Portal', function () {
           </div>
         );
       }
-    });
+    }
 
     let overlayInstance = ReactTestUtils.renderIntoDocument(
       <ContainerTest overlay={<div id="test1" />} />
@@ -108,10 +106,8 @@ describe('Portal', function () {
 
   it('Should unmount when parent unmounts', function() {
 
-    let Parent = React.createClass({
-      getInitialState() {
-        return {show: true}
-      },
+    class Parent extends React.Component {
+      state = {show: true};
       render() {
         return (
           <div>
@@ -119,9 +115,9 @@ describe('Portal', function () {
           </div>
         )
       }
-    })
+    }
 
-    let Child = React.createClass({
+    class Child extends React.Component {
       render() {
         return (
           <div>
@@ -132,7 +128,7 @@ describe('Portal', function () {
           </div>
         );
       }
-    });
+    }
 
     instance = ReactTestUtils.renderIntoDocument(
       <Parent />

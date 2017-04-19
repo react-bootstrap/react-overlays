@@ -70,21 +70,21 @@ class AutoAffix extends React.Component {
     }
   }
 
-  onWindowScroll() {
+  onWindowScroll = () => {
     this.onUpdate();
   }
 
-  onWindowResize() {
+  onWindowResize = () => {
     if (this.props.autoWidth) {
       requestAnimationFrame(() => this.onUpdate());
     }
   }
 
-  onDocumentClick() {
+  onDocumentClick = () => {
     requestAnimationFrame(() => this.onUpdate());
   }
 
-  onUpdate() {
+  onUpdate = () => {
     if (!this._isMounted) {
       return;
     }
@@ -104,7 +104,7 @@ class AutoAffix extends React.Component {
     this.updateState(offsetTop, offsetBottom, width);
   }
 
-  updateState(offsetTop, offsetBottom, width) {
+  updateState = (offsetTop, offsetBottom, width) => {
     if (
       offsetTop === this.state.offsetTop &&
       offsetBottom === this.state.offsetBottom &&

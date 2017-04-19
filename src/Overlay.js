@@ -92,7 +92,7 @@ class Overlay extends React.Component {
     );
   }
 
-  handleHidden(...args) {
+  handleHidden = (...args) => {
     this.setState({exited: true});
 
     if (this.props.onExited) {

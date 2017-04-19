@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
@@ -77,13 +78,13 @@ class Position extends React.Component {
     );
   }
 
-  getTarget() {
+  getTarget = () => {
     const { target } = this.props;
     const targetElement = typeof target === 'function' ? target() : target;
     return targetElement && ReactDOM.findDOMNode(targetElement) || null;
   }
 
-  maybeUpdatePosition(placementChanged) {
+  maybeUpdatePosition = (placementChanged) => {
     const target = this.getTarget();
 
     if (

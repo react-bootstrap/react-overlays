@@ -269,7 +269,7 @@ describe('Transition', () => {
         );
       }
 
-      getStatus() {
+      getStatus = () => {
         return this.refs.transition.state.status;
       }
     }
@@ -344,7 +344,7 @@ describe('Transition', () => {
         );
       }
 
-      getStatus() {
+      getStatus = () => {
         return this.refs.transition.state.status;
       }
     }

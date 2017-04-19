@@ -5,6 +5,7 @@ import getOffsetParent from 'dom-helpers/query/offsetParent';
 import getScrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -65,15 +66,15 @@ class Affix extends React.Component {
     }
   }
 
-  onWindowScroll() {
+  onWindowScroll = () => {
     this.onUpdate();
   }
 
-  onDocumentClick() {
+  onDocumentClick = () => {
     requestAnimationFrame(() => this.onUpdate());
   }
 
-  onUpdate() {
+  onUpdate = () => {
     if (!this._isMounted) {
       return;
     }
@@ -112,14 +113,14 @@ class Affix extends React.Component {
     this.updateState('affix', 'fixed', viewportOffsetTop);
   }
 
-  getPositionTopMax() {
+  getPositionTopMax = () => {
     const documentHeight = getDocumentHeight(ownerDocument(this));
     const height = getHeight(ReactDOM.findDOMNode(this));
 
     return documentHeight - height - this.props.offsetBottom;
   }
 
-  updateState(affixed, position, top) {
+  updateState = (affixed, position, top) => {
     if (
       affixed === this.state.affixed &&
       position === this.state.position &&
@@ -142,7 +143,7 @@ class Affix extends React.Component {
     });
   }
 
-  updateStateAtBottom() {
+  updateStateAtBottom = () => {
     const positionTopMax = this.getPositionTopMax();
     const offsetParent = getOffsetParent(ReactDOM.findDOMNode(this));
     const parentTop = getOffset(offsetParent).top;

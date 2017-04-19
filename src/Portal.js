@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
@@ -10,11 +11,11 @@ import getContainer from './utils/getContainer';
  * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
  * The children of `<Portal/>` component will be appended to the `container` specified.
  */
-let Portal = React.createClass({
+class Portal extends React.Component {
 
-  displayName: 'Portal',
+  static displayName = 'Portal';
 
-  propTypes: {
+  static propTypes = {
     /**
      * A Node, Component instance, or function that returns either. The `container` will have the Portal children
      * appended to it.
@@ -23,15 +24,16 @@ let Portal = React.createClass({
       componentOrElement,
       PropTypes.func
     ])
-  },
+  };
 
   componentDidMount() {
+    this._isMounted = true;
     this._renderOverlay();
-  },
+  }
 
   componentDidUpdate() {
     this._renderOverlay();
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this._overlayTarget && nextProps.container !== this.props.container) {
@@ -39,31 +41,32 @@ let Portal = React.createClass({
       this._portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
       this._portalContainerNode.appendChild(this._overlayTarget);
     }
-  },
+  }
 
   componentWillUnmount() {
+    this._isMounted = false;
     this._unrenderOverlay();
     this._unmountOverlayTarget();
-  },
+  }
 
 
-  _mountOverlayTarget() {
+  _mountOverlayTarget = () => {
     if (!this._overlayTarget) {
       this._overlayTarget = document.createElement('div');
       this._portalContainerNode = getContainer(this.props.container, ownerDocument(this).body);
       this._portalContainerNode.appendChild(this._overlayTarget);
     }
-  },
+  }
 
-  _unmountOverlayTarget() {
+  _unmountOverlayTarget = () => {
     if (this._overlayTarget) {
       this._portalContainerNode.removeChild(this._overlayTarget);
       this._overlayTarget = null;
     }
     this._portalContainerNode = null;
-  },
+  }
 
-  _renderOverlay() {
+  _renderOverlay = () => {
 
     let overlay = !this.props.children
       ? null
@@ -80,25 +83,25 @@ let Portal = React.createClass({
       this._unrenderOverlay();
       this._unmountOverlayTarget();
     }
-  },
+  }
 
-  _unrenderOverlay() {
+  _unrenderOverlay = () => {
     if (this._overlayTarget) {
       ReactDOM.unmountComponentAtNode(this._overlayTarget);
       this._overlayInstance = null;
     }
-  },
+  }
 
   render() {
     return null;
-  },
+  }
 
-  getMountNode(){
+  getMountNode = () => {
     return this._overlayTarget;
-  },
+  }
 
-  getOverlayDOMNode() {
-    if (!this.isMounted()) {
+  getOverlayDOMNode = () => {
+    if (!this._isMounted) {
       throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
     }
 
@@ -109,6 +112,6 @@ let Portal = React.createClass({
     return null;
   }
 
-});
+}
 
 export default Portal;

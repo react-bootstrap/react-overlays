@@ -38,9 +38,9 @@ let modalManager = new ModalManager();
  * a Modal to be truly modal, it should have a `container` that is _outside_ your app's
  * React hierarchy (such as the default: document.body).
  */
-const Modal = React.createClass({
+class Modal extends React.Component {
 
-  propTypes: {
+  static propTypes = {
     ...Portal.propTypes,
 
     /**
@@ -201,23 +201,19 @@ const Modal = React.createClass({
      * Modals. Useful when customizing how modals interact within a container
      */
     manager: PropTypes.object.isRequired,
-  },
+  }
 
-  getDefaultProps() {
-    let noop = ()=>{};
-
-    return {
-      show: false,
-      backdrop: true,
-      keyboard: true,
-      autoFocus: true,
-      enforceFocus: true,
-      restoreFocus: true,
-      onHide: noop,
-      manager: modalManager,
-      renderBackdrop: (props) => <div {...props} />
-    };
-  },
+  static defaultProps = {
+    show: false,
+    backdrop: true,
+    keyboard: true,
+    autoFocus: true,
+    enforceFocus: true,
+    restoreFocus: true,
+    onHide: ()=>{},
+    manager: modalManager,
+    renderBackdrop: (props) => <div {...props} />
+  };
 
   omitProps(props, propTypes) {
 
@@ -230,11 +226,9 @@ const Modal = React.createClass({
     });
 
     return newProps;
-  },
+  }
 
-  getInitialState(){
-    return {exited: !this.props.show};
-  },
+  state = {exited: !this.props.show};
 
   render() {
     const {
@@ -306,9 +300,9 @@ const Modal = React.createClass({
         </div>
       </Portal>
     );
-  },
+  }
 
-  renderBackdrop() {
+  renderBackdrop = () => {
     let {
       backdropStyle,
       backdropClassName,
@@ -337,7 +331,7 @@ const Modal = React.createClass({
     }
 
     return backdrop;
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.show) {
@@ -346,19 +340,20 @@ const Modal = React.createClass({
       // Otherwise let handleHidden take care of marking exited.
       this.setState({exited: true});
     }
-  },
+  }
 
   componentWillUpdate(nextProps){
     if (!this.props.show && nextProps.show) {
       this.checkForFocus();
     }
-  },
+  }
 
   componentDidMount() {
+    this._isMounted = true;
     if (this.props.show) {
       this.onShow();
     }
-  },
+  }
 
   componentDidUpdate(prevProps) {
     let { transition } = this.props;
@@ -370,17 +365,19 @@ const Modal = React.createClass({
     else if (!prevProps.show && this.props.show) {
       this.onShow();
     }
-  },
+  }
 
   componentWillUnmount() {
     let { show, transition } = this.props;
+    
+    this._isMounted = false;
 
     if (show || (transition && !this.state.exited)) {
       this.onHide();
     }
-  },
+  }
 
-  onShow() {
+  onShow = () => {
     let doc = ownerDocument(this);
     let container = getContainer(this.props.container, doc.body);
 
@@ -397,9 +394,9 @@ const Modal = React.createClass({
    if (this.props.onShow) {
      this.props.onShow();
    }
-  },
+  }
 
-  onHide() {
+  onHide = () => {
     this.props.manager.remove(this);
 
     this._onDocumentKeyupListener.remove();
@@ -409,22 +406,22 @@ const Modal = React.createClass({
     if (this.props.restoreFocus) {
       this.restoreLastFocus();
     }
-  },
+  }
 
-  setMountNode(ref) {
+  setMountNode = (ref) => {
     this.mountNode = ref ? ref.getMountNode() : ref;
-  },
+  }
 
-  handleHidden(...args) {
+  handleHidden = (...args) => {
     this.setState({ exited: true });
     this.onHide();
 
     if (this.props.onExited) {
       this.props.onExited(...args);
     }
-  },
+  }
 
-  handleBackdropClick(e) {
+  handleBackdropClick = (e) => {
     if (e.target !== e.currentTarget) {
       return;
     }
@@ -436,24 +433,24 @@ const Modal = React.createClass({
     if (this.props.backdrop === true){
       this.props.onHide();
     }
-  },
+  }
 
-  handleDocumentKeyUp(e) {
+  handleDocumentKeyUp = (e) => {
     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
       if (this.props.onEscapeKeyUp) {
         this.props.onEscapeKeyUp(e);
       }
       this.props.onHide();
     }
-  },
+  }
 
-  checkForFocus() {
+  checkForFocus = () => {
     if (canUseDom) {
       this.lastFocus = activeElement();
     }
-  },
+  }
 
-  focus() {
+  focus = () => {
     let autoFocus = this.props.autoFocus;
     let modalContent = this.getDialogElement();
     let current = activeElement(ownerDocument(this));
@@ -471,20 +468,20 @@ const Modal = React.createClass({
 
       modalContent.focus();
     }
-  },
+  }
 
-  restoreLastFocus() {
+  restoreLastFocus = () => {
     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
     if (this.lastFocus && this.lastFocus.focus) {
       this.lastFocus.focus();
       this.lastFocus = null;
     }
-  },
+  }
 
-  enforceFocus() {
+  enforceFocus = () => {
     let { enforceFocus } = this.props;
 
-    if (!enforceFocus || !this.isMounted() || !this.isTopModal()) {
+    if (!enforceFocus || !this._isMounted || !this.isTopModal()) {
       return;
     }
 
@@ -494,19 +491,19 @@ const Modal = React.createClass({
     if (modal && modal !== active && !contains(modal, active)) {
       modal.focus();
     }
-  },
+  };
 
   //instead of a ref, which might conflict with one the parent applied.
-  getDialogElement() {
+  getDialogElement = () => {
     let node = this.refs.modal;
     return node && node.lastChild;
-  },
+  }
 
-  isTopModal() {
+  isTopModal = () => {
     return this.props.manager.isTopModal(this);
   }
 
-});
+}
 
 Modal.Manager = ModalManager;
 

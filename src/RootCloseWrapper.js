@@ -1,5 +1,6 @@
 import contains from 'dom-helpers/query/contains';
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -49,7 +50,7 @@ class RootCloseWrapper extends React.Component {
     }
   }
 
-  addEventListeners() {
+  addEventListeners = () => {
     const { event } = this.props;
     const doc = ownerDocument(this);
 
@@ -66,7 +67,7 @@ class RootCloseWrapper extends React.Component {
       addEventListener(doc, 'keyup', this.handleKeyUp);
   }
 
-  removeEventListeners() {
+  removeEventListeners = () => {
     if (this.documentMouseCaptureListener) {
       this.documentMouseCaptureListener.remove();
     }

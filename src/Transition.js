@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import addEventListener from 'dom-helpers/events/on';
 import transitionInfo from 'dom-helpers/transition/properties';
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -78,7 +79,7 @@ class Transition extends React.Component {
     this.cancelNextCallback();
   }
 
-  updateStatus() {
+  updateStatus = () => {
     if (this.nextStatus !== null) {
       // nextStatus will always be ENTERING or EXITING.
       this.cancelNextCallback();
@@ -116,21 +117,21 @@ class Transition extends React.Component {
     }
   }
 
-  cancelNextCallback() {
+  cancelNextCallback = () => {
     if (this.nextCallback !== null) {
       this.nextCallback.cancel();
       this.nextCallback = null;
     }
   }
 
-  safeSetState(nextState, callback) {
+  safeSetState = (nextState, callback) => {
     // This shouldn't be necessary, but there are weird race conditions with
     // setState callbacks and unmounting in testing, so always make sure that
     // we can cancel any pending setState callbacks after we unmount.
     this.setState(nextState, this.setNextCallback(callback));
   }
 
-  setNextCallback(callback) {
+  setNextCallback = (callback) => {
     let active = true;
 
     this.nextCallback = (event) => {
@@ -149,7 +150,7 @@ class Transition extends React.Component {
     return this.nextCallback;
   }
 
-  onTransitionEnd(node, handler) {
+  onTransitionEnd = (node, handler) => {
     this.setNextCallback(handler);
 
     if (node) {
