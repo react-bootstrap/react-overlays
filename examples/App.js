@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
+import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/lib/Button';
 import Playground from '@monastic.panic/component-playground/Playground';
 
@@ -34,7 +35,7 @@ const scope = {
 
 const Anchor = React.createClass({
   propTypes: {
-    id: React.PropTypes.string
+    id: PropTypes.string
   },
   render() {
     let id = this.props.id || this.props.children.toLowerCase().replace(/\s+/gi, '_');
@@ -50,7 +51,7 @@ const Anchor = React.createClass({
 
 const ExampleEditor = React.createClass({
   propTypes: {
-    codeText: React.PropTypes.string
+    codeText: PropTypes.string
   },
   render() {
     return (

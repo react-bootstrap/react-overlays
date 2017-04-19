@@ -1,5 +1,6 @@
 /*eslint-disable react/prop-types */
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import warning from 'warning';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 import elementType from 'react-prop-types/lib/elementType';
@@ -45,7 +46,7 @@ const Modal = React.createClass({
     /**
      * Set the visibility of the Modal
      */
-    show: React.PropTypes.bool,
+    show: PropTypes.bool,
 
     /**
      * A Node, Component instance, or function that returns either. The Modal is appended to it's container element.
@@ -53,15 +54,15 @@ const Modal = React.createClass({
      * For the sake of assistive technologies, the container should usually be the document body, so that the rest of the
      * page content can be placed behind a virtual backdrop as well as a visual one.
      */
-    container: React.PropTypes.oneOfType([
+    container: PropTypes.oneOfType([
       componentOrElement,
-      React.PropTypes.func
+      PropTypes.func
     ]),
 
     /**
      * A callback fired when the Modal is opening.
      */
-    onShow: React.PropTypes.func,
+    onShow: PropTypes.func,
 
     /**
      * A callback fired when either the backdrop is clicked, or the escape key is pressed.
@@ -69,14 +70,14 @@ const Modal = React.createClass({
      * The `onHide` callback only signals intent from the Modal,
      * you must actually set the `show` prop to `false` for the Modal to close.
      */
-    onHide: React.PropTypes.func,
+    onHide: PropTypes.func,
 
     /**
      * Include a backdrop component.
      */
-    backdrop: React.PropTypes.oneOfType([
-      React.PropTypes.bool,
-      React.PropTypes.oneOf(['static'])
+    backdrop: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.oneOf(['static'])
     ]),
 
     /**
@@ -87,38 +88,38 @@ const Modal = React.createClass({
      *  renderBackdrop={props => <MyBackdrop {...props} />}
      * ```
      */
-    renderBackdrop: React.PropTypes.func,
+    renderBackdrop: PropTypes.func,
 
     /**
      * A callback fired when the escape key, if specified in `keyboard`, is pressed.
      */
-    onEscapeKeyUp: React.PropTypes.func,
+    onEscapeKeyUp: PropTypes.func,
 
     /**
      * A callback fired when the backdrop, if specified, is clicked.
      */
-    onBackdropClick: React.PropTypes.func,
+    onBackdropClick: PropTypes.func,
 
     /**
      * A style object for the backdrop component.
      */
-    backdropStyle: React.PropTypes.object,
+    backdropStyle: PropTypes.object,
 
     /**
      * A css class or classes for the backdrop component.
      */
-    backdropClassName: React.PropTypes.string,
+    backdropClassName: PropTypes.string,
 
     /**
      * A css class or set of classes applied to the modal container when the modal is open,
      * and removed when it is closed.
      */
-    containerClassName: React.PropTypes.string,
+    containerClassName: PropTypes.string,
 
     /**
      * Close the modal when escape key is pressed
      */
-    keyboard: React.PropTypes.bool,
+    keyboard: PropTypes.bool,
 
     /**
      * A `<Transition/>` component to use for the dialog and backdrop components.
@@ -131,7 +132,7 @@ const Modal = React.createClass({
      *
      * See the Transition `timeout` prop for more infomation.
      */
-    dialogTransitionTimeout: React.PropTypes.number,
+    dialogTransitionTimeout: PropTypes.number,
 
     /**
      * The `timeout` of the backdrop transition if specified. This number is used to
@@ -139,7 +140,7 @@ const Modal = React.createClass({
      *
      * See the Transition `timeout` prop for more infomation.
      */
-    backdropTransitionTimeout: React.PropTypes.number,
+    backdropTransitionTimeout: PropTypes.number,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and
@@ -149,7 +150,7 @@ const Modal = React.createClass({
      * Generally this should never be set to `false` as it makes the Modal less
      * accessible to assistive technologies, like screen readers.
      */
-    autoFocus: React.PropTypes.bool,
+    autoFocus: PropTypes.bool,
 
     /**
      * When `true` The modal will prevent focus from leaving the Modal while open.
@@ -157,49 +158,49 @@ const Modal = React.createClass({
      * Generally this should never be set to `false` as it makes the Modal less
      * accessible to assistive technologies, like screen readers.
      */
-    enforceFocus: React.PropTypes.bool,
+    enforceFocus: PropTypes.bool,
     
     /**
      * When `true` The modal will restore focus to previously focused element once
      * modal is hidden
      */
-    restoreFocus: React.PropTypes.bool,
+    restoreFocus: PropTypes.bool,
 
     /**
      * Callback fired before the Modal transitions in
      */
-    onEnter: React.PropTypes.func,
+    onEnter: PropTypes.func,
 
     /**
      * Callback fired as the Modal begins to transition in
      */
-    onEntering: React.PropTypes.func,
+    onEntering: PropTypes.func,
 
     /**
      * Callback fired after the Modal finishes transitioning in
      */
-    onEntered: React.PropTypes.func,
+    onEntered: PropTypes.func,
 
     /**
      * Callback fired right before the Modal transitions out
      */
-    onExit: React.PropTypes.func,
+    onExit: PropTypes.func,
 
     /**
      * Callback fired as the Modal begins to transition out
      */
-    onExiting: React.PropTypes.func,
+    onExiting: PropTypes.func,
 
     /**
      * Callback fired after the Modal finishes transitioning out
      */
-    onExited: React.PropTypes.func,
+    onExited: PropTypes.func,
 
     /**
      * A ModalManager instance used to track and manage the state of open
      * Modals. Useful when customizing how modals interact within a container
      */
-    manager: React.PropTypes.object.isRequired,
+    manager: PropTypes.object.isRequired,
   },
 
   getDefaultProps() {

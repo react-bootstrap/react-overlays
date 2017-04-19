@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { cloneElement } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
 import calculatePosition from './utils/calculatePosition';
@@ -130,28 +131,28 @@ Position.propTypes = {
    * A node, element, or function that returns either. The child will be
    * be positioned next to the `target` specified.
    */
-  target: React.PropTypes.oneOfType([
-    componentOrElement, React.PropTypes.func
+  target: PropTypes.oneOfType([
+    componentOrElement, PropTypes.func
   ]),
 
   /**
    * "offsetParent" of the component
    */
-  container: React.PropTypes.oneOfType([
-    componentOrElement, React.PropTypes.func
+  container: PropTypes.oneOfType([
+    componentOrElement, PropTypes.func
   ]),
   /**
    * Minimum spacing in pixels between container border and component border
    */
-  containerPadding: React.PropTypes.number,
+  containerPadding: PropTypes.number,
   /**
    * How to position the component relative to the target
    */
-  placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+  placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
   /**
    * Whether the position should be changed on each update
    */
-  shouldUpdatePosition: React.PropTypes.bool
+  shouldUpdatePosition: PropTypes.bool
 };
 
 Position.displayName = 'Position';

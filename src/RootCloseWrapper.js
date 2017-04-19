@@ -1,6 +1,7 @@
 import contains from 'dom-helpers/query/contains';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import addEventListener from './utils/addEventListener';
 import ownerDocument from './utils/ownerDocument';
@@ -110,19 +111,19 @@ RootCloseWrapper.propTypes = {
   /**
    * Callback fired after click or mousedown. Also triggers when user hits `esc`.
    */
-  onRootClose: React.PropTypes.func,
+  onRootClose: PropTypes.func,
   /**
    * Children to render.
    */
-  children: React.PropTypes.element,
+  children: PropTypes.element,
   /**
    * Disable the the RootCloseWrapper, preventing it from triggering `onRootClose`.
    */
-  disabled: React.PropTypes.bool,
+  disabled: PropTypes.bool,
   /**
    * Choose which document mouse event to bind to.
    */
-  event: React.PropTypes.oneOf(['click', 'mousedown'])
+  event: PropTypes.oneOf(['click', 'mousedown'])
 };
 
 RootCloseWrapper.defaultProps = {
