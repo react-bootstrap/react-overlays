@@ -94,6 +94,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "dom-helpers": "^3.2.0",
+    "prop-types": "^15.5.8",
     "react-prop-types": "^0.4.0",
     "warning": "^3.0.0"
   }

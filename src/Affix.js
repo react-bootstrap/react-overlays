@@ -6,6 +6,7 @@ import getScrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import addEventListener from './utils/addEventListener';
 import getDocumentHeight from './utils/getDocumentHeight';
@@ -180,75 +181,75 @@ Affix.propTypes = {
   /**
    * Pixels to offset from top of screen when calculating position
    */
-  offsetTop: React.PropTypes.number,
+  offsetTop: PropTypes.number,
 
   /**
    * When affixed, pixels to offset from top of viewport
    */
-  viewportOffsetTop: React.PropTypes.number,
+  viewportOffsetTop: PropTypes.number,
 
   /**
    * Pixels to offset from bottom of screen when calculating position
    */
-  offsetBottom: React.PropTypes.number,
+  offsetBottom: PropTypes.number,
 
   /**
    * CSS class or classes to apply when at top
    */
-  topClassName: React.PropTypes.string,
+  topClassName: PropTypes.string,
 
   /**
    * Style to apply when at top
    */
-  topStyle: React.PropTypes.object,
+  topStyle: PropTypes.object,
 
   /**
    * CSS class or classes to apply when affixed
    */
-  affixClassName: React.PropTypes.string,
+  affixClassName: PropTypes.string,
   /**
    * Style to apply when affixed
    */
-  affixStyle: React.PropTypes.object,
+  affixStyle: PropTypes.object,
 
   /**
    * CSS class or classes to apply when at bottom
    */
-  bottomClassName: React.PropTypes.string,
+  bottomClassName: PropTypes.string,
 
   /**
    * Style to apply when at bottom
    */
-  bottomStyle: React.PropTypes.object,
+  bottomStyle: PropTypes.object,
 
   /**
    * Callback fired when the right before the `affixStyle` and `affixStyle` props are rendered
    */
-  onAffix: React.PropTypes.func,
+  onAffix: PropTypes.func,
   /**
    * Callback fired after the component `affixStyle` and `affixClassName` props have been rendered.
    */
-  onAffixed: React.PropTypes.func,
+  onAffixed: PropTypes.func,
 
   /**
    * Callback fired when the right before the `topStyle` and `topClassName` props are rendered
    */
-  onAffixTop: React.PropTypes.func,
+  onAffixTop: PropTypes.func,
 
   /**
    * Callback fired after the component `topStyle` and `topClassName` props have been rendered.
    */
-  onAffixedTop: React.PropTypes.func,
+  onAffixedTop: PropTypes.func,
 
   /**
    * Callback fired when the right before the `bottomStyle` and `bottomClassName` props are rendered
    */
-  onAffixBottom: React.PropTypes.func,
+  onAffixBottom: PropTypes.func,
 
   /**
    * Callback fired after the component `bottomStyle` and `bottomClassName` props have been rendered.
    */
-  onAffixedBottom: React.PropTypes.func
+  onAffixedBottom: PropTypes.func
 };
 
 Affix.defaultProps = {

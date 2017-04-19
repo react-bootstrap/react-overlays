@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 import ownerDocument from './utils/ownerDocument';
 import getContainer from './utils/getContainer';
@@ -18,9 +19,9 @@ let Portal = React.createClass({
      * A Node, Component instance, or function that returns either. The `container` will have the Portal children
      * appended to it.
      */
-    container: React.PropTypes.oneOfType([
+    container: PropTypes.oneOfType([
       componentOrElement,
-      React.PropTypes.func
+      PropTypes.func
     ])
   },
 
