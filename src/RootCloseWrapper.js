@@ -2,6 +2,7 @@ import contains from 'dom-helpers/query/contains';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import addEventListener from './utils/addEventListener';
 import ownerDocument from './utils/ownerDocument';

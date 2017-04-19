@@ -28,7 +28,6 @@ function getPropsData(componentData, metadata){
 }
 
 class PropTable extends React.Component {
-
   static contextTypes = {
     metadata: PropTypes.object
   }

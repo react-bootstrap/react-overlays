@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM, { findDOMNode } from 'react-dom';
+import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/lib/Button';
 import Playground from '@monastic.panic/component-playground/Playground';
 

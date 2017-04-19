@@ -4,6 +4,7 @@ import transitionInfo from 'dom-helpers/transition/properties';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 const transitionEndEvent = transitionInfo.end;
 

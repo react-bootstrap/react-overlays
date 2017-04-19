@@ -7,6 +7,7 @@ import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import addEventListener from './utils/addEventListener';
 import getDocumentHeight from './utils/getDocumentHeight';
