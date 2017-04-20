@@ -10,7 +10,7 @@ global.expect = chai.expect;
 global.assert = chai.assert;
 
 beforeEach(() => {
-  sinon.stub(console, 'error', msg => {
+  sinon.stub(console, 'error').callsFake(msg => {
     let expected = false;
 
     console.error.expected.forEach(about => {

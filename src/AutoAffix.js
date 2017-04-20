@@ -1,6 +1,7 @@
 import getOffset from 'dom-helpers/query/offset';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
 import React from 'react';
+import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
 import Affix from './Affix';
@@ -69,21 +70,21 @@ class AutoAffix extends React.Component {
     }
   }
 
-  onWindowScroll() {
+  onWindowScroll = () => {
     this.onUpdate();
   }
 
-  onWindowResize() {
+  onWindowResize = () => {
     if (this.props.autoWidth) {
       requestAnimationFrame(() => this.onUpdate());
     }
   }
 
-  onDocumentClick() {
+  onDocumentClick = () => {
     requestAnimationFrame(() => this.onUpdate());
   }
 
-  onUpdate() {
+  onUpdate = () => {
     if (!this._isMounted) {
       return;
     }
@@ -103,7 +104,7 @@ class AutoAffix extends React.Component {
     this.updateState(offsetTop, offsetBottom, width);
   }
 
-  updateState(offsetTop, offsetBottom, width) {
+  updateState = (offsetTop, offsetBottom, width) => {
     if (
       offsetTop === this.state.offsetTop &&
       offsetBottom === this.state.offsetBottom &&
@@ -154,14 +155,14 @@ AutoAffix.propTypes = {
    * The logical container node or component for determining offset from bottom
    * of viewport, or a function that returns it
    */
-  container: React.PropTypes.oneOfType([
+  container: PropTypes.oneOfType([
     componentOrElement,
-    React.PropTypes.func
+    PropTypes.func
   ]),
   /**
    * Automatically set width when affixed
    */
-  autoWidth: React.PropTypes.bool
+  autoWidth: PropTypes.bool
 };
 
 // This intentionally doesn't inherit default props from `<Affix>`, so that the

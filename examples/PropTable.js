@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Label from 'react-bootstrap/lib/Label';
 import Table from 'react-bootstrap/lib/Table';
 
@@ -26,16 +27,15 @@ function getPropsData(componentData, metadata){
   return props;
 }
 
-const PropTable = React.createClass({
-
-  contextTypes: {
-    metadata: React.PropTypes.object
-  },
+class PropTable extends React.Component {
+  static contextTypes = {
+    metadata: PropTypes.object
+  }
 
   componentWillMount(){
     let componentData = this.props.metadata[this.props.component] || {};
     this.propsData = getPropsData(componentData, this.props.metadata);
-  },
+  }
 
   render(){
     let propsData = this.propsData;
@@ -78,9 +78,9 @@ const PropTable = React.createClass({
         </Table>
       </div>
     );
-  },
+  }
 
-  _renderRows(propsData){
+  _renderRows = (propsData) => {
 
     return Object.keys(propsData)
       .sort()
@@ -107,7 +107,7 @@ const PropTable = React.createClass({
           </tr>
         );
       });
-  },
+  }
 
   renderRequiredLabel(prop) {
     if (!prop.required) {
@@ -117,9 +117,9 @@ const PropTable = React.createClass({
     return (
       <Label>required</Label>
     );
-  },
+  }
 
-  getType(prop) {
+  getType = (prop) => {
     const type = prop.type || {};
     const name = this.getDisplayTypeName(type.name);
     const doclets = prop.doclets || {};
@@ -148,7 +148,7 @@ const PropTable = React.createClass({
       default:
         return name;
     }
-  },
+  }
 
   getDisplayTypeName(typeName) {
     if (typeName === 'func') {
@@ -158,7 +158,7 @@ const PropTable = React.createClass({
     } else {
       return typeName;
     }
-  },
+  }
 
   renderEnum(enumType) {
     const enumValues = enumType.value || [];
@@ -180,7 +180,7 @@ const PropTable = React.createClass({
       <span>one of: {renderedEnumValues}</span>
     );
   }
-});
+}
 
 
 

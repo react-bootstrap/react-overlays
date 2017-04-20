@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
+import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/lib/Button';
 import Playground from '@monastic.panic/component-playground/Playground';
 
@@ -32,10 +33,11 @@ const scope = {
   React, ReactDOM, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset
 };
 
-const Anchor = React.createClass({
-  propTypes: {
-    id: React.PropTypes.string
-  },
+class Anchor extends React.Component {
+  static propTypes = {
+    id: PropTypes.string
+  };
+
   render() {
     let id = this.props.id || this.props.children.toLowerCase().replace(/\s+/gi, '_');
 
@@ -46,12 +48,13 @@ const Anchor = React.createClass({
       </a>
     );
   }
-});
+}
 
-const ExampleEditor = React.createClass({
-  propTypes: {
-    codeText: React.PropTypes.string
-  },
+class ExampleEditor extends React.Component {
+  static propTypes = {
+    codeText: PropTypes.string
+  };
+
   render() {
     return (
       <Playground
@@ -68,9 +71,9 @@ const ExampleEditor = React.createClass({
       />
     );
   }
-});
+}
 
-const Example = React.createClass({
+class Example extends React.Component {
 
   render() {
 
@@ -174,6 +177,6 @@ const Example = React.createClass({
       </div>
     );
   }
-});
+}
 
 ReactDOM.render(<Example/>, document.getElementById('app-container'));
