@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import React, { cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
 import calculatePosition from './utils/calculatePosition';

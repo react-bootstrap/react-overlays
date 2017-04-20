@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import componentOrElement from 'react-prop-types/lib/componentOrElement';
 import ownerDocument from './utils/ownerDocument';
 import getContainer from './utils/getContainer';
