@@ -289,7 +289,7 @@ class Modal extends React.Component {
         container={container}
       >
         <div
-          ref={'modal'}
+          ref={this.setModalNode}
           role={role || 'dialog'}
           {...filteredProps}
           style={style}
@@ -411,7 +411,11 @@ class Modal extends React.Component {
   setMountNode = (ref) => {
     this.mountNode = ref ? ref.getMountNode() : ref;
   }
-
+    
+  setModalNode = (ref) => {
+    this.modalNode = ref;
+  }
+  
   handleHidden = (...args) => {
     this.setState({ exited: true });
     this.onHide();
@@ -495,7 +499,7 @@ class Modal extends React.Component {
 
   //instead of a ref, which might conflict with one the parent applied.
   getDialogElement = () => {
-    let node = this.refs.modal;
+    let node = this.modalNode;
     return node && node.lastChild;
   }
 

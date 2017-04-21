@@ -34,7 +34,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    expect(instance.refs.modal.querySelectorAll('strong').length).to.equal(1);
+    expect(instance.modalNode.querySelectorAll('strong').length).to.equal(1);
   });
 
   it('Should disable scrolling on the modal container while open', function() {
@@ -291,7 +291,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let attr = instance.refs.modal.attributes.getNamedItem('role').value;
+    let attr = instance.modalNode.attributes.getNamedItem('role').value;
     expect(attr).to.equal('alertdialog');
   });
 
@@ -303,7 +303,7 @@ describe('Modal', function () {
       </Modal>
     , mountPoint);
 
-    let attr = instance.refs.modal.attributes.getNamedItem('aria-describedby').value;
+    let attr = instance.modalNode.attributes.getNamedItem('aria-describedby').value;
     expect(attr).to.equal('modal-description');
   });
 
