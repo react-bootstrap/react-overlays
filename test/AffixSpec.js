@@ -59,8 +59,8 @@ describe('<Affix>', () => {
 
   it('should render the affix content', () => {
     let instance = render((
-      <Affix>
-        <Content />
+      <Affix className="foo" >
+        <Content className="bar" />
       </Affix>
     ), mountPoint);
 
@@ -68,6 +68,10 @@ describe('<Affix>', () => {
       ReactTestUtils.findRenderedComponentWithType(instance, Content);
 
     expect(content).to.exist;
+
+    const node = ReactDOM.findDOMNode(content);
+    expect(node.className).to.match(/foo/);
+    expect(node.className).to.match(/bar/);
   });
 
   describe('no viewportOffsetTop', () => {

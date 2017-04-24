@@ -152,7 +152,8 @@ class Affix extends React.Component {
 
   render() {
     const child = React.Children.only(this.props.children);
-    const {className, style} = child.props;
+    const {className, style} = this.props;
+    const {className: childClassName, style: childStyle} = child.props;
 
     const {affixed, position, top} = this.state;
     const positionStyle = {position, top};
@@ -171,8 +172,8 @@ class Affix extends React.Component {
     }
 
     return React.cloneElement(child, {
-      className: classNames(affixClassName, className),
-      style: {...positionStyle, ...affixStyle, ...style}
+      className: classNames(affixClassName, className, childClassName),
+      style: {...positionStyle, ...affixStyle, ...style, ...childStyle}
     });
   }
 }
