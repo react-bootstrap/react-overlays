@@ -9,10 +9,10 @@
  */
 function createChainedFunction(...funcs) {
   return funcs
-    .filter(f => f != null)
+    .filter(f => f)
     .reduce((acc, f) => {
       if (typeof f !== 'function') {
-        throw new Error('Invalid Argument Type, must only provide functions, undefined, or null.');
+        throw new Error('Invalid Argument Type, must only provide functions or falsy.');
       }
 
       if (acc === null) {
