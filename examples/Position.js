@@ -5,7 +5,8 @@ import Position from 'react-overlays/lib/Position';
 
 
 const OverlayStyle = {
-  position: 'absolute'
+  position: 'absolute',
+  width: 100
 };
 
 const OverlayInnerStyle = {
@@ -34,7 +35,7 @@ const PlacementStyles = {
 
 
 const ToolTip = props => {
-  let placementStyle = PlacementStyles[props.placement];
+  let placementStyle = PlacementStyles[props.placement.split(' ')[0]];
 
   let {
     style,
@@ -58,9 +59,14 @@ class PositionExample extends React.Component {
   state = { placement: 'left' };
 
   toggle = () => {
-    let placements = ['left', 'top', 'right', 'bottom'];
-    let placement = this.state.placement;
+    let placements = [
+      'left', 'left top', 'left bottom',
+      'top', 'top left', 'top right',
+      'right', 'right top', 'right bottom',
+      'bottom', 'bottom left', 'bottom right'
+    ];
 
+    let placement = this.state.placement;
     placement = placements[placements.indexOf(placement) + 1] || placements[0];
 
     return this.setState({ placement });

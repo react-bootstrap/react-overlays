@@ -1,110 +1,117 @@
 import getOffset from 'dom-helpers/query/offset';
 import getPosition from 'dom-helpers/query/position';
 import getScrollTop from 'dom-helpers/query/scrollTop';
-
+import getScrollLeft from 'dom-helpers/query/scrollLeft';
 import ownerDocument from './ownerDocument';
 
+const AXIS = {
+  top: 'top',
+  bottom: 'top',
+  left: 'left',
+  right: 'left'
+};
+
+const CROSS_AXIS = {
+  top: 'left',
+  left: 'top'
+};
+
+const AXIS_SIZE = {
+  top: 'height',
+  left: 'width'
+};
+
 function getContainerDimensions(containerNode) {
-  let width, height, scroll;
+  let width, height;
+  let scroll = {};
 
   if (containerNode.tagName === 'BODY') {
     width = window.innerWidth;
     height = window.innerHeight;
 
-    scroll =
+    scroll.top =
       getScrollTop(ownerDocument(containerNode).documentElement) ||
       getScrollTop(containerNode);
+    scroll.left =
+      getScrollLeft(ownerDocument(containerNode).documentElement) ||
+      getScrollLeft(containerNode);
   } else {
     ({ width, height } = getOffset(containerNode));
-    scroll = getScrollTop(containerNode);
+    scroll.top = getScrollTop(containerNode);
+    scroll.left = getScrollLeft(containerNode);
   }
 
-  return { width, height, scroll};
+  return {width, height, scroll};
 }
 
-function getTopDelta(top, overlayHeight, container, padding) {
+function getDelta(axis, offset, size, container, padding) {
   const containerDimensions = getContainerDimensions(container);
-  const containerScroll = containerDimensions.scroll;
-  const containerHeight = containerDimensions.height;
+  const containerScroll = containerDimensions.scroll[axis];
+  const containerHeight = containerDimensions[AXIS_SIZE[axis]];
 
-  const topEdgeOffset = top - padding - containerScroll;
-  const bottomEdgeOffset = top + padding - containerScroll + overlayHeight;
+  const startEdgeOffset = offset - padding - containerScroll;
+  const endEdgeOffset = offset + padding - containerScroll + size;
 
-  if (topEdgeOffset < 0) {
-    return -topEdgeOffset;
-  } else if (bottomEdgeOffset > containerHeight) {
-    return containerHeight - bottomEdgeOffset;
+  if (startEdgeOffset < 0) {
+    return -startEdgeOffset;
+  } else if (endEdgeOffset > containerHeight) {
+    return containerHeight - endEdgeOffset;
   } else {
     return 0;
   }
 }
 
-function getLeftDelta(left, overlayWidth, container, padding) {
-  const containerDimensions = getContainerDimensions(container);
-  const containerWidth = containerDimensions.width;
+function parsePlacement(input) {
+  let [placement, crossPlacement] = input.split(' ');
+  let axis = AXIS[placement] || 'right';
+  let crossAxis = CROSS_AXIS[axis];
 
-  const leftEdgeOffset = left - padding;
-  const rightEdgeOffset = left + padding + overlayWidth;
-
-  if (leftEdgeOffset < 0) {
-    return -leftEdgeOffset;
-  } else if (rightEdgeOffset > containerWidth) {
-    return containerWidth - rightEdgeOffset;
+  if (!AXIS[crossPlacement]) {
+    crossPlacement = 'center';
   }
 
-  return 0;
+  let size = AXIS_SIZE[axis];
+  let crossSize = AXIS_SIZE[crossAxis];
+  return {placement, crossPlacement, axis, crossAxis, size, crossSize};
 }
 
 export default function calculatePosition(
-  placement, overlayNode, target, container, padding
+  placementInput, overlayNode, target, container, padding
 ) {
   const childOffset = container.tagName === 'BODY' ?
     getOffset(target) : getPosition(target, container);
 
-  const { height: overlayHeight, width: overlayWidth } =
-    getOffset(overlayNode);
+  const overlaySize = getOffset(overlayNode);
+  const {placement, crossPlacement, axis, crossAxis, size, crossSize} =
+    parsePlacement(placementInput);
 
-  let positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop;
+  let position = {};
+  let arrowPosition = {};
 
-  if (placement === 'left' || placement === 'right') {
-    positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
-
-    if (placement === 'left') {
-      positionLeft = childOffset.left - overlayWidth;
-    } else {
-      positionLeft = childOffset.left + childOffset.width;
-    }
-
-    const topDelta = getTopDelta(
-      positionTop, overlayHeight, container, padding
-    );
-
-    positionTop += topDelta;
-    arrowOffsetTop = 50 * (1 - 2 * topDelta / overlayHeight) + '%';
-    arrowOffsetLeft = void 0;
-
-  } else if (placement === 'top' || placement === 'bottom') {
-    positionLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
-
-    if (placement === 'top') {
-      positionTop = childOffset.top - overlayHeight;
-    } else {
-      positionTop = childOffset.top + childOffset.height;
-    }
-
-    const leftDelta = getLeftDelta(
-      positionLeft, overlayWidth, container, padding
-    );
-
-    positionLeft += leftDelta;
-    arrowOffsetLeft = 50 * (1 - 2 * leftDelta / overlayWidth) + '%';
-    arrowOffsetTop = void 0;
-
-  } else {
-    throw new Error(
-      `calcOverlayPosition(): No such placement of "${placement}" found.`
-    );
+  position[crossAxis] = childOffset[crossAxis];
+  if (crossPlacement === 'center') {
+    position[crossAxis] += (childOffset[crossSize] - overlaySize[crossSize]) / 2;
+  } else if (crossPlacement !== crossAxis) {
+    position[crossAxis] += (childOffset[crossSize] - overlaySize[crossSize]);
   }
 
-  return { positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop };
+  if (placement === axis) {
+    position[axis] = childOffset[axis] - overlaySize[size];
+  } else {
+    position[axis] = childOffset[axis] + childOffset[size];
+  }
+
+  let delta = getDelta(
+    crossAxis, position[crossAxis], overlaySize[crossSize], container, padding
+  );
+
+  position[crossAxis] += delta;
+  arrowPosition[crossAxis] = 50 * (1 - 2 * delta / overlaySize[crossSize]) + '%';
+
+  return {
+    positionLeft: position.left,
+    positionTop: position.top,
+    arrowOffsetLeft: arrowPosition.left,
+    arrowOffsetTop: arrowPosition.top
+  };
 }

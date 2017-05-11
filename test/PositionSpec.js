@@ -231,10 +231,34 @@ describe('Position', function () {
         offsetAfter: [300, 350, undefined, '100%']
       },
       {
+        placement: 'left top',
+        noOffset: [50, 250, undefined, '50%'],
+        offsetBefore: [-200, 50, undefined, '25%'],
+        offsetAfter: [300, 350, undefined, '125%']
+      },
+      {
+        placement: 'left bottom',
+        noOffset: [50, 150, undefined, '50%'],
+        offsetBefore: [-200, 50, undefined, '-25%'],
+        offsetAfter: [300, 350, undefined, '75%']
+      },
+      {
         placement: 'top',
         noOffset: [200, 50, '50%', undefined],
         offsetBefore: [50, -200, '0%', undefined],
         offsetAfter: [350, 300, '100%', undefined]
+      },
+      {
+        placement: 'top left',
+        noOffset: [250, 50, '50%', undefined],
+        offsetBefore: [50, -200, '25%', undefined],
+        offsetAfter: [350, 300, '125%', undefined]
+      },
+      {
+        placement: 'top right',
+        noOffset: [150, 50, '50%', undefined],
+        offsetBefore: [50, -200, '-25%', undefined],
+        offsetAfter: [350, 300, '75%', undefined]
       },
       {
         placement: 'bottom',
@@ -243,11 +267,35 @@ describe('Position', function () {
         offsetAfter: [350, 600, '100%', undefined]
       },
       {
+        placement: 'bottom left',
+        noOffset: [250, 350, '50%', undefined],
+        offsetBefore: [50, 100, '25%', undefined],
+        offsetAfter: [350, 600, '125%', undefined]
+      },
+      {
+        placement: 'bottom right',
+        noOffset: [150, 350, '50%', undefined],
+        offsetBefore: [50, 100, '-25%', undefined],
+        offsetAfter: [350, 600, '75%', undefined]
+      },
+      {
         placement: 'right',
         noOffset: [350, 200, undefined, '50%'],
         offsetBefore: [100, 50, undefined, '0%'],
         offsetAfter: [600, 350, undefined, '100%']
-      }
+      },
+      {
+        placement: 'right top',
+        noOffset: [350, 250, undefined, '50%'],
+        offsetBefore: [100, 50, undefined, '25%'],
+        offsetAfter: [600, 350, undefined, '125%']
+      },
+      {
+        placement: 'right bottom',
+        noOffset: [350, 150, undefined, '50%'],
+        offsetBefore: [100, 50, undefined, '-25%'],
+        offsetAfter: [600, 350, undefined, '75%']
+      },
     ].forEach(function(testCase) {
       const placement = testCase.placement;
 

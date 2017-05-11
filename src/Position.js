@@ -148,7 +148,12 @@ Position.propTypes = {
   /**
    * How to position the component relative to the target
    */
-  placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+  placement: PropTypes.oneOf([
+    'top', 'top left', 'top center', 'top right',
+    'right', 'right top', 'right center', 'right bottom',
+    'bottom', 'bottom left', 'bottom center', 'bottom right',
+    'left', 'left top', 'left center', 'left bottom'
+  ]),
   /**
    * Whether the position should be changed on each update
    */
