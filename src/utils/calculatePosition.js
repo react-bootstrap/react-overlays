@@ -1,30 +1,36 @@
 import getOffset from 'dom-helpers/query/offset';
 import getPosition from 'dom-helpers/query/position';
 import getScrollTop from 'dom-helpers/query/scrollTop';
+import getScrollLeft from 'dom-helpers/query/scrollLeft';
 
 import ownerDocument from './ownerDocument';
 
 function getContainerDimensions(containerNode) {
-  let width, height, scroll;
+  let width, height, scrollTop, scrollLeft;
 
   if (containerNode.tagName === 'BODY') {
     width = window.innerWidth;
     height = window.innerHeight;
 
-    scroll =
+    scrollTop =
       getScrollTop(ownerDocument(containerNode).documentElement) ||
       getScrollTop(containerNode);
+
+    scrollLeft =
+      getScrollLeft(ownerDocument(containerNode).documentElement) ||
+      getScrollLeft(containerNode);
   } else {
     ({ width, height } = getOffset(containerNode));
-    scroll = getScrollTop(containerNode);
+    scrollTop = getScrollTop(containerNode);
+    scrollLeft = getScrollLeft(containerNode);
   }
 
-  return { width, height, scroll};
+  return { width, height, scrollTop, scrollLeft};
 }
 
 function getTopDelta(top, overlayHeight, container, padding) {
   const containerDimensions = getContainerDimensions(container);
-  const containerScroll = containerDimensions.scroll;
+  const containerScroll = containerDimensions.scrollTop;
   const containerHeight = containerDimensions.height;
 
   const topEdgeOffset = top - padding - containerScroll;
@@ -41,10 +47,11 @@ function getTopDelta(top, overlayHeight, container, padding) {
 
 function getLeftDelta(left, overlayWidth, container, padding) {
   const containerDimensions = getContainerDimensions(container);
+  const containerScroll = containerDimensions.scrollLeft;
   const containerWidth = containerDimensions.width;
 
-  const leftEdgeOffset = left - padding;
-  const rightEdgeOffset = left + padding + overlayWidth;
+  const leftEdgeOffset = left - padding - containerScroll;
+  const rightEdgeOffset = left + padding - containerScroll + overlayWidth;
 
   if (leftEdgeOffset < 0) {
     return -leftEdgeOffset;
