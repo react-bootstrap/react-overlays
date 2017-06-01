@@ -71,7 +71,7 @@ class PositionExample extends React.Component {
     return (
       <div className='overlay-example'>
         <Button bsStyle='primary' ref='target' onClick={this.toggle}>
-          I am an Position target
+          I am a Position target
         </Button>
         <p>
           keep clicking to see the placement change
