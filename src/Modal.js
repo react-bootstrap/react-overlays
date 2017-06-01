@@ -7,6 +7,7 @@ import elementType from 'react-prop-types/lib/elementType';
 
 import Portal from './Portal';
 import ModalManager from './ModalManager';
+import Transition from './Transition';
 
 import ownerDocument from './utils/ownerDocument';
 import addEventListener from './utils/addEventListener';
