@@ -1,10 +1,5 @@
 const webpack = require('webpack');
 
-const coverageReporters = ['coverage'];
-if (process.env.CONTINUOUS_INTEGRATION === 'true') {
-  coverageReporters.push('coveralls');
-}
-
 module.exports = (config) => {
   const { env } = process;
 
@@ -36,7 +31,7 @@ module.exports = (config) => {
       noInfo: true,
     },
 
-    reporters: ['mocha', ...coverageReporters],
+    reporters: ['mocha', 'coverage'],
 
     mochaReporter: {
       output: 'autowatch',
