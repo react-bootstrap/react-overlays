@@ -253,29 +253,29 @@ describe('<Position>', () => {
       }
 
       const instance = ReactTestUtils.renderIntoDocument(<TargetChanger />);
-      await wait();
 
       // Position calculates initial position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.not.been.called;
+      await wait();
       expect(Popper.prototype.update)
         .to.have.been.calledOnce;
 
       instance.setState({target: 'bar'});
-      await wait();
 
       // Position receives new props and recalculates position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledOnce;
+      await wait();
       expect(Popper.prototype.update)
         .to.have.been.calledTwice;
 
       instance.setState({fakeProp: 1});
-      await wait();
 
       // Position receives new props but should not recalculate position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledTwice;
+      await wait();
       expect(Popper.prototype.update)
         .to.have.been.calledTwice;
     });
@@ -307,26 +307,26 @@ describe('<Position>', () => {
       }
 
       const instance = ReactTestUtils.renderIntoDocument(<Target />);
-      await wait();
 
       // Position calculates initial position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.not.been.called;
+      await wait();
       expect(Popper.prototype.update)
         .to.have.been.calledOnce;
 
       instance.setState({fakeProp: 1});
-      await wait();
 
       // Position receives new props and position should be recalculated
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledOnce;
+      await wait();
       expect(Popper.prototype.update)
         .to.have.been.calledTwice;
     });
   });
 
-  it('should not forward extra props to child', () => {
+  it('should not forward own props to child', () => {
     let childProps;
     const Child = (props) => {
       childProps = props;
@@ -334,12 +334,17 @@ describe('<Position>', () => {
     };
 
     ReactTestUtils.renderIntoDocument(
-      <Position target={() => null} otherProp="foo">
-        <Child />
+      <Position
+        target={() => null}
+        otherProp="foo"
+        className="bar"
+      >
+        <Child className="foo" />
       </Position>
     );
 
     expect(childProps.target).to.not.exist;
-    expect(childProps.otherProp).to.not.exist;
+    expect(childProps.otherProp).to.equal('foo');
+    expect(childProps.className).to.equal('foo bar');
   });
 });

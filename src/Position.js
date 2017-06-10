@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Popper from 'popper.js';
 import PropTypes from 'prop-types';
 import componentOrElement from 'prop-types-extra/lib/componentOrElement';
@@ -218,9 +219,20 @@ class Position extends React.Component {
   }
 
   render() {
-    return React.cloneElement(
-      React.Children.only(this.props.children), this.state,
-    );
+    const { className, children, ...props } = this.props;
+    const child = React.Children.only(children);
+
+    delete props.target;
+    delete props.placement;
+    delete props.container;
+    delete props.containerPadding;
+    delete props.shouldUpdatePosition;
+
+    return React.cloneElement(child, {
+      ...props,
+      ...this.state,
+      className: classNames(child.props.className, className),
+    });
   }
 }
 
