@@ -1,39 +1,32 @@
 {
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "env": {
     "browser": true,
     "node": true
-  },
-  "ecmaFeatures": {
-    "jsx": true
   },
   "parser": "babel-eslint",
   "plugins": [
     "react"
   ],
   "rules": {
-    "constructor-super": 2,
-    "comma-spacing": 2,
-    "comma-style": [2, "last"],
-    "one-var": [2, { "initialized": "never" }],
-    "key-spacing": 0,
-    "no-this-before-super": 2,
-    "no-underscore-dangle": 0,
-    "no-unused-vars": [2, { "vars": "all", "args": "none" }],
-    "no-var": 2,
-    "quotes": [2, "single", "avoid-escape"],
-    "react/display-name": 0,
-    "react/jsx-boolean-value": [2, "never"],
-    "react/jsx-no-duplicate-props": 2,
-    "react/jsx-no-undef": 2,
-    "react/jsx-uses-react": 2,
-    "react/no-did-mount-set-state": 0,
-    "react/no-did-update-set-state": 0,
-    "react/react-in-jsx-scope": 2,
-    "react/self-closing-comp": 2,
-    "react/wrap-multilines": 2,
-    "react/jsx-uses-vars": 2,
-    "space-infix-ops": 2,
-    "strict": [2, "never"]
+    "comma-spacing": "error",
+    "comma-style": ["error", "last"],
+    "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+    "no-var": "error",
+    "one-var": ["error", { "initialized": "never" }],
+    "quotes": ["error", "single", "avoid-escape"],
+    "space-infix-ops": "error",
+    "strict": ["error", "never"],
+    "react/no-find-dom-node": "off",
+    "react/jsx-boolean-value": ["error", "never"],
+    "react/jsx-wrap-multilines": "error",
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": ["error", {
+      "ignore": ["children", "className"]
+    }],
+    "react/self-closing-comp": "error"
   }
 }

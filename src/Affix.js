@@ -4,9 +4,9 @@ import getOffset from 'dom-helpers/query/offset';
 import getOffsetParent from 'dom-helpers/query/offsetParent';
 import getScrollTop from 'dom-helpers/query/scrollTop';
 import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 
 import addEventListener from './utils/addEventListener';
 import getDocumentHeight from './utils/getDocumentHeight';

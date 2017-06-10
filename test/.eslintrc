@@ -1,4 +1,7 @@
 {
+  "extends": [
+    "plugin:mocha/recommended"
+  ],
   "env": {
     "mocha": true
   },
@@ -11,8 +14,7 @@
     "mocha"
   ],
   "rules": {
-    "no-console": 0,
-    "no-unused-expressions": 0,
-    "mocha/no-exclusive-tests": 2
+    "no-console": "off",
+    "react/prop-types": "off"
   }
 }

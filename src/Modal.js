@@ -1,20 +1,21 @@
 /*eslint-disable react/prop-types */
-import React, { cloneElement } from 'react';
+
+import activeElement from 'dom-helpers/activeElement';
+import contains from 'dom-helpers/query/contains';
+import canUseDom from 'dom-helpers/util/inDOM';
 import PropTypes from 'prop-types';
+import componentOrElement from 'prop-types-extra/lib/componentOrElement';
+import elementType from 'prop-types-extra/lib/elementType';
+import React, { cloneElement } from 'react';
 import warning from 'warning';
-import componentOrElement from 'react-prop-types/lib/componentOrElement';
-import elementType from 'react-prop-types/lib/elementType';
 
 import Portal from './Portal';
 import ModalManager from './ModalManager';
 
-import ownerDocument from './utils/ownerDocument';
 import addEventListener from './utils/addEventListener';
 import addFocusListener from './utils/addFocusListener';
-import canUseDom from 'dom-helpers/util/inDOM';
-import activeElement from 'dom-helpers/activeElement';
-import contains from 'dom-helpers/query/contains';
 import getContainer from './utils/getContainer';
+import ownerDocument from './utils/ownerDocument';
 
 let modalManager = new ModalManager();
 
@@ -159,7 +160,7 @@ class Modal extends React.Component {
      * accessible to assistive technologies, like screen readers.
      */
     enforceFocus: PropTypes.bool,
-    
+
     /**
      * When `true` The modal will restore focus to previously focused element once
      * modal is hidden
@@ -369,7 +370,7 @@ class Modal extends React.Component {
 
   componentWillUnmount() {
     let { show, transition } = this.props;
-    
+
     this._isMounted = false;
 
     if (show || (transition && !this.state.exited)) {
@@ -411,11 +412,11 @@ class Modal extends React.Component {
   setMountNode = (ref) => {
     this.mountNode = ref ? ref.getMountNode() : ref;
   }
-    
+
   setModalNode = (ref) => {
     this.modalNode = ref;
   }
-  
+
   handleHidden = (...args) => {
     this.setState({ exited: true });
     this.onHide();

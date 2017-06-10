@@ -1,4 +1,14 @@
 {
-  "presets": ["es2015", "stage-1", "react"],
-  "plugins": ["add-module-exports"]
+  "presets": [
+    ["env", { "loose": true }],
+    "stage-1",
+    "react"
+  ],
+  "plugins": ["add-module-exports"],
+
+  "env": {
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
 }

@@ -96,7 +96,11 @@ class OverlayExample extends React.Component {
 
     return (
       <div className='overlay-example'>
-        <Button bsStyle='primary' ref='target' onClick={this.toggle}>
+        <Button
+          bsStyle='primary'
+          ref={(c) => { this.target = c; }}
+          onClick={this.toggle}
+        >
           I am an Overlay target
         </Button>
         <p>
@@ -108,7 +112,7 @@ class OverlayExample extends React.Component {
           onHide={() => this.setState({ show: false })}
           placement={this.state.placement}
           container={this}
-          target={ props => findDOMNode(this.refs.target)}
+          target={() => findDOMNode(this.target)}
         >
           <ToolTip>
             I&rsquo;m placed to the: <strong>{this.state.placement}</strong>

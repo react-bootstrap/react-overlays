@@ -1,9 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import elementType from 'prop-types-extra/lib/elementType';
+import React from 'react';
+
 import Portal from './Portal';
 import Position from './Position';
 import RootCloseWrapper from './RootCloseWrapper';
-import elementType from 'react-prop-types/lib/elementType';
 
 /**
  * Built on top of `<Position/>` and `<Portal/>`, the overlay component is great for custom tooltip overlays.

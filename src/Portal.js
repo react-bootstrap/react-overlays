@@ -1,9 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import componentOrElement from 'prop-types-extra/lib/componentOrElement';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import componentOrElement from 'react-prop-types/lib/componentOrElement';
-import ownerDocument from './utils/ownerDocument';
+
 import getContainer from './utils/getContainer';
+import ownerDocument from './utils/ownerDocument';
 
 /**
  * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
