@@ -1,4 +1,4 @@
-import pick from 'lodash/pick';
+import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
@@ -6,51 +6,235 @@ import ReactTestUtils from 'react-dom/test-utils';
 
 import Position from '../src/Position';
 
-import { render } from './helpers';
+import { render, shouldWarn } from './helpers';
 
-describe('Position', function () {
-  // Swallow extra props.
-  const Span = () => <span />;
+// Swallow extra props.
+function Span() {
+  return <span />;
+}
 
-  it('Should output a child', function () {
+function wait() {
+  return new Promise((resolve) => { setTimeout(resolve, 10); });
+}
+
+describe('<Position>', () => {
+  it('should output a child', () => {
     let instance = ReactTestUtils.renderIntoDocument(
       <Position>
-        <Span>Text</Span>
+        <Span />
       </Position>
     );
-    assert.equal(ReactDOM.findDOMNode(instance).nodeName, 'SPAN');
+
+    expect(ReactDOM.findDOMNode(instance).nodeName).to.equal('SPAN');
   });
 
-  it('Should warn about several children', function () {
+  it('should fail on multiple children', () => {
+    shouldWarn('expected a single ReactElement');
+
     expect(() => {
       ReactDOMServer.renderToString(
         <Position>
-          <Span>Text</Span>
-          <Span>Another Text</Span>
+          <Span />
+          <Span />
         </Position>
       );
-    }).to.throw(/React.Children.only expected to receive a single React element child./);
+    }).to.throw(
+      /React.Children.only expected to receive a single React element child./
+    );
   });
 
-  describe('position recalculation', function () {
+  describe('position calculation', () => {
+    let mountPoint;
+
+    beforeEach(() => {
+      mountPoint = document.createElement('div');
+      document.body.appendChild(mountPoint);
+    });
+
+    afterEach(() => {
+      ReactDOM.unmountComponentAtNode(mountPoint);
+      document.body.removeChild(mountPoint);
+    });
+
+    function checkPosition(placement, targetPosition, expected) {
+      class FakeOverlay extends React.Component {
+        render() {
+          return (
+            <div
+              style={{
+                position: 'absolute',
+                width: 200,
+                height: 200,
+              }}
+            />
+          );
+        }
+      }
+
+      class FakeContainer extends React.Component {
+        render() {
+          return (
+            <div
+              style={{
+                position: 'relative',
+                width: 600,
+                height: 600,
+              }}
+            >
+              <div
+                ref={(c) => { this.target = c; }}
+                style={{
+                  position: 'absolute',
+                  width: 100,
+                  height: 100,
+                  ...targetPosition,
+                }}
+              />
+
+              <Position
+                target={() => this.target}
+                placement={placement}
+                container={this}
+                containerPadding={50}
+              >
+                <FakeOverlay ref={(c) => { this.overlay1 = c; }} />
+              </Position>
+
+              <Position
+                target={() => this.target}
+                placement={placement}
+                container={() => this}
+                containerPadding={50}
+              >
+                <FakeOverlay ref={(c) => { this.overlay2 = c; }} />
+              </Position>
+            </div>
+          );
+        }
+      }
+
+      it('should calculate the correct position', async () => {
+        const instance = render(<FakeContainer />, mountPoint);
+        await wait();
+
+        [instance.overlay1, instance.overlay2].forEach(({ props }) => {
+          expect(props.position).to.eql(expected.position);
+          expect(props.arrowPosition).to.eql(expected.arrowPosition);
+        });
+      });
+    }
+
+    [
+      {
+        placement: 'top',
+        noOffset: {
+          position: { left: 200, top: 50 },
+          arrowPosition: { left: 100 },
+        },
+        offsetBefore: {
+          position: { left: 0, top: 50 },
+          arrowPosition: { left: 0 },
+        },
+        offsetAfter: {
+          position: { left: 400, top: 350 },
+          arrowPosition: { left: 200 },
+        },
+      },
+      {
+        placement: 'right',
+        noOffset: {
+          position: { left: 350, top: 200 },
+          arrowPosition: { top: 100 },
+        },
+        offsetBefore: {
+          position: { left: 50, top: 0 },
+          arrowPosition: { top: 0 },
+        },
+        offsetAfter: {
+          position: { left: 350, top: 400 },
+          arrowPosition: { top: 200 },
+        },
+      },
+      {
+        placement: 'bottom',
+        noOffset: {
+          position: { left: 200, top: 350 },
+          arrowPosition: { left: 100 },
+        },
+        offsetBefore: {
+          position: { left: 0, top: 50 },
+          arrowPosition: { left: 0 },
+        },
+        offsetAfter: {
+          position: { left: 400, top: 350 },
+          arrowPosition: { left: 200 },
+        },
+      },
+      {
+        placement: 'left',
+        noOffset: {
+          position: { left: 50, top: 200 },
+          arrowPosition: { top: 100 },
+        },
+        offsetBefore: {
+          position: { left: 50, top: 0 },
+          arrowPosition: { top: 0 },
+        },
+        offsetAfter: {
+          position: { left: 350, top: 400 },
+          arrowPosition: { top: 200 },
+        },
+      },
+    ].forEach((testCase) => {
+      const { placement } = testCase;
+
+      describe(`placement = ${placement}`, () => {
+        describe('no viewport offset', () => {
+          checkPosition(
+            placement,
+            { left: 250, top: 250 },
+            testCase.noOffset,
+          );
+        });
+
+        describe('viewport offset before', () => {
+          checkPosition(
+            placement,
+            { left: -100, top: -100 },
+            testCase.offsetBefore,
+          );
+        });
+
+        describe('viewport offset after', () => {
+          checkPosition(
+            placement,
+            { left: 600, top: 600 },
+            testCase.offsetAfter,
+          );
+        });
+      });
+    });
+  });
+
+  describe('position updating', () => {
     beforeEach(function () {
       sinon.spy(Position.prototype, 'componentWillReceiveProps');
-      sinon.spy(Position.prototype, 'updatePosition');
+      sinon.spy(Popper.prototype, 'update');
     });
 
     afterEach(function () {
       Position.prototype.componentWillReceiveProps.restore();
-      Position.prototype.updatePosition.restore();
+      Popper.prototype.update.restore();
     });
 
-    it('Should only recalculate when target changes', function () {
+    it('should update position only when target changes', async () => {
       class TargetChanger extends React.Component {
-        constructor(props) {
-          super(props);
+        constructor(props, context) {
+          super(props, context);
 
           this.state = {
             target: 'foo',
-            fakeProp: 0
+            fakeProp: 0,
           };
         }
 
@@ -60,11 +244,8 @@ describe('Position', function () {
               <div ref={(c) => { this.foo = c; }} />
               <div ref={(c) => { this.bar = c; }} />
 
-              <Position
-                target={() => this[this.state.target]}
-                fakeProp={this.state.fakeProp}
-              >
-                <Span />
+              <Position target={() => this[this.state.target]}>
+                <Span fakeProp={this.state.fakeProp} />
               </Position>
             </div>
           );
@@ -72,52 +253,53 @@ describe('Position', function () {
       }
 
       const instance = ReactTestUtils.renderIntoDocument(<TargetChanger />);
+      await wait();
 
       // Position calculates initial position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.not.been.called;
-      expect(Position.prototype.updatePosition)
+      expect(Popper.prototype.update)
         .to.have.been.calledOnce;
 
       instance.setState({target: 'bar'});
+      await wait();
 
       // Position receives new props and recalculates position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledOnce;
-      expect(Position.prototype.updatePosition)
+      expect(Popper.prototype.update)
         .to.have.been.calledTwice;
 
       instance.setState({fakeProp: 1});
+      await wait();
 
       // Position receives new props but should not recalculate position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledTwice;
-      expect(Position.prototype.updatePosition)
+      expect(Popper.prototype.update)
         .to.have.been.calledTwice;
     });
 
-    it('Should recalculate position if shouldUpdatePosition prop is true', function () {
+    it('should update position if shouldUpdatePosition is set', async () => {
       class Target extends React.Component {
-        constructor(props) {
-          super(props);
+        constructor(props, context) {
+          super(props, context);
 
           this.state = {
-            target: 'bar',
-            fakeProp: 0
+            fakeProp: 0,
           };
         }
 
         render() {
           return (
             <div>
-              <div ref={(c) => { this.bar = c; }} />
+              <div ref={(c) => { this.target = c; }} />
 
               <Position
-                target={() => this[this.state.target]}
+                target={() => this.target}
                 shouldUpdatePosition
-                fakeProp={this.state.fakeProp}
               >
-                <Span />
+                <Span fakeProp={this.state.fakeProp} />
               </Position>
             </div>
           );
@@ -125,178 +307,39 @@ describe('Position', function () {
       }
 
       const instance = ReactTestUtils.renderIntoDocument(<Target />);
+      await wait();
 
       // Position calculates initial position.
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.not.been.called;
-      expect(Position.prototype.updatePosition)
+      expect(Popper.prototype.update)
         .to.have.been.calledOnce;
 
       instance.setState({fakeProp: 1});
+      await wait();
 
       // Position receives new props and position should be recalculated
       expect(Position.prototype.componentWillReceiveProps)
         .to.have.been.calledOnce;
-      expect(Position.prototype.updatePosition)
+      expect(Popper.prototype.update)
         .to.have.been.calledTwice;
     });
   });
 
-  describe('position calculation', function () {
-    let mountPoint;
-
-    beforeEach(function () {
-      mountPoint = document.createElement('div');
-      document.body.appendChild(mountPoint);
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(mountPoint);
-      document.body.removeChild(mountPoint);
-    });
-
-    function checkPosition(placement, targetPosition, expected) {
-      class FakeOverlay extends React.Component {
-        render() {
-          return (
-            <div style={{
-              position: 'absolute',
-              width: 200,
-              height: 200
-            }} />
-          );
-        }
-      }
-
-      class FakeContainer extends React.Component {
-        render() {
-          return (
-            <div style={{
-              position: 'relative',
-              width: 600,
-              height: 600
-            }}>
-              <div
-                ref={(c) => { this.target = c; }}
-                style={{
-                  position: 'absolute',
-                  width: 100,
-                  height: 100,
-                  ...targetPosition
-                }}
-              />
-
-              <Position
-                target={() => this.target}
-                container={this}
-                containerPadding={50}
-                placement={placement}
-              >
-                <FakeOverlay ref={(c) => { this.overlay = c; }} />
-              </Position>
-              <Position
-                target={() => this.target}
-                container={() => this}
-                containerPadding={50}
-                placement={placement}
-              >
-                <FakeOverlay ref={(c) => { this.fakeOverlay = c; }} />
-              </Position>
-            </div>
-          );
-        }
-      }
-
-      const expectedPosition = {
-        positionLeft: expected[0],
-        positionTop: expected[1],
-        arrowOffsetLeft: expected[2],
-        arrowOffsetTop: expected[3]
-      };
-
-      it('Should calculate the correct position', function() {
-        const instance = render(<FakeContainer />, mountPoint);
-
-        ['overlay', 'fakeOverlay'].forEach(function(overlayRefName) {
-          const calculatedPosition = pick(
-            instance[overlayRefName].props, Object.keys(expectedPosition)
-          );
-          expect(calculatedPosition).to.eql(expectedPosition);
-
-        });
-      });
-    }
-
-    [
-      {
-        placement: 'left',
-        noOffset: [50, 200, undefined, '50%'],
-        offsetBefore: [-200, 50, undefined, '0%'],
-        offsetAfter: [300, 350, undefined, '100%']
-      },
-      {
-        placement: 'top',
-        noOffset: [200, 50, '50%', undefined],
-        offsetBefore: [50, -200, '0%', undefined],
-        offsetAfter: [350, 300, '100%', undefined]
-      },
-      {
-        placement: 'bottom',
-        noOffset: [200, 350, '50%', undefined],
-        offsetBefore: [50, 100, '0%', undefined],
-        offsetAfter: [350, 600, '100%', undefined]
-      },
-      {
-        placement: 'right',
-        noOffset: [350, 200, undefined, '50%'],
-        offsetBefore: [100, 50, undefined, '0%'],
-        offsetAfter: [600, 350, undefined, '100%']
-      }
-    ].forEach(function(testCase) {
-      const placement = testCase.placement;
-
-      describe(`placement = ${placement}`, function() {
-        describe('no viewport offset', function() {
-          checkPosition(
-            placement, {left: 250, top: 250}, testCase.noOffset
-          );
-        });
-
-        describe('viewport offset before', function() {
-          checkPosition(
-            placement, {left: 0, top: 0}, testCase.offsetBefore
-          );
-        });
-
-        describe('viewport offset after', function() {
-          checkPosition(
-            placement, {left: 500, top: 500}, testCase.offsetAfter
-          );
-        });
-      });
-    });
-
-    describe('calculate using container callback function', function () {
-
-    });
-  });
-
-  it('should not forward own props to child', function () {
-    let spiedProps;
+  it('should not forward extra props to child', () => {
+    let childProps;
     const Child = (props) => {
-      spiedProps = props;
+      childProps = props;
       return <div />;
     };
 
     ReactTestUtils.renderIntoDocument(
-      <Position target={() => null} childProp="foo">
+      <Position target={() => null} otherProp="foo">
         <Child />
       </Position>
     );
 
-    expect(spiedProps.target).to.not.exist;
-    expect(spiedProps.childProp).to.equal('foo');
+    expect(childProps.target).to.not.exist;
+    expect(childProps.otherProp).to.not.exist;
   });
-
-  // ToDo: add remaining tests
 });

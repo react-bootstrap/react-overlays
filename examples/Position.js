@@ -1,94 +1,106 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
+import ReactDOM from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
 import Position from 'react-overlays/lib/Position';
 
+const styles = {
+  tooltip: {
+    position: 'absolute',
+  },
 
-const OverlayStyle = {
-  position: 'absolute'
+  inner: {
+    margin: 5,
+    backgroundColor: '#555',
+    borderRadius: 3,
+    color: 'white',
+    padding: '2px 5px',
+  },
+
+  arrow: {
+    position: 'absolute',
+    backgroundColor: '#555',
+    borderRadius: '50%',
+    width: 5,
+    height: 5,
+  },
 };
 
-const OverlayInnerStyle = {
-  margin: 5,
-  backgroundColor: '#555',
-  borderRadius: 3,
-  color: 'white',
-  padding: '2px 5px'
+const placementStyles = {
+  left: {
+    arrow: { right: 0, marginTop: -3 },
+  },
+  right: {
+    arrow: { left: 0, marginTop: -3 },
+  },
+  top: {
+    arrow: { bottom: 0, marginLeft: -3 },
+  },
+  bottom: {
+    arrow: { top: 0, marginLeft: -3 },
+  },
 };
 
-const CalloutStyle = {
-  position: 'absolute',
-  backgroundColor: '#555',
-  borderRadius: '50%',
-  width: 5,
-  height: 5
-};
+const PLACEMENTS = ['left', 'top', 'right', 'bottom'];
 
-const PlacementStyles = {
-  left: { right: 0, marginTop: -3 },
-  right: { left: 0, marginTop: -3 },
-  top: { bottom: 0, marginLeft: -3 },
-  bottom: { top: 0, marginLeft: -3 }
-};
-
-
-
-const ToolTip = props => {
-  let placementStyle = PlacementStyles[props.placement];
-
-  let {
-    style,
-    arrowOffsetLeft: left = placementStyle.left,
-    arrowOffsetTop: top = placementStyle.top,
-    children
-  } = props;
-
+function Tooltip({ placement, position, arrowPosition, children }) {
   return (
-    <div style={{...OverlayStyle, ...style}}>
-      <div style={{...CalloutStyle, ...placementStyle, left, top }}/>
-      <div style={{...OverlayInnerStyle}}>
+    <div style={{...styles.tooltip, ...position}}>
+      <div
+        style={{
+          ...styles.arrow,
+          ...placementStyles[placement].arrow,
+          ...arrowPosition,
+        }}
+      />
+      <div style={{...styles.inner}}>
         {children}
       </div>
     </div>
   );
-};
+}
 
 class PositionExample extends React.Component {
+  constructor(props, context) {
+    super(props, context);
 
-  state = { placement: 'left' };
-
-  toggle = () => {
-    let placements = ['left', 'top', 'right', 'bottom'];
-    let placement = this.state.placement;
-
-    placement = placements[placements.indexOf(placement) + 1] || placements[0];
-
-    return this.setState({ placement });
+    this.state = {
+      placement: PLACEMENTS[0],
+    };
   }
 
-  render(){
+  onClick = () => {
+    const { placement } = this.state;
+    const nextPlacement = PLACEMENTS[PLACEMENTS.indexOf(placement) + 1];
+
+    this.setState({
+      placement: nextPlacement || PLACEMENTS[0],
+    });
+  };
+
+  render() {
+    const { placement } = this.state;
 
     return (
-      <div className='overlay-example'>
+      <div className="overlay-example">
         <Button
-          bsStyle='primary'
+          bsStyle="primary"
           ref={(c) => { this.target = c; }}
-          onClick={this.toggle}
+          onClick={this.onClick}
         >
           I am a Position target
         </Button>
         <p>
-          keep clicking to see the placement change
+          Keep clicking to see the placement change.
         </p>
 
         <Position
           container={this}
-          placement={this.state.placement}
-          target={() => findDOMNode(this.target)}
+          placement={placement}
+          target={() => ReactDOM.findDOMNode(this.target)}
         >
-          <ToolTip>
-            I'm placed to the: <strong>{this.state.placement}</strong>
-          </ToolTip>
+          <Tooltip>
+            I&rsquo;m placed to the <strong>{placement}</strong>.
+          </Tooltip>
         </Position>
       </div>
     );
