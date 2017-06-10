@@ -1,7 +1,7 @@
 import pick from 'lodash/pick';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 
 import Position from '../src/Position';
 
@@ -56,11 +56,11 @@ describe('Position', function () {
         render() {
           return (
             <div>
-              <div ref="foo" />
-              <div ref="bar" />
+              <div ref={(c) => { this.foo = c; }} />
+              <div ref={(c) => { this.bar = c; }} />
 
               <Position
-                target={() => this.refs[this.state.target]}
+                target={() => this[this.state.target]}
                 fakeProp={this.state.fakeProp}
               >
                 <Span />
@@ -109,10 +109,10 @@ describe('Position', function () {
         render() {
           return (
             <div>
-              <div ref="bar" />
+              <div ref={(c) => { this.bar = c; }} />
 
               <Position
-                target={() => this.refs[this.state.target]}
+                target={() => this[this.state.target]}
                 shouldUpdatePosition
                 fakeProp={this.state.fakeProp}
               >
@@ -175,28 +175,31 @@ describe('Position', function () {
               width: 600,
               height: 600
             }}>
-              <div ref="target" style={{
-                position: 'absolute',
-                width: 100,
-                height: 100,
-                ...targetPosition
-              }}/>
+              <div
+                ref={(c) => { this.target = c; }}
+                style={{
+                  position: 'absolute',
+                  width: 100,
+                  height: 100,
+                  ...targetPosition
+                }}
+              />
 
               <Position
-                target={() => this.refs.target}
+                target={() => this.target}
                 container={this}
                 containerPadding={50}
                 placement={placement}
               >
-                <FakeOverlay ref="overlay" />
+                <FakeOverlay ref={(c) => { this.overlay = c; }} />
               </Position>
               <Position
-                target={() => this.refs.target}
+                target={() => this.target}
                 container={() => this}
                 containerPadding={50}
                 placement={placement}
               >
-                <FakeOverlay ref="overlay_for_callback_container" />
+                <FakeOverlay ref={(c) => { this.fakeOverlay = c; }} />
               </Position>
             </div>
           );
@@ -213,9 +216,9 @@ describe('Position', function () {
       it('Should calculate the correct position', function() {
         const instance = render(<FakeContainer />, mountPoint);
 
-        ['overlay', 'overlay_for_callback_container'].forEach(function(overlayRefName) {
+        ['overlay', 'fakeOverlay'].forEach(function(overlayRefName) {
           const calculatedPosition = pick(
-            instance.refs[overlayRefName].props, Object.keys(expectedPosition)
+            instance[overlayRefName].props, Object.keys(expectedPosition)
           );
           expect(calculatedPosition).to.eql(expectedPosition);
 

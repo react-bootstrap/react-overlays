@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RootCloseWrapper from '../src/RootCloseWrapper';
-import { render } from './helpers';
 import simulant from 'simulant';
+
+import RootCloseWrapper from '../src/RootCloseWrapper';
+
+import { render } from './helpers';
 
 const escapeKeyCode = 27;
 

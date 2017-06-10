@@ -1,10 +1,13 @@
+/* eslint-disable react/no-string-refs */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import tsp from 'teaspoon';
 
-import { render } from './helpers';
 import Transition, { UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING }
   from '../src/Transition';
+
+import { render } from './helpers';
 
 describe('Transition', () => {
   it('should not transition on mount', () => {
@@ -14,7 +17,7 @@ describe('Transition', () => {
         timeout={0}
         onEnter={()=> { throw new Error('should not Enter'); }}
       >
-        <div></div>
+        <div />
       </Transition>
     )
     .render()
@@ -29,7 +32,7 @@ describe('Transition', () => {
         timeout={0}
         onEnter={()=> done()}
       >
-        <div></div>
+        <div />
       </Transition>
     )
     .render();
@@ -49,7 +52,7 @@ describe('Transition', () => {
           done()
         }}
       >
-        <div></div>
+        <div />
       </Transition>
     )
     .render()
@@ -270,6 +273,7 @@ describe('Transition', () => {
       }
 
       getStatus = () => {
+        // FIXME: This test breaks when using a functional ref.
         return this.refs.transition.state.status;
       }
     }
@@ -345,6 +349,7 @@ describe('Transition', () => {
       }
 
       getStatus = () => {
+        // FIXME: This test breaks when using a functional ref.
         return this.refs.transition.state.status;
       }
     }

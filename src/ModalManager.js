@@ -1,8 +1,10 @@
-import css from 'dom-helpers/style';
 import classes from 'dom-helpers/class';
+import css from 'dom-helpers/style';
 import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
+
 import isOverflowing from './utils/isOverflowing';
-import { hideSiblings, showSiblings, ariaHidden } from './utils/manageAriaHidden';
+import { ariaHidden, hideSiblings, showSiblings }
+  from './utils/manageAriaHidden';
 
 function findIndexOf(arr, cb){
   let idx = -1;

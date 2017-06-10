@@ -1,8 +1,10 @@
+import css from 'dom-helpers/style';
+import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
+
 import Modal from '../src/Modal';
 import ModalManager from '../src/ModalManager';
+
 import { injectCss } from './helpers';
-import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
-import css from 'dom-helpers/style';
 
 describe('ModalManager', ()=> {
   let container, manager;

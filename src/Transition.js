@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import addEventListener from 'dom-helpers/events/on';
 import transitionInfo from 'dom-helpers/transition/properties';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 const transitionEndEvent = transitionInfo.end;
