@@ -2,10 +2,10 @@ import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+import Transition from 'react-transition-group/Transition';
 import simulant from 'simulant';
 
 import Modal from '../src/Modal';
-import Transition from '../src/Transition';
 
 import { render, shouldWarn } from './helpers';
 
@@ -237,9 +237,7 @@ describe('Modal', function () {
 
     let instance = render(
       <Modal show
-        transition={Transition}
-        dialogTransitionTimeout={0}
-        backdropTransitionTimeout={0}
+        transition={p => <Transition {...p} timeout={0}/> }
         onExit={increment}
         onExiting={increment}
         onExited={()=> {

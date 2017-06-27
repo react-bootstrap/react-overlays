@@ -229,7 +229,6 @@ class Modal extends React.Component {
       children,
       transition: Transition,
       backdrop,
-      dialogTransitionTimeout,
       className,
       style,
       onExit,
