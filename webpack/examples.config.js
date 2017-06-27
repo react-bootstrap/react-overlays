@@ -14,5 +14,5 @@ module.exports = Object.assign(
       contentBase: path.resolve(__dirname, '../examples'),
       stats: { colors: true },
     },
-  },
+  }
 );
