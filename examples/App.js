@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
+import Transition, { ENTERED, ENTERING }
+  from 'react-transition-group/Transition';
 
 import PropTable from './PropTable';
 
@@ -21,7 +23,6 @@ import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Over
 import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal';
 import PositionMetadata from 'component-metadata-loader?pitch!react-overlays/Position';
 import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper';
-import TransitionMetadata from 'component-metadata-loader?pitch!react-overlays/Transition';
 
 import * as ReactOverlays from 'react-overlays';
 import getOffset from 'dom-helpers/query/offset';
@@ -30,7 +31,8 @@ import './styles.less';
 import injectCss from './injectCss';
 
 const scope = {
-  React, ReactDOM, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset
+  React, ReactDOM, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset,
+  Transition, ENTERED, ENTERING,
 };
 
 class Anchor extends React.Component {
@@ -81,27 +83,16 @@ class Example extends React.Component {
       <div className='app row'>
         <article className='side-panel col-md-2'>
           <ul className='list-unstyled'>
-            <li><a href='#transition'>Transition</a></li>
             <li><a href='#portals'>Portals</a></li>
             <li><a href='#modals'>Modals</a></li>
             <li><a href='#position'>Position</a></li>
             <li><a href='#overlay'>Overlay</a></li>
             <li><a href='#affixes'>Affixes</a></li>
             <li><a href='#root-close-wrapper'>RootCloseWrapper</a></li>
+            <li><a href='#transitions'>Transitions</a></li>
           </ul>
         </article>
         <main className='col-md-10'>
-          <section >
-            <h2 className='page-header'>
-              <Anchor>Transition</Anchor>
-            </h2>
-            <p dangerouslySetInnerHTML={{__html: TransitionMetadata.Transition.descHtml }}/>
-            <ExampleEditor codeText={TransitionSource} />
-            <PropTable
-              component='Transition'
-              metadata={TransitionMetadata}
-            />
-          </section>
           <section >
             <h2 className='page-header'>
               <Anchor>Portals</Anchor>
@@ -172,6 +163,23 @@ class Example extends React.Component {
               component='RootCloseWrapper'
               metadata={RootCloseWrapperMetadata}
             />
+          </section>
+          <section >
+            <h2 className='page-header'>
+              <Anchor>Transitions</Anchor>
+            </h2>
+            <p>
+              Animation of components is handled by <code>transition</code> props.
+              If a component accepts a <code>transition</code> prop you can provide
+              a <a href="https://github.com/reactjs/react-transition-group">react-transition-group@2.0.0</a> compatible
+              <code>Transition</code> component and it will work.
+            </p>
+
+            <p>
+              Feel free to use <code>CSSTransition</code> specifically, or roll your own like the below example.
+            </p>
+
+            <ExampleEditor codeText={TransitionSource} />
           </section>
         </main>
       </div>

@@ -64,7 +64,7 @@ class Overlay extends React.Component {
       child = (
         <Transition
           in={props.show}
-          transitionAppear
+          appear
           onExit={onExit}
           onExiting={onExiting}
           onExited={this.onHiddenListener}
@@ -133,7 +133,8 @@ Overlay.propTypes = {
   },
 
   /**
-   * A `<Transition/>` component used to animate the overlay changes visibility.
+   * A `react-transition-group@2.0.0` `<Transition/>` component
+   * used to animate the overlay as it changes visibility.
    */
   transition: elementType,
 

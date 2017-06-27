@@ -123,25 +123,16 @@ class Modal extends React.Component {
     keyboard: PropTypes.bool,
 
     /**
-     * A `<Transition/>` component to use for the dialog and backdrop components.
+     * A `react-transition-group@2.0.0` `<Transition/>` component used
+     * to control animations for the dialog component.
      */
     transition: elementType,
 
     /**
-     * The `timeout` of the dialog transition if specified. This number is used to ensure that
-     * transition callbacks are always fired, even if browser transition events are canceled.
-     *
-     * See the Transition `timeout` prop for more infomation.
+     * A `react-transition-group@2.0.0` `<Transition/>` component used
+     * to control animations for the backdrop components.
      */
-    dialogTransitionTimeout: PropTypes.number,
-
-    /**
-     * The `timeout` of the backdrop transition if specified. This number is used to
-     * ensure that transition callbacks are always fired, even if browser transition events are canceled.
-     *
-     * See the Transition `timeout` prop for more infomation.
-     */
-    backdropTransitionTimeout: PropTypes.number,
+    backdropTransition: elementType,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and
@@ -268,10 +259,9 @@ class Modal extends React.Component {
     if (Transition) {
       dialog = (
         <Transition
-          transitionAppear
+          appear
           unmountOnExit
           in={show}
-          timeout={dialogTransitionTimeout}
           onExit={onExit}
           onExiting={onExiting}
           onExited={this.handleHidden}
@@ -279,7 +269,7 @@ class Modal extends React.Component {
           onEntering={onEntering}
           onEntered={onEntered}
         >
-          { dialog }
+          {dialog}
         </Transition>
       );
     }
@@ -296,8 +286,8 @@ class Modal extends React.Component {
           style={style}
           className={className}
         >
-          { backdrop && this.renderBackdrop() }
-          { dialog }
+          {backdrop && this.renderBackdrop()}
+          {dialog}
         </div>
       </Portal>
     );
@@ -308,8 +298,7 @@ class Modal extends React.Component {
       backdropStyle,
       backdropClassName,
       renderBackdrop,
-      transition: Transition,
-      backdropTransitionTimeout } = this.props;
+      backdropTransition: Transition } = this.props;
 
     const backdropRef = ref => this.backdrop = ref;
 
@@ -322,9 +311,9 @@ class Modal extends React.Component {
 
     if (Transition) {
       backdrop = (
-        <Transition transitionAppear
+        <Transition
+          appear
           in={this.props.show}
-          timeout={backdropTransitionTimeout}
         >
           {backdrop}
         </Transition>
