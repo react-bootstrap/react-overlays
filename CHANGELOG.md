@@ -1,3 +1,21 @@
+## [v0.8.0]
+> 2017-07-03
+
+- **Feature:** remove Transition component and depend on react-transition-group@2.0.0 ([#184])
+
+[v0.8.0]: https://github.com/react-bootstrap/react-overlays/compare/v0.7.0...v0.8.0
+[#184]: https://github.com/react-bootstrap/react-overlays/pull/184
+
+## [v0.7.0]
+> 2017-04-22
+
+- **Chore:** Update depedencies to avoid React deprecation warnings
+- **Chore:** Use function refs ([#159])
+
+[v0.7.0]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.12...v0.7.0
+[#159]: https://github.com/react-bootstrap/react-overlays/pull/159
+
+
 ## [v0.6.12]
 > 2017-03-06
 
