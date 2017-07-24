@@ -4,12 +4,21 @@ import ReactTestUtils from 'react-dom/test-utils';
 
 import Affix from '../src/Affix';
 
-import { render } from './helpers';
+import { render, injectCss } from './helpers';
 
 describe('<Affix>', () => {
   let mountPoint;
   let handlers;
 
+  before(() => {
+    injectCss(`
+      html, body { margin: 0; padding: 0; }
+    `)
+  })
+
+  after(() => {
+    injectCss.reset()
+  })
   // This makes the window very tall; hopefully enough to exhibit the affix
   // behavior. If this is insufficient, we should modify the Karma config to
   // fix the browser window size.
@@ -17,8 +26,6 @@ describe('<Affix>', () => {
     render() {
       return (
         <div style={{
-          position: 'absolute',
-          top: 0,
           height: 20000
         }}>
           Placeholder
@@ -38,6 +45,7 @@ describe('<Affix>', () => {
 
   beforeEach(() => {
     Content.renderCount = 0;
+
     mountPoint = document.createElement('div');
     document.body.appendChild(mountPoint);
     handlers = {
