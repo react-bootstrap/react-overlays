@@ -4,6 +4,7 @@ import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/query/contains';
 import canUseDom from 'dom-helpers/util/inDOM';
 import PropTypes from 'prop-types';
+import { deprecated } from 'prop-types-extra';
 import componentOrElement from 'prop-types-extra/lib/componentOrElement';
 import elementType from 'prop-types-extra/lib/elementType';
 import React, { cloneElement } from 'react';
@@ -101,7 +102,9 @@ class Modal extends React.Component {
      * A callback fired when the escape key, if specified in `keyboard`, is pressed.
      * @deprecated
      */
-    onEscapeKeyUp: PropTypes.func,
+    onEscapeKeyUp: deprecated(
+      PropTypes.func,
+      'Please use onEscapeKeyDown instead for consistency'),
 
     /**
      * A callback fired when the backdrop, if specified, is clicked.
