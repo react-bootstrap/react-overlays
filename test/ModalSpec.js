@@ -296,6 +296,23 @@ describe('Modal', function () {
       expect(onEscapeSpy).to.have.been.calledOnce;
   })
 
+  it('Should fire onEscapeKeyUp callback on escape close keyDown', function () {
+            shouldWarn('Please use onEscapeKeyDown instead for consistency');
+
+      let onEscapeSpy = sinon.spy();
+      let instance = render(
+          <Modal onEscapeKeyUp={onEscapeSpy}>
+              <strong>Message</strong>
+          </Modal>
+          , mountPoint);
+
+      instance.renderWithProps({ show: true });
+
+      simulant.fire(instance.backdrop, 'keyup', { keyCode: 27 });
+
+      expect(onEscapeSpy).to.have.been.calledOnce;
+  })
+
   it('Should accept role on the Modal', function () {
     let instance = render(
       <Modal role="alertdialog" show>
