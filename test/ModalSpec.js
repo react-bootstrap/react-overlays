@@ -154,7 +154,7 @@ describe('Modal', function () {
 
     let backdrop = instance.backdrop;
 
-    simulant.fire(backdrop, 'keyup', { keyCode: 27 });
+    simulant.fire(backdrop, 'keydown', { keyCode: 27 });
   });
 
 
