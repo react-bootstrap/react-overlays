@@ -453,7 +453,7 @@ class Modal extends React.Component {
   handleDocumentKeyUp = (e) => {
     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
       if (this.props.onEscapeKeyUp) {
-          this.props.onEscapeKeyUp(e);
+        this.props.onEscapeKeyUp(e);
       }
     }
   }
