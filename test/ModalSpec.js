@@ -306,7 +306,7 @@ describe('Modal', function () {
 
       instance.renderWithProps({ show: true });
 
-      simulant.fire(instance.backdrop, 'keydown', { keyCode: 27 });
+      simulant.fire(instance.backdrop, 'keyup', { keyCode: 27 });
 
       expect(onEscapeSpy).to.have.been.calledOnce;
   })

@@ -97,8 +97,9 @@ class Modal extends React.Component {
     onEscapeKeyDown: PropTypes.func,
 
     /**
-     * Support for this function will be depricated. Please use `onEscapeKeyDown` instead
+     * Support for this function will be deprecated. Please use `onEscapeKeyDown` instead
      * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+     * @deprecated
      */
     onEscapeKeyUp: PropTypes.func,
 
@@ -381,6 +382,9 @@ class Modal extends React.Component {
     this._onDocumentKeydownListener =
       addEventListener(doc, 'keydown', this.handleDocumentKeyDown);
 
+    this._onDocumentKeyupListener =
+      addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
+
     this._onFocusinListener =
       addFocusListener(this.enforceFocus);
 
@@ -395,6 +399,8 @@ class Modal extends React.Component {
     this.props.manager.remove(this);
 
     this._onDocumentKeydownListener.remove();
+
+    this._onDocumentKeyupListener.remove();
 
     this._onFocusinListener.remove();
 
@@ -436,13 +442,19 @@ class Modal extends React.Component {
 
   handleDocumentKeyDown = (e) => {
     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
-      let escapeFunc = this.props.onEscapeKeyDown || this.props.onEscapeKeyUp;
-
-      if (escapeFunc) {
-        escapeFunc(e);
+      if (this.props.onEscapeKeyDown) {
+        this.props.onEscapeKeyDown(e);
       }
 
       this.props.onHide();
+    }
+  }
+
+  handleDocumentKeyUp = (e) => {
+    if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
+      if (this.props.onEscapeKeyUp) {
+          this.props.onEscapeKeyUp(e);
+      }
     }
   }
 
