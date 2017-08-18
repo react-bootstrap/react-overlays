@@ -5,6 +5,7 @@ import contains from 'dom-helpers/query/contains';
 import canUseDom from 'dom-helpers/util/inDOM';
 import PropTypes from 'prop-types';
 import componentOrElement from 'prop-types-extra/lib/componentOrElement';
+import deprecated from 'prop-types-extra/lib/deprecated';
 import elementType from 'prop-types-extra/lib/elementType';
 import React, { cloneElement } from 'react';
 import warning from 'warning';
@@ -94,7 +95,17 @@ class Modal extends React.Component {
     /**
      * A callback fired when the escape key, if specified in `keyboard`, is pressed.
      */
-    onEscapeKeyUp: PropTypes.func,
+    onEscapeKeyDown: PropTypes.func,
+
+    /**
+     * Support for this function will be deprecated. Please use `onEscapeKeyDown` instead
+     * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+     * @deprecated
+     */
+    onEscapeKeyUp: deprecated(
+      PropTypes.func,
+      'Please use onEscapeKeyDown instead for consistency'
+    ),
 
     /**
      * A callback fired when the backdrop, if specified, is clicked.
@@ -384,6 +395,9 @@ class Modal extends React.Component {
 
     this.props.manager.add(this, container, this.props.containerClassName);
 
+    this._onDocumentKeydownListener =
+      addEventListener(doc, 'keydown', this.handleDocumentKeyDown);
+
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
 
@@ -399,6 +413,8 @@ class Modal extends React.Component {
 
   onHide = () => {
     this.props.manager.remove(this);
+
+    this._onDocumentKeydownListener.remove();
 
     this._onDocumentKeyupListener.remove();
 
@@ -440,12 +456,21 @@ class Modal extends React.Component {
     }
   }
 
+  handleDocumentKeyDown = (e) => {
+    if (this.props.keyboard && e.key === 'Escape' && this.isTopModal()) {
+      if (this.props.onEscapeKeyDown) {
+        this.props.onEscapeKeyDown(e);
+      }
+
+      this.props.onHide();
+    }
+  }
+
   handleDocumentKeyUp = (e) => {
-    if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
+    if (this.props.keyboard && e.key === 'Escape' && this.isTopModal()) {
       if (this.props.onEscapeKeyUp) {
         this.props.onEscapeKeyUp(e);
       }
-      this.props.onHide();
     }
   }
 
