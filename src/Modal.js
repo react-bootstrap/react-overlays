@@ -104,7 +104,8 @@ class Modal extends React.Component {
      */
     onEscapeKeyUp: deprecated(
       PropTypes.func,
-      'Please use onEscapeKeyDown instead for consistency'),
+      'Please use onEscapeKeyDown instead for consistency'
+    ),
 
     /**
      * A callback fired when the backdrop, if specified, is clicked.

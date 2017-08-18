@@ -282,36 +282,36 @@ describe('Modal', function () {
   });
 
   it('Should fire onEscapeKeyDown callback on escape close', function () {
-      let onEscapeSpy = sinon.spy();
-      let instance = render(
-          <Modal onEscapeKeyDown={onEscapeSpy}>
-              <strong>Message</strong>
-          </Modal>
-          , mountPoint);
+    let onEscapeSpy = sinon.spy();
+    let instance = render(
+      <Modal onEscapeKeyDown={onEscapeSpy}>
+          <strong>Message</strong>
+      </Modal>
+    , mountPoint);
 
-      instance.renderWithProps({ show: true });
+    instance.renderWithProps({ show: true });
 
-      simulant.fire(instance.backdrop, 'keydown', { key: 'Escape' });
+    simulant.fire(instance.backdrop, 'keydown', { key: 'Escape' });
 
-      expect(onEscapeSpy).to.have.been.calledOnce;
-  })
+    expect(onEscapeSpy).to.have.been.calledOnce;
+  });
 
   it('Should fire onEscapeKeyUp callback on escape close keyDown', function () {
-            shouldWarn('Please use onEscapeKeyDown instead for consistency');
+    shouldWarn('Please use onEscapeKeyDown instead for consistency');
 
-      let onEscapeSpy = sinon.spy();
-      let instance = render(
-          <Modal onEscapeKeyUp={onEscapeSpy}>
-              <strong>Message</strong>
-          </Modal>
-          , mountPoint);
+    let onEscapeSpy = sinon.spy();
+    let instance = render(
+      <Modal onEscapeKeyUp={onEscapeSpy}>
+          <strong>Message</strong>
+      </Modal>
+    , mountPoint);
 
-      instance.renderWithProps({ show: true });
+    instance.renderWithProps({ show: true });
 
-      simulant.fire(instance.backdrop, 'keyup', { key: 'Escape' });
+    simulant.fire(instance.backdrop, 'keyup', { key: 'Escape' });
 
-      expect(onEscapeSpy).to.have.been.calledOnce;
-  })
+    expect(onEscapeSpy).to.have.been.calledOnce;
+  });
 
   it('Should accept role on the Modal', function () {
     let instance = render(
