@@ -285,7 +285,7 @@ describe('Modal', function () {
     let onEscapeSpy = sinon.spy();
     let instance = render(
       <Modal onEscapeKeyDown={onEscapeSpy}>
-          <strong>Message</strong>
+        <strong>Message</strong>
       </Modal>
     , mountPoint);
 
@@ -302,7 +302,7 @@ describe('Modal', function () {
     let onEscapeSpy = sinon.spy();
     let instance = render(
       <Modal onEscapeKeyUp={onEscapeSpy}>
-          <strong>Message</strong>
+        <strong>Message</strong>
       </Modal>
     , mountPoint);
 
