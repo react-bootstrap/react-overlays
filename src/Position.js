@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import componentOrElement from 'prop-types-extra/lib/componentOrElement';
 import React, { cloneElement } from 'react';
 import ReactDOM from 'react-dom';
+import defaults from 'lodash/defaults';
 
 import calculatePosition from './utils/calculatePosition';
 import getContainer from './utils/getContainer';
@@ -116,13 +117,18 @@ class Position extends React.Component {
       this.props.container, ownerDocument(this).body
     );
 
-    this.setState(calculatePosition(
-      this.props.placement,
-      overlay,
-      target,
-      container,
-      this.props.containerPadding
+    const { positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop } = this.props.children.props;
+    const newState = defaults(
+      { positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop },
+      calculatePosition(
+        this.props.placement,
+        overlay,
+        target,
+        container,
+        this.props.containerPadding
     ));
+
+    this.setState(newState);
   }
 }
 
