@@ -1,10 +1,20 @@
+## [v0.8.1]
+> 2017-09-13
+
+- **Bugfix:** Use `keydown` instead of incorrect `keyup` for `<Modal>` close keyboard event ([#195])
+
+[v0.8.1]: https://github.com/react-bootstrap/react-overlays/compare/v0.8.0...v0.8.1
+[#195]: https://github.com/react-bootstrap/react-overlays/pull/195
+
+
 ## [v0.8.0]
 > 2017-07-03
 
-- **Feature:** remove Transition component and depend on react-transition-group@2.0.0 ([#184])
+- **Feature:** Remove `<Transition>` and depend on react-transition-group@2.0.0 ([#184])
 
 [v0.8.0]: https://github.com/react-bootstrap/react-overlays/compare/v0.7.0...v0.8.0
 [#184]: https://github.com/react-bootstrap/react-overlays/pull/184
+
 
 ## [v0.7.0]
 > 2017-04-22
