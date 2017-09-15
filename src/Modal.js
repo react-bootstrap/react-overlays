@@ -285,7 +285,7 @@ class Modal extends React.Component {
     }
 
     return (
-      <Portal
+      <Portal onOverlayRendered={this.onPortalOverlayRendered}
         ref={this.setMountNode}
         container={container}
       >
@@ -350,6 +350,9 @@ class Modal extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
+  }
+
+  onPortalOverlayRendered = () => {
     if (this.props.show) {
       this.onShow();
     }
@@ -361,9 +364,6 @@ class Modal extends React.Component {
     if ( prevProps.show && !this.props.show && !transition) {
       // Otherwise handleHidden will call this.
       this.onHide();
-    }
-    else if (!prevProps.show && this.props.show) {
-      this.onShow();
     }
   }
 
