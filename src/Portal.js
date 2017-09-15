@@ -23,7 +23,11 @@ class Portal extends React.Component {
     container: PropTypes.oneOfType([
       componentOrElement,
       PropTypes.func
-    ])
+    ]),
+    /**
+     * a callback to call when the overlay has rendered
+     */
+    onOverlayRendered: PropTypes.func
   };
 
   componentDidMount() {
@@ -76,13 +80,14 @@ class Portal extends React.Component {
     if (overlay !== null) {
       this._mountOverlayTarget();
       this._overlayInstance = ReactDOM.unstable_renderSubtreeIntoContainer(
-        this, overlay, this._overlayTarget
+        this, overlay, this._overlayTarget, this.props.onOverlayRendered
       );
     } else {
       // Unrender if the component is null for transitions to null
       this._unrenderOverlay();
       this._unmountOverlayTarget();
     }
+
   }
 
   _unrenderOverlay = () => {
