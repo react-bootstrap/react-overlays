@@ -14,6 +14,8 @@ export function shouldWarn(about) {
  */
 export function render(element, mountPoint){
   let mount = mountPoint || document.createElement('div');
+
+  // eslint-disable-next-line react/no-render-return-value
   let instance = ReactDOM.render(element, mount);
 
   if (!instance.renderWithProps) {

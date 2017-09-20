@@ -1,9 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import elementType from 'prop-types-extra/lib/elementType';
+import React from 'react';
+
 import Portal from './Portal';
 import Position from './Position';
 import RootCloseWrapper from './RootCloseWrapper';
-import elementType from 'react-prop-types/lib/elementType';
 
 /**
  * Built on top of `<Position/>` and `<Portal/>`, the overlay component is great for custom tooltip overlays.
@@ -63,7 +64,7 @@ class Overlay extends React.Component {
       child = (
         <Transition
           in={props.show}
-          transitionAppear
+          appear
           onExit={onExit}
           onExiting={onExiting}
           onExited={this.onHiddenListener}
@@ -132,7 +133,8 @@ Overlay.propTypes = {
   },
 
   /**
-   * A `<Transition/>` component used to animate the overlay changes visibility.
+   * A `react-transition-group@2.0.0` `<Transition/>` component
+   * used to animate the overlay as it changes visibility.
    */
   transition: elementType,
 

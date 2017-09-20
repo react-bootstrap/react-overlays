@@ -1,12 +1,11 @@
 import jQuery from 'jquery';
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
+import ReactTestUtils from 'react-dom/test-utils';
+import Transition from 'react-transition-group/Transition';
 import simulant from 'simulant';
 
 import Modal from '../src/Modal';
-
-import Transition from '../src/Transition';
 
 import { render, shouldWarn } from './helpers';
 
@@ -155,7 +154,7 @@ describe('Modal', function () {
 
     let backdrop = instance.backdrop;
 
-    simulant.fire(backdrop, 'keyup', { keyCode: 27 });
+    simulant.fire(backdrop, 'keydown', { key: 'Escape' });
   });
 
 
@@ -238,9 +237,7 @@ describe('Modal', function () {
 
     let instance = render(
       <Modal show
-        transition={Transition}
-        dialogTransitionTimeout={0}
-        backdropTransitionTimeout={0}
+        transition={p => <Transition {...p} timeout={0}/> }
         onExit={increment}
         onExiting={increment}
         onExited={()=> {
@@ -282,6 +279,38 @@ describe('Modal', function () {
     instance.renderWithProps({ show: true });
 
     expect(onShowSpy).to.have.been.calledOnce;
+  });
+
+  it('Should fire onEscapeKeyDown callback on escape close', function () {
+    let onEscapeSpy = sinon.spy();
+    let instance = render(
+      <Modal onEscapeKeyDown={onEscapeSpy}>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    instance.renderWithProps({ show: true });
+
+    simulant.fire(instance.backdrop, 'keydown', { key: 'Escape' });
+
+    expect(onEscapeSpy).to.have.been.calledOnce;
+  });
+
+  it('Should fire onEscapeKeyUp callback on escape close keyDown', function () {
+    shouldWarn('Please use onEscapeKeyDown instead for consistency');
+
+    let onEscapeSpy = sinon.spy();
+    let instance = render(
+      <Modal onEscapeKeyUp={onEscapeSpy}>
+        <strong>Message</strong>
+      </Modal>
+    , mountPoint);
+
+    instance.renderWithProps({ show: true });
+
+    simulant.fire(instance.backdrop, 'keyup', { key: 'Escape' });
+
+    expect(onEscapeSpy).to.have.been.calledOnce;
   });
 
   it('Should accept role on the Modal', function () {

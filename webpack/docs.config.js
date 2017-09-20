@@ -1,34 +1,37 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-
-  entry: path.join(__dirname, '../examples/App.js'),
+  entry: path.resolve(__dirname, '../examples/App.js'),
 
   output: {
-    path: path.join(__dirname, '../examples/'),
-    filename: 'static/bundle.js',
-    publicPath: '/static/'
+    path: path.resolve(__dirname, '../examples/static'),
+    filename: 'bundle.js',
+    publicPath: '/static/',
+  },
+
+  module: {
+    rules: [
+      { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
+      {
+        test: /\.less$/,
+        exclude: /node_modules/,
+        loader: ['style-loader', 'css-loader', 'less-loader'],
+      },
+    ],
   },
 
   resolve: {
     alias: {
-      'react-overlays': path.join(__dirname, '..', 'src')
+      'react-overlays': path.resolve(__dirname, '../src')
     },
   },
 
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    })
+        'NODE_ENV': JSON.stringify('production'),
+      },
+    }),
   ],
-
-  module: {
-    loaders: [
-      { test: /\.less/, loader: 'style-loader!css-loader!less-loader', exclude: /node_modules/ },
-      { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ }
-    ]
-  }
 };

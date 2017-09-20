@@ -1,6 +1,6 @@
 import contains from 'dom-helpers/query/contains';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import addEventListener from './utils/addEventListener';

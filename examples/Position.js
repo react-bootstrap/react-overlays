@@ -76,8 +76,12 @@ class PositionExample extends React.Component {
 
     return (
       <div className='overlay-example'>
-        <Button bsStyle='primary' ref='target' onClick={this.toggle}>
-          I am an Position target
+        <Button
+          bsStyle='primary'
+          ref={(c) => { this.target = c; }}
+          onClick={this.toggle}
+        >
+          I am a Position target
         </Button>
         <p>
           keep clicking to see the placement change
@@ -86,7 +90,7 @@ class PositionExample extends React.Component {
         <Position
           container={this}
           placement={this.state.placement}
-          target={props => findDOMNode(this.refs.target)}
+          target={() => findDOMNode(this.target)}
         >
           <ToolTip>
             I'm placed to the: <strong>{this.state.placement}</strong>

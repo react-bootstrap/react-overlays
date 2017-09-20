@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import React, { cloneElement } from 'react';
 import PropTypes from 'prop-types';
+import componentOrElement from 'prop-types-extra/lib/componentOrElement';
+import React, { cloneElement } from 'react';
 import ReactDOM from 'react-dom';
-import componentOrElement from 'react-prop-types/lib/componentOrElement';
 
 import calculatePosition from './utils/calculatePosition';
 import getContainer from './utils/getContainer';

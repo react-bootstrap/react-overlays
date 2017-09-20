@@ -1,20 +1,22 @@
 /*eslint-disable react/prop-types */
-import React, { cloneElement } from 'react';
+
+import activeElement from 'dom-helpers/activeElement';
+import contains from 'dom-helpers/query/contains';
+import canUseDom from 'dom-helpers/util/inDOM';
 import PropTypes from 'prop-types';
+import componentOrElement from 'prop-types-extra/lib/componentOrElement';
+import deprecated from 'prop-types-extra/lib/deprecated';
+import elementType from 'prop-types-extra/lib/elementType';
+import React, { cloneElement } from 'react';
 import warning from 'warning';
-import componentOrElement from 'react-prop-types/lib/componentOrElement';
-import elementType from 'react-prop-types/lib/elementType';
 
 import Portal from './Portal';
 import ModalManager from './ModalManager';
 
-import ownerDocument from './utils/ownerDocument';
 import addEventListener from './utils/addEventListener';
 import addFocusListener from './utils/addFocusListener';
-import canUseDom from 'dom-helpers/util/inDOM';
-import activeElement from 'dom-helpers/activeElement';
-import contains from 'dom-helpers/query/contains';
 import getContainer from './utils/getContainer';
+import ownerDocument from './utils/ownerDocument';
 
 let modalManager = new ModalManager();
 
@@ -93,7 +95,17 @@ class Modal extends React.Component {
     /**
      * A callback fired when the escape key, if specified in `keyboard`, is pressed.
      */
-    onEscapeKeyUp: PropTypes.func,
+    onEscapeKeyDown: PropTypes.func,
+
+    /**
+     * Support for this function will be deprecated. Please use `onEscapeKeyDown` instead
+     * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+     * @deprecated
+     */
+    onEscapeKeyUp: deprecated(
+      PropTypes.func,
+      'Please use onEscapeKeyDown instead for consistency'
+    ),
 
     /**
      * A callback fired when the backdrop, if specified, is clicked.
@@ -122,25 +134,16 @@ class Modal extends React.Component {
     keyboard: PropTypes.bool,
 
     /**
-     * A `<Transition/>` component to use for the dialog and backdrop components.
+     * A `react-transition-group@2.0.0` `<Transition/>` component used
+     * to control animations for the dialog component.
      */
     transition: elementType,
 
     /**
-     * The `timeout` of the dialog transition if specified. This number is used to ensure that
-     * transition callbacks are always fired, even if browser transition events are canceled.
-     *
-     * See the Transition `timeout` prop for more infomation.
+     * A `react-transition-group@2.0.0` `<Transition/>` component used
+     * to control animations for the backdrop components.
      */
-    dialogTransitionTimeout: PropTypes.number,
-
-    /**
-     * The `timeout` of the backdrop transition if specified. This number is used to
-     * ensure that transition callbacks are always fired, even if browser transition events are canceled.
-     *
-     * See the Transition `timeout` prop for more infomation.
-     */
-    backdropTransitionTimeout: PropTypes.number,
+    backdropTransition: elementType,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and
@@ -159,7 +162,7 @@ class Modal extends React.Component {
      * accessible to assistive technologies, like screen readers.
      */
     enforceFocus: PropTypes.bool,
-    
+
     /**
      * When `true` The modal will restore focus to previously focused element once
      * modal is hidden
@@ -237,7 +240,6 @@ class Modal extends React.Component {
       children,
       transition: Transition,
       backdrop,
-      dialogTransitionTimeout,
       className,
       style,
       onExit,
@@ -267,10 +269,9 @@ class Modal extends React.Component {
     if (Transition) {
       dialog = (
         <Transition
-          transitionAppear
+          appear
           unmountOnExit
           in={show}
-          timeout={dialogTransitionTimeout}
           onExit={onExit}
           onExiting={onExiting}
           onExited={this.handleHidden}
@@ -278,7 +279,7 @@ class Modal extends React.Component {
           onEntering={onEntering}
           onEntered={onEntered}
         >
-          { dialog }
+          {dialog}
         </Transition>
       );
     }
@@ -295,8 +296,8 @@ class Modal extends React.Component {
           style={style}
           className={className}
         >
-          { backdrop && this.renderBackdrop() }
-          { dialog }
+          {backdrop && this.renderBackdrop()}
+          {dialog}
         </div>
       </Portal>
     );
@@ -307,8 +308,7 @@ class Modal extends React.Component {
       backdropStyle,
       backdropClassName,
       renderBackdrop,
-      transition: Transition,
-      backdropTransitionTimeout } = this.props;
+      backdropTransition: Transition } = this.props;
 
     const backdropRef = ref => this.backdrop = ref;
 
@@ -321,9 +321,9 @@ class Modal extends React.Component {
 
     if (Transition) {
       backdrop = (
-        <Transition transitionAppear
+        <Transition
+          appear
           in={this.props.show}
-          timeout={backdropTransitionTimeout}
         >
           {backdrop}
         </Transition>
@@ -369,7 +369,7 @@ class Modal extends React.Component {
 
   componentWillUnmount() {
     let { show, transition } = this.props;
-    
+
     this._isMounted = false;
 
     if (show || (transition && !this.state.exited)) {
@@ -382,6 +382,9 @@ class Modal extends React.Component {
     let container = getContainer(this.props.container, doc.body);
 
     this.props.manager.add(this, container, this.props.containerClassName);
+
+    this._onDocumentKeydownListener =
+      addEventListener(doc, 'keydown', this.handleDocumentKeyDown);
 
     this._onDocumentKeyupListener =
       addEventListener(doc, 'keyup', this.handleDocumentKeyUp);
@@ -399,6 +402,8 @@ class Modal extends React.Component {
   onHide = () => {
     this.props.manager.remove(this);
 
+    this._onDocumentKeydownListener.remove();
+
     this._onDocumentKeyupListener.remove();
 
     this._onFocusinListener.remove();
@@ -411,11 +416,11 @@ class Modal extends React.Component {
   setMountNode = (ref) => {
     this.mountNode = ref ? ref.getMountNode() : ref;
   }
-    
+
   setModalNode = (ref) => {
     this.modalNode = ref;
   }
-  
+
   handleHidden = (...args) => {
     this.setState({ exited: true });
     this.onHide();
@@ -439,12 +444,21 @@ class Modal extends React.Component {
     }
   }
 
+  handleDocumentKeyDown = (e) => {
+    if (this.props.keyboard && e.key === 'Escape' && this.isTopModal()) {
+      if (this.props.onEscapeKeyDown) {
+        this.props.onEscapeKeyDown(e);
+      }
+
+      this.props.onHide();
+    }
+  }
+
   handleDocumentKeyUp = (e) => {
-    if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
+    if (this.props.keyboard && e.key === 'Escape' && this.isTopModal()) {
       if (this.props.onEscapeKeyUp) {
         this.props.onEscapeKeyUp(e);
       }
-      this.props.onHide();
     }
   }
 
