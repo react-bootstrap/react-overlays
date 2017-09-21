@@ -82,6 +82,10 @@ export default function calculatePosition(
     getOffset(target) : getPosition(target, container);
 
   const overlaySize = getOffset(overlayNode);
+  const style = window.getComputedStyle(overlayNode);
+  overlaySize.width += (parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)) || 0;
+  overlaySize.height +=  (parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10)) || 0;
+
   const {placement, crossPlacement, axis, crossAxis, size, crossSize} =
     parsePlacement(placementInput);
 
