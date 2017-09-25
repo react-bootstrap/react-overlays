@@ -61,11 +61,10 @@ export default function calculatePosition(
   const childOffset = container.tagName === 'BODY' ?
     getOffset(target) : getPosition(target, container);
   const targetStyle = window.getComputedStyle(target)
-  if (insideMargin) {
+  if (!insideMargin) {
     // apply margin offsets to top/left values for childOffset
-    childOffset.top += parseInt(targetStyle.marginTop, 10) || 0;
-    childOffset.left += parseInt(targetStyle.marginLeft, 10) || 0;
-  } else {
+    childOffset.top -= parseInt(targetStyle.marginTop, 10) || 0;
+    childOffset.left -= parseInt(targetStyle.marginLeft, 10) || 0;
     // expand the bounds of our target to include its margins
     childOffset.width += (parseInt(targetStyle.marginLeft, 10) + parseInt(targetStyle.marginRight, 10)) || 0;
     childOffset.height +=  (parseInt(targetStyle.marginTop, 10) + parseInt(targetStyle.marginBottom, 10)) || 0;
