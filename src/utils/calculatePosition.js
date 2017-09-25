@@ -56,14 +56,12 @@ function getLeftDelta(left, overlayWidth, container, padding) {
 }
 
 export default function calculatePosition(
-  placement, overlayNode, target, container, padding, insideMargin, legacy
+  placement, overlayNode, target, container, padding, insideMargin
 ) {
   const childOffset = container.tagName === 'BODY' ?
     getOffset(target) : getPosition(target, container);
   const targetStyle = window.getComputedStyle(target)
-  if (legacy) {
-    // do nothing
-  } else if (insideMargin) {
+  if (insideMargin) {
     // apply margin offsets to top/left values for childOffset
     childOffset.top += parseInt(targetStyle.marginTop, 10) || 0;
     childOffset.left += parseInt(targetStyle.marginLeft, 10) || 0;

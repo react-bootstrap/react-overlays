@@ -122,8 +122,7 @@ class Position extends React.Component {
       target,
       container,
       this.props.containerPadding,
-      this.props.insideMargin,
-      this.props.legacy
+      this.props.insideMargin
     ));
   }
 }
