@@ -11,6 +11,16 @@ import { render, shouldWarn } from './helpers';
 
 const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode));
 
+
+class ErrorBoundary extends React.Component {
+  componentDidCatch(error, info) {
+    this.props.onError(error, info)
+  }
+  render() {
+    return this.props.children;
+  }
+}
+
 describe('Modal', function () {
   let mountPoint;
 
@@ -24,6 +34,7 @@ describe('Modal', function () {
     if (unmounted) {
       document.body.removeChild(mountPoint);
     }
+    mountPoint.remove()
   });
 
   it('Should render the modal content', function() {
@@ -58,14 +69,17 @@ describe('Modal', function () {
     }
 
     let instance = render(<Container />, mountPoint);
-    let modal = ReactTestUtils.findRenderedComponentWithType(instance, Modal);
-    let backdrop = modal.backdrop;
 
-    expect($(instance).css('overflow')).to.equal('hidden');
+    setTimeout(() => {
+      let modal = ReactTestUtils.findRenderedComponentWithType(instance, Modal);
+      let backdrop = modal.backdrop;
 
-    ReactTestUtils.Simulate.click(backdrop);
+      expect($(instance).css('overflow')).to.equal('hidden');
 
-    expect($(instance).css('overflow')).to.not.equal('hidden');
+      ReactTestUtils.Simulate.click(backdrop);
+
+      expect($(instance).css('overflow')).to.not.equal('hidden');
+    })
   });
 
   it('Should add and remove container classes', function() {
@@ -159,7 +173,6 @@ describe('Modal', function () {
 
 
   it('Should set backdrop Style', function () {
-
     let instance = render(
       <Modal show className='mymodal' backdrop backdropStyle={{ borderWidth: '3px' }}>
         <strong>Message</strong>
@@ -171,15 +184,20 @@ describe('Modal', function () {
       backdrop.style.borderWidth).to.equal('3px');
   });
 
-  it('Should throw with multiple children', function () {
-    expect(function(){
-      render(
+  xit('Should throw with multiple children', function () {
+    render(
+      <ErrorBoundary
+        onError={err => {
+          console.log('hiii')
+          expect(err.message).to.match(/React.Children.only expected to receive a single React element child./)
+        }}
+      >
         <Modal show>
           <strong>Message</strong>
           <strong>Message</strong>
         </Modal>
-      , mountPoint);
-    }).to.throw(/React.Children.only expected to receive a single React element child./);
+      </ErrorBoundary>
+    , mountPoint);
   });
 
   it('Should add role to child', function () {
@@ -353,8 +371,7 @@ describe('Modal', function () {
     });
 
     it('Should focus on the Modal when it is opened', function () {
-
-      document.activeElement.should.equal(focusableContainer);
+      expect(document.activeElement).to.equal(focusableContainer);
 
       let instance = render(
         <Modal show>
@@ -366,7 +383,7 @@ describe('Modal', function () {
 
       instance.renderWithProps({ show: false });
 
-      document.activeElement.should.equal(focusableContainer);
+      expect(document.activeElement).to.equal(focusableContainer);
     });
 
 
@@ -377,12 +394,12 @@ describe('Modal', function () {
         </Modal>
         , focusableContainer);
 
-      document.activeElement.should.equal(focusableContainer);
+      expect(document.activeElement).to.equal(focusableContainer);
     });
 
     it('Should not focus Modal when child has focus', function () {
 
-      document.activeElement.should.equal(focusableContainer);
+      expect(document.activeElement).to.equal(focusableContainer);
 
       render(
         <Modal show>
@@ -394,15 +411,15 @@ describe('Modal', function () {
 
       let input = document.getElementsByTagName('input')[0];
 
-      document.activeElement.should.equal(input);
+      expect(document.activeElement).to.equal(input);
     });
 
     it('Should return focus to the modal', () => {
-      document.activeElement.should.equal(focusableContainer);
+      expect(document.activeElement).to.equal(focusableContainer);
 
       render(
         <Modal show>
-          <div className='modal'>
+          <div className='modal'>q
             <input autoFocus/>
           </div>
         </Modal>

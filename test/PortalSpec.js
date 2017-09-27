@@ -26,12 +26,6 @@ describe('Portal', function () {
     }
   }
 
-  afterEach(function() {
-    if (instance && ReactTestUtils.isCompositeComponent(instance) && instance._isMounted) {
-      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
-    }
-  });
-
   it('Should render overlay into container (DOMNode)', function() {
     let container = document.createElement('div');
 
@@ -76,29 +70,8 @@ describe('Portal', function () {
     assert.equal(instance.overlay.getOverlayDOMNode(), null);
   });
 
-  it('Should render only an overlay', function() {
-    class OnlyOverlay extends React.Component {
-      render() {
-        return (
-          <Portal
-            ref={(c) => { this.portal = c; }}
-            {...this.props}
-          >
-            {this.props.overlay}
-          </Portal>
-        );
-      }
-    }
-
-    let overlayInstance = ReactTestUtils.renderIntoDocument(
-      <OnlyOverlay overlay={<div id="test1" />} />
-    );
-
-    assert.equal(overlayInstance.portal.getOverlayDOMNode().nodeName, 'DIV');
-  });
 
   it('Should change container on prop change', function() {
-
     class ContainerTest extends React.Component {
       state = {};
       render() {
