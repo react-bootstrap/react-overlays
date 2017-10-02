@@ -12,15 +12,6 @@ import { render, shouldWarn } from './helpers';
 const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode));
 
 
-class ErrorBoundary extends React.Component {
-  componentDidCatch(error, info) {
-    this.props.onError(error, info)
-  }
-  render() {
-    return this.props.children;
-  }
-}
-
 describe('Modal', function () {
   let mountPoint;
 
@@ -185,19 +176,14 @@ describe('Modal', function () {
   });
 
   xit('Should throw with multiple children', function () {
-    render(
-      <ErrorBoundary
-        onError={err => {
-          console.log('hiii')
-          expect(err.message).to.match(/React.Children.only expected to receive a single React element child./)
-        }}
-      >
+    expect(function(){
+      render(
         <Modal show>
           <strong>Message</strong>
           <strong>Message</strong>
         </Modal>
-      </ErrorBoundary>
-    , mountPoint);
+      , mountPoint);
+    }).to.throw(/React.Children.only expected to receive a single React element child./);
   });
 
   it('Should add role to child', function () {
@@ -419,7 +405,7 @@ describe('Modal', function () {
 
       render(
         <Modal show>
-          <div className='modal'>q
+          <div className='modal'>
             <input autoFocus/>
           </div>
         </Modal>
