@@ -23,7 +23,9 @@ class Portal extends React.Component {
     container: PropTypes.oneOfType([
       componentOrElement,
       PropTypes.func
-    ])
+    ]),
+
+    onRendered: PropTypes.func,
   };
 
   componentDidMount() {
@@ -67,7 +69,6 @@ class Portal extends React.Component {
   }
 
   _renderOverlay = () => {
-
     let overlay = !this.props.children
       ? null
       : React.Children.only(this.props.children);
@@ -78,6 +79,10 @@ class Portal extends React.Component {
       ReactDOM.unstable_renderSubtreeIntoContainer(
         this, overlay, this._overlayTarget, (inst) => {
           this._overlayInstance = inst
+
+          if (this.props.onRendered) {
+            this.props.onRendered()
+          }
         }
       );
     } else {

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import getContainer from './utils/getContainer';
 import ownerDocument from './utils/ownerDocument';
-
+import LegacyPortal from './LegacyPortal'
 /**
  * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
  * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
@@ -72,4 +72,4 @@ class Portal extends React.Component {
   }
 }
 
-export default Portal;
+export default ReactDOM.createPortal ? Portal : LegacyPortal;
