@@ -1,3 +1,12 @@
+## [v0.7.2]
+> 2017-10-06
+
+- **Bugfix:** Fix detecting escape keyboard event on IE ([#211])
+
+[v0.7.2]: https://github.com/react-bootstrap/react-overlays/compare/v0.7.1...v0.7.2
+[#211]: https://github.com/react-bootstrap/react-overlays/pull/211
+
+
 ## [v0.7.1]
 > 2017-09-25
 
