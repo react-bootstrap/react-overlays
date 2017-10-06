@@ -154,7 +154,7 @@ describe('Modal', function () {
 
     let backdrop = instance.backdrop;
 
-    simulant.fire(backdrop, 'keydown', { key: 'Escape' });
+    simulant.fire(backdrop, 'keydown', { keyCode: 27 });
   });
 
 
@@ -293,7 +293,7 @@ describe('Modal', function () {
 
     instance.renderWithProps({ show: true });
 
-    simulant.fire(instance.backdrop, 'keydown', { key: 'Escape' });
+    simulant.fire(instance.backdrop, 'keydown', { keyCode: 27 });
 
     expect(onEscapeSpy).to.have.been.calledOnce;
   });
@@ -310,7 +310,7 @@ describe('Modal', function () {
 
     instance.renderWithProps({ show: true });
 
-    simulant.fire(instance.backdrop, 'keyup', { key: 'Escape' });
+    simulant.fire(instance.backdrop, 'keyup', { keyCode: 27 });
 
     expect(onEscapeSpy).to.have.been.calledOnce;
   });
