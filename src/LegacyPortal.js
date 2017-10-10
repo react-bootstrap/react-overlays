@@ -78,10 +78,10 @@ class Portal extends React.Component {
       this._mountOverlayTarget();
       ReactDOM.unstable_renderSubtreeIntoContainer(
         this, overlay, this._overlayTarget, (inst) => {
-          this._overlayInstance = inst
+          this._overlayInstance = inst;
 
           if (this.props.onRendered) {
-            this.props.onRendered()
+            this.props.onRendered();
           }
         }
       );
