@@ -299,6 +299,7 @@ class Modal extends React.Component {
       <Portal
         ref={this.setMountNode}
         container={container}
+        onRendered={this.onPortalRendered}
       >
         <div
           ref={this.setModalNode}
@@ -389,6 +390,14 @@ class Modal extends React.Component {
     }
   }
 
+  onPortalRendered = () => {
+    this.focus();
+
+    if (this.props.onShow) {
+      this.props.onShow();
+    }
+  }
+
   onShow = () => {
     let doc = ownerDocument(this);
     let container = getContainer(this.props.container, doc.body);
@@ -403,12 +412,6 @@ class Modal extends React.Component {
 
     this._onFocusinListener =
       addFocusListener(this.enforceFocus);
-
-   this.focus();
-
-   if (this.props.onShow) {
-     this.props.onShow();
-   }
   }
 
   onHide = () => {
@@ -484,7 +487,7 @@ class Modal extends React.Component {
     let autoFocus = this.props.autoFocus;
     let modalContent = this.getDialogElement();
     let current = activeElement(ownerDocument(this));
-    let focusInModal = current && contains(modalContent, current);
+    let focusInModal = modalContent && current && contains(modalContent, current);
 
     if (modalContent && autoFocus && !focusInModal) {
       this.lastFocus = current;

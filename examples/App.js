@@ -63,8 +63,8 @@ class ExampleEditor extends React.Component {
         lang="js"
         theme="neo"
         scope={scope}
-        codeText={this.props.codeText}
-        collapsableCode
+        code={this.props.codeText}
+        collapsable
         babelConfig={{
           presets: ['es2015-loose', 'react', 'stage-0']
         }}
