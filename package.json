@@ -58,6 +58,8 @@
     "component-metadata-loader": "^3.0.1",
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-16": "^1.0.1",
     "eslint": "^3.19.0",
     "eslint-plugin-mocha": "^4.9.0",
     "eslint-plugin-react": "^7.0.1",
@@ -79,13 +81,13 @@
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.3",
     "react-dom": "^16.0.0",
+    "react-test-renderer": "^16.0.0",
     "release-script": "^1.0.2",
     "rimraf": "^2.6.1",
     "simulant": "^0.2.2",
     "sinon": "^2.3.2",
     "sinon-chai": "^2.10.0",
     "style-loader": "^0.18.2",
-    "teaspoon": "^6.5.0",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
   }

@@ -2,6 +2,10 @@ import 'babel-polyfill';
 
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
+import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() })
 
 chai.should();
 chai.use(sinonChai);
