@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import Portal from '../src/Portal';
+import Portal from '../src/LegacyPortal';
 
-describe('Portal', function () {
+describe('LegacyPortal', function () {
   let instance;
 
   class Overlay extends React.Component {

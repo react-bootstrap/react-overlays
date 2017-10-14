@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 
 import getContainer from './utils/getContainer';
 import ownerDocument from './utils/ownerDocument';
+import LegacyPortal from './LegacyPortal'
+
 
 /**
  * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
@@ -23,81 +25,40 @@ class Portal extends React.Component {
     container: PropTypes.oneOfType([
       componentOrElement,
       PropTypes.func
-    ])
+    ]),
+
+    onRendered: PropTypes.func,
   };
 
   componentDidMount() {
     this._isMounted = true;
-    this._renderOverlay();
-  }
-
-  componentDidUpdate() {
-    this._renderOverlay();
+    this.setContainer()
+    this.forceUpdate(this.props.onRendered)
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this._overlayTarget && nextProps.container !== this.props.container) {
-      this._portalContainerNode.removeChild(this._overlayTarget);
-      this._portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
-      this._portalContainerNode.appendChild(this._overlayTarget);
+    if (nextProps.container !== this.props.container) {
+      this.setContainer(nextProps)
     }
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-    this._unrenderOverlay();
-    this._unmountOverlayTarget();
-  }
-
-
-  _mountOverlayTarget = () => {
-    if (!this._overlayTarget) {
-      this._overlayTarget = document.createElement('div');
-      this._portalContainerNode = getContainer(this.props.container, ownerDocument(this).body);
-      this._portalContainerNode.appendChild(this._overlayTarget);
-    }
-  }
-
-  _unmountOverlayTarget = () => {
-    if (this._overlayTarget) {
-      this._portalContainerNode.removeChild(this._overlayTarget);
-      this._overlayTarget = null;
-    }
     this._portalContainerNode = null;
   }
 
-  _renderOverlay = () => {
-
-    let overlay = !this.props.children
-      ? null
-      : React.Children.only(this.props.children);
-
-    // Save reference for future access.
-    if (overlay !== null) {
-      this._mountOverlayTarget();
-      this._overlayInstance = ReactDOM.unstable_renderSubtreeIntoContainer(
-        this, overlay, this._overlayTarget
-      );
-    } else {
-      // Unrender if the component is null for transitions to null
-      this._unrenderOverlay();
-      this._unmountOverlayTarget();
-    }
-  }
-
-  _unrenderOverlay = () => {
-    if (this._overlayTarget) {
-      ReactDOM.unmountComponentAtNode(this._overlayTarget);
-      this._overlayInstance = null;
-    }
+  setContainer = (props = this.props) => {
+    this._portalContainerNode = getContainer(props.container, ownerDocument(this).body);
   }
 
   render() {
-    return null;
+    return this.props.children && this._portalContainerNode ?
+      ReactDOM.createPortal(this.props.children, this._portalContainerNode) :
+      null;
   }
 
   getMountNode = () => {
-    return this._overlayTarget;
+    return this._portalContainerNode;
   }
 
   getOverlayDOMNode = () => {
@@ -111,7 +72,6 @@ class Portal extends React.Component {
 
     return null;
   }
-
 }
 
-export default Portal;
+export default ReactDOM.createPortal ? Portal : LegacyPortal;

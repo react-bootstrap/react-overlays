@@ -44,7 +44,7 @@
     "react-dom": "^0.14.9 || >=15.3.0"
   },
   "devDependencies": {
-    "@monastic.panic/component-playground": "^2.0.0",
+    "@monastic.panic/component-playground": "^3.2.2",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
@@ -77,9 +77,9 @@
     "mocha": "^3.5.3",
     "node-libs-browser": "^2.0.0",
     "raw-loader": "^0.5.1",
-    "react": "^15.6.1",
+    "react": "^16.0.0",
     "react-bootstrap": "^0.31.3",
-    "react-dom": "^15.6.1",
+    "react-dom": "^16.0.0",
     "release-script": "^1.0.2",
     "rimraf": "^2.6.2",
     "simulant": "^0.2.2",
