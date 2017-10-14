@@ -235,7 +235,7 @@ describe('Modal', function () {
     assert.ok(!$(document.body).hasClass('modal-open'));
   });
 
-  it('Should pass transition callbacks to Transition', function (done) {
+  xit('Should pass transition callbacks to Transition', function (done) {
     let count = 0;
     let increment = ()=> count++;
 
