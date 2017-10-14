@@ -20,6 +20,7 @@ describe('Position', function () {
     assert.equal(ReactDOM.findDOMNode(instance).nodeName, 'SPAN');
   });
 
+  // FIXME
   xit('Should warn about several children', function () {
     expect(() => {
       ReactTestUtils.renderIntoDocument(
