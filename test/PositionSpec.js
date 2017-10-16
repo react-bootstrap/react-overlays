@@ -7,6 +7,17 @@ import Position from '../src/Position';
 
 import { render } from './helpers';
 
+class ErrorBoundary extends React.Component {
+  // React >= 16
+  componentDidCatch(error, info) {
+    this.props.onError(error, info);
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
+
 describe('Position', function () {
   // Swallow extra props.
   const Span = () => <span />;
@@ -20,16 +31,20 @@ describe('Position', function () {
     assert.equal(ReactDOM.findDOMNode(instance).nodeName, 'SPAN');
   });
 
-  // FIXME
-  xit('Should warn about several children', function () {
-    expect(() => {
-      ReactTestUtils.renderIntoDocument(
+  it('Should warn about several children', function (done) {
+    ReactTestUtils.renderIntoDocument(
+      <ErrorBoundary
+        onError={err => {
+          expect(err.message).to.match(/React.Children.only expected to receive a single React element child./);
+          done();
+        }}
+      >
         <Position>
           <Span>Text</Span>
           <Span>Another Text</Span>
         </Position>
-      );
-    }).to.throw(/React.Children.only expected to receive a single React element child./);
+      </ErrorBoundary>
+    );
   });
 
   describe('position recalculation', function () {
