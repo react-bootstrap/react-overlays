@@ -39,12 +39,16 @@ describe('Modal', function () {
     expect(instance.modalNode.querySelectorAll('strong').length).to.equal(1);
   });
 
-  it('Should disable scrolling on the modal container while open', function() {
+  it('Should disable scrolling on the modal container while open', (done) => {
     class Container extends React.Component {
-      state = { modalOpen: true };
+      state = {
+        modalOpen: true,
+      };
+
       handleCloseModal = () => {
         this.setState({ modalOpen: false });
-      }
+      };
+
       render() {
         return (
           <div>
@@ -71,6 +75,8 @@ describe('Modal', function () {
       ReactTestUtils.Simulate.click(backdrop);
 
       expect($(instance).css('overflow')).to.not.equal('hidden');
+
+      done();
     })
   });
 
