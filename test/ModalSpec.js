@@ -1,6 +1,7 @@
 import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import ReactTestUtils from 'react-dom/test-utils';
 import Transition from 'react-transition-group/Transition';
 import simulant from 'simulant';
@@ -175,14 +176,13 @@ describe('Modal', function () {
       backdrop.style.borderWidth).to.equal('3px');
   });
 
-  xit('Should throw with multiple children', function () {
+  it('Should throw with multiple children', function () {
     expect(function(){
-      render(
+      ReactDOMServer.renderToString(
         <Modal show>
           <strong>Message</strong>
           <strong>Message</strong>
-        </Modal>
-      , mountPoint);
+        </Modal>);
     }).to.throw(/React.Children.only expected to receive a single React element child./);
   });
 
