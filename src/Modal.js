@@ -252,7 +252,7 @@ class Modal extends React.Component {
     } = this.props;
 
     let dialog = React.Children.only(children);
-    const filteredProps = this.omitProps(this.props, Modal.propTypes)
+    const filteredProps = this.omitProps(this.props, Modal.propTypes);
 
     const mountModal = show || (Transition && !this.state.exited);
     if (!mountModal) {
@@ -383,7 +383,7 @@ class Modal extends React.Component {
   }
 
   onPortalRendered = () => {
-    this.focus();
+    this.autoFocus();
 
     if (this.props.onShow) {
       this.props.onShow();
@@ -479,7 +479,7 @@ class Modal extends React.Component {
     }
   };
 
-  focus = () => {
+  autoFocus() {
     if (!this.props.autoFocus) {
       return;
     }
@@ -503,15 +503,15 @@ class Modal extends React.Component {
 
       dialogElement.focus();
     }
-  };
+  }
 
-  restoreLastFocus = () => {
+  restoreLastFocus() {
     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
     if (this.lastFocus && this.lastFocus.focus) {
       this.lastFocus.focus();
       this.lastFocus = null;
     }
-  };
+  }
 
   enforceFocus = () => {
     if (
@@ -534,7 +534,7 @@ class Modal extends React.Component {
     return ReactDOM.findDOMNode(this.dialog);
   }
 
-  isTopModal = () => {
+  isTopModal() {
     return this.props.manager.isTopModal(this);
   }
 }

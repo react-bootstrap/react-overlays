@@ -419,7 +419,6 @@ describe('<Modal>', () => {
         </Modal>
         , focusableContainer);
 
-
       focusableContainer.focus();
 
       document.activeElement.className.should.contain('modal');
