@@ -4,7 +4,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 
 import Portal from '../src/LegacyPortal';
 
-describe('LegacyPortal', function () {
+describe('LegacyPortal', () => {
   let instance;
 
   class Overlay extends React.Component {
@@ -26,7 +26,7 @@ describe('LegacyPortal', function () {
     }
   }
 
-  it('Should render overlay into container (DOMNode)', function() {
+  it('should render overlay into container (DOMNode)', () => {
     let container = document.createElement('div');
 
     instance = ReactTestUtils.renderIntoDocument(
@@ -36,7 +36,7 @@ describe('LegacyPortal', function () {
     assert.equal(container.querySelectorAll('#test1').length, 1);
   });
 
-  it('Should render overlay into container (ReactComponent)', function() {
+  it('should render overlay into container (ReactComponent)', () => {
     class Container extends React.Component {
       render() {
         return <Overlay container={this} overlay={<div id="test1" />} />;
@@ -50,7 +50,7 @@ describe('LegacyPortal', function () {
     assert.equal(ReactDOM.findDOMNode(instance).querySelectorAll('#test1').length, 1);
   });
 
-  it('Should not render a null overlay', function() {
+  it('should not render a null overlay', () => {
     class Container extends React.Component {
       render() {
         return (
@@ -71,7 +71,7 @@ describe('LegacyPortal', function () {
   });
 
 
-  it('Should change container on prop change', function() {
+  it('should change container on prop change', () => {
     class ContainerTest extends React.Component {
       state = {};
       render() {
@@ -103,7 +103,7 @@ describe('LegacyPortal', function () {
     );
   });
 
-  it('Should unmount when parent unmounts', function() {
+  it('should unmount when parent unmounts', () => {
     class Parent extends React.Component {
       state = {show: true};
       render() {
@@ -134,5 +134,4 @@ describe('LegacyPortal', function () {
 
     instance.setState({show: false});
   });
-
 });
