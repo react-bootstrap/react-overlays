@@ -5,8 +5,6 @@ import ReactTestUtils from 'react-dom/test-utils';
 import Portal from '../src/LegacyPortal';
 
 describe('LegacyPortal', () => {
-  let instance;
-
   class Overlay extends React.Component {
     render() {
       return (
@@ -20,16 +18,12 @@ describe('LegacyPortal', () => {
         </div>
       );
     }
-
-    getOverlayDOMNode = () => {
-      return this.portal.getOverlayDOMNode();
-    }
   }
 
   it('should render overlay into container (DOMNode)', () => {
-    let container = document.createElement('div');
+    const container = document.createElement('div');
 
-    instance = ReactTestUtils.renderIntoDocument(
+    ReactTestUtils.renderIntoDocument(
       <Overlay container={container} overlay={<div id="test1" />} />
     );
 
@@ -43,11 +37,13 @@ describe('LegacyPortal', () => {
       }
     }
 
-    instance = ReactTestUtils.renderIntoDocument(
+    const instance = ReactTestUtils.renderIntoDocument(
       <Container />
     );
 
-    assert.equal(ReactDOM.findDOMNode(instance).querySelectorAll('#test1').length, 1);
+    expect(
+      ReactDOM.findDOMNode(instance).querySelectorAll('#test1')
+    ).to.have.lengthOf(1)
   });
 
   it('should not render a null overlay', () => {
@@ -63,11 +59,11 @@ describe('LegacyPortal', () => {
       }
     }
 
-    instance = ReactTestUtils.renderIntoDocument(
+    const instance = ReactTestUtils.renderIntoDocument(
       <Container />
     );
 
-    assert.equal(instance.overlay.getOverlayDOMNode(), null);
+    expect(ReactDOM.findDOMNode(instance).childNodes).to.be.empty;
   });
 
 
@@ -90,7 +86,7 @@ describe('LegacyPortal', () => {
       }
     }
 
-    let overlayInstance = ReactTestUtils.renderIntoDocument(
+    const overlayInstance = ReactTestUtils.renderIntoDocument(
       <ContainerTest overlay={<div id="test1" />} />
     );
 
@@ -128,7 +124,7 @@ describe('LegacyPortal', () => {
       }
     }
 
-    instance = ReactTestUtils.renderIntoDocument(
+    const instance = ReactTestUtils.renderIntoDocument(
       <Parent />
     );
 

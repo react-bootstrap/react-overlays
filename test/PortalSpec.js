@@ -4,9 +4,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 
 import Portal from '../src/Portal';
 
-describe('Portal', function () {
-  let instance;
-
+describe('Portal', () => {
   class Overlay extends React.Component {
     render() {
       return (
@@ -20,37 +18,35 @@ describe('Portal', function () {
         </div>
       );
     }
-
-    getOverlayDOMNode = () => {
-      return this.portal.getOverlayDOMNode();
-    }
   }
 
-  it('Should render overlay into container (DOMNode)', function() {
-    let container = document.createElement('div');
+  it('should render overlay into container (DOMNode)', () => {
+    const container = document.createElement('div');
 
-    instance = ReactTestUtils.renderIntoDocument(
+    ReactTestUtils.renderIntoDocument(
       <Overlay container={container} overlay={<div id="test1" />} />
     );
 
     assert.equal(container.querySelectorAll('#test1').length, 1);
   });
 
-  it('Should render overlay into container (ReactComponent)', function() {
+  it('should render overlay into container (ReactComponent)', () => {
     class Container extends React.Component {
       render() {
         return <Overlay container={this} overlay={<div id="test1" />} />;
       }
     }
 
-    instance = ReactTestUtils.renderIntoDocument(
+    const instance = ReactTestUtils.renderIntoDocument(
       <Container />
     );
 
-    assert.equal(ReactDOM.findDOMNode(instance).querySelectorAll('#test1').length, 1);
+    expect(
+      ReactDOM.findDOMNode(instance).querySelectorAll('#test1')
+    ).to.have.lengthOf(1)
   });
 
-  it('Should not render a null overlay', function() {
+  it('should not fail to render a null overlay', () => {
     class Container extends React.Component {
       render() {
         return (
@@ -63,15 +59,14 @@ describe('Portal', function () {
       }
     }
 
-    instance = ReactTestUtils.renderIntoDocument(
+    const instance = ReactTestUtils.renderIntoDocument(
       <Container />
     );
 
-    assert.equal(instance.overlay.getOverlayDOMNode(), null);
+    expect(ReactDOM.findDOMNode(instance).childNodes).to.be.empty;
   });
 
-
-  it('Should change container on prop change', function() {
+  it('should change container on prop change', () => {
     class ContainerTest extends React.Component {
       state = {};
       render() {
@@ -90,12 +85,12 @@ describe('Portal', function () {
       }
     }
 
-    let overlayInstance = ReactTestUtils.renderIntoDocument(
-      <ContainerTest overlay={<div id="test1" />} />
+    const overlayInstance = ReactTestUtils.renderIntoDocument(
+      <ContainerTest overlay={<div id="test1" />} />,
     );
 
     assert.equal(overlayInstance.portal._portalContainerNode.nodeName, 'BODY');
-    overlayInstance.setState({container: overlayInstance.container})
+    overlayInstance.setState({container: overlayInstance.container});
     assert.equal(overlayInstance.portal._portalContainerNode.nodeName, 'DIV');
 
     ReactDOM.unmountComponentAtNode(
@@ -103,7 +98,7 @@ describe('Portal', function () {
     );
   });
 
-  it('Should unmount when parent unmounts', function() {
+  it('should unmount when parent unmounts', () => {
     class Parent extends React.Component {
       state = {show: true};
       render() {
@@ -128,7 +123,7 @@ describe('Portal', function () {
       }
     }
 
-    instance = ReactTestUtils.renderIntoDocument(
+    const instance = ReactTestUtils.renderIntoDocument(
       <Parent />
     );
 
