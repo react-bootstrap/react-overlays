@@ -12,7 +12,6 @@ import ownerDocument from './utils/ownerDocument';
  * The children of `<Portal/>` component will be appended to the `container` specified.
  */
 class Portal extends React.Component {
-
   static displayName = 'Portal';
 
   static propTypes = {
@@ -58,7 +57,7 @@ class Portal extends React.Component {
       this._portalContainerNode = getContainer(this.props.container, ownerDocument(this).body);
       this._portalContainerNode.appendChild(this._overlayTarget);
     }
-  }
+  };
 
   _unmountOverlayTarget = () => {
     if (this._overlayTarget) {
@@ -66,7 +65,7 @@ class Portal extends React.Component {
       this._overlayTarget = null;
     }
     this._portalContainerNode = null;
-  }
+  };
 
   _renderOverlay = () => {
     let overlay = !this.props.children
@@ -91,14 +90,14 @@ class Portal extends React.Component {
       this._unrenderOverlay();
       this._unmountOverlayTarget();
     }
-  }
+  };
 
   _unrenderOverlay = () => {
     if (this._overlayTarget) {
       ReactDOM.unmountComponentAtNode(this._overlayTarget);
       this._overlayInstance = null;
     }
-  }
+  };
 
   render() {
     return null;
@@ -106,20 +105,7 @@ class Portal extends React.Component {
 
   getMountNode = () => {
     return this._overlayTarget;
-  }
-
-  getOverlayDOMNode = () => {
-    if (!this._isMounted) {
-      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
-    }
-
-    if (this._overlayInstance) {
-      return ReactDOM.findDOMNode(this._overlayInstance);
-    }
-
-    return null;
-  }
-
+  };
 }
 
 export default Portal;
