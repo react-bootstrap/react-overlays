@@ -72,10 +72,12 @@ describe('<Modal>', () => {
       let backdrop = modal.backdrop;
 
       expect($(instance).css('overflow')).to.equal('hidden');
+      expect($(instance).css('position')).to.equal('fixed');
 
       ReactTestUtils.Simulate.click(backdrop);
 
       expect($(instance).css('overflow')).to.not.equal('hidden');
+      expect($(instance).css('position')).to.not.equal('fixed');
 
       done();
     })

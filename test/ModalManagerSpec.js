@@ -37,6 +37,7 @@ describe('ModalManager', ()=> {
       overflowing: false,
       style: {
         overflow: '',
+        position: '',
         paddingRight: ''
       }
     });
@@ -183,6 +184,16 @@ describe('ModalManager', ()=> {
       manager.add(modal, container);
 
       expect(container.style.overflow).to.equal('hidden');
+    });
+
+    it('should set container position to fixed ', ()=>{
+      let modal = new Modal({});
+
+      expect(container.style.position).to.equal('');
+
+      manager.add(modal, container);
+
+      expect(container.style.position).to.equal('fixed');
     });
 
     it('should respect handleContainerOverflow', ()=>{

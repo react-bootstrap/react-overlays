@@ -23,12 +23,13 @@ function findContainer(data, modal) {
 }
 
 function setContainerStyle(state, container) {
-  let style = { overflow: 'hidden' };
+  let style = { overflow: 'hidden', position: 'fixed' };
 
   // we are only interested in the actual `style` here
   // becasue we will override it
   state.style = {
     overflow: container.style.overflow,
+    position: container.style.position,
     paddingRight: container.style.paddingRight
   }
 
