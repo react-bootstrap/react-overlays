@@ -14,7 +14,6 @@ import LegacyPortal from './LegacyPortal'
  * The children of `<Portal/>` component will be appended to the `container` specified.
  */
 class Portal extends React.Component {
-
   static displayName = 'Portal';
 
   static propTypes = {
@@ -31,8 +30,7 @@ class Portal extends React.Component {
   };
 
   componentDidMount() {
-    this._isMounted = true;
-    this.setContainer()
+    this.setContainer();
     this.forceUpdate(this.props.onRendered)
   }
 
@@ -43,13 +41,14 @@ class Portal extends React.Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
     this._portalContainerNode = null;
   }
 
   setContainer = (props = this.props) => {
-    this._portalContainerNode = getContainer(props.container, ownerDocument(this).body);
-  }
+    this._portalContainerNode = getContainer(
+      props.container, ownerDocument(this).body,
+    );
+  };
 
   render() {
     return this.props.children && this._portalContainerNode ?
@@ -59,19 +58,7 @@ class Portal extends React.Component {
 
   getMountNode = () => {
     return this._portalContainerNode;
-  }
-
-  getOverlayDOMNode = () => {
-    if (!this._isMounted) {
-      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
-    }
-
-    if (this._overlayInstance) {
-      return ReactDOM.findDOMNode(this._overlayInstance);
-    }
-
-    return null;
-  }
+  };
 }
 
 export default ReactDOM.createPortal ? Portal : LegacyPortal;
