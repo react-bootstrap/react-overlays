@@ -1,3 +1,18 @@
+## [v0.8.3]
+> 2017-10-24
+
+- **Bugfix:** Support React v16 portal API ([#208])
+- **Bugfix:** Only call `onRendered` in `<LegacyPortal>` on initial render ([#218])
+- **Bugfix:** Use more robust method of getting `<Modal>` dialog element ([#220])
+- **Bugfix:** Remove broken `getOverlayDOMNode` from `<Portal>` ([#222])
+
+[v0.8.3]: https://github.com/react-bootstrap/react-overlays/compare/v0.8.2...v0.8.3
+[#208]: https://github.com/react-bootstrap/react-overlays/pull/208
+[#218]: https://github.com/react-bootstrap/react-overlays/pull/218
+[#220]: https://github.com/react-bootstrap/react-overlays/pull/220
+[#222]: https://github.com/react-bootstrap/react-overlays/pull/222
+
+
 ## [v0.8.2]
 > 2017-10-06
 
