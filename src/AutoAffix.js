@@ -33,7 +33,8 @@ const propTypes = {
 // auto-calculated offsets can apply.
 const defaultProps = {
   viewportOffsetTop: 0,
-  autoWidth: true
+  autoWidth: true,
+  offsetBottom: 0
 };
 
 /**
@@ -121,7 +122,7 @@ class AutoAffix extends React.Component {
     if (container) {
       const documentHeight = getDocumentHeight(ownerDocument(this));
       const {top, height} = getOffset(container);
-      offsetBottom = documentHeight - top - height;
+      offsetBottom = documentHeight - top - height + this.props.offsetBottom;
     } else {
       offsetBottom = null;
     }

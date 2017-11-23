@@ -38,7 +38,7 @@ describe('<AutoAffix>', () => {
         <div style={{width: 200, height: 10000}}>
           <div style={{height: 100}} />
 
-          <AutoAffix container={this} viewportOffsetTop={0}>
+          <AutoAffix container={this} viewportOffsetTop={0} {...this.props}>
             <Content style={{height: 100}} />
           </AutoAffix>
         </div>
@@ -59,9 +59,10 @@ describe('<AutoAffix>', () => {
 
   describe('affix behavior', () => {
     let node;
+    let container
 
     beforeEach(() => {
-      const container = render((
+      container = render((
         <Container>
           <Fixture />
         </Container>
@@ -101,6 +102,31 @@ describe('<AutoAffix>', () => {
         expect(node.style.top).to.equal('9900px');
         expect(node.style.width).to.equal('200px');
         done();
+      });
+    });
+
+    describe('offsetBottom', () => {
+      beforeEach(() => {
+        container = render((
+          <Container>
+            <Fixture offsetBottom={100}/>
+          </Container>
+        ), mountPoint);
+
+        node = ReactDOM.findDOMNode(ReactTestUtils.findRenderedComponentWithType(
+          container, Content
+        ));
+      });
+
+      it('should render correctly at bottom', (done) => {
+        window.scrollTo(0, 9810);
+
+        requestAnimationFrame(() => {
+          expect(node.style.position).to.equal('absolute');
+          expect(node.style.top).to.equal('9800px');
+          expect(node.style.width).to.equal('200px');
+          done();
+        });
       });
     });
   });
