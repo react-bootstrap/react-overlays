@@ -328,6 +328,7 @@ class Modal extends React.Component {
       backdrop = (
         <Transition
           appear
+          unmountOnExit
           in={this.props.show}
         >
           {backdrop}
