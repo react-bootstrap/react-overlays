@@ -5,35 +5,38 @@ import ReactTestUtils from 'react-dom/test-utils';
 import Portal from '../src/LegacyPortal';
 
 describe('LegacyPortal', () => {
-  class Overlay extends React.Component {
-    render() {
-      return (
-        <div>
-          <Portal
-            ref={(c) => { this.portal = c; }}
-            {...this.props}
-          >
-            {this.props.overlay}
-          </Portal>
-        </div>
-      );
-    }
-  }
+  it('should render overlay into container (document)', () => {
+    ReactTestUtils.renderIntoDocument(
+      <Portal>
+        <div id="test2" />
+      </Portal>
+    );
+
+    expect(document.querySelectorAll('#test2')).to.have.lengthOf(1);
+  });
 
   it('should render overlay into container (DOMNode)', () => {
     const container = document.createElement('div');
 
     ReactTestUtils.renderIntoDocument(
-      <Overlay container={container} overlay={<div id="test1" />} />
+      <Portal container={container}>
+        <div id="test2" />
+      </Portal>
     );
 
-    assert.equal(container.querySelectorAll('#test1').length, 1);
+    expect(container.querySelectorAll('#test2')).to.have.lengthOf(1);
   });
 
   it('should render overlay into container (ReactComponent)', () => {
     class Container extends React.Component {
       render() {
-        return <Overlay container={this} overlay={<div id="test1" />} />;
+        return (
+          <div>
+            <Portal container={this}>
+              <div id="test2" />
+            </Portal>
+          </div>
+        );
       }
     }
 
@@ -42,7 +45,7 @@ describe('LegacyPortal', () => {
     );
 
     expect(
-      ReactDOM.findDOMNode(instance).querySelectorAll('#test1')
+      ReactDOM.findDOMNode(instance).querySelectorAll('#test2')
     ).to.have.lengthOf(1)
   });
 
@@ -50,11 +53,9 @@ describe('LegacyPortal', () => {
     class Container extends React.Component {
       render() {
         return (
-          <Overlay
-            ref={(c) => { this.overlay = c; }}
-            container={this}
-            overlay={null}
-          />
+          <div>
+            <Portal container={this} />
+          </div>
         );
       }
     }
@@ -70,6 +71,7 @@ describe('LegacyPortal', () => {
   it('should change container on prop change', () => {
     class ContainerTest extends React.Component {
       state = {};
+
       render() {
         return (
           <div>
@@ -87,12 +89,16 @@ describe('LegacyPortal', () => {
     }
 
     const overlayInstance = ReactTestUtils.renderIntoDocument(
-      <ContainerTest overlay={<div id="test1" />} />
+      <ContainerTest overlay={<div id="test2" />} />,
     );
 
-    assert.equal(overlayInstance.portal._portalContainerNode.nodeName, 'BODY');
-    overlayInstance.setState({container: overlayInstance.container})
-    assert.equal(overlayInstance.portal._portalContainerNode.nodeName, 'DIV');
+    expect(
+      overlayInstance.portal._portalContainerNode.nodeName,
+    ).to.equal('BODY');
+    overlayInstance.setState({container: overlayInstance.container});
+    expect(
+      overlayInstance.portal._portalContainerNode.nodeName,
+    ).to.equal('DIV');
 
     ReactDOM.unmountComponentAtNode(
       ReactDOM.findDOMNode(overlayInstance).parentNode,
@@ -117,7 +123,7 @@ describe('LegacyPortal', () => {
           <div>
             <div ref={(c) => { this.container = c; }} />
             <Portal container={() => this.container}>
-              <div id="test1" />
+              <div id="test2" />
             </Portal>
           </div>
         );

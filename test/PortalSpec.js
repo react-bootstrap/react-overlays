@@ -5,35 +5,75 @@ import ReactTestUtils from 'react-dom/test-utils';
 import Portal from '../src/Portal';
 
 describe('Portal', () => {
-  class Overlay extends React.Component {
-    render() {
-      return (
-        <div>
-          <Portal
-            ref={(c) => { this.portal = c; }}
-            {...this.props}
-          >
-            {this.props.overlay}
+  it('should render overlay into container (document)', () => {
+    class Container extends React.Component {
+      componentDidMount() {
+        expect(this.div).to.exist;
+      }
+
+      render() {
+        return (
+          <Portal>
+            <div
+              ref={(c) => { this.div = c; }}
+              id="test1"
+            />
           </Portal>
-        </div>
-      );
+        );
+      }
     }
-  }
+
+    ReactTestUtils.renderIntoDocument(
+      <Container />
+    );
+
+    expect(document.querySelectorAll('#test1')).to.have.lengthOf(1);
+  });
 
   it('should render overlay into container (DOMNode)', () => {
     const container = document.createElement('div');
 
+    class Container extends React.Component {
+      componentDidMount() {
+        expect(this.div).to.exist;
+      }
+
+      render() {
+        return (
+          <Portal container={container}>
+            <div
+              ref={(c) => { this.div = c; }}
+              id="test1"
+            />
+          </Portal>
+        );
+      }
+    }
+
     ReactTestUtils.renderIntoDocument(
-      <Overlay container={container} overlay={<div id="test1" />} />
+      <Container />
     );
 
-    assert.equal(container.querySelectorAll('#test1').length, 1);
+    expect(container.querySelectorAll('#test1')).to.have.lengthOf(1);
   });
 
   it('should render overlay into container (ReactComponent)', () => {
     class Container extends React.Component {
+      componentDidMount() {
+        expect(this.div).to.not.exist;
+      }
+
       render() {
-        return <Overlay container={this} overlay={<div id="test1" />} />;
+        return (
+          <div>
+            <Portal container={this}>
+              <div
+                ref={(c) => { this.div = c; }}
+                id="test1"
+              />
+            </Portal>
+          </div>
+        );
       }
     }
 
@@ -41,6 +81,7 @@ describe('Portal', () => {
       <Container />
     );
 
+    expect(instance.div).to.exist;
     expect(
       ReactDOM.findDOMNode(instance).querySelectorAll('#test1')
     ).to.have.lengthOf(1)
@@ -50,11 +91,9 @@ describe('Portal', () => {
     class Container extends React.Component {
       render() {
         return (
-          <Overlay
-            ref={(c) => { this.overlay = c; }}
-            container={this}
-            overlay={null}
-          />
+          <div>
+            <Portal container={this} />
+          </div>
         );
       }
     }
@@ -69,6 +108,7 @@ describe('Portal', () => {
   it('should change container on prop change', () => {
     class ContainerTest extends React.Component {
       state = {};
+
       render() {
         return (
           <div>
@@ -89,9 +129,13 @@ describe('Portal', () => {
       <ContainerTest overlay={<div id="test1" />} />,
     );
 
-    assert.equal(overlayInstance.portal._portalContainerNode.nodeName, 'BODY');
+    expect(
+      overlayInstance.portal._portalContainerNode.nodeName,
+    ).to.equal('BODY');
     overlayInstance.setState({container: overlayInstance.container});
-    assert.equal(overlayInstance.portal._portalContainerNode.nodeName, 'DIV');
+    expect(
+      overlayInstance.portal._portalContainerNode.nodeName,
+    ).to.equal('DIV');
 
     ReactDOM.unmountComponentAtNode(
       ReactDOM.findDOMNode(overlayInstance).parentNode,
@@ -129,5 +173,4 @@ describe('Portal', () => {
 
     instance.setState({show: false});
   });
-
 });
