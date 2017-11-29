@@ -1,3 +1,4 @@
+import canUseDom from 'dom-helpers/util/inDOM';
 import PropTypes from 'prop-types';
 import componentOrElement from 'prop-types-extra/lib/componentOrElement';
 import React from 'react';
@@ -29,14 +30,37 @@ class Portal extends React.Component {
     onRendered: PropTypes.func,
   };
 
+  componentWillMount() {
+    if (!canUseDom) {
+      return;
+    }
+
+    let { container } = this.props;
+    if (typeof container === 'function') {
+      container = container();
+    }
+
+    if (container && !ReactDOM.findDOMNode(container)) {
+      // The container is a React component that has not yet been rendered.
+      // Don't set the container node yet.
+      return;
+    }
+
+    this.setContainer(container);
+  }
+
   componentDidMount() {
-    this.setContainer();
-    this.forceUpdate(this.props.onRendered)
+    if (!this._portalContainerNode) {
+      this.setContainer(this.props.container);
+      this.forceUpdate(this.props.onRendered);
+    } else if (this.props.onRendered) {
+      this.props.onRendered();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.container !== this.props.container) {
-      this.setContainer(nextProps)
+      this.setContainer(nextProps.container)
     }
   }
 
@@ -44,11 +68,11 @@ class Portal extends React.Component {
     this._portalContainerNode = null;
   }
 
-  setContainer = (props = this.props) => {
+  setContainer(container) {
     this._portalContainerNode = getContainer(
-      props.container, ownerDocument(this).body,
+      container, ownerDocument(this).body,
     );
-  };
+  }
 
   render() {
     return this.props.children && this._portalContainerNode ?
