@@ -5,6 +5,7 @@ import ReactDOM, { findDOMNode } from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
 import Transition, { ENTERED, ENTERING }
   from 'react-transition-group/Transition';
+  import {TransitionMotion, spring, presets } from 'react-motion';
 
 import PropTable from './PropTable';
 
@@ -15,6 +16,7 @@ import PortalSource from '../webpack/example-loader!./Portal';
 import PositionSource from '../webpack/example-loader!./Position';
 import RootCloseWrapperSource from '../webpack/example-loader!./RootCloseWrapper';
 import TransitionSource from '../webpack/example-loader!./Transition';
+import TransitionModelSource from '../webpack/example-loader!./TransitionModel';
 
 import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix';
 import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix';
@@ -32,7 +34,7 @@ import injectCss from './injectCss';
 
 const scope = {
   React, ReactDOM, findDOMNode, Button, injectCss, ...ReactOverlays, getOffset,
-  Transition, ENTERED, ENTERING,
+  Transition, ENTERED, ENTERING, TransitionMotion, spring, presets,
 };
 
 class Anchor extends React.Component {
@@ -90,6 +92,7 @@ class Example extends React.Component {
             <li><a href='#affixes'>Affixes</a></li>
             <li><a href='#root-close-wrapper'>RootCloseWrapper</a></li>
             <li><a href='#transitions'>Transitions</a></li>
+            <li><a href='#transitions-motion'>Transitions Using Motion</a></li>
           </ul>
         </article>
         <main className='col-md-10'>
@@ -180,6 +183,23 @@ class Example extends React.Component {
             </p>
 
             <ExampleEditor codeText={TransitionSource} />
+          </section>
+          <section >
+            <h2 className='page-header'>
+              <Anchor id='transitions-motion'>Transition Model using React Motion</Anchor>
+            </h2>
+            <p>
+              Animation of components is handled by <code>transition</code> props.
+              If a component accepts a <code>transition</code> prop you can provide
+              a <a href="https://github.com/reactjs/react-transition-group">react-transition-group@2.0.0</a> compatible
+              <code>Transition Motion</code> component and it will work.
+            </p>
+
+            <p>
+              Feel free to use <code>CSSTransition</code> specifically, or roll your own like the below example.
+            </p>
+
+            <ExampleEditor codeText={TransitionModelSource} />
           </section>
         </main>
       </div>
