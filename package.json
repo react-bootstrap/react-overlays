@@ -36,6 +36,7 @@
     "dom-helpers": "^3.2.1",
     "prop-types": "^15.5.10",
     "prop-types-extra": "^1.0.1",
+    "react-motion": "^0.5.2",
     "react-transition-group": "^2.2.0",
     "warning": "^3.0.0"
   },

@@ -76,7 +76,6 @@ class Overlay extends React.Component {
         </Transition>
       );
     }
-
     // This goes after everything else because it adds a wrapping div.
     if (rootClose) {
       child = (
