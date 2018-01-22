@@ -22,3 +22,9 @@ Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patche
 
 [build-badge]: https://travis-ci.org/react-bootstrap/react-overlays.svg?branch=master
 [build]: https://travis-ci.org/react-bootstrap/react-overlays
+
+
+# Build
+
+Build and push to Github, then `yarn upgrade react-overlays` in main project
+$ npm run clean && ./node_modules/.bin/babel src -d lib
