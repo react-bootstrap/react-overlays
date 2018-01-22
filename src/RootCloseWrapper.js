@@ -84,7 +84,8 @@ class RootCloseWrapper extends React.Component {
     this.preventMouseRootClose = (
       isModifiedEvent(e) ||
       !isLeftClickEvent(e) ||
-      contains(ReactDOM.findDOMNode(this), e.target)
+      contains(ReactDOM.findDOMNode(this), e.target) ||
+      contains(this.props.ignoreClicksOn, e.target)
     );
   };
 
@@ -123,7 +124,9 @@ RootCloseWrapper.propTypes = {
   /**
    * Choose which document mouse event to bind to.
    */
-  event: PropTypes.oneOf(['click', 'mousedown'])
+  event: PropTypes.oneOf(['click', 'mousedown']),
+
+  ignoreClicksOn: PropTypes.object,
 };
 
 RootCloseWrapper.defaultProps = {
