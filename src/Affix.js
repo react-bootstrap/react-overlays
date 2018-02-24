@@ -81,7 +81,11 @@ class Affix extends React.Component {
     const {offsetTop, viewportOffsetTop} = this.props;
     const scrollTop = getScrollTop(ownerWindow(this));
     const positionTopMin = scrollTop + (viewportOffsetTop || 0);
-
+    
+    if (this.state.position === 'fixed') {
+       positionTopMin += getHeight(ReactDOM.findDOMNode(this));
+    }
+    
     if (positionTopMin <= offsetTop) {
       this.updateState('top', null, null);
       return;
