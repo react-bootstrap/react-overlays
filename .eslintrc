@@ -4,6 +4,7 @@
     "plugin:react/recommended"
   ],
   "env": {
+    "es6": true,
     "browser": true,
     "node": true
   },
@@ -23,7 +24,6 @@
     "react/no-find-dom-node": "off",
     "react/jsx-boolean-value": ["error", "never"],
     "react/jsx-wrap-multilines": "error",
-    "react/no-unescaped-entities": "off",
     "react/prop-types": ["error", {
       "ignore": ["children", "className"]
     }],
