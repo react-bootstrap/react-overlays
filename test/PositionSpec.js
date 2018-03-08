@@ -1,12 +1,11 @@
 import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
 import ReactTestUtils from 'react-dom/test-utils';
 
 import Position from '../src/Position';
 
-import { render, shouldWarn } from './helpers';
+import { render } from './helpers';
 
 // Swallow extra props.
 function Span() {
