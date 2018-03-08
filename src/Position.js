@@ -1,14 +1,14 @@
-import classNames from 'classnames';
-import Popper from 'popper.js';
-import PropTypes from 'prop-types';
-import componentOrElement from 'prop-types-extra/lib/componentOrElement';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import classNames from 'classnames'
+import Popper from 'popper.js'
+import PropTypes from 'prop-types'
+import componentOrElement from 'prop-types-extra/lib/componentOrElement'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import getContainer from './utils/getContainer';
-import ownerDocument from './utils/ownerDocument';
+import getContainer from './utils/getContainer'
+import ownerDocument from './utils/ownerDocument'
 
-const displayName = 'Position';
+const displayName = 'Position'
 
 const propTypes = {
   /**
@@ -21,11 +21,21 @@ const propTypes = {
    */
   placement: PropTypes.oneOf([
     // These are inlined from Popper.placements for docgen.
-    'auto-start', 'auto', 'auto-end',
-    'top-start', 'top', 'top-end',
-    'right-start', 'right', 'right-end',
-    'bottom-end', 'bottom', 'bottom-start',
-    'left-end', 'left', 'left-start',
+    'auto-start',
+    'auto',
+    'auto-end',
+    'top-start',
+    'top',
+    'top-end',
+    'right-start',
+    'right',
+    'right-end',
+    'bottom-end',
+    'bottom',
+    'bottom-start',
+    'left-end',
+    'left',
+    'left-start',
   ]),
   /**
    * "offsetParent" of the component
@@ -42,14 +52,17 @@ const propTypes = {
   /**
    * @private
    */
-  children: PropTypes.element.isRequired,
-};
+  children: PropTypes.oneOfType([
+    PropTypes.element.isRequired,
+    PropTypes.func.isRequired,
+  ]).isRequired,
+}
 
 const defaultProps = {
   placement: 'right',
   containerPadding: 0,
   shouldUpdatePosition: false,
-};
+}
 
 /**
  * The Position component calculates the coordinates for its child, to position
@@ -62,18 +75,18 @@ const defaultProps = {
  */
 class Position extends React.Component {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
-    this.state = this.getNullState();
+    this.state = this.getNullState()
 
-    this._needsFlush = false;
-    this._lastTarget = null;
+    this._needsFlush = false
+    this._lastTarget = null
 
-    this.popper = null;
+    this.popper = null
   }
 
   componentDidMount() {
-    this.updatePosition(this.getTarget());
+    this.updatePosition(this.getTarget())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -81,20 +94,20 @@ class Position extends React.Component {
       // Do our best to re-render with the intended next placement.
       this.setState({
         placement: nextProps.placement,
-      });
+      })
     }
 
-    this._needsFlush = true;
+    this._needsFlush = true
   }
 
   componentDidUpdate(prevProps) {
     if (!this._needsFlush) {
-      return;
+      return
     }
 
-    this._needsFlush = false;
+    this._needsFlush = false
 
-    const target = this.getTarget();
+    const target = this.getTarget()
     if (
       target !== this._lastTarget ||
       this.props.placement !== prevProps.placement ||
@@ -102,142 +115,144 @@ class Position extends React.Component {
       this.props.containerPadding !== prevProps.containerPadding ||
       this.props.shouldUpdatePosition !== prevProps.shouldUpdatePosition
     ) {
-      this.updatePosition(target);
+      this.updatePosition(target)
     } else if (
       this.popper &&
       this.props.shouldUpdatePosition &&
       this.props.children !== prevProps.children
     ) {
-      this.popper.scheduleUpdate();
+      this.popper.scheduleUpdate()
     }
   }
 
   componentWillUnmount() {
     if (this.popper) {
-      this.popper.destroy();
+      this.popper.destroy()
     }
   }
 
-  onUpdate = ({ placement, offsets }) => {
-    const { popper, reference } = offsets;
+  onUpdate = ({ placement, offsets, styles }) => {
+    const { popper, reference } = offsets
 
-    let arrowPositionDirection;
-    let arrowPositionDimension;
+    let arrowPositionDirection
+    let arrowPositionDimension
 
     if (placement === 'left' || placement === 'right') {
-      arrowPositionDirection = 'top';
-      arrowPositionDimension = 'height';
+      arrowPositionDirection = 'top'
+      arrowPositionDimension = 'height'
     } else {
-      arrowPositionDirection = 'left';
-      arrowPositionDimension = 'width';
+      arrowPositionDirection = 'left'
+      arrowPositionDimension = 'width'
     }
 
-    const popperPosition = popper[arrowPositionDirection];
-    const popperSize = popper[arrowPositionDimension];
-    const referencePosition = reference[arrowPositionDirection];
-    const referenceSize = reference[arrowPositionDimension];
+    const popperPosition = popper[arrowPositionDirection]
+    const popperSize = popper[arrowPositionDimension]
+    const referencePosition = reference[arrowPositionDirection]
+    const referenceSize = reference[arrowPositionDimension]
 
-    const popperPositionMin = referencePosition - popperSize;
-    const popperPositionMax = referencePosition + referenceSize;
+    const popperPositionMin = referencePosition - popperSize
+    const popperPositionMax = referencePosition + referenceSize
     const arrowPositionRelReverse =
       (popperPosition - popperPositionMin) /
-      (popperPositionMax - popperPositionMin);
-    const arrowPosition = (1 - arrowPositionRelReverse) * popperSize;
+      (popperPositionMax - popperPositionMin)
+    const arrowPosition = (1 - arrowPositionRelReverse) * popperSize
 
     // A change in placement might cause the positioned element to rerender, so
     // schedule a recalculation of the position.
     if (placement !== this.state.placement) {
-      this.popper.scheduleUpdate();
+      this.popper.scheduleUpdate()
     }
 
     this.setState({
       placement,
+      style: styles,
       position: {
-        left: popper.left,
-        top: popper.top,
+        left: offsets.popper.left,
+        top: offsets.popper.top,
       },
       arrowPosition: {
         [arrowPositionDirection]: arrowPosition,
       },
-    });
-  };
+    })
+  }
 
   getNullState() {
     return {
       placement: this.props.placement,
       position: { visibility: 'hidden' },
       arrowPosition: null,
-    };
+    }
   }
 
   getTarget() {
-    let { target } = this.props;
-    target = typeof target === 'function' ? target() : target;
-    return target && ReactDOM.findDOMNode(target) || null;
+    let { target } = this.props
+    target = typeof target === 'function' ? target() : target
+    return (target && ReactDOM.findDOMNode(target)) || null
   }
 
   updatePosition(target) {
     if (this.popper) {
-      this.popper.destroy();
+      this.popper.destroy()
     }
 
-    this._lastTarget = target;
+    this._lastTarget = target
 
     if (!target) {
-      this.setState(this.getNullState());
+      this.setState(this.getNullState())
 
-      return;
+      return
     }
 
     const {
-      placement, shouldUpdatePosition, container, containerPadding,
-    } = this.props;
-    const containerNode = getContainer(container, ownerDocument(this).body);
+      placement,
+      shouldUpdatePosition,
+      container,
+      containerPadding,
+    } = this.props
+    const containerNode = getContainer(container, ownerDocument(this).body)
 
-    this.popper = new Popper(
-      target,
-      ReactDOM.findDOMNode(this),
-      {
-        placement,
-        eventsEnabled: shouldUpdatePosition,
-        modifiers: {
-          preventOverflow: {
-            boundariesElement: containerNode,
-            padding: containerPadding,
-          },
-          flip: {
-            enabled: placement.indexOf('auto') === 0,
-          },
-          applyStyle: {
-            enabled: false,
-          },
+    this.popper = new Popper(target, ReactDOM.findDOMNode(this), {
+      placement,
+      eventsEnabled: shouldUpdatePosition,
+      modifiers: {
+        preventOverflow: {
+          boundariesElement: containerNode,
+          padding: containerPadding,
         },
-        onCreate: this.onUpdate,
-        onUpdate: this.onUpdate,
+        flip: {
+          enabled: placement.indexOf('auto') === 0,
+        },
+        computeStyle: { enabled: true },
+        applyStyle: { enabled: false },
       },
-    );
+      onCreate: this.onUpdate,
+      onUpdate: this.onUpdate,
+    })
   }
 
   render() {
-    const { className, children, ...props } = this.props;
-    const child = React.Children.only(children);
+    const { className, children, ...props } = this.props
 
-    delete props.target;
-    delete props.placement;
-    delete props.container;
-    delete props.containerPadding;
-    delete props.shouldUpdatePosition;
+    if (typeof children === 'function') return children(this.state)
+
+    const child = React.Children.only(children)
+
+    delete props.target
+    delete props.placement
+    delete props.container
+    delete props.containerPadding
+    delete props.shouldUpdatePosition
 
     return React.cloneElement(child, {
       ...props,
       ...this.state,
       className: classNames(child.props.className, className),
-    });
+    })
   }
 }
 
-Position.displayName = displayName;
-Position.propTypes = propTypes;
-Position.defaultProps = defaultProps;
+Position.displayName = displayName
+Position.propTypes = propTypes
+Position.defaultProps = defaultProps
 
-export default Position;
+export default Position

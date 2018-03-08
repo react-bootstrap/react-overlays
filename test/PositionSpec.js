@@ -1,12 +1,11 @@
 import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
 import ReactTestUtils from 'react-dom/test-utils';
 
 import Position from '../src/Position';
 
-import { render, shouldWarn } from './helpers';
+import { render } from './helpers';
 
 // Swallow extra props.
 function Span() {
@@ -28,20 +27,16 @@ describe('<Position>', () => {
     expect(ReactDOM.findDOMNode(instance).nodeName).to.equal('SPAN');
   });
 
-  it('should fail on multiple children', () => {
-    shouldWarn('expected a single ReactElement');
-
-    expect(() => {
-      ReactDOMServer.renderToString(
-        <Position>
-          <Span />
-          <Span />
-        </Position>
-      );
-    }).to.throw(
-      /React.Children.only expected to receive a single React element child./
+  it('should accept a function child', () => {
+    let instance = ReactTestUtils.renderIntoDocument(
+      <Position>
+        {(props) => <Span {...props} />}
+      </Position>
     );
+
+    expect(ReactDOM.findDOMNode(instance).nodeName).to.equal('SPAN');
   });
+
 
   describe('position calculation', () => {
     let mountPoint;
@@ -119,6 +114,9 @@ describe('<Position>', () => {
 
         [instance.overlay1, instance.overlay2].forEach(({ props }) => {
           expect(props.position).to.eql(expected.position);
+          expect(props.style.transform).to.eql(
+            `translate3d(${expected.position.left}px, ${expected.position.top}px, 0)`
+          );
           expect(props.arrowPosition).to.eql(expected.arrowPosition);
         });
       });
