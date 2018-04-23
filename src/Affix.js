@@ -201,6 +201,7 @@ Affix.propTypes = {
    * CSS class or classes to apply when affixed
    */
   affixClassName: PropTypes.string,
+
   /**
    * Style to apply when affixed
    */
@@ -217,31 +218,32 @@ Affix.propTypes = {
   bottomStyle: PropTypes.object,
 
   /**
-   * Callback fired when the right before the `affixStyle` and `affixStyle` props are rendered
+   * Callback fired right before the `affixStyle` and `affixClassName` props are rendered
    */
   onAffix: PropTypes.func,
+
   /**
-   * Callback fired after the component `affixStyle` and `affixClassName` props have been rendered.
+   * Callback fired after the component `affixStyle` and `affixClassName` props have been rendered
    */
   onAffixed: PropTypes.func,
 
   /**
-   * Callback fired when the right before the `topStyle` and `topClassName` props are rendered
+   * Callback fired right before the `topStyle` and `topClassName` props are rendered
    */
   onAffixTop: PropTypes.func,
 
   /**
-   * Callback fired after the component `topStyle` and `topClassName` props have been rendered.
+   * Callback fired after the component `topStyle` and `topClassName` props have been rendered
    */
   onAffixedTop: PropTypes.func,
 
   /**
-   * Callback fired when the right before the `bottomStyle` and `bottomClassName` props are rendered
+   * Callback fired right before the `bottomStyle` and `bottomClassName` props are rendered
    */
   onAffixBottom: PropTypes.func,
 
   /**
-   * Callback fired after the component `bottomStyle` and `bottomClassName` props have been rendered.
+   * Callback fired after the component `bottomStyle` and `bottomClassName` props have been rendered
    */
   onAffixedBottom: PropTypes.func,
 }
