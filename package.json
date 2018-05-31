@@ -6,9 +6,7 @@
   "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
   "main": "lib/index.js",
-  "files": [
-    "lib"
-  ],
+  "files": ["lib"],
   "keywords": [
     "react-overlays",
     "react-component",
@@ -22,9 +20,11 @@
   ],
   "scripts": {
     "build": "npm run clean && babel src -d lib",
-    "build-examples": "rimraf examples/static && webpack --config webpack/docs.config.js",
+    "build-examples":
+      "rimraf examples/static && webpack --config webpack/docs.config.js",
     "clean": "rimraf lib",
-    "examples": "webpack-dev-server --config webpack/examples.config.js --hot --port 3000 --progress",
+    "examples":
+      "webpack-dev-server --config webpack/examples.config.js --hot --port 3000 --progress",
     "lint": "eslint examples src test *.js",
     "release": "release",
     "tdd": "cross-env NODE_ENV=test karma start",
@@ -33,16 +33,16 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "dom-helpers": "^3.2.1",
-    "popper.js": "^1.9.9",
-    "prop-types": "^15.5.10",
-    "prop-types-extra": "^1.0.1",
-    "react-transition-group": "^2.2.1",
-    "warning": "^3.0.0"
+    "dom-helpers": "^3.3.1",
+    "popper.js": "^1.14.3",
+    "prop-types": "^15.6.1",
+    "prop-types-extra": "^1.1.0",
+    "react-transition-group": "^2.3.1",
+    "warning": "^4.0.1"
   },
   "peerDependencies": {
-    "react": "^0.14.9 || >=15.3.0",
-    "react-dom": "^0.14.9 || >=15.3.0"
+    "react": "^>=16.3.0",
+    "react-dom": "^>=16.3.0"
   },
   "devDependencies": {
     "@monastic.panic/component-playground": "^3.2.2",
