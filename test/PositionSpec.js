@@ -267,15 +267,15 @@ describe('<Position>', () => {
       const instance = ReactTestUtils.renderIntoDocument(<TargetChanger />)
 
       // Position calculates initial position.
-      expect(Position.prototype.componentWillReceiveProps).to.have.not.been
-        .called
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps).to.have.not
+        .been.called
       await wait()
       expect(Popper.prototype.update).to.have.been.calledOnce
 
       instance.setState({ target: 'bar' })
 
       // Position receives new props and recalculates position.
-      expect(Position.prototype.componentWillReceiveProps).to.have.been
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps).to.have.been
         .calledOnce
       await wait()
       expect(Popper.prototype.update).to.have.been.calledTwice
@@ -283,7 +283,7 @@ describe('<Position>', () => {
       instance.setState({ fakeProp: 1 })
 
       // Position receives new props but should not recalculate position.
-      expect(Position.prototype.componentWillReceiveProps).to.have.been
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps).to.have.been
         .calledTwice
       await wait()
       expect(Popper.prototype.update).to.have.been.calledTwice
@@ -319,15 +319,15 @@ describe('<Position>', () => {
       const instance = ReactTestUtils.renderIntoDocument(<Target />)
 
       // Position calculates initial position.
-      expect(Position.prototype.componentWillReceiveProps).to.have.not.been
-        .called
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps).to.have.not
+        .been.called
       await wait()
       expect(Popper.prototype.update).to.have.been.calledOnce
 
       instance.setState({ fakeProp: 1 })
 
       // Position receives new props and position should be recalculated
-      expect(Position.prototype.componentWillReceiveProps).to.have.been
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps).to.have.been
         .calledOnce
       await wait()
       expect(Popper.prototype.update).to.have.been.calledTwice
