@@ -89,7 +89,7 @@ class Position extends React.Component {
     this.updatePosition(this.getTarget())
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.placement !== this.props.placement) {
       // Do our best to re-render with the intended next placement.
       this.setState({

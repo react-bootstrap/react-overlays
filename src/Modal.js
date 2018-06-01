@@ -52,7 +52,6 @@ function omitProps(props, propTypes) {
  */
 class Modal extends React.Component {
   static propTypes = {
-
     /**
      * Set the visibility of the Modal
      */
@@ -222,7 +221,7 @@ class Modal extends React.Component {
       // Otherwise let handleHidden take care of marking exited.
       return { exited: true }
     }
-    return null;
+    return null
   }
 
   getSnapshotBeforeUpdate(prevProps) {
@@ -281,13 +280,7 @@ class Modal extends React.Component {
       this.handleDocumentKeyDown
     )
 
-    this.removeFocusListener = listen(
-      doc,
-      'focus',
-      this.enforceFocus,
-      true
-    )
-
+    this.removeFocusListener = listen(doc, 'focus', this.enforceFocus, true)
   }
 
   onHide = () => {
@@ -429,7 +422,7 @@ class Modal extends React.Component {
       onEnter,
       onEntering,
       onEntered,
-      ...props,
+      ...props
     } = this.props
 
     if (!(show || (Transition && !this.state.exited))) {
@@ -466,10 +459,7 @@ class Modal extends React.Component {
     const dialogRole = role === undefined ? 'dialog' : role
 
     return (
-      <Portal
-        container={container}
-        onRendered={this.onPortalRendered}
-      >
+      <Portal container={container} onRendered={this.onPortalRendered}>
         <React.Fragment>
           {backdrop && this.renderBackdrop()}
           <div

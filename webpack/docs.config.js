@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: path.resolve(__dirname, '../examples/App.js'),
@@ -15,23 +15,26 @@ module.exports = {
       { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
       {
         test: /\.less$/,
-        exclude: /node_modules/,
         loader: ['style-loader', 'css-loader', 'less-loader'],
+      },
+      {
+        test: /\.css$/,
+        loader: ['style-loader', 'css-loader'],
       },
     ],
   },
 
   resolve: {
     alias: {
-      'react-overlays': path.resolve(__dirname, '../src')
+      'react-overlays': path.resolve(__dirname, '../src'),
     },
   },
 
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
+        NODE_ENV: JSON.stringify('production'),
       },
     }),
   ],
-};
+}
