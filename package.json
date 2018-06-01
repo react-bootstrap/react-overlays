@@ -6,7 +6,10 @@
   "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
   "main": "lib/index.js",
-  "files": ["lib"],
+  "module": "lib/index.mjs",
+  "files": [
+    "lib"
+  ],
   "keywords": [
     "react-overlays",
     "react-component",
@@ -19,14 +22,11 @@
     "modal"
   ],
   "scripts": {
-    "build:esm":
-      "babel src -d lib --env-name esm && file-butler mjs lib -d lib && rimraf lib/*.js",
+    "build:esm": "babel src -d lib --env-name esm && file-butler mjs lib -d lib && rimraf lib/*.js",
     "build:cjs": "babel src -d lib",
     "build": "rimraf lib && npm run build:esm && npm run build:cjs",
-    "build-examples":
-      "rimraf examples/static && webpack --config webpack/docs.config.js",
-    "examples":
-      "webpack-dev-server --config webpack/examples.config.js --hot --port 3000 --progress",
+    "build-examples": "rimraf examples/static && webpack --config webpack/docs.config.js",
+    "examples": "webpack-dev-server --config webpack/examples.config.js --hot --port 3000 --progress",
     "lint": "eslint examples src test *.js",
     "release": "release",
     "tdd": "cross-env NODE_ENV=test karma start",
@@ -51,6 +51,7 @@
     "@babel/cli": "^7.0.0-beta.49",
     "@babel/core": "^7.0.0-beta.49",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.49",
+    "@babel/polyfill": "^7.0.0-beta.49",
     "@babel/preset-env": "^7.0.0-beta.49",
     "@babel/preset-react": "^7.0.0-beta.49",
     "@monastic.panic/component-playground": "^3.2.2",

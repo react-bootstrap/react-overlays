@@ -1,52 +1,53 @@
-import PropTypes from 'prop-types';
-import elementType from 'prop-types-extra/lib/elementType';
-import React from 'react';
+import PropTypes from 'prop-types'
+import elementType from 'prop-types-extra/lib/elementType'
+import React from 'react'
 
-import Portal from './Portal';
-import Position from './Position';
-import RootCloseWrapper from './RootCloseWrapper';
+import Portal from './Portal'
+import Position from './Position'
+import RootCloseWrapper from './RootCloseWrapper'
 
 /**
  * Built on top of `<Position/>` and `<Portal/>`, the overlay component is great for custom tooltip overlays.
  */
 class Overlay extends React.Component {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
-    this.state = {exited: !props.show};
-    this.onHiddenListener = this.handleHidden.bind(this);
+    this.state = { exited: !props.show }
+    this.onHiddenListener = this.handleHidden.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     if (nextProps.show) {
-      this.setState({exited: false});
+      return { exited: false }
     } else if (!nextProps.transition) {
       // Otherwise let handleHidden take care of marking exited.
-      this.setState({exited: true});
+      return { exited: true }
     }
+    return null
   }
 
   render() {
     let {
-        container
-      , containerPadding
-      , target
-      , placement
-      , shouldUpdatePosition
-      , rootClose
-      , children
-      , transition: Transition
-      , ...props } = this.props;
-
+      container,
+      containerPadding,
+      target,
+      placement,
+      shouldUpdatePosition,
+      rootClose,
+      children,
+      transition: Transition,
+      ...props
+    } = this.props
 
     // Don't un-render the overlay while it's transitioning out.
-    const mountOverlay = props.show || (Transition && !this.state.exited);
+    const mountOverlay = props.show || (Transition && !this.state.exited)
     if (!mountOverlay) {
       // Don't bother showing anything if we don't have to.
-      return null;
+      return null
     }
 
-    let child = children;
+    let child = children
 
     // Position is be inner-most because it adds inline styles into the child,
     // which the other wrappers don't forward correctly.
@@ -60,10 +61,10 @@ class Overlay extends React.Component {
       >
         {child}
       </Position>
-    );
+    )
 
     if (Transition) {
-      let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
+      let { onExit, onExiting, onEnter, onEntering, onEntered } = props
 
       // This animates the child node by injecting props, so it must precede
       // anything that adds a wrapping div.
@@ -80,7 +81,7 @@ class Overlay extends React.Component {
         >
           {child}
         </Transition>
-      );
+      )
     }
 
     // This goes after everything else because it adds a wrapping div.
@@ -92,21 +93,17 @@ class Overlay extends React.Component {
         >
           {child}
         </RootCloseWrapper>
-      );
+      )
     }
 
-    return (
-      <Portal container={container}>
-        {child}
-      </Portal>
-    );
+    return <Portal container={container}>{child}</Portal>
   }
 
   handleHidden = (...args) => {
-    this.setState({exited: true});
+    this.setState({ exited: true })
 
     if (this.props.onExited) {
-      this.props.onExited(...args);
+      this.props.onExited(...args)
     }
   }
 }
@@ -138,9 +135,9 @@ Overlay.propTypes = {
    * @type func
    */
   onHide(props, ...args) {
-    let propType = PropTypes.func;
+    let propType = PropTypes.func
     if (props.rootClose) {
-      propType = propType.isRequired;
+      propType = propType.isRequired
     }
 
     return propType(props, ...args)
@@ -180,8 +177,7 @@ Overlay.propTypes = {
   /**
    * Callback fired after the Overlay finishes transitioning out
    */
-  onExited: PropTypes.func
-};
+  onExited: PropTypes.func,
+}
 
-
-export default Overlay;
+export default Overlay

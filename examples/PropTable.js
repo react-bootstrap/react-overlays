@@ -35,7 +35,9 @@ class PropTable extends React.Component {
     metadata: PropTypes.object,
   }
 
-  componentWillMount() {
+  constructor(...args) {
+    super(...args)
+
     let componentData = this.props.metadata[this.props.component] || {}
     this.propsData = getPropsData(componentData, this.props.metadata)
   }

@@ -14,8 +14,8 @@ module.exports = api => ({
   ],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],
-    'add-module-exports',
-  ],
+    api.env() !== 'esm' && 'add-module-exports',
+  ].filter(Boolean),
 
   env: {
     test: {

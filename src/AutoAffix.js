@@ -66,13 +66,8 @@ class AutoAffix extends React.Component {
     this.onUpdate()
   }
 
-  componentWillReceiveProps() {
-    this._needPositionUpdate = true
-  }
-
-  componentDidUpdate() {
-    if (this._needPositionUpdate) {
-      this._needPositionUpdate = false
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
       this.onUpdate()
     }
   }
