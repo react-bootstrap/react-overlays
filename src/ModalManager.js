@@ -20,10 +20,6 @@ function findIndexOf(arr, cb) {
   return idx
 }
 
-function findContainer(data, modal) {
-  return findIndexOf(data, d => d.modals.indexOf(modal) !== -1)
-}
-
 /**
  * Proper state managment for containers and the modals in those containers.
  *
@@ -39,6 +35,16 @@ class ModalManager {
     this.modals = []
     this.containers = []
     this.data = []
+    this.scrollbarSize = getScrollbarSize()
+  }
+
+  isContainerOverflowing(modal) {
+    const data = this.data[this.containerIndexFromModal(modal)]
+    return data && data.overflowing
+  }
+
+  containerIndexFromModal(modal) {
+    return findIndexOf(this.data, d => d.modals.indexOf(modal) !== -1)
   }
 
   setContainerStyle(containerState, container) {
@@ -56,11 +62,12 @@ class ModalManager {
       // to add our scrollbar width
       style.paddingRight =
         parseInt(css(container, 'paddingRight') || 0, 10) +
-        `${getScrollbarSize()}px`
+        `${this.scrollbarSize}px`
     }
 
     css(container, style)
   }
+
   removeContainerStyle(containerState, container) {
     const { style } = containerState
 
@@ -93,7 +100,6 @@ class ModalManager {
       modals: [modal],
       //right now only the first modal of a container will have its classes applied
       classes: className ? className.split(/\s+/) : [],
-
       overflowing: isOverflowing(container),
     }
 
@@ -116,7 +122,7 @@ class ModalManager {
       return
     }
 
-    let containerIdx = findContainer(this.data, modal)
+    let containerIdx = this.containerIndexFromModal(modal)
     let data = this.data[containerIdx]
     let container = this.containers[containerIdx]
 
