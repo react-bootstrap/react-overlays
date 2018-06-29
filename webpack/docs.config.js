@@ -1,5 +1,5 @@
 const path = require('path')
-const webpack = require('webpack')
+const { rules } = require('webpack-atoms')
 
 module.exports = {
   entry: path.resolve(__dirname, '../examples/App.js'),
@@ -12,15 +12,9 @@ module.exports = {
 
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
-      {
-        test: /\.less$/,
-        loader: ['style-loader', 'css-loader', 'less-loader'],
-      },
-      {
-        test: /\.css$/,
-        loader: ['style-loader', 'css-loader'],
-      },
+      rules.js(),
+      rules.less(),
+      rules.css()
     ],
   },
 
@@ -29,12 +23,4 @@ module.exports = {
       'react-overlays': path.resolve(__dirname, '../src'),
     },
   },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
-  ],
 }
