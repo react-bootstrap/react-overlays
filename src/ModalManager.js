@@ -20,35 +20,6 @@ function findIndexOf(arr, cb) {
   return idx
 }
 
-function findContainer(data, modal) {
-  return findIndexOf(data, d => d.modals.indexOf(modal) !== -1)
-}
-
-function setContainerStyle(state, container) {
-  let style = { overflow: 'hidden' }
-
-  // we are only interested in the actual `style` here
-  // becasue we will override it
-  state.style = {
-    overflow: container.style.overflow,
-    paddingRight: container.style.paddingRight,
-  }
-
-  if (state.overflowing) {
-    // use computed style, here to get the real padding
-    // to add our scrollbar width
-    style.paddingRight =
-      parseInt(css(container, 'paddingRight') || 0, 10) +
-      getScrollbarSize() +
-      'px'
-  }
-
-  css(container, style)
-}
-
-function removeContainerStyle({ style }, container) {
-  Object.keys(style).forEach(key => (container.style[key] = style[key]))
-}
 /**
  * Proper state managment for containers and the modals in those containers.
  *
@@ -64,9 +35,49 @@ class ModalManager {
     this.modals = []
     this.containers = []
     this.data = []
+    this.scrollbarSize = getScrollbarSize()
   }
 
-  add = (modal, container, className) => {
+  isContainerOverflowing(modal) {
+    const data = this.data[this.containerIndexFromModal(modal)]
+    return data && data.overflowing
+  }
+
+  containerIndexFromModal(modal) {
+    return findIndexOf(this.data, d => d.modals.indexOf(modal) !== -1)
+  }
+
+  setContainerStyle(containerState, container) {
+    let style = { overflow: 'hidden' }
+
+    // we are only interested in the actual `style` here
+    // becasue we will override it
+    containerState.style = {
+      overflow: container.style.overflow,
+      paddingRight: container.style.paddingRight,
+    }
+
+    if (containerState.overflowing) {
+      // use computed style, here to get the real padding
+      // to add our scrollbar width
+      style.paddingRight = `${parseInt(
+        css(container, 'paddingRight') || 0,
+        10
+      ) + this.scrollbarSize}px`
+    }
+
+    css(container, style)
+  }
+
+  removeContainerStyle(containerState, container) {
+    const { style } = containerState
+
+    Object.keys(style).forEach(key => {
+      container.style[key] = style[key]
+    })
+  }
+
+  add(modal, container, className) {
     let modalIdx = this.modals.indexOf(modal)
     let containerIdx = this.containers.indexOf(container)
 
@@ -90,12 +101,11 @@ class ModalManager {
       modals: [modal],
       //right now only the first modal of a container will have its classes applied
       classes: className ? className.split(/\s+/) : [],
-
       overflowing: isOverflowing(container),
     }
 
     if (this.handleContainerOverflow) {
-      setContainerStyle(data, container)
+      this.setContainerStyle(data, container)
     }
 
     data.classes.forEach(classes.addClass.bind(null, container))
@@ -106,14 +116,14 @@ class ModalManager {
     return modalIdx
   }
 
-  remove = modal => {
+  remove(modal) {
     let modalIdx = this.modals.indexOf(modal)
 
     if (modalIdx === -1) {
       return
     }
 
-    let containerIdx = findContainer(this.data, modal)
+    let containerIdx = this.containerIndexFromModal(modal)
     let data = this.data[containerIdx]
     let container = this.containers[containerIdx]
 
@@ -127,7 +137,7 @@ class ModalManager {
       data.classes.forEach(classes.removeClass.bind(null, container))
 
       if (this.handleContainerOverflow) {
-        removeContainerStyle(data, container)
+        this.removeContainerStyle(data, container)
       }
 
       if (this.hideSiblingNodes) {
@@ -143,7 +153,7 @@ class ModalManager {
     }
   }
 
-  isTopModal = modal => {
+  isTopModal(modal) {
     return !!this.modals.length && this.modals[this.modals.length - 1] === modal
   }
 }
