@@ -27,7 +27,7 @@
     "build": "rimraf lib && npm run build:esm && npm run build:cjs",
     "build:examples": "webpack --config webpack/docs.config.js --mode production",
     "deploy-docs": "npm run build:examples && gh-pages -d examples/dist",
-    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "examples": "webpack-dev-server --config webpack/examples.config.js --port 3000 --mode development",
     "lint": "eslint examples src test *.js",
     "release": "release",
@@ -42,6 +42,7 @@
     "prop-types": "^15.6.2",
     "prop-types-extra": "^1.1.0",
     "react-transition-group": "^2.4.0",
+    "react-context-toolbox": "^1.1.0",
     "warning": "^4.0.1"
   },
   "peerDependencies": {

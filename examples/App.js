@@ -15,6 +15,7 @@ import PropTable from './PropTable'
 import AffixSource from '../webpack/example-loader!./Affix'
 import ModalExample from '../webpack/example-loader!./Modal'
 import OverlaySource from '../webpack/example-loader!./Overlay'
+import DropdownSource from '../webpack/example-loader!./Dropdown'
 import PortalSource from '../webpack/example-loader!./Portal'
 import PositionSource from '../webpack/example-loader!./Position'
 import RootCloseWrapperSource from '../webpack/example-loader!./RootCloseWrapper'
@@ -24,6 +25,8 @@ import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix'
 import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix'
 import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal'
 import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay'
+
+import DropdownMetadata from 'component-metadata-loader?pitch!react-overlays/Dropdown'
 import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal'
 import PositionMetadata from 'component-metadata-loader?pitch!react-overlays/Position'
 import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper'
@@ -101,6 +104,9 @@ class Example extends React.Component {
               <a href="#position">Position</a>
             </li>
             <li>
+              <a href="#dropdown">Dropdown</a>
+            </li>
+            <li>
               <a href="#overlay">Overlay</a>
             </li>
             <li>
@@ -161,6 +167,20 @@ class Example extends React.Component {
             <ExampleEditor codeText={OverlaySource} />
             <PropTable component="Overlay" metadata={OverlayMetadata} />
           </section>
+
+          <section>
+            <h2 className="page-header">
+              <Anchor>Dropdown</Anchor>
+            </h2>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DropdownMetadata.Dropdown.descHtml,
+              }}
+            />
+            <ExampleEditor codeText={DropdownSource} />
+            <PropTable component="Dropdown" metadata={DropdownMetadata} />
+          </section>
+
           <section>
             <h2 className="page-header">
               <Anchor>Affixes</Anchor>

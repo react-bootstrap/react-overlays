@@ -6718,6 +6718,10 @@ react-bootstrap@^0.32.1:
     uncontrollable "^4.1.0"
     warning "^3.0.0"
 
+react-context-toolbox@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-context-toolbox/-/react-context-toolbox-1.1.0.tgz#4a6f5d3b949b8e1647aa0f0fb659f189958d5fab"
+
 react-docgen@^2.20.0:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/react-docgen/-/react-docgen-2.20.1.tgz#29c3a1216066f513958abb1a43678860bbd51c7f"
