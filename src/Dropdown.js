@@ -36,11 +36,9 @@ const propTypes = {
   show: PropTypes.bool,
 
   /**
-   * Allow Dropdown to flip in case of an overlapping on the reference element. For more information refer to
-   * Popper.js's flip [docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled).
-   *
+   * A set of configuration options passed to the underlying popper instance.
    */
-  flip: PropTypes.bool,
+  popperConfig: PropTypes.object,
 
   /**
    * A callback fired when the Dropdown wishes to change visibility. Called with the requested
@@ -212,14 +210,13 @@ class Dropdown extends React.Component {
 
   updatePosition() {
     if (!this.toggle || !this.menu) return
+    const { popperConfig } = this.props
 
     this.popper.update({
+      ...popperConfig,
       element: this.menu,
       target: this.toggle,
       placement: this.state.placement,
-      modifiers: {
-        flip: { enabled: !!this.props.flip },
-      },
     })
   }
 
