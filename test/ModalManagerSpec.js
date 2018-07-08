@@ -114,7 +114,7 @@ describe('ModalManager', () => {
       let modalA = new Modal({})
       let mount = document.createElement('div')
 
-      modalA.root = mount
+      modalA.dialog = mount
       container.appendChild(mount)
 
       manager.add(modalA, container)
@@ -129,7 +129,7 @@ describe('ModalManager', () => {
       let modalB = new Modal({})
       let mount = document.createElement('div')
 
-      modalA.root = mount
+      modalA.dialog = mount
       container.appendChild(mount)
 
       manager.add(modalA, container)

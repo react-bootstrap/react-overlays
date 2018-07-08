@@ -35,7 +35,7 @@ describe('<Modal>', () => {
       mountPoint
     )
 
-    expect(instance.root.querySelectorAll('strong')).to.have.lengthOf(1)
+    expect(instance.dialog.querySelectorAll('strong')).to.have.lengthOf(1)
   })
 
   it('should disable scrolling on the modal container while open', done => {
@@ -312,7 +312,7 @@ describe('<Modal>', () => {
       mountPoint
     )
 
-    expect(instance.root.getAttribute('role')).to.equal('alertdialog')
+    expect(instance.dialog.getAttribute('role')).to.equal('alertdialog')
   })
 
   it('should accept the `aria-describedby` property on the Modal', () => {
@@ -323,7 +323,7 @@ describe('<Modal>', () => {
       mountPoint
     )
 
-    expect(instance.root.getAttribute('aria-describedby')).to.equal(
+    expect(instance.dialog.getAttribute('aria-describedby')).to.equal(
       'modal-description'
     )
   })

@@ -147,8 +147,8 @@ class ModalManager {
       this.data.splice(containerIdx, 1)
     } else if (this.hideSiblingNodes) {
       //otherwise make sure the next top modal is visible to a SR
-      const { backdrop, root } = data.modals[data.modals.length - 1]
-      ariaHidden(false, root)
+      const { backdrop, dialog } = data.modals[data.modals.length - 1]
+      ariaHidden(false, dialog)
       ariaHidden(false, backdrop)
     }
   }

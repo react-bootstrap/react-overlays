@@ -9,7 +9,6 @@ import componentOrElement from 'prop-types-extra/lib/componentOrElement'
 import elementType from 'prop-types-extra/lib/elementType'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import warning from 'warning'
 
 import ModalManager from './ModalManager'
 import Portal from './Portal'
@@ -294,8 +293,8 @@ class Modal extends React.Component {
     }
   }
 
-  setRootRef = ref => {
-    this.root = ref
+  setDialogRef = ref => {
+    this.dialog = ref
   }
 
   setBackdropRef = ref => {
@@ -340,9 +339,9 @@ class Modal extends React.Component {
 
     const currentActiveElement = activeElement(ownerDocument(this))
 
-    if (this.root && !contains(this.root, currentActiveElement)) {
+    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
       this.lastFocus = currentActiveElement
-      this.root.focus()
+      this.dialog.focus()
     }
   }
 
@@ -361,8 +360,8 @@ class Modal extends React.Component {
 
     const currentActiveElement = activeElement(ownerDocument(this))
 
-    if (this.root && !contains(this.root, currentActiveElement)) {
-      this.root.focus()
+    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
+      this.dialog.focus()
     }
   }
 
@@ -445,7 +444,7 @@ class Modal extends React.Component {
           {backdrop && this.renderBackdrop()}
           <div
             role={dialogRole}
-            ref={this.setRootRef}
+            ref={this.setDialogRef}
             // apparently only works on the dialog role element
             aria-modal={dialogRole === 'dialog' ? true : undefined}
             {...omitProps(props, Modal.propTypes)}
