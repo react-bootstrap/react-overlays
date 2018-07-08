@@ -9,7 +9,6 @@ import componentOrElement from 'prop-types-extra/lib/componentOrElement'
 import elementType from 'prop-types-extra/lib/elementType'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import warning from 'warning'
 
 import ModalManager from './ModalManager'
 import Portal from './Portal'
@@ -294,12 +293,10 @@ class Modal extends React.Component {
     }
   }
 
-  setRootRef = ref => {
-    this.root = ref
-  }
   setDialogRef = ref => {
-    this.dialog = ref && ReactDOM.findDOMNode(ref)
+    this.dialog = ref
   }
+
   setBackdropRef = ref => {
     this.backdrop = ref && ReactDOM.findDOMNode(ref)
   }
@@ -338,28 +335,13 @@ class Modal extends React.Component {
   }
 
   autoFocus() {
-    if (!this.props.autoFocus) {
-      return
-    }
+    if (!this.props.autoFocus) return
 
-    const dialogElement = this.dialog
     const currentActiveElement = activeElement(ownerDocument(this))
 
-    if (dialogElement && !contains(dialogElement, currentActiveElement)) {
+    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
       this.lastFocus = currentActiveElement
-
-      if (!dialogElement.hasAttribute('tabIndex')) {
-        warning(
-          false,
-          'The modal content node does not accept focus. For the benefit of ' +
-            'assistive technologies, the tabIndex of the node is being set ' +
-            'to "-1".'
-        )
-
-        dialogElement.setAttribute('tabIndex', -1)
-      }
-
-      dialogElement.focus()
+      this.dialog.focus()
     }
   }
 
@@ -430,9 +412,7 @@ class Modal extends React.Component {
     }
 
     const dialogProps = {
-      tabIndex: -1,
       role: 'document',
-      ref: this.setDialogRef,
     }
 
     let dialog = renderDialog
@@ -464,12 +444,13 @@ class Modal extends React.Component {
           {backdrop && this.renderBackdrop()}
           <div
             role={dialogRole}
-            ref={this.setRootRef}
+            ref={this.setDialogRef}
             // apparently only works on the dialog role element
             aria-modal={dialogRole === 'dialog' ? true : undefined}
             {...omitProps(props, Modal.propTypes)}
             style={style}
             className={className}
+            tabIndex="-1"
           >
             {dialog}
           </div>
