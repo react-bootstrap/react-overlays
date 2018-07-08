@@ -27,14 +27,11 @@ const modalStyle = function() {
     zIndex: 1040,
     top: top + '%',
     left: left + '%',
+    border: '1px solid #e5e5e5',
+    backgroundColor: 'white',
+    boxShadow: '0 5px 15px rgba(0,0,0,.5)',
+    padding: 20,
   }
-}
-
-const dialogStyle = {
-  border: '1px solid #e5e5e5',
-  backgroundColor: 'white',
-  boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-  padding: 20,
 }
 
 class ModalExample extends React.Component {
@@ -52,15 +49,6 @@ class ModalExample extends React.Component {
     return <div {...props} style={backdropStyle} />
   }
 
-  renderDialog = props => {
-    return (
-      <div style={dialogStyle} {...props}>
-        <h4 id="modal-label">Text in a modal</h4>
-        <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-        <ModalExample />
-      </div>
-    )
-  }
   render() {
     return (
       <div className="modal-example">
@@ -72,9 +60,16 @@ class ModalExample extends React.Component {
           style={modalStyle()}
           aria-labelledby="modal-label"
           show={this.state.showModal}
-          renderDialog={this.renderDialog}
           renderBackdrop={this.renderBackdrop}
-        />
+        >
+          <div>
+            <h4 id="modal-label">Text in a modal</h4>
+            <p>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </p>
+            <ModalExample />
+          </div>
+        </Modal>
       </div>
     )
   }
