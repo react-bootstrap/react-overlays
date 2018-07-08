@@ -5,14 +5,12 @@ import Overlay from './Overlay'
 import Portal from './Portal'
 import Position from './Position'
 import RootCloseWrapper from './RootCloseWrapper'
-import Dropdown, { dropdownMenu, dropdownToggle } from './Dropdown'
+import Dropdown from './Dropdown'
 
 export {
   Affix,
   AutoAffix,
   Dropdown,
-  dropdownMenu,
-  dropdownToggle,
   Modal,
   Overlay,
   Portal,

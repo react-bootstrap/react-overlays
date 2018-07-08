@@ -1,11 +1,11 @@
 import React from 'react'
 import Button from 'react-bootstrap/lib/Button'
-import Dropdown, {
-  dropdownMenu,
-  dropdownToggle,
-} from 'react-overlays/lib/Dropdown'
-import RootCloseWrapper from '../src/RootCloseWrapper'
+import Dropdown from 'react-overlays/src/Dropdown'
 
+const dropdownStyle = {
+  position: 'relative',
+  display: 'inline-block',
+}
 const menuStyle = {
   minWidth: 150,
   position: 'absolute',
@@ -16,37 +16,36 @@ const menuStyle = {
   padding: 20,
 }
 
-const DropdownMenu = dropdownMenu(
-  React.forwardRef(
-    ({ show, onClose, popper, alignRight: _, ...props }, ref) => (
-      <RootCloseWrapper disabled={!show} onRootClose={onClose}>
-        <div
-          ref={ref}
-          {...props}
-          style={{
-            ...menuStyle,
-            ...popper.styles,
-            display: show ? 'flex' : 'none',
-          }}
-        >
-          <button onClick={onClose} style={{ textAlign: 'left' }}>
-            Item 1
-          </button>
-          <button onClick={onClose} style={{ textAlign: 'left' }}>
-            Item 2
-          </button>
-        </div>
-      </RootCloseWrapper>
-    )
-  )
+const Menu = props => (
+  <Dropdown.Menu flip>
+    {({ popper, show, onClose, ref, labelledBy }) => (
+      <div
+        {...props}
+        ref={ref}
+        style={{
+          ...menuStyle,
+          ...popper.style,
+          display: show ? 'flex' : 'none',
+        }}
+        aria-labelledby={labelledBy}
+      >
+        <button onClick={onClose} style={{ textAlign: 'left' }}>
+          Item 1
+        </button>
+        <button onClick={onClose} style={{ textAlign: 'left' }}>
+          Item 2
+        </button>
+      </div>
+    )}
+  </Dropdown.Menu>
 )
 
-const DropdownToggle = dropdownToggle(
-  React.forwardRef(({ onToggle, show, children, ...props }, ref) => (
-    <Button ref={ref} {...props} onClick={onToggle}>
-      {children}
-    </Button>
-  ))
+const Toggle = props => (
+  <Dropdown.Toggle>
+    {({ onToggle, show, ref }) => (
+      <Button {...props} onClick={onToggle} ref={ref} />
+    )}
+  </Dropdown.Toggle>
 )
 
 const DropdownButton = ({ show, onToggle, drop, alignRight, title, role }) => (
@@ -58,10 +57,10 @@ const DropdownButton = ({ show, onToggle, drop, alignRight, title, role }) => (
     itemSelector="button:not(:disabled)"
   >
     {innerProps => (
-      <span {...innerProps}>
-        <DropdownToggle id="example-toggle">{title}</DropdownToggle>
-        <DropdownMenu role={role} />
-      </span>
+      <div {...innerProps} style={dropdownStyle}>
+        <Toggle id="example-toggle">{title}</Toggle>
+        <Menu role={role} />
+      </div>
     )}
   </Dropdown>
 )
@@ -79,15 +78,14 @@ class DropdownExample extends React.Component {
       <div className="dropdown-example">
         <DropdownButton
           show={show}
+          drop="down"
           onToggle={this.handleToggle}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
-        <DropdownButton alignRight title="Align right" />
+        {/* <DropdownButton alignRight title="Align right" />
 
         <DropdownButton drop="up" title="Drop up" />
-        <DropdownButton role="menu" title="Role 'menu'" />
-
-        <br />
+        <DropdownButton role="menu" title="Role 'menu'" /> */}
       </div>
     )
   }

@@ -2,12 +2,14 @@ import matches from 'dom-helpers/query/matches'
 import qsa from 'dom-helpers/query/querySelectorAll'
 import React from 'react'
 import PropTypes from 'prop-types'
+import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
 
-import * as Popper from 'react-popper'
-import DropdownContext from './DropdownContext'
-import DropdownMenu from './DropdownMenu'
-import DropdownToggle from './DropdownToggle'
+import createPopper from './utils/createPopper'
+import DropdownContext, {
+  dropdownMenu,
+  dropdownToggle,
+} from './DropdownContext'
 
 const propTypes = {
   /**
@@ -60,14 +62,18 @@ const defaultProps = {
 
 class Dropdown extends React.Component {
   static getDerivedStateFromProps({ drop, alignRight, show }, prevState) {
-    const lastShow = prevState.dropdownContext.show
+    let placement = alignRight ? 'bottom-end' : 'bottom-start'
+    if (drop === 'up') placement = alignRight ? 'top-end' : 'top-start'
+    if (drop === 'right') placement = 'right-start'
+    if (drop === 'left') placement = 'left-start'
+
     return {
-      lastShow,
+      placement,
+      lastShow: prevState.dropdownContext.show,
       dropdownContext: {
         ...prevState.dropdownContext,
-        drop,
-        show,
         alignRight,
+        show,
       },
     }
   }
@@ -76,18 +82,34 @@ class Dropdown extends React.Component {
     super(props, context)
 
     this._focusInDropdown = false
-
-    this.menu = null
+    this.popper = createPopper(this.handleUpdate)
 
     this.state = {
       dropdownContext: {
+        popper: {},
         onToggle: this.handleClick,
         onClose: this.handleClose,
-        menuRef: r => {
-          this.menu = r
+        setToggleElement: el => {
+          this.toggle = ReactDOM.findDOMNode(el)
+          if (this.toggle)
+            this.setState(({ dropdownContext }) => ({
+              dropdownContext: {
+                ...dropdownContext,
+                toggleId: this.toggle.id,
+              },
+            }))
+          if (this.props.show) this.updatePosition()
+        },
+        setMenuElement: el => {
+          this.menu = ReactDOM.findDOMNode(el)
+          if (this.props.show) this.updatePosition()
         },
       },
     }
+  }
+
+  componentDidMount() {
+    if (this.props.show) this.updatePosition()
   }
 
   componentDidUpdate(prevProps) {
@@ -95,6 +117,7 @@ class Dropdown extends React.Component {
     const prevOpen = prevProps.show
 
     if (show && !prevOpen) {
+      this.updatePosition()
       this.maybeFocusFirst()
     }
     if (!show && prevOpen) {
@@ -105,6 +128,10 @@ class Dropdown extends React.Component {
         this.focus()
       }
     }
+  }
+
+  componentWillUnmount() {
+    if (this.popper) this.popper.destroy()
   }
 
   getNextFocusedChild(current, offset) {
@@ -136,7 +163,6 @@ class Dropdown extends React.Component {
     let first = qsa(this.menu, itemSelector)[0]
     if (first && first.focus) first.focus()
   }
-
   handleClick = event => {
     this.toggleOpen(event)
   }
@@ -178,6 +204,22 @@ class Dropdown extends React.Component {
     }
   }
 
+  handleUpdate = popper => {
+    this.setState({ popper })
+  }
+
+  updatePosition() {
+    if (!this.toggle || !this.menu) return
+    const { popperConfig } = this.props
+
+    this.popper.update({
+      ...popperConfig,
+      element: this.menu,
+      target: this.toggle,
+      placement: this.state.placement,
+    })
+  }
+
   toggleOpen(event) {
     let show = !this.props.show
     this.props.onToggle(show, event)
@@ -191,12 +233,14 @@ class Dropdown extends React.Component {
     if (this.state.lastShow && !this.props.show) {
       this._focusInDropdown = this.menu.contains(document.activeElement)
     }
+    const { dropdownContext, popper = {} } = this.state
+    dropdownContext.popper = popper
 
     return (
-      <DropdownContext.Provider value={this.state.dropdownContext}>
-        <Popper.Manager>
-          {children({ onKeyDown: this.handleKeyDown })}
-        </Popper.Manager>
+      <DropdownContext.Provider value={dropdownContext}>
+        {children({
+          onKeyDown: this.handleKeyDown,
+        })}
       </DropdownContext.Provider>
     )
   }
@@ -207,7 +251,5 @@ Dropdown.defaultProps = defaultProps
 
 const UncontrolledDropdown = uncontrollable(Dropdown, { show: 'onToggle' })
 
-UncontrolledDropdown.Menu = DropdownMenu
-UncontrolledDropdown.Toggle = DropdownToggle
-
+export { dropdownMenu, dropdownToggle }
 export default UncontrolledDropdown
