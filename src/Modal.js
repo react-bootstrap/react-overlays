@@ -297,9 +297,7 @@ class Modal extends React.Component {
   setRootRef = ref => {
     this.root = ref
   }
-  setDialogRef = ref => {
-    this.dialog = ref && ReactDOM.findDOMNode(ref)
-  }
+
   setBackdropRef = ref => {
     this.backdrop = ref && ReactDOM.findDOMNode(ref)
   }
@@ -338,28 +336,13 @@ class Modal extends React.Component {
   }
 
   autoFocus() {
-    if (!this.props.autoFocus) {
-      return
-    }
+    if (!this.props.autoFocus) return
 
-    const dialogElement = this.dialog
     const currentActiveElement = activeElement(ownerDocument(this))
 
-    if (dialogElement && !contains(dialogElement, currentActiveElement)) {
+    if (this.root && !contains(this.root, currentActiveElement)) {
       this.lastFocus = currentActiveElement
-
-      if (!dialogElement.hasAttribute('tabIndex')) {
-        warning(
-          false,
-          'The modal content node does not accept focus. For the benefit of ' +
-            'assistive technologies, the tabIndex of the node is being set ' +
-            'to "-1".'
-        )
-
-        dialogElement.setAttribute('tabIndex', -1)
-      }
-
-      dialogElement.focus()
+      this.root.focus()
     }
   }
 
@@ -378,8 +361,8 @@ class Modal extends React.Component {
 
     const currentActiveElement = activeElement(ownerDocument(this))
 
-    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
-      this.dialog.focus()
+    if (this.root && !contains(this.root, currentActiveElement)) {
+      this.root.focus()
     }
   }
 
@@ -430,9 +413,7 @@ class Modal extends React.Component {
     }
 
     const dialogProps = {
-      tabIndex: -1,
       role: 'document',
-      ref: this.setDialogRef,
     }
 
     let dialog = renderDialog
@@ -470,6 +451,7 @@ class Modal extends React.Component {
             {...omitProps(props, Modal.propTypes)}
             style={style}
             className={className}
+            tabIndex="-1"
           >
             {dialog}
           </div>

@@ -7,7 +7,7 @@ import simulant from 'simulant'
 
 import Modal from '../src/Modal'
 
-import { render, shouldWarn } from './helpers'
+import { render } from './helpers'
 
 const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode))
 
@@ -177,22 +177,36 @@ describe('<Modal>', () => {
   })
 
   it('should add role to child', () => {
-    let instance = render(
+    let dialog
+    render(
       <Modal show>
-        <strong>Message</strong>
+        <strong
+          ref={r => {
+            dialog = r
+          }}
+        >
+          Message
+        </strong>
       </Modal>,
       mountPoint
     )
 
-    expect(instance.dialog.getAttribute('role')).to.equal('document')
+    expect(dialog.getAttribute('role')).to.equal('document')
   })
 
   it('should allow custom rendering', () => {
-    let instance = render(
+    let dialog
+    render(
       <Modal
         show
         renderDialog={props => (
-          <strong {...props} role="group">
+          <strong
+            {...props}
+            role="group"
+            ref={r => {
+              dialog = r
+            }}
+          >
             Message
           </strong>
         )}
@@ -200,7 +214,7 @@ describe('<Modal>', () => {
       mountPoint
     )
 
-    expect(instance.dialog.getAttribute('role')).to.equal('group')
+    expect(dialog.getAttribute('role')).to.equal('group')
   })
 
   it('should unbind listeners when unmounted', () => {
@@ -213,11 +227,11 @@ describe('<Modal>', () => {
       mountPoint
     )
 
-    assert.ok($(document.body).hasClass('modal-open'))
+    assert.ok(document.body.classList.contains('modal-open'))
 
     render(<div />, mountPoint)
 
-    assert.ok(!$(document.body).hasClass('modal-open'))
+    assert.ok(!document.body.classList.contains('modal-open'))
   })
 
   it('should pass transition callbacks to Transition', done => {
@@ -334,8 +348,8 @@ describe('<Modal>', () => {
       expect(document.activeElement).to.equal(focusableContainer)
 
       let instance = render(
-        <Modal show>
-          <strong className="modal">Message</strong>
+        <Modal show className="modal">
+          <strong>Message</strong>
         </Modal>,
         focusableContainer
       )
@@ -362,8 +376,8 @@ describe('<Modal>', () => {
       expect(document.activeElement).to.equal(focusableContainer)
 
       render(
-        <Modal show>
-          <div className="modal">
+        <Modal show className="modal">
+          <div>
             <input autoFocus />
           </div>
         </Modal>,
@@ -379,8 +393,8 @@ describe('<Modal>', () => {
       expect(document.activeElement).to.equal(focusableContainer)
 
       render(
-        <Modal show>
-          <div className="modal">
+        <Modal show className="modal">
+          <div>
             <input autoFocus />
           </div>
         </Modal>,
@@ -390,19 +404,6 @@ describe('<Modal>', () => {
       focusableContainer.focus()
 
       document.activeElement.className.should.contain('modal')
-    })
-
-    it('should warn if the modal content is not focusable', () => {
-      shouldWarn('The modal content node does not accept focus')
-
-      const Dialog = React.forwardRef((props, ref) => <div ref={ref} />)
-
-      render(
-        <Modal show>
-          <Dialog />
-        </Modal>,
-        focusableContainer
-      )
     })
 
     it('should not attempt to focus nonexistent children', () => {
