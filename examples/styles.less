@@ -2,6 +2,14 @@
 //   border-radius: 0;
 // }
 
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+}
+
 .app {
   font-family: 'Helvetica';
   max-width: 900px;
@@ -106,14 +114,16 @@ h4 a:focus .anchor-icon {
 .modal-example,
 .portal-example,
 .overlay-example,
+.dropdown-example,
 .root-close-wrapper-example {
   text-align: center;
 }
 
-.overlay-example {
+.overlay-example,
+.dropdown-example {
   position: relative;
-  height: 130px;
-  padding-top: 35px;
+  height: 320px;
+  padding-top: 30px;
 
   p {
     padding-top: 10px;

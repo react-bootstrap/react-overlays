@@ -54,7 +54,7 @@ class PropTable extends React.Component {
     return (
       <div>
         <h3>
-          {component} Props
+          {this.props.title || component} Props
           {!!composes.length && [
             <br key="1" />,
             <small key="2">

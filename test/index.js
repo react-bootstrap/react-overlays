@@ -3,6 +3,32 @@ import '@babel/polyfill'
 import chai from 'chai'
 import sinonChai from 'sinon-chai'
 
+import Enzyme, { ShallowWrapper, ReactWrapper } from 'enzyme'
+import Adapter from '@monastic.panic/enzyme-adapter-react-16'
+
+Enzyme.configure({ adapter: new Adapter() })
+
+function assertLength(length) {
+  return function $assertLength(selector) {
+    let result = this.find(selector)
+    expect(result).to.have.length(length)
+    return result
+  }
+}
+
+function print() {
+  return this.tap(f => console.log(f.debug()))
+}
+
+ReactWrapper.prototype.assertSingle = assertLength(1)
+ShallowWrapper.prototype.assertSingle = assertLength(1)
+
+ReactWrapper.prototype.assertNone = assertLength(0)
+ShallowWrapper.prototype.assertNone = assertLength(0)
+
+ReactWrapper.prototype.print = print
+ShallowWrapper.prototype.print = print
+
 chai.should()
 chai.use(sinonChai)
 
