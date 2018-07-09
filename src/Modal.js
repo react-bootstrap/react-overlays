@@ -201,6 +201,7 @@ class Modal extends React.Component {
 
   static defaultProps = {
     show: false,
+    role: 'dialog',
     backdrop: true,
     keyboard: true,
     autoFocus: true,
@@ -394,7 +395,7 @@ class Modal extends React.Component {
       container,
       children,
       renderDialog,
-      role,
+      role = 'dialog',
       transition: Transition,
       backdrop,
       className,
@@ -412,12 +413,23 @@ class Modal extends React.Component {
     }
 
     const dialogProps = {
-      role: 'document',
+      role,
+      ref: this.setDialogRef,
+      // apparently only works on the dialog role element
+      'aria-modal': role === 'dialog' ? true : undefined,
+      ...omitProps(props, Modal.propTypes),
+      style,
+      className,
+      tabIndex: '-1',
     }
 
-    let dialog = renderDialog
-      ? renderDialog(dialogProps)
-      : React.cloneElement(children, dialogProps)
+    let dialog = renderDialog ? (
+      renderDialog(dialogProps)
+    ) : (
+      <div {...dialogProps}>
+        {React.cloneElement(children, { role: 'document' })}
+      </div>
+    )
 
     if (Transition) {
       dialog = (
@@ -436,24 +448,12 @@ class Modal extends React.Component {
         </Transition>
       )
     }
-    const dialogRole = role === undefined ? 'dialog' : role
 
     return (
       <Portal container={container} onRendered={this.onPortalRendered}>
         <React.Fragment>
           {backdrop && this.renderBackdrop()}
-          <div
-            role={dialogRole}
-            ref={this.setDialogRef}
-            // apparently only works on the dialog role element
-            aria-modal={dialogRole === 'dialog' ? true : undefined}
-            {...omitProps(props, Modal.propTypes)}
-            style={style}
-            className={className}
-            tabIndex="-1"
-          >
-            {dialog}
-          </div>
+          {dialog}
         </React.Fragment>
       </Portal>
     )
