@@ -36,6 +36,7 @@
     "testonly": "npm run tdd -- --single-run"
   },
   "dependencies": {
+    "@react-bootstrap/react-popper": "^1.0.2",
     "classnames": "^2.2.6",
     "compose-ref": "^0.1.0",
     "dom-helpers": "^3.3.1",

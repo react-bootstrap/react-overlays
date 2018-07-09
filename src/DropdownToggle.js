@@ -2,14 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import forwardRef from 'react-context-toolbox/lib/forwardRef'
 
-import * as Popper from 'react-popper'
+import { Reference } from '@react-bootstrap/react-popper'
 import DropdownContext from './DropdownContext'
 
 const DropdownToggle = forwardRef(
   ({ children, ...props }, ref) => (
     <DropdownContext.Consumer>
       {({ show, onToggle }) => (
-        <Popper.Reference {...props}>
+        <Reference {...props}>
           {({ ref }) => {
             return children({
               show,
@@ -21,7 +21,7 @@ const DropdownToggle = forwardRef(
                 }),
             })
           }}
-        </Popper.Reference>
+        </Reference>
       )}
     </DropdownContext.Consumer>
   ),

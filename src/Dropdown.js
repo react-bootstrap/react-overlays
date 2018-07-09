@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import uncontrollable from 'uncontrollable'
 
-import * as Popper from 'react-popper'
+import * as Popper from '@react-bootstrap/react-popper'
 import DropdownContext from './DropdownContext'
 import DropdownMenu from './DropdownMenu'
 import DropdownToggle from './DropdownToggle'

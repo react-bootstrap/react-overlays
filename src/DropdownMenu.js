@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Popper } from 'react-popper'
+import { Popper } from '@react-bootstrap/react-popper'
 import DropdownContext from './DropdownContext'
 import RootCloseWrapper from './RootCloseWrapper'
 import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps'
@@ -10,10 +10,12 @@ class DropdownMenu extends React.Component {
 
   state = { toggleId: null }
 
+  hasInitialized = false
+
   componentDidUpdate(prevProps) {
-    if (this.props.show && !prevProps.show && this.scheduleUpdate) {
-      this.scheduleUpdate()
-    }
+    // if (this.props.show && !prevProps.show && this.scheduleUpdate) {
+    //   this.scheduleUpdate()
+    // }
   }
 
   getReferenceId = data => {
@@ -50,6 +52,8 @@ class DropdownMenu extends React.Component {
     if (drop === 'right') placement = 'right-start'
     if (drop === 'left') placement = 'left-start'
 
+    if (show && !this.hasInitialized) this.hasInitialized = show
+
     const modifiers = {
       flip: {
         enabled: !!flip,
@@ -73,6 +77,7 @@ class DropdownMenu extends React.Component {
           innerRef={menuRef}
           placement={placement}
           modifiers={modifiers}
+          init={this.hasInitialized}
         >
           {({ ref, ...popper }) => {
             this.scheduleUpdate = popper.scheduleUpdate

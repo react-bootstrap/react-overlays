@@ -78,7 +78,7 @@ class DropdownExample extends React.Component {
       <div className="dropdown-example">
         <DropdownButton
           show={show}
-          drop="down"
+          drop="up"
           onToggle={this.handleToggle}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
