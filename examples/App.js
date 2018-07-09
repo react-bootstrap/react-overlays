@@ -27,6 +27,8 @@ import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal'
 import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay'
 
 import DropdownMetadata from 'component-metadata-loader?pitch!react-overlays/Dropdown'
+import DropdownMenuMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownMenu'
+import DropdownToggleMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownToggle'
 import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal'
 import PositionMetadata from 'component-metadata-loader?pitch!react-overlays/Position'
 import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper'
@@ -179,6 +181,16 @@ class Example extends React.Component {
             />
             <ExampleEditor codeText={DropdownSource} />
             <PropTable component="Dropdown" metadata={DropdownMetadata} />
+            <PropTable
+              title="Dropdown.Menu"
+              component="ReactOverlaysDropdownMenu"
+              metadata={DropdownMenuMetadata}
+            />
+            <PropTable
+              title="Dropdown.Toggle"
+              component="ReactOverlaysDropdownToggle"
+              metadata={DropdownToggleMetadata}
+            />
           </section>
 
           <section>

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 import { Popper } from '@react-bootstrap/react-popper'
@@ -8,15 +9,49 @@ import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps'
 class DropdownMenu extends React.Component {
   static displayName = 'ReactOverlaysDropdownMenu'
 
+  static propTypes = {
+    /**
+     * Controls the visible state of the menu, generally this is
+     * provided by the parent `Dropdown` component,
+     * but may also be specified as a prop directly.
+     */
+    show: PropTypes.bool,
+
+    /**
+     * Aligns the dropdown menu to the 'end' of it's placement position.
+     * Generally this is provided by the parent `Dropdown` component,
+     * but may also be specified as a prop directly.
+     */
+    alignRight: PropTypes.bool,
+
+    /**
+     * Enables the Popper.js `flip` modifier, allowing the Dropdown to
+     * automatically adjust it's placement in case of overlap with the viewport or toggle.
+     * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
+     */
+    flip: PropTypes.bool,
+
+    /**
+     * A set of popper options and props passed directly to react-popper's Popper component.
+     */
+    popperConfig: PropTypes.object,
+
+    /**
+     * Override the default event used by RootCloseWrapper.
+     */
+    rootCloseEvent: PropTypes.string,
+
+    /** @private */
+    onToggle: PropTypes.func,
+    /** @private */
+    menuRef: PropTypes.func,
+    /** @private */
+    drop: PropTypes.string,
+  }
+
   state = { toggleId: null }
 
   hasInitialized = false
-
-  componentDidUpdate(prevProps) {
-    // if (this.props.show && !prevProps.show && this.scheduleUpdate) {
-    //   this.scheduleUpdate()
-    // }
-  }
 
   getReferenceId = data => {
     const {
@@ -41,7 +76,6 @@ class DropdownMenu extends React.Component {
       menuRef,
       alignRight,
       drop,
-      children,
       rootCloseEvent,
       popperConfig = {},
     } = this.props

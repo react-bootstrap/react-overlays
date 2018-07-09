@@ -5,8 +5,8 @@ import forwardRef from 'react-context-toolbox/lib/forwardRef'
 import { Reference } from '@react-bootstrap/react-popper'
 import DropdownContext from './DropdownContext'
 
-const DropdownToggle = forwardRef(
-  ({ children, ...props }, ref) => (
+function DropdownToggle({ children, ...props }, ref) {
+  return (
     <DropdownContext.Consumer>
       {({ show, onToggle }) => (
         <Reference {...props}>
@@ -24,8 +24,9 @@ const DropdownToggle = forwardRef(
         </Reference>
       )}
     </DropdownContext.Consumer>
-  ),
-  { displayName: 'DropdownToggle' }
-)
+  )
+}
 
-export default DropdownToggle
+DropdownToggle.displayName = 'ReactOverlaysDropdownToggle'
+
+export default forwardRef(DropdownToggle, {})
