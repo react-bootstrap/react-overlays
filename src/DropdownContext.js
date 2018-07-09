@@ -1,13 +1,13 @@
 import React from 'react'
 
 const DropdownContext = React.createContext({
-  setMenuElement() {},
-  setToggleElement() {},
+  menuRef() {},
+  toggleRef() {},
   onToggle() {},
-  popper: {},
-  toggleId: undefined,
-  show: null,
+  toggleNode: undefined,
   alignRight: null,
+  show: null,
+  drop: null,
 })
 
 export default DropdownContext

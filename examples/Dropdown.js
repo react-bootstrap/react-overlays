@@ -18,16 +18,16 @@ const menuStyle = {
 
 const Menu = props => (
   <Dropdown.Menu flip>
-    {({ popper, show, onClose, ref, labelledBy }) => (
+    {({ popper, show, onClose, ref, props: menuProps }) => (
       <div
         {...props}
+        {...menuProps}
         ref={ref}
         style={{
           ...menuStyle,
           ...popper.style,
           display: show ? 'flex' : 'none',
         }}
-        aria-labelledby={labelledBy}
       >
         <button onClick={onClose} style={{ textAlign: 'left' }}>
           Item 1
@@ -42,8 +42,8 @@ const Menu = props => (
 
 const Toggle = props => (
   <Dropdown.Toggle>
-    {({ onToggle, show, ref }) => (
-      <Button {...props} onClick={onToggle} ref={ref} />
+    {({ onToggle, show, ref, props: toggleProps }) => (
+      <Button {...props} {...toggleProps} onClick={onToggle} ref={ref} />
     )}
   </Dropdown.Toggle>
 )

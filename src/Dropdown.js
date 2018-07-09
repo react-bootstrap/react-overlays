@@ -1,6 +1,7 @@
 import matches from 'dom-helpers/query/matches'
 import qsa from 'dom-helpers/query/querySelectorAll'
 import React from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import uncontrollable from 'uncontrollable'
 
@@ -56,15 +57,16 @@ const propTypes = {
 
 const defaultProps = {
   as: 'div',
+  itemSelector: '* > *',
 }
 
 class Dropdown extends React.Component {
   static getDerivedStateFromProps({ drop, alignRight, show }, prevState) {
-    const lastShow = prevState.dropdownContext.show
+    const lastShow = prevState.context.show
     return {
       lastShow,
-      dropdownContext: {
-        ...prevState.dropdownContext,
+      context: {
+        ...prevState.context,
         drop,
         show,
         alignRight,
@@ -80,11 +82,17 @@ class Dropdown extends React.Component {
     this.menu = null
 
     this.state = {
-      dropdownContext: {
+      context: {
         onToggle: this.handleClick,
         onClose: this.handleClose,
         menuRef: r => {
           this.menu = r
+        },
+        toggleRef: r => {
+          const toggleNode = r && ReactDOM.findDOMNode(r)
+          this.setState(({ context }) => ({
+            context: { ...context, toggleNode },
+          }))
         },
       },
     }
@@ -124,8 +132,9 @@ class Dropdown extends React.Component {
   }
 
   focus() {
-    if (this.toggle && this.toggle.focus) {
-      this.toggle.focus()
+    const { toggleNode } = this.state.context
+    if (toggleNode && toggleNode.focus) {
+      toggleNode.focus()
     }
   }
 
@@ -172,7 +181,7 @@ class Dropdown extends React.Component {
         return
       case 'Escape':
       case 'Tab':
-        this.handleClose(event)
+        this.props.onToggle(false, event)
         break
       default:
     }
@@ -193,7 +202,7 @@ class Dropdown extends React.Component {
     }
 
     return (
-      <DropdownContext.Provider value={this.state.dropdownContext}>
+      <DropdownContext.Provider value={this.state.context}>
         <Popper.Manager>
           {children({ onKeyDown: this.handleKeyDown })}
         </Popper.Manager>

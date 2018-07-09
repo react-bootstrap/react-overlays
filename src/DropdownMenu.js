@@ -47,21 +47,13 @@ class DropdownMenu extends React.Component {
     menuRef: PropTypes.func,
     /** @private */
     drop: PropTypes.string,
+    /** @private */
+    toggleNode: PropTypes.any,
   }
 
   state = { toggleId: null }
 
   hasInitialized = false
-
-  getReferenceId = data => {
-    const {
-      instance: { reference },
-    } = data
-
-    const { toggleId } = this.state
-    if (toggleId !== reference.id) this.setState({ toggleId: reference.id })
-    return data
-  }
 
   handleClose = e => {
     if (!this.props.onToggle) return
@@ -76,10 +68,10 @@ class DropdownMenu extends React.Component {
       menuRef,
       alignRight,
       drop,
+      toggleNode,
       rootCloseEvent,
       popperConfig = {},
     } = this.props
-    const { toggleId } = this.state
 
     let placement = alignRight ? 'bottom-end' : 'bottom-start'
     if (drop === 'up') placement = alignRight ? 'top-end' : 'top-start'
@@ -93,13 +85,13 @@ class DropdownMenu extends React.Component {
         enabled: !!flip,
       },
       ...popperConfig.modifiers,
-      reactOverlaysDropdown: {
-        enabled: true,
-        order: 901,
-        fn: this.getReferenceId,
-      },
     }
 
+    // Add it this way, so it doesn't override someones usage
+    // with react-poppers <Reference>
+    if (toggleNode) {
+      popperConfig.referenceElement = toggleNode
+    }
     return (
       <RootCloseWrapper
         disabled={!show}
@@ -122,7 +114,9 @@ class DropdownMenu extends React.Component {
               popper,
               alignRight,
               onClose: this.handleClose,
-              labelledBy: toggleId,
+              props: {
+                'aria-labelledby': toggleNode && toggleNode.id,
+              },
             })
           }}
         </Popper>
@@ -133,10 +127,11 @@ class DropdownMenu extends React.Component {
 
 const DecoratedDropdownMenu = mapContextToProps(
   DropdownContext,
-  ({ show, alignRight, onToggle, drop, menuRef }, props) => ({
+  ({ show, alignRight, onToggle, drop, menuRef, toggleNode }, props) => ({
     drop,
     menuRef,
     onToggle,
+    toggleNode,
     show: show == null ? props.show : show,
     alignRight: alignRight == null ? props.alignRight : alignRight,
   }),
