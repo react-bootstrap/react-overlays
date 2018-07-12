@@ -53,6 +53,10 @@ class DropdownMenu extends React.Component {
     toggleNode: PropTypes.any,
   }
 
+  static defaultProps = {
+    usePopper: 'lazy',
+  }
+
   state = { toggleId: null }
 
   popperIsInitialized = false
