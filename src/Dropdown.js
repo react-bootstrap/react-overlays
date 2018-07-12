@@ -23,9 +23,9 @@ const propTypes = {
    */
   itemSelector: PropTypes.string.isRequired,
   /**
-   * Align the menu to the right side of the Dropdown toggle
+   * Align the menu to the 'end' side of the placement side of the Dropdown toggle. The default placement is `top-start` or `bottom-start`.
    */
-  alignRight: PropTypes.bool,
+  alignEnd: PropTypes.bool,
 
   /**
    * Whether or not the Dropdown is visible.
@@ -33,11 +33,6 @@ const propTypes = {
    * @controllable onToggle
    */
   show: PropTypes.bool,
-
-  /**
-   * A set of configuration options passed to the underlying popper instance.
-   */
-  popperConfig: PropTypes.object,
 
   /**
    * A callback fired when the Dropdown wishes to change visibility. Called with the requested
@@ -61,7 +56,7 @@ const defaultProps = {
 }
 
 class Dropdown extends React.Component {
-  static getDerivedStateFromProps({ drop, alignRight, show }, prevState) {
+  static getDerivedStateFromProps({ drop, alignEnd, show }, prevState) {
     const lastShow = prevState.context.show
     return {
       lastShow,
@@ -69,7 +64,7 @@ class Dropdown extends React.Component {
         ...prevState.context,
         drop,
         show,
-        alignRight,
+        alignEnd,
       },
     }
   }

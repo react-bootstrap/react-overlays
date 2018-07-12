@@ -22,7 +22,7 @@ class DropdownMenu extends React.Component {
      * Generally this is provided by the parent `Dropdown` component,
      * but may also be specified as a prop directly.
      */
-    alignRight: PropTypes.bool,
+    alignEnd: PropTypes.bool,
 
     /**
      * Enables the Popper.js `flip` modifier, allowing the Dropdown to
@@ -55,6 +55,25 @@ class DropdownMenu extends React.Component {
 
   hasInitialized = false
 
+  getSnapshotBeforeUpdate(prevProps) {
+    // If, to the best we can tell, this update won't reinitialize popper,
+    // manually schedule an update
+    const shouldUpdatePopper =
+      !prevProps.show &&
+      this.props.show &&
+      this.hasInitialized &&
+      // a new reference node will already trigger this internally
+      prevProps.toggleNode === this.props.toggleNode
+
+    return !!shouldUpdatePopper
+  }
+
+  componentDidUpdate(_, __, shouldUpdatePopper) {
+    if (shouldUpdatePopper) {
+      this.scheduleUpdate()
+    }
+  }
+
   handleClose = e => {
     if (!this.props.onToggle) return
 
@@ -66,17 +85,17 @@ class DropdownMenu extends React.Component {
       show,
       flip,
       menuRef,
-      alignRight,
+      alignEnd,
       drop,
       toggleNode,
       rootCloseEvent,
       popperConfig = {},
     } = this.props
 
-    let placement = alignRight ? 'bottom-end' : 'bottom-start'
-    if (drop === 'up') placement = alignRight ? 'top-end' : 'top-start'
-    if (drop === 'right') placement = 'right-start'
-    if (drop === 'left') placement = 'left-start'
+    let placement = alignEnd ? 'bottom-end' : 'bottom-start'
+    if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start'
+    if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start'
+    if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start'
 
     if (show && !this.hasInitialized) this.hasInitialized = show
 
@@ -92,6 +111,7 @@ class DropdownMenu extends React.Component {
     if (toggleNode) {
       popperConfig.referenceElement = toggleNode
     }
+
     return (
       <RootCloseWrapper
         disabled={!show}
@@ -112,7 +132,7 @@ class DropdownMenu extends React.Component {
               ref,
               show,
               popper,
-              alignRight,
+              alignEnd,
               onClose: this.handleClose,
               props: {
                 'aria-labelledby': toggleNode && toggleNode.id,
@@ -127,13 +147,13 @@ class DropdownMenu extends React.Component {
 
 const DecoratedDropdownMenu = mapContextToProps(
   DropdownContext,
-  ({ show, alignRight, onToggle, drop, menuRef, toggleNode }, props) => ({
+  ({ show, alignEnd, onToggle, drop, menuRef, toggleNode }, props) => ({
     drop,
     menuRef,
     onToggle,
     toggleNode,
     show: show == null ? props.show : show,
-    alignRight: alignRight == null ? props.alignRight : alignRight,
+    alignEnd: alignEnd == null ? props.alignEnd : alignEnd,
   }),
   DropdownMenu
 )
