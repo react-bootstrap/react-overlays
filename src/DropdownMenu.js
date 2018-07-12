@@ -31,6 +31,8 @@ class DropdownMenu extends React.Component {
      */
     flip: PropTypes.bool,
 
+    usePopper: PropTypes.oneOf([true, false, 'lazy']),
+
     /**
      * A set of popper options and props passed directly to react-popper's Popper component.
      */
@@ -53,7 +55,7 @@ class DropdownMenu extends React.Component {
 
   state = { toggleId: null }
 
-  hasInitialized = false
+  popperIsInitialized = false
 
   getSnapshotBeforeUpdate(prevProps) {
     // If, to the best we can tell, this update won't reinitialize popper,
@@ -61,9 +63,17 @@ class DropdownMenu extends React.Component {
     const shouldUpdatePopper =
       !prevProps.show &&
       this.props.show &&
-      this.hasInitialized &&
+      this.popperIsInitialized &&
       // a new reference node will already trigger this internally
       prevProps.toggleNode === this.props.toggleNode
+
+    if (
+      this.props.show &&
+      this.props.usePopper === 'lazy' &&
+      !this.popperIsInitialized
+    ) {
+      this.popperIsInitialized = true
+    }
 
     return !!shouldUpdatePopper
   }
@@ -87,6 +97,7 @@ class DropdownMenu extends React.Component {
       menuRef,
       alignEnd,
       drop,
+      usePopper,
       toggleNode,
       rootCloseEvent,
       popperConfig = {},
@@ -97,14 +108,18 @@ class DropdownMenu extends React.Component {
     if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start'
     if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start'
 
-    if (show && !this.hasInitialized) this.hasInitialized = show
-
     const modifiers = {
       flip: {
         enabled: !!flip,
       },
       ...popperConfig.modifiers,
     }
+
+    const initPopper = usePopper
+      ? usePopper === 'lazy'
+        ? this.popperIsInitialized || show
+        : show
+      : false
 
     // Add it this way, so it doesn't override someones usage
     // with react-poppers <Reference>
@@ -123,7 +138,7 @@ class DropdownMenu extends React.Component {
           innerRef={menuRef}
           placement={placement}
           modifiers={modifiers}
-          init={this.hasInitialized}
+          init={initPopper}
         >
           {({ ref, ...popper }) => {
             this.scheduleUpdate = popper.scheduleUpdate
