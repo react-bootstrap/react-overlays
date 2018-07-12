@@ -67,9 +67,9 @@ describe('<Dropdown>', () => {
     buttonNode.getAttribute('id').should.be.ok
   })
 
-  it('forwards alignRight to menu', () => {
-    mount(<SimpleDropdown alignRight />).assertSingle(
-      'DropdownMenu[alignRight=true]'
+  it('forwards alignEnd to menu', () => {
+    mount(<SimpleDropdown alignEnd />).assertSingle(
+      'DropdownMenu[alignEnd=true]'
     )
   })
 
