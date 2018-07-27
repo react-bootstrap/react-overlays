@@ -130,7 +130,7 @@ class DropdownMenu extends React.Component {
           {...popperConfig}
           innerRef={menuRef}
           placement={placement}
-          eventsEnabled={show}
+          eventsEnabled={!!show}
           modifiers={{
             flip: { enabled: !!flip },
             ...popperConfig.modifiers,

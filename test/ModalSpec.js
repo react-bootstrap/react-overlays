@@ -407,7 +407,7 @@ describe('<Modal>', () => {
     })
 
     it('should not attempt to focus nonexistent children', () => {
-      const Dialog = React.forwardRef((props, ref) => null)
+      const Dialog = React.forwardRef((_, __) => null)
 
       render(
         <Modal show>

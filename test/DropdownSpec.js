@@ -22,7 +22,7 @@ describe('<Dropdown>', () => {
 
   const Toggle = props => (
     <Dropdown.Toggle>
-      {({ onToggle, show, ref, props: toggleProps }) => (
+      {({ onToggle, ref, props: toggleProps }) => (
         <button
           {...props}
           {...toggleProps}

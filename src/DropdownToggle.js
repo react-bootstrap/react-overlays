@@ -1,9 +1,8 @@
 import React from 'react'
-import forwardRef from 'react-context-toolbox/lib/forwardRef'
 
 import DropdownContext from './DropdownContext'
 
-function DropdownToggle({ children, ...props }, ref) {
+function DropdownToggle({ children }) {
   return (
     <DropdownContext.Consumer>
       {({ show, onToggle, toggleRef }) =>
@@ -23,4 +22,4 @@ function DropdownToggle({ children, ...props }, ref) {
 
 DropdownToggle.displayName = 'ReactOverlaysDropdownToggle'
 
-export default forwardRef(DropdownToggle, {})
+export default DropdownToggle

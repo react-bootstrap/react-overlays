@@ -39,7 +39,6 @@
     "@react-bootstrap/react-popper": "^1.1.0",
     "classnames": "^2.2.6",
     "dom-helpers": "^3.3.1",
-
     "prop-types": "^15.6.2",
     "prop-types-extra": "^1.1.0",
     "react-context-toolbox": "^1.1.0",
@@ -90,6 +89,8 @@
     "rimraf": "^2.6.2",
     "simulant": "^0.2.2",
     "sinon": "^6.1.3",
-    "sinon-chai": "^3.2.0"
+    "sinon-chai": "^3.2.0",
+    "webpack": "^4.16.3",
+    "webpack-atoms": "^7.0.1"
   }
 }

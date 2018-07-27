@@ -55,7 +55,7 @@ class Overlay extends React.Component {
 
   render() {
     let {
-      target,
+      target: _0,
       container,
       containerPadding,
       placement,

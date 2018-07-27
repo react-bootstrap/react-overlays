@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ReactTestUtils from 'react-dom/test-utils'
+import { mount } from 'enzyme'
 
 import Portal from '../src/Portal'
 
@@ -25,7 +25,7 @@ describe('Portal', () => {
       }
     }
 
-    ReactTestUtils.renderIntoDocument(<Container />)
+    mount(<Container />)
 
     expect(document.querySelectorAll('#test1')).to.have.lengthOf(1)
   })
@@ -52,7 +52,7 @@ describe('Portal', () => {
       }
     }
 
-    ReactTestUtils.renderIntoDocument(<Container />)
+    mount(<Container />)
 
     expect(container.querySelectorAll('#test1')).to.have.lengthOf(1)
   })
@@ -79,7 +79,7 @@ describe('Portal', () => {
       }
     }
 
-    const instance = ReactTestUtils.renderIntoDocument(<Container />)
+    const instance = mount(<Container />).instance()
 
     expect(instance.div).to.exist
     expect(
@@ -98,9 +98,9 @@ describe('Portal', () => {
       }
     }
 
-    const instance = ReactTestUtils.renderIntoDocument(<Container />)
+    const nodes = mount(<Container />).getDOMNode().childNodes
 
-    expect(ReactDOM.findDOMNode(instance).childNodes).to.be.empty
+    expect(nodes).to.be.empty
   })
 
   it('should change container on prop change', () => {
@@ -129,18 +129,16 @@ describe('Portal', () => {
       }
     }
 
-    const overlayInstance = ReactTestUtils.renderIntoDocument(
-      <ContainerTest overlay={<div id="test1" />} />
+    const container = mount(<ContainerTest overlay={<div id="test1" />} />)
+
+    expect(container.find('#test1').getDOMNode().parentNode).to.equal(
+      document.body
     )
 
-    expect(overlayInstance.portal._portalContainerNode.nodeName).to.equal(
-      'BODY'
-    )
-    overlayInstance.setState({ container: overlayInstance.container })
-    expect(overlayInstance.portal._portalContainerNode.nodeName).to.equal('DIV')
+    container.setState({ container: container.instance().container })
 
-    ReactDOM.unmountComponentAtNode(
-      ReactDOM.findDOMNode(overlayInstance).parentNode
+    expect(container.find('#test1').getDOMNode().parentNode.nodeName).to.equal(
+      'DIV'
     )
   })
 
@@ -169,7 +167,7 @@ describe('Portal', () => {
       }
     }
 
-    const instance = ReactTestUtils.renderIntoDocument(<Parent />)
+    const instance = mount(<Parent />)
 
     instance.setState({ show: false })
   })
