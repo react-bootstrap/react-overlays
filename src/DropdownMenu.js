@@ -119,6 +119,7 @@ class DropdownMenu extends React.Component {
     }
 
     if (!usePopper) {
+      menuProps.ref = menuRef
       menu = this.props.children(menuProps)
     } else if (this.popperIsInitialized || show) {
       // Add it this way, so it doesn't override someones usage
