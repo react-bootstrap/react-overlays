@@ -195,7 +195,7 @@ class Dropdown extends React.Component {
 
     delete props.onToggle
 
-    if (this.state.lastShow && !this.props.show) {
+    if (this.menu && this.state.lastShow && !this.props.show) {
       this._focusInDropdown = this.menu.contains(document.activeElement)
     }
 
