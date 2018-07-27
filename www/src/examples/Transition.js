@@ -1,14 +1,4 @@
-import React from 'react'
-import Button from 'react-bootstrap/lib/Button'
-import Modal from 'react-overlays/lib/Modal'
-import Transition, {
-  ENTERED,
-  ENTERING,
-} from 'react-transition-group/Transition'
-
-import injectCss from './injectCss'
-
-const FADE_DURATION = 200
+const FADE_DURATION = 200;
 
 injectCss(`
   .fade {
@@ -46,12 +36,12 @@ injectCss(`
     box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
     padding: 20px;
   }
-`)
+`);
 
 const fadeStyles = {
-  [ENTERING]: 'in',
-  [ENTERED]: 'in',
-}
+  entering: 'in',
+  entered: 'in'
+};
 
 const Fade = ({ children, ...props }) => {
   return (
@@ -59,26 +49,57 @@ const Fade = ({ children, ...props }) => {
       {(status, innerProps) =>
         React.cloneElement(children, {
           ...innerProps,
-          className: `fade ${fadeStyles[status]} ${children.props.className}`,
+          className: `fade ${fadeStyles[status]} ${children.props.className}`
         })
       }
     </Transition>
-  )
-}
+  );
+};
 
 class TransitionExample extends React.Component {
-  state = { showModal: false }
+  constructor(...args) {
+    super(...args);
 
-  toggle = () => {
-    return this.setState({ showModal: !this.state.showModal })
+    this.state = { showModal: false };
+    this.toggleModal = () => {
+      this.setState({ showModal: !this.state.showModal });
+    };
+
+    this.toggleTooltip = () => {
+      this.setState({ showTooltip: !this.state.showTooltip });
+    };
+
+    this.tooltipRef = React.createRef();
   }
 
   render() {
     return (
       <div className="transition-example">
-        <Button bsStyle="primary" onClick={this.toggle}>
+        <Button bsStyle="primary" onClick={this.toggleModal}>
           Show Animated Modal
         </Button>
+
+        <Button
+          bsStyle="primary"
+          onClick={this.toggleTooltip}
+          ref={this.tooltipRef}
+        >
+          Show Tooltip
+        </Button>
+
+        <Overlay
+          placement="top"
+          transition={Fade}
+          show={this.state.showTooltip}
+          modifiers={{ offset: { enabled: true, offset: '0 5px' } }}
+          target={() => this.tooltipRef.current}
+        >
+          {({ ref, style }) => (
+            <div ref={ref} className="tooltip tooltip-inner" style={style}>
+              Hello there
+            </div>
+          )}
+        </Overlay>
 
         <Modal
           transition={Fade}
@@ -86,7 +107,7 @@ class TransitionExample extends React.Component {
           className="transition-example-modal"
           backdropClassName="transition-example-backdrop"
           show={this.state.showModal}
-          onHide={this.toggle}
+          onHide={this.toggleModal}
         >
           <div className="transition-example-dialog">
             <h4 id="modal-label">{"I'm fading in!"}</h4>
@@ -99,8 +120,8 @@ class TransitionExample extends React.Component {
           </div>
         </Modal>
       </div>
-    )
+    );
   }
 }
 
-export default TransitionExample
+render(<TransitionExample />);

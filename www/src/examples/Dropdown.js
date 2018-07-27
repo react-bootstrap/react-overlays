@@ -1,11 +1,7 @@
-import React from 'react'
-import Button from 'react-bootstrap/lib/Button'
-import Dropdown from 'react-overlays/src/Dropdown'
-
 const dropdownStyle = {
   position: 'relative',
-  display: 'inline-block',
-}
+  display: 'inline-block'
+};
 const menuStyle = {
   minWidth: 150,
   position: 'absolute',
@@ -13,8 +9,8 @@ const menuStyle = {
   border: '1px solid #e5e5e5',
   backgroundColor: 'white',
   boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-  padding: 20,
-}
+  padding: 20
+};
 
 const Menu = props => (
   <Dropdown.Menu flip>
@@ -26,7 +22,7 @@ const Menu = props => (
         style={{
           ...menuStyle,
           ...popper.style,
-          display: show ? 'flex' : 'none',
+          display: show ? 'flex' : 'none'
         }}
       >
         <button onClick={onClose} style={{ textAlign: 'left' }}>
@@ -38,7 +34,7 @@ const Menu = props => (
       </div>
     )}
   </Dropdown.Menu>
-)
+);
 
 const Toggle = props => (
   <Dropdown.Toggle>
@@ -46,14 +42,14 @@ const Toggle = props => (
       <Button {...props} {...toggleProps} onClick={onToggle} ref={ref} />
     )}
   </Dropdown.Toggle>
-)
+);
 
-const DropdownButton = ({ show, onToggle, drop, alignRight, title, role }) => (
+const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
   <Dropdown
     show={show}
     onToggle={onToggle}
     drop={drop}
-    alignRight={alignRight}
+    alignEnd={alignEnd}
     itemSelector="button:not(:disabled)"
   >
     {innerProps => (
@@ -63,32 +59,30 @@ const DropdownButton = ({ show, onToggle, drop, alignRight, title, role }) => (
       </div>
     )}
   </Dropdown>
-)
+);
 
 class DropdownExample extends React.Component {
-  state = { show: false }
-
-  handleToggle = show => {
-    this.setState({ show })
+  constructor(...args) {
+    super(...args);
+    this.state = { show: false };
   }
 
   render() {
-    const { show } = this.state
+    const { show } = this.state;
     return (
       <div className="dropdown-example">
         <DropdownButton
           show={show}
-          drop="up"
-          onToggle={this.handleToggle}
+          onToggle={show => this.setState({ show })}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
-        {/* <DropdownButton alignRight title="Align right" />
+        <DropdownButton alignEnd title="Align right" />
 
         <DropdownButton drop="up" title="Drop up" />
-        <DropdownButton role="menu" title="Role 'menu'" /> */}
+        <DropdownButton role="menu" title="Role 'menu'" />
       </div>
-    )
+    );
   }
 }
 
-export default DropdownExample
+render(<DropdownExample />);

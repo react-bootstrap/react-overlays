@@ -22,6 +22,7 @@ const propTypes = {
    * e.g. ` > li:not('.disabled')`
    */
   itemSelector: PropTypes.string.isRequired,
+
   /**
    * Align the menu to the 'end' side of the placement side of the Dropdown toggle. The default placement is `top-start` or `bottom-start`.
    */
@@ -51,10 +52,12 @@ const propTypes = {
 }
 
 const defaultProps = {
-  as: 'div',
   itemSelector: '* > *',
 }
 
+/**
+ * Initial
+ */
 class Dropdown extends React.Component {
   static getDerivedStateFromProps({ drop, alignEnd, show }, prevState) {
     const lastShow = prevState.context.show

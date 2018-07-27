@@ -1,11 +1,9 @@
-import canUseDom from 'dom-helpers/util/inDOM'
 import PropTypes from 'prop-types'
 import componentOrElement from 'prop-types-extra/lib/componentOrElement'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import getContainer from './utils/getContainer'
-import ownerDocument from './utils/ownerDocument'
+import WaitForContainer from './WaitForContainer'
 
 /**
  * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
@@ -25,55 +23,15 @@ class Portal extends React.Component {
     onRendered: PropTypes.func,
   }
 
-  UNSAFE_componentWillMount() {
-    if (!canUseDom) {
-      return
-    }
-
-    let { container } = this.props
-    if (typeof container === 'function') {
-      container = container()
-    }
-
-    if (container && !ReactDOM.findDOMNode(container)) {
-      // The container is a React component that has not yet been rendered.
-      // Don't set the container node yet.
-      return
-    }
-
-    this.setContainer(container)
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.container !== this.props.container) {
-      this.setContainer(nextProps.container)
-    }
-  }
-
-  componentDidMount() {
-    if (!this._portalContainerNode) {
-      this.setContainer(this.props.container)
-      this.forceUpdate(this.props.onRendered)
-    } else if (this.props.onRendered) {
-      this.props.onRendered()
-    }
-  }
-
-  componentWillUnmount() {
-    this._portalContainerNode = null
-  }
-
-  setContainer(container) {
-    this._portalContainerNode = getContainer(
-      container,
-      ownerDocument(this).body
-    )
-  }
-
   render() {
-    return this.props.children && this._portalContainerNode
-      ? ReactDOM.createPortal(this.props.children, this._portalContainerNode)
-      : null
+    return this.props.children ? (
+      <WaitForContainer
+        container={this.props.container}
+        onContainerResolved={this.props.onRendered}
+      >
+        {container => ReactDOM.createPortal(this.props.children, container)}
+      </WaitForContainer>
+    ) : null
   }
 }
 

@@ -31,7 +31,7 @@ class DropdownMenu extends React.Component {
      */
     flip: PropTypes.bool,
 
-    usePopper: PropTypes.oneOf([true, false, 'lazy']),
+    usePopper: PropTypes.oneOf([true, false]),
 
     /**
      * A set of popper options and props passed directly to react-popper's Popper component.
@@ -54,7 +54,7 @@ class DropdownMenu extends React.Component {
   }
 
   static defaultProps = {
-    usePopper: 'lazy',
+    usePopper: true,
   }
 
   state = { toggleId: null }
@@ -71,11 +71,7 @@ class DropdownMenu extends React.Component {
       // a new reference node will already trigger this internally
       prevProps.toggleNode === this.props.toggleNode
 
-    if (
-      this.props.show &&
-      this.props.usePopper === 'lazy' &&
-      !this.popperIsInitialized
-    ) {
+    if (this.props.show && this.props.usePopper && !this.popperIsInitialized) {
       this.popperIsInitialized = true
     }
 
@@ -83,7 +79,7 @@ class DropdownMenu extends React.Component {
   }
 
   componentDidUpdate(_, __, shouldUpdatePopper) {
-    if (shouldUpdatePopper) {
+    if (shouldUpdatePopper && this.scheduleUpdate) {
       this.scheduleUpdate()
     }
   }
@@ -112,54 +108,57 @@ class DropdownMenu extends React.Component {
     if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start'
     if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start'
 
-    const modifiers = {
-      flip: {
-        enabled: !!flip,
+    let menu = null
+    const menuProps = {
+      show,
+      alignEnd,
+      onClose: this.handleClose,
+      props: {
+        'aria-labelledby': toggleNode && toggleNode.id,
       },
-      ...popperConfig.modifiers,
     }
 
-    const initPopper = usePopper
-      ? usePopper === 'lazy'
-        ? this.popperIsInitialized || show
-        : show
-      : false
+    if (!usePopper) {
+      menu = this.props.children(menuProps)
+    } else if (this.popperIsInitialized || show) {
+      // Add it this way, so it doesn't override someones usage
+      // with react-poppers <Reference>
+      if (toggleNode) popperConfig.referenceElement = toggleNode
 
-    // Add it this way, so it doesn't override someones usage
-    // with react-poppers <Reference>
-    if (toggleNode) {
-      popperConfig.referenceElement = toggleNode
-    }
-
-    return (
-      <RootCloseWrapper
-        disabled={!show}
-        event={rootCloseEvent}
-        onRootClose={this.handleClose}
-      >
+      menu = (
         <Popper
           {...popperConfig}
           innerRef={menuRef}
           placement={placement}
-          modifiers={modifiers}
-          init={initPopper}
+          eventsEnabled={!!show}
+          modifiers={{
+            flip: { enabled: !!flip },
+            ...popperConfig.modifiers,
+          }}
         >
           {({ ref, ...popper }) => {
             this.scheduleUpdate = popper.scheduleUpdate
 
             return this.props.children({
               ref,
-              show,
               popper,
-              alignEnd,
-              onClose: this.handleClose,
-              props: {
-                'aria-labelledby': toggleNode && toggleNode.id,
-              },
+              ...menuProps,
             })
           }}
         </Popper>
-      </RootCloseWrapper>
+      )
+    }
+
+    return (
+      menu && (
+        <RootCloseWrapper
+          disabled={!show}
+          event={rootCloseEvent}
+          onRootClose={this.handleClose}
+        >
+          {menu}
+        </RootCloseWrapper>
+      )
     )
   }
 }

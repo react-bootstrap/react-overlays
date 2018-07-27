@@ -1,9 +1,5 @@
-import React from 'react';
-import Button from 'react-bootstrap/lib/Button';
-import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
-
 class RootCloseWrapperExample extends React.Component {
-  constructor(...args){
+  constructor(...args) {
     super(...args);
 
     this.state = { show: false };
@@ -14,15 +10,15 @@ class RootCloseWrapperExample extends React.Component {
 
   render() {
     return (
-      <div className='root-close-wrapper-example'>
-        <Button bsStyle='primary' onClick={this.show}>
+      <div className="root-close-wrapper-example">
+        <Button bsStyle="primary" onClick={this.show}>
           Render RootCloseWrapper
         </Button>
 
         {this.state.show && (
           <RootCloseWrapper onRootClose={this.hide}>
-            <div className='panel panel-default'>
-              <div className='panel-body'>
+            <div className="panel panel-default">
+              <div className="panel-body">
                 <span>Click anywhere to dismiss me!</span>
               </div>
             </div>
@@ -32,5 +28,4 @@ class RootCloseWrapperExample extends React.Component {
     );
   }
 }
-
-export default RootCloseWrapperExample;
+render(<RootCloseWrapperExample />);

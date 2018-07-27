@@ -1,0 +1,19 @@
+{
+  "name": "www",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "gatsby develop",
+    "build": "gatsby build"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.54",
+    "gatsby": "2.0.0-beta.59",
+    "gatsby-plugin-less": "2.0.0-beta.5",
+    "gatsby-source-filesystem": "2.0.1-beta.10",
+    "gatsby-transformer-react-docgen": "2.1.1-beta.4",
+    "gatsby-transformer-remark": "2.1.1-beta.4"
+  }
+}
