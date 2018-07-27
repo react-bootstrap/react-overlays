@@ -1,4 +1,6 @@
 lib/
+.cache/
+www/public
 
 # Logs
 logs

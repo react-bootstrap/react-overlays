@@ -55,6 +55,9 @@ const defaultProps = {
   itemSelector: '* > *',
 }
 
+/**
+ * Initial
+ */
 class Dropdown extends React.Component {
   static getDerivedStateFromProps({ drop, alignEnd, show }, prevState) {
     const lastShow = prevState.context.show

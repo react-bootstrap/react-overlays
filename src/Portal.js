@@ -25,7 +25,10 @@ class Portal extends React.Component {
 
   render() {
     return this.props.children ? (
-      <WaitForContainer onContainerResolved={this.onRendered}>
+      <WaitForContainer
+        container={this.props.container}
+        onContainerResolved={this.onRendered}
+      >
         {container => ReactDOM.createPortal(this.props.children, container)}
       </WaitForContainer>
     ) : null

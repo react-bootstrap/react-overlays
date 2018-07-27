@@ -1,8 +1,4 @@
-import React from 'react'
-import Button from 'react-bootstrap/lib/Button'
-import Modal from 'react-overlays/lib/Modal'
-
-let rand = () => Math.floor(Math.random() * 20) - 10
+let rand = () => Math.floor(Math.random() * 20) - 10;
 
 const backdropStyle = {
   position: 'fixed',
@@ -12,14 +8,14 @@ const backdropStyle = {
   left: 0,
   right: 0,
   backgroundColor: '#000',
-  opacity: 0.5,
-}
+  opacity: 0.5
+};
 
 const modalStyle = function() {
   // we use some psuedo random coords so nested modals
   // don't sit right on top of each other.
-  let top = 50 + rand()
-  let left = 50 + rand()
+  let top = 50 + rand();
+  let left = 50 + rand();
 
   return {
     position: 'fixed',
@@ -30,26 +26,26 @@ const modalStyle = function() {
     border: '1px solid #e5e5e5',
     backgroundColor: 'white',
     boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-    padding: 20,
-  }
-}
+    padding: 20
+  };
+};
 
 class ModalExample extends React.Component {
   constructor(...args) {
-    super(...args)
-    this.state = { showModal: false }
+    super(...args);
+    this.state = { showModal: false };
 
     this.close = () => {
-      this.setState({ showModal: false })
-    }
+      this.setState({ showModal: false });
+    };
 
     this.open = () => {
-      this.setState({ showModal: true })
-    }
+      this.setState({ showModal: true });
+    };
   }
 
   renderBackdrop(props) {
-    return <div {...props} style={backdropStyle} />
+    return <div {...props} style={backdropStyle} />;
   }
 
   render() {
@@ -74,8 +70,7 @@ class ModalExample extends React.Component {
           </div>
         </Modal>
       </div>
-    )
+    );
   }
 }
-
-export default ModalExample
+render(<ModalExample />);

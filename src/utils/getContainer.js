@@ -1,6 +1,8 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
 
-export default function getContainer(container, defaultContainer){
-  container = typeof container === 'function' ? container() : container;
-  return ReactDOM.findDOMNode(container) || defaultContainer;
+export default function getContainer(container, defaultContainer) {
+  if (!container == null) return defaultContainer
+
+  container = typeof container === 'function' ? container() : container
+  return ReactDOM.findDOMNode(container) || null
 }

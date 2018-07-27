@@ -1,11 +1,7 @@
-import React from 'react'
-import Button from 'react-bootstrap/lib/Button'
-import Dropdown from 'react-overlays/src/Dropdown'
-
 const dropdownStyle = {
   position: 'relative',
-  display: 'inline-block',
-}
+  display: 'inline-block'
+};
 const menuStyle = {
   minWidth: 150,
   position: 'absolute',
@@ -13,8 +9,8 @@ const menuStyle = {
   border: '1px solid #e5e5e5',
   backgroundColor: 'white',
   boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-  padding: 20,
-}
+  padding: 20
+};
 
 const Menu = props => (
   <Dropdown.Menu flip>
@@ -26,7 +22,7 @@ const Menu = props => (
         style={{
           ...menuStyle,
           ...popper.style,
-          display: show ? 'flex' : 'none',
+          display: show ? 'flex' : 'none'
         }}
       >
         <button onClick={onClose} style={{ textAlign: 'left' }}>
@@ -38,7 +34,7 @@ const Menu = props => (
       </div>
     )}
   </Dropdown.Menu>
-)
+);
 
 const Toggle = props => (
   <Dropdown.Toggle>
@@ -46,7 +42,7 @@ const Toggle = props => (
       <Button {...props} {...toggleProps} onClick={onToggle} ref={ref} />
     )}
   </Dropdown.Toggle>
-)
+);
 
 const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
   <Dropdown
@@ -63,16 +59,16 @@ const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
       </div>
     )}
   </Dropdown>
-)
+);
 
 class DropdownExample extends React.Component {
   constructor(...args) {
-    super(...args)
-    this.state = { show: false }
+    super(...args);
+    this.state = { show: false };
   }
 
   render() {
-    const { show } = this.state
+    const { show } = this.state;
     return (
       <div className="dropdown-example">
         <DropdownButton
@@ -85,8 +81,8 @@ class DropdownExample extends React.Component {
         <DropdownButton drop="up" title="Drop up" />
         <DropdownButton role="menu" title="Role 'menu'" />
       </div>
-    )
+    );
   }
 }
 
-export default DropdownExample
+render(<DropdownExample />);

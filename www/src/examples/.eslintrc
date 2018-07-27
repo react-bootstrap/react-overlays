@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "no-alert": "off",
+    "no-unused-expressions": "off",
+    "no-unused-vars": "off",
+    "react/jsx-no-undef": "off",
+    "react/no-multi-comp": "off",
+    "react/prop-types": "off"
+  },
+  "globals": {
+    "render": false,
+    "classNames": false,
+    "React": false,
+    "ReactDOM": false,
+    "injectCss": false,
+
+    "Modal": false,
+    "Overlay": false,
+    "Dropdown": false,
+    "Portal": false,
+    "RootCloseWrapper": false
+  }
+}

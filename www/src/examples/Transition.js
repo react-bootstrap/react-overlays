@@ -1,15 +1,4 @@
-import React from 'react'
-import Button from 'react-bootstrap/lib/Button'
-import Modal from 'react-overlays/lib/Modal'
-import Overlay from 'react-overlays/lib/Overlay'
-import Transition, {
-  ENTERED,
-  ENTERING,
-} from 'react-transition-group/Transition'
-
-import injectCss from './injectCss'
-
-const FADE_DURATION = 200
+const FADE_DURATION = 200;
 
 injectCss(`
   .fade {
@@ -47,12 +36,12 @@ injectCss(`
     box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
     padding: 20px;
   }
-`)
+`);
 
 const fadeStyles = {
-  [ENTERING]: 'in',
-  [ENTERED]: 'in',
-}
+  entering: 'in',
+  entered: 'in'
+};
 
 const Fade = ({ children, ...props }) => {
   return (
@@ -60,27 +49,27 @@ const Fade = ({ children, ...props }) => {
       {(status, innerProps) =>
         React.cloneElement(children, {
           ...innerProps,
-          className: `fade ${fadeStyles[status]} ${children.props.className}`,
+          className: `fade ${fadeStyles[status]} ${children.props.className}`
         })
       }
     </Transition>
-  )
-}
+  );
+};
 
 class TransitionExample extends React.Component {
   constructor(...args) {
-    super(...args)
+    super(...args);
 
-    this.state = { showModal: false }
+    this.state = { showModal: false };
     this.toggleModal = () => {
-      this.setState({ showModal: !this.state.showModal })
-    }
+      this.setState({ showModal: !this.state.showModal });
+    };
 
     this.toggleTooltip = () => {
-      this.setState({ showTooltip: !this.state.showTooltip })
-    }
+      this.setState({ showTooltip: !this.state.showTooltip });
+    };
 
-    this.tooltipRef = React.createRef()
+    this.tooltipRef = React.createRef();
   }
 
   render() {
@@ -131,8 +120,8 @@ class TransitionExample extends React.Component {
           </div>
         </Modal>
       </div>
-    )
+    );
   }
 }
 
-export default TransitionExample
+render(<TransitionExample />);

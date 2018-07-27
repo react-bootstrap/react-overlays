@@ -1,6 +1,7 @@
 import merge from 'lodash/merge'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { graphql } from 'gatsby'
 import Label from 'react-bootstrap/lib/Label'
 import Table from 'react-bootstrap/lib/Table'
 
@@ -10,46 +11,24 @@ let cleanDocletValue = str =>
     .replace(/^\{/, '')
     .replace(/\}$/, '')
 
-function getPropsData(componentData, metadata) {
-  let props = componentData.props || {}
-
-  if (componentData.composes) {
-    componentData.composes.forEach(other => {
-      props = merge({}, getPropsData(metadata[other] || {}, metadata), props)
-    })
-  }
-
-  if (componentData.mixins) {
-    componentData.mixins.forEach(other => {
-      if (componentData.composes.indexOf(other) === -1) {
-        props = merge({}, getPropsData(metadata[other] || {}, metadata), props)
-      }
-    })
-  }
-
-  return props
-}
-
 class PropTable extends React.Component {
   static contextTypes = {
     metadata: PropTypes.object,
   }
 
-  constructor(...args) {
-    super(...args)
-
-    let componentData = this.props.metadata[this.props.component] || {}
-    this.propsData = getPropsData(componentData, this.props.metadata)
-  }
-
   render() {
-    let propsData = this.propsData
-    if (!Object.keys(propsData).length) {
-      return <span />
+    let { component, metadata } = this.props
+    let propsData = metadata.props || []
+
+    if (!propsData.length) {
+      return (
+        <div className="text-muted">
+          <em>There are no public props for this component.</em>
+        </div>
+      )
     }
 
-    let { component, metadata } = this.props
-    let composes = metadata[component].composes || []
+    let composes = metadata.composes || []
 
     return (
       <div>
@@ -61,7 +40,8 @@ class PropTable extends React.Component {
               {'Also accepts the same props as: '}
               <em>
                 {composes.reduce(
-                  (arr, name) => arr.concat(<code>{`<${name}/>`}</code>, ' '),
+                  (arr, name) =>
+                    arr.concat(<code>{`<${name.slice(2)}/>`}</code>, ' '),
                   []
                 )}
               </em>
@@ -85,34 +65,31 @@ class PropTable extends React.Component {
   }
 
   _renderRows = propsData => {
-    return Object.keys(propsData)
-      .sort()
-      .filter(
-        propName =>
-          propsData[propName].type && !propsData[propName].doclets.private
-      )
-      .map(propName => {
-        let propData = propsData[propName]
+    return propsData
+      .filter(prop => prop.type && !prop.doclets.private)
+      .map(propData => {
+        const { name, description, doclets, defaultValue } = propData
+        let descHtml = description && description.childMarkdownRemark.html
 
         return (
-          <tr key={propName} className="prop-table-row">
+          <tr key={name} className="prop-table-row">
             <td>
-              {propName} {this.renderRequiredLabel(propData)}
+              {name} {this.renderRequiredLabel(propData)}
             </td>
             <td>
               <div>{this.getType(propData)}</div>
             </td>
-            <td>{propData.defaultValue && propData.defaultValue.value}</td>
+            <td>{defaultValue && defaultValue.value}</td>
 
             <td>
-              {propData.doclets.deprecated && (
+              {doclets.deprecated && (
                 <div>
                   <strong className="text-danger">
                     {'Deprecated: ' + propData.doclets.deprecated + ' '}
                   </strong>
                 </div>
               )}
-              <div dangerouslySetInnerHTML={{ __html: propData.descHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: descHtml }} />
             </td>
           </tr>
         )
@@ -120,17 +97,14 @@ class PropTable extends React.Component {
   }
 
   renderRequiredLabel(prop) {
-    if (!prop.required) {
-      return null
-    }
-
+    if (!prop.required) return null
     return <Label>required</Label>
   }
 
-  getType = prop => {
-    const type = prop.type || {}
-    const name = this.getDisplayTypeName(type.name)
-    const doclets = prop.doclets || {}
+  getType(prop) {
+    let type = prop.type || {}
+    let name = this.getDisplayTypeName(type.name)
+    let doclets = prop.doclets || {}
 
     switch (name) {
       case 'object':
@@ -145,18 +119,21 @@ class PropTable extends React.Component {
 
           return i === list.length - 1 ? current : current.concat(' | ')
         }, [])
-      case 'array':
+      case 'array': {
+        let child = this.getType({ type: type.value })
+
         return (
           <span>
             {'array<'}
-            {this.getType({ type: type.value })}
+            {child}
             {'>'}
           </span>
         )
+      }
       case 'enum':
         return this.renderEnum(type)
       case 'custom':
-        return cleanDocletValue(doclets.type || name)
+        return cleanDocletValue(doclets.type || type.raw)
       default:
         return name
     }
@@ -174,8 +151,9 @@ class PropTable extends React.Component {
 
   renderEnum(enumType) {
     const enumValues = enumType.value || []
-    if (enumType.computed) return <span>one of: {enumValues}</span>
-
+    if (!Array.isArray(enumValues)) {
+      return <span>one of: {enumValues}</span>
+    }
     const renderedEnumValues = []
     enumValues.forEach(function renderEnumValue(enumValue, i) {
       if (i > 0) {
@@ -190,3 +168,36 @@ class PropTable extends React.Component {
 }
 
 export default PropTable
+
+export const metadataFragment = graphql`
+  fragment Description_markdown on ComponentDescription {
+    childMarkdownRemark {
+      html
+    }
+  }
+
+  fragment PropTable_metadata on ComponentMetadata {
+    composes
+    displayName
+    description {
+      ...Description_markdown
+    }
+    props {
+      name
+      doclets
+      defaultValue {
+        value
+        computed
+      }
+      description {
+        ...Description_markdown
+      }
+      required
+      type {
+        name
+        value
+        raw
+      }
+    }
+  }
+`

@@ -9,32 +9,33 @@ import Transition, {
   ENTERING,
 } from 'react-transition-group/Transition'
 
-import PropTable from './PropTable'
+import PropTable from '../components/PropTable'
 
-import AffixSource from '../webpack/example-loader!./Affix'
-import ModalExample from '../webpack/example-loader!./Modal'
-import OverlaySource from '../webpack/example-loader!./Overlay'
-import DropdownSource from '../webpack/example-loader!./Dropdown'
-import PortalSource from '../webpack/example-loader!./Portal'
-import RootCloseWrapperSource from '../webpack/example-loader!./RootCloseWrapper'
-import TransitionSource from '../webpack/example-loader!./Transition'
+import AffixSource from '../examples/Affix'
+import ModalExample from '../examples/Modal'
+import OverlaySource from '../examples/Overlay'
+import DropdownSource from '../examples/Dropdown'
+import PortalSource from '../examples/Portal'
+import RootCloseWrapperSource from '../examples/RootCloseWrapper'
+import TransitionSource from '../examples/Transition'
 
-import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix'
-import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix'
-import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal'
-import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay'
+// import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix'
+// import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix'
+// import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal'
+// import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay'
 
-import DropdownMetadata from 'component-metadata-loader?pitch!react-overlays/Dropdown'
-import DropdownMenuMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownMenu'
-import DropdownToggleMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownToggle'
-import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal'
-import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper'
+// import DropdownMetadata from 'component-metadata-loader?pitch!react-overlays/Dropdown'
+// import DropdownMenuMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownMenu'
+// import DropdownToggleMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownToggle'
+// import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal'
+// import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper'
 
 import * as ReactOverlays from 'react-overlays'
 import getOffset from 'dom-helpers/query/offset'
 
-import './styles.less'
-import injectCss from './injectCss'
+import '../styles.less'
+import injectCss from '../injectCss'
+import { graphql } from 'gatsby'
 
 const scope = {
   React,
@@ -89,7 +90,23 @@ class ExampleEditor extends React.Component {
 }
 
 class Example extends React.Component {
+  static propTypes = {
+    data: PropTypes.object,
+  }
+
   render() {
+    const {
+      AffixMetadata,
+      AutoAffixMetadata,
+      ModalMetadata,
+      PortalMetadata,
+      OverlayMetadata,
+      DropdownMetadata,
+      DropdownMenuMetadata,
+      DropdownToggleMetadata,
+      RootCloseWrapperMetadata,
+    } = this.props.data
+
     return (
       <div className="app row">
         <article className="side-panel col-md-2">
@@ -127,7 +144,7 @@ class Example extends React.Component {
             </h2>
             <p
               dangerouslySetInnerHTML={{
-                __html: PortalMetadata.Portal.descHtml,
+                __html: PortalMetadata.description.childMarkdownRemark.html,
               }}
             />
             <ExampleEditor codeText={PortalSource} />
@@ -138,7 +155,9 @@ class Example extends React.Component {
               <Anchor>Modals</Anchor>
             </h2>
             <p
-              dangerouslySetInnerHTML={{ __html: ModalMetadata.Modal.descHtml }}
+              dangerouslySetInnerHTML={{
+                __html: ModalMetadata.description.childMarkdownRemark.html,
+              }}
             />
             <ExampleEditor codeText={ModalExample} />
             <PropTable component="Modal" metadata={ModalMetadata} />
@@ -149,7 +168,7 @@ class Example extends React.Component {
             </h2>
             <p
               dangerouslySetInnerHTML={{
-                __html: PositionMetadata.Position.descHtml,
+                __html: PositionMetadata.Position.description.childMarkdownRemark.html,
               }}
             />
             <ExampleEditor codeText={PositionSource} />
@@ -161,7 +180,7 @@ class Example extends React.Component {
             </h2>
             <p
               dangerouslySetInnerHTML={{
-                __html: OverlayMetadata.Overlay.descHtml,
+                __html: OverlayMetadata.description.childMarkdownRemark.html,
               }}
             />
             <ExampleEditor codeText={OverlaySource} />
@@ -174,7 +193,7 @@ class Example extends React.Component {
             </h2>
             <p
               dangerouslySetInnerHTML={{
-                __html: DropdownMetadata.Dropdown.descHtml,
+                __html: DropdownMetadata.description.childMarkdownRemark.html,
               }}
             />
             <ExampleEditor codeText={DropdownSource} />
@@ -196,11 +215,13 @@ class Example extends React.Component {
               <Anchor>Affixes</Anchor>
             </h2>
             <p
-              dangerouslySetInnerHTML={{ __html: AffixMetadata.Affix.descHtml }}
+              dangerouslySetInnerHTML={{
+                __html: AffixMetadata.description.childMarkdownRemark.html,
+              }}
             />
             <p
               dangerouslySetInnerHTML={{
-                __html: AutoAffixMetadata.AutoAffix.descHtml,
+                __html: AutoAffixMetadata.description.childMarkdownRemark.html,
               }}
             />
             <ExampleEditor codeText={AffixSource} />
@@ -213,7 +234,8 @@ class Example extends React.Component {
             </h2>
             <p
               dangerouslySetInnerHTML={{
-                __html: RootCloseWrapperMetadata.RootCloseWrapper.descHtml,
+                __html:
+                  RootCloseWrapperMetadata.description.childMarkdownRemark.html,
               }}
             />
             <ExampleEditor codeText={RootCloseWrapperSource} />
@@ -250,4 +272,42 @@ class Example extends React.Component {
   }
 }
 
-ReactDOM.render(<Example />, document.getElementById('app-container'))
+export default Example
+
+export const pageQuery = graphql`
+  query SiteQuery {
+    AffixMetadata: componentMetadata(displayName: { eq: "Affix" }) {
+      ...PropTable_metadata
+    }
+    AutoAffixMetadata: componentMetadata(displayName: { eq: "AutoAffix" }) {
+      ...PropTable_metadata
+    }
+    ModalMetadata: componentMetadata(displayName: { eq: "Modal" }) {
+      ...PropTable_metadata
+    }
+    OverlayMetadata: componentMetadata(displayName: { eq: "Overlay" }) {
+      ...PropTable_metadata
+    }
+    DropdownMetadata: componentMetadata(displayName: { eq: "Dropdown" }) {
+      ...PropTable_metadata
+    }
+    DropdownToggleMetadata: componentMetadata(
+      displayName: { eq: "ReactOverlaysDropdownToggle" }
+    ) {
+      ...PropTable_metadata
+    }
+    DropdownMenuMetadata: componentMetadata(
+      displayName: { eq: "ReactOverlaysDropdownMenu" }
+    ) {
+      ...PropTable_metadata
+    }
+    PortalMetadata: componentMetadata(displayName: { eq: "Portal" }) {
+      ...PropTable_metadata
+    }
+    RootCloseWrapperMetadata: componentMetadata(
+      displayName: { eq: "RootCloseWrapper" }
+    ) {
+      ...PropTable_metadata
+    }
+  }
+`
