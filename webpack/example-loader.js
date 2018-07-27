@@ -4,11 +4,8 @@ function exampleLoader(source) {
   }
 
   source = source
-    .replace(/import([\S\s])*?from.+':?/gm, '') //remove imports
-    .replace(
-      /export default (\w+)/g,
-      (_, name) => `ReactDOM.render(<${name}/>, mountNode)`
-    )
+    .replace(/import([\S\s])*?from.+';?/gm, '') //remove imports
+    .replace(/export default (\w+)/g, (_, name) => `render(<${name}/>)`)
     .trim() //transform export
 
   return source

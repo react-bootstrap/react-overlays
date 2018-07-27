@@ -48,12 +48,12 @@ const Toggle = props => (
   </Dropdown.Toggle>
 )
 
-const DropdownButton = ({ show, onToggle, drop, alignRight, title, role }) => (
+const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
   <Dropdown
     show={show}
     onToggle={onToggle}
     drop={drop}
-    alignRight={alignRight}
+    alignEnd={alignEnd}
     itemSelector="button:not(:disabled)"
   >
     {innerProps => (
@@ -66,10 +66,9 @@ const DropdownButton = ({ show, onToggle, drop, alignRight, title, role }) => (
 )
 
 class DropdownExample extends React.Component {
-  state = { show: false }
-
-  handleToggle = show => {
-    this.setState({ show })
+  constructor(...args) {
+    super(...args)
+    this.state = { show: false }
   }
 
   render() {
@@ -78,14 +77,13 @@ class DropdownExample extends React.Component {
       <div className="dropdown-example">
         <DropdownButton
           show={show}
-          drop="up"
-          onToggle={this.handleToggle}
+          onToggle={show => this.setState({ show })}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
-        {/* <DropdownButton alignRight title="Align right" />
+        <DropdownButton alignEnd title="Align right" />
 
         <DropdownButton drop="up" title="Drop up" />
-        <DropdownButton role="menu" title="Role 'menu'" /> */}
+        <DropdownButton role="menu" title="Role 'menu'" />
       </div>
     )
   }

@@ -35,14 +35,17 @@ const modalStyle = function() {
 }
 
 class ModalExample extends React.Component {
-  state = { showModal: false }
+  constructor(...args) {
+    super(...args)
+    this.state = { showModal: false }
 
-  close = () => {
-    this.setState({ showModal: false })
-  }
+    this.close = () => {
+      this.setState({ showModal: false })
+    }
 
-  open = () => {
-    this.setState({ showModal: true })
+    this.open = () => {
+      this.setState({ showModal: true })
+    }
   }
 
   renderBackdrop(props) {

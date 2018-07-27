@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types'
 import elementType from 'prop-types-extra/lib/elementType'
 import React from 'react'
+import ReactDOM from 'react-dom'
 
 import Portal from './Portal'
-import Position from './Position'
 import RootCloseWrapper from './RootCloseWrapper'
+import { Popper, placements } from '@react-bootstrap/react-popper'
+import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps'
+
+import WaitForContainer from './WaitForContainer'
 
 /**
  * Built on top of `<Position/>` and `<Portal/>`, the overlay component is great for custom tooltip overlays.
@@ -15,6 +19,8 @@ class Overlay extends React.Component {
 
     this.state = { exited: !props.show }
     this.onHiddenListener = this.handleHidden.bind(this)
+
+    this._lastTarget = null
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -27,15 +33,36 @@ class Overlay extends React.Component {
     return null
   }
 
+  componentDidMount() {
+    this.setState({ target: this.getTarget() })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props === prevProps) return
+
+    const target = this.getTarget()
+
+    if (target !== this.state.target) {
+      this.setState({ target })
+    }
+  }
+
+  getTarget() {
+    let { target } = this.props
+    target = typeof target === 'function' ? target() : target
+    return (target && ReactDOM.findDOMNode(target)) || null
+  }
+
   render() {
     let {
+      target,
       container,
       containerPadding,
-      target,
       placement,
-      shouldUpdatePosition,
       rootClose,
       children,
+      flip,
+      modifiers = {},
       transition: Transition,
       ...props
     } = this.props
@@ -48,43 +75,56 @@ class Overlay extends React.Component {
     }
 
     let child = children
-
-    // Position is be inner-most because it adds inline styles into the child,
-    // which the other wrappers don't forward correctly.
-    child = (
-      <Position
-        target={target}
-        placement={placement}
-        container={container}
-        containerPadding={containerPadding}
-        shouldUpdatePosition={shouldUpdatePosition}
-      >
-        {child}
-      </Position>
-    )
-
-    if (Transition) {
-      let { onExit, onExiting, onEnter, onEntering, onEntered } = props
-
-      // This animates the child node by injecting props, so it must precede
-      // anything that adds a wrapping div.
-      child = (
-        <Transition
-          in={props.show}
-          appear
-          onExit={onExit}
-          onExiting={onExiting}
-          onExited={this.onHiddenListener}
-          onEnter={onEnter}
-          onEntering={onEntering}
-          onEntered={onEntered}
-        >
-          {child}
-        </Transition>
-      )
+    const popperProps = {
+      placement,
+      referenceElement: this.state.target,
+      enableEvents: props.show,
+      modifiers: {
+        ...modifiers,
+        preventOverflow: {
+          padding: containerPadding || 5,
+          ...modifiers.preventOverflow,
+        },
+        flip: {
+          enabled: !!flip,
+          ...modifiers.preventOverflow,
+        },
+      },
     }
 
-    // This goes after everything else because it adds a wrapping div.
+    child = (
+      <Popper {...popperProps}>
+        {popper => {
+          this.popper = popper
+
+          let innerChild = this.props.children({
+            ...popper,
+            // popper doesn't set the initial placement
+            placement: popper.placement || placement,
+          })
+          if (Transition) {
+            let { onExit, onExiting, onEnter, onEntering, onEntered } = props
+
+            innerChild = (
+              <Transition
+                in={props.show}
+                appear
+                onExit={onExit}
+                onExiting={onExiting}
+                onExited={this.onHiddenListener}
+                onEnter={onEnter}
+                onEntering={onEntering}
+                onEntered={onEntered}
+              >
+                {innerChild}
+              </Transition>
+            )
+          }
+          return innerChild
+        }}
+      </Popper>
+    )
+
     if (rootClose) {
       child = (
         <RootCloseWrapper
@@ -110,12 +150,13 @@ class Overlay extends React.Component {
 
 Overlay.propTypes = {
   ...Portal.propTypes,
-  ...Position.propTypes,
 
   /**
    * Set the visibility of the Overlay
    */
   show: PropTypes.bool,
+
+  placement: PropTypes.oneOf(placements),
 
   /**
    * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
@@ -180,4 +221,8 @@ Overlay.propTypes = {
   onExited: PropTypes.func,
 }
 
-export default Overlay
+export default mapContextToProps(
+  WaitForContainer,
+  container => ({ container }),
+  Overlay
+)

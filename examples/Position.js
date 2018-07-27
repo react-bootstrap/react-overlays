@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Button from 'react-bootstrap/lib/Button';
-import Position from 'react-overlays/lib/Position';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Button from 'react-bootstrap/lib/Button'
+import Position from 'react-overlays/lib/Position'
 
 const styles = {
   tooltip: {
@@ -23,7 +23,7 @@ const styles = {
     width: 5,
     height: 5,
   },
-};
+}
 
 const placementStyles = {
   left: {
@@ -38,13 +38,13 @@ const placementStyles = {
   bottom: {
     arrow: { top: 0, marginLeft: -3 },
   },
-};
+}
 
-const PLACEMENTS = ['left', 'top', 'right', 'bottom'];
+const PLACEMENTS = ['left', 'top', 'right', 'bottom']
 
 function Tooltip({ placement, position, arrowPosition, children }) {
   return (
-    <div style={{...styles.tooltip, ...position}}>
+    <div style={{ ...styles.tooltip, ...position }}>
       <div
         style={{
           ...styles.arrow,
@@ -52,46 +52,44 @@ function Tooltip({ placement, position, arrowPosition, children }) {
           ...arrowPosition,
         }}
       />
-      <div style={{...styles.inner}}>
-        {children}
-      </div>
+      <div style={{ ...styles.inner }}>{children}</div>
     </div>
-  );
+  )
 }
 
 class PositionExample extends React.Component {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
     this.state = {
       placement: PLACEMENTS[0],
-    };
+    }
+
+    this.onClick = () => {
+      const { placement } = this.state
+      const nextPlacement = PLACEMENTS[PLACEMENTS.indexOf(placement) + 1]
+
+      this.setState({
+        placement: nextPlacement || PLACEMENTS[0],
+      })
+    }
   }
 
-  onClick = () => {
-    const { placement } = this.state;
-    const nextPlacement = PLACEMENTS[PLACEMENTS.indexOf(placement) + 1];
-
-    this.setState({
-      placement: nextPlacement || PLACEMENTS[0],
-    });
-  };
-
   render() {
-    const { placement } = this.state;
+    const { placement } = this.state
 
     return (
       <div className="overlay-example">
         <Button
           bsStyle="primary"
-          ref={(c) => { this.target = c; }}
+          ref={c => {
+            this.target = c
+          }}
           onClick={this.onClick}
         >
           I am a Position target
         </Button>
-        <p>
-          Keep clicking to see the placement change.
-        </p>
+        <p>Keep clicking to see the placement change.</p>
 
         <Position
           container={this}
@@ -103,8 +101,8 @@ class PositionExample extends React.Component {
           </Tooltip>
         </Position>
       </div>
-    );
+    )
   }
 }
 
-export default PositionExample;
+export default PositionExample

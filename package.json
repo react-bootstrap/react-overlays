@@ -36,7 +36,7 @@
     "testonly": "npm run tdd -- --single-run"
   },
   "dependencies": {
-    "@react-bootstrap/react-popper": "^1.0.2",
+    "@react-bootstrap/react-popper": "^1.1.0",
     "classnames": "^2.2.6",
     "dom-helpers": "^3.3.1",
     "popper.js": "^1.14.3",
@@ -87,6 +87,7 @@
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
+    "react-live": "^1.11.0",
     "release-script": "^1.0.2",
     "rimraf": "^2.6.2",
     "simulant": "^0.2.2",

@@ -1,5 +1,4 @@
-import Playground from '@monastic.panic/component-playground/Playground'
-import '@monastic.panic/component-playground/themes/neo.css'
+import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'
 
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -17,7 +16,6 @@ import ModalExample from '../webpack/example-loader!./Modal'
 import OverlaySource from '../webpack/example-loader!./Overlay'
 import DropdownSource from '../webpack/example-loader!./Dropdown'
 import PortalSource from '../webpack/example-loader!./Portal'
-import PositionSource from '../webpack/example-loader!./Position'
 import RootCloseWrapperSource from '../webpack/example-loader!./RootCloseWrapper'
 import TransitionSource from '../webpack/example-loader!./Transition'
 
@@ -30,7 +28,6 @@ import DropdownMetadata from 'component-metadata-loader?pitch!react-overlays/Dro
 import DropdownMenuMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownMenu'
 import DropdownToggleMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownToggle'
 import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal'
-import PositionMetadata from 'component-metadata-loader?pitch!react-overlays/Position'
 import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper'
 
 import * as ReactOverlays from 'react-overlays'
@@ -77,15 +74,16 @@ class ExampleEditor extends React.Component {
 
   render() {
     return (
-      <Playground
-        className="overlay-example"
+      <LiveProvider
+        scope={scope}
+        mountStylesheet={false}
         code={this.props.codeText}
-        collapsable
+        noInline={this.props.codeText.includes('render(')}
       >
-        <Playground.Preview scope={scope} />
-        <Playground.Editor lineNumbers={false} lang="js" theme="neo" />
-        <Playground.Toggle />
-      </Playground>
+        <LivePreview />
+        <LiveError />
+        <LiveEditor />
+      </LiveProvider>
     )
   }
 }
@@ -145,7 +143,7 @@ class Example extends React.Component {
             <ExampleEditor codeText={ModalExample} />
             <PropTable component="Modal" metadata={ModalMetadata} />
           </section>
-          <section>
+          {/* <section>
             <h2 className="page-header">
               <Anchor>Position</Anchor>
             </h2>
@@ -156,7 +154,7 @@ class Example extends React.Component {
             />
             <ExampleEditor codeText={PositionSource} />
             <PropTable component="Position" metadata={PositionMetadata} />
-          </section>
+          </section> */}
           <section>
             <h2 className="page-header">
               <Anchor>Overlay</Anchor>

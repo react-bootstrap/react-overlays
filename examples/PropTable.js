@@ -174,6 +174,7 @@ class PropTable extends React.Component {
 
   renderEnum(enumType) {
     const enumValues = enumType.value || []
+    if (enumType.computed) return <span>one of: {enumValues}</span>
 
     const renderedEnumValues = []
     enumValues.forEach(function renderEnumValue(enumValue, i) {

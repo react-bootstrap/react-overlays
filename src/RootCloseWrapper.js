@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom'
 import ownerDocument from './utils/ownerDocument'
 
 const escapeKeyCode = 27
+const noop = () => {}
 
 function isLeftClickEvent(event) {
   return event.button === 0
@@ -65,12 +66,20 @@ class RootCloseWrapper extends React.Component {
 
     this.removeMouseListener = listen(doc, event, this.handleMouse)
     this.removeKeyupListener = listen(doc, 'keyup', this.handleKeyUp)
+
+    if ('ontouchstart' in doc.documentElement) {
+      this.mobileSafariHackListeners = [].slice
+        .call(document.body.children)
+        .map(el => listen(el, 'mousemove', noop))
+    }
   }
 
   removeEventListeners = () => {
     if (this.removeMouseCaptureListener) this.removeMouseCaptureListener()
     if (this.removeMouseListener) this.removeMouseListener()
     if (this.removeKeyupListener) this.removeKeyupListener()
+    if (this.mobileSafariHackListeners)
+      this.mobileSafariHackListeners.forEach(remove => remove())
   }
 
   handleMouseCapture = e => {

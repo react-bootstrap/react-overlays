@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from 'react-bootstrap/lib/Button'
 import Modal from 'react-overlays/lib/Modal'
+import Overlay from 'react-overlays/lib/Overlay'
 import Transition, {
   ENTERED,
   ENTERING,
@@ -67,18 +68,49 @@ const Fade = ({ children, ...props }) => {
 }
 
 class TransitionExample extends React.Component {
-  state = { showModal: false }
+  constructor(...args) {
+    super(...args)
 
-  toggle = () => {
-    return this.setState({ showModal: !this.state.showModal })
+    this.state = { showModal: false }
+    this.toggleModal = () => {
+      this.setState({ showModal: !this.state.showModal })
+    }
+
+    this.toggleTooltip = () => {
+      this.setState({ showTooltip: !this.state.showTooltip })
+    }
+
+    this.tooltipRef = React.createRef()
   }
 
   render() {
     return (
       <div className="transition-example">
-        <Button bsStyle="primary" onClick={this.toggle}>
+        <Button bsStyle="primary" onClick={this.toggleModal}>
           Show Animated Modal
         </Button>
+
+        <Button
+          bsStyle="primary"
+          onClick={this.toggleTooltip}
+          ref={this.tooltipRef}
+        >
+          Show Tooltip
+        </Button>
+
+        <Overlay
+          placement="top"
+          transition={Fade}
+          show={this.state.showTooltip}
+          modifiers={{ offset: { enabled: true, offset: '0 5px' } }}
+          target={() => this.tooltipRef.current}
+        >
+          {({ ref, style }) => (
+            <div ref={ref} className="tooltip tooltip-inner" style={style}>
+              Hello there
+            </div>
+          )}
+        </Overlay>
 
         <Modal
           transition={Fade}
@@ -86,7 +118,7 @@ class TransitionExample extends React.Component {
           className="transition-example-modal"
           backdropClassName="transition-example-backdrop"
           show={this.state.showModal}
-          onHide={this.toggle}
+          onHide={this.toggleModal}
         >
           <div className="transition-example-dialog">
             <h4 id="modal-label">{"I'm fading in!"}</h4>
