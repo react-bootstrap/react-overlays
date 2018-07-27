@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import componentOrElement from 'prop-types-extra/lib/componentOrElement'
 import canUseDom from 'dom-helpers/util/inDOM'
+import ownerDocument from 'dom-helpers/ownerDocument'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import getContainer from './utils/getContainer'
-import ownerDocument from './utils/ownerDocument'
 
 const propTypes = {
   /**
@@ -17,12 +17,14 @@ const propTypes = {
 }
 
 class WaitForContainer extends React.Component {
-  UNSAFE_componentWillMount() {
+  constructor(...args) {
+    super(...args)
+
     if (!canUseDom) return
 
     let { container } = this.props
-    if (typeof container === 'function') container = container()
 
+    if (typeof container === 'function') container = container()
     if (container && !ReactDOM.findDOMNode(container)) {
       // The container is a React component that has not yet been rendered.
       // Don't set the container node yet.
@@ -48,8 +50,9 @@ class WaitForContainer extends React.Component {
   componentWillUnmount() {
     this._container = null
   }
+
   setContainer(container) {
-    this._container = getContainer(container, ownerDocument(this).body)
+    this._container = getContainer(container, ownerDocument().body)
   }
 
   render() {
