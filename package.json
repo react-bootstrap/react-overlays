@@ -6,7 +6,7 @@
   "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "module": "es/index.js",
   "files": [
     "lib"
   ],
@@ -22,7 +22,7 @@
     "modal"
   ],
   "scripts": {
-    "build:esm": "babel src -d lib --env-name esm && file-butler mjs lib -d lib && rimraf lib/*.js",
+    "build:esm": "babel src -d es --env-name esm",
     "build:cjs": "babel src -d lib",
     "build": "rimraf lib && npm run build:esm && npm run build:cjs",
     "build:examples": "webpack --config webpack/docs.config.js --mode production",
