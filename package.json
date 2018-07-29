@@ -6,7 +6,7 @@
   "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
   "main": "lib/index.js",
-  "module": "es/index.js",
+  "module": "lib/es/index.js",
   "files": [
     "lib"
   ],
@@ -45,11 +45,11 @@
     "warning": "^4.0.1"
   },
   "peerDependencies": {
-    "react": "^>=16.3.0",
-    "react-dom": "^>=16.3.0"
+    "react": ">=16.3.0",
+    "react-dom": ">=16.3.0"
   },
   "devDependencies": {
-    "@4c/file-butler": "^1.0.2",
+    "@4c/file-butler": "^1.1.1",
     "@babel/cli": "^7.0.0-beta.52",
     "@babel/core": "^7.0.0-beta.52",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.52",
