@@ -19,17 +19,6 @@ import PortalSource from '../examples/Portal'
 import RootCloseWrapperSource from '../examples/RootCloseWrapper'
 import TransitionSource from '../examples/Transition'
 
-// import AffixMetadata from 'component-metadata-loader?pitch!react-overlays/Affix'
-// import AutoAffixMetadata from 'component-metadata-loader?pitch!react-overlays/AutoAffix'
-// import ModalMetadata from 'component-metadata-loader?pitch!react-overlays/Modal'
-// import OverlayMetadata from 'component-metadata-loader?pitch!react-overlays/Overlay'
-
-// import DropdownMetadata from 'component-metadata-loader?pitch!react-overlays/Dropdown'
-// import DropdownMenuMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownMenu'
-// import DropdownToggleMetadata from 'component-metadata-loader?pitch!react-overlays/DropdownToggle'
-// import PortalMetadata from 'component-metadata-loader?pitch!react-overlays/Portal'
-// import RootCloseWrapperMetadata from 'component-metadata-loader?pitch!react-overlays/RootCloseWrapper'
-
 import * as ReactOverlays from 'react-overlays'
 import getOffset from 'dom-helpers/query/offset'
 
