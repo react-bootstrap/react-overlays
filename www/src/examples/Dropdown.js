@@ -12,16 +12,14 @@ const menuStyle = {
   padding: 20
 };
 
-const Menu = props => (
+const Menu = () => (
   <Dropdown.Menu flip>
-    {({ popper, show, onClose, ref, props: menuProps }) => (
+    {({ show, onClose, props }) => (
       <div
         {...props}
-        {...menuProps}
-        ref={ref}
         style={{
           ...menuStyle,
-          ...popper.style,
+          ...props.style,
           display: show ? 'flex' : 'none'
         }}
       >
@@ -36,10 +34,10 @@ const Menu = props => (
   </Dropdown.Menu>
 );
 
-const Toggle = props => (
+const Toggle = ({ id }) => (
   <Dropdown.Toggle>
-    {({ onToggle, show, ref, props: toggleProps }) => (
-      <Button {...props} {...toggleProps} onClick={onToggle} ref={ref} />
+    {({ onToggle, show, props }) => (
+      <Button id={id} {...props} onClick={onToggle} />
     )}
   </Dropdown.Toggle>
 );
@@ -52,8 +50,8 @@ const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
     alignEnd={alignEnd}
     itemSelector="button:not(:disabled)"
   >
-    {innerProps => (
-      <div {...innerProps} style={dropdownStyle}>
+    {({ props }) => (
+      <div {...props} style={dropdownStyle}>
         <Toggle id="example-toggle">{title}</Toggle>
         <Menu role={role} />
       </div>

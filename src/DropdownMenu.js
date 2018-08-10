@@ -11,6 +11,30 @@ class DropdownMenu extends React.Component {
 
   static propTypes = {
     /**
+     * A render prop that returns a Menu element. The `props`
+     * argument should spread through to **a component that can accept a ref**.
+     *
+     * @type {Function ({
+     *   show: boolean,
+     *   alignEnd: boolean,
+     *   onClose: () => void,
+     *   placement: Placement,
+     *   outOfBoundaries: ?boolean,
+     *   scheduleUpdate: () => void,
+     *   props: {
+     *     ref: (?HTMLElement) => void,
+     *     style: { [string]: string | number },
+     *     aria-labelledby: ?string
+     *   },
+     *   arrowProps: {
+     *     ref: (?HTMLElement) => void,
+     *     style: { [string]: string | number },
+     *   },
+     * }) => React.Element}
+     */
+    children: PropTypes.func.isRequired,
+
+    /**
      * Controls the visible state of the menu, generally this is
      * provided by the parent `Dropdown` component,
      * but may also be specified as a prop directly.
@@ -110,17 +134,17 @@ class DropdownMenu extends React.Component {
 
     let menu = null
     const menuProps = {
+      ref: menuRef,
+      'aria-labelledby': toggleNode && toggleNode.id,
+    }
+    const childArgs = {
       show,
       alignEnd,
       onClose: this.handleClose,
-      props: {
-        'aria-labelledby': toggleNode && toggleNode.id,
-      },
     }
 
     if (!usePopper) {
-      menuProps.ref = menuRef
-      menu = this.props.children(menuProps)
+      menu = this.props.children({ ...childArgs, props: menuProps })
     } else if (this.popperIsInitialized || show) {
       // Add it this way, so it doesn't override someones usage
       // with react-poppers <Reference>
@@ -137,13 +161,13 @@ class DropdownMenu extends React.Component {
             ...popperConfig.modifiers,
           }}
         >
-          {({ ref, ...popper }) => {
+          {({ ref, style, ...popper }) => {
             this.scheduleUpdate = popper.scheduleUpdate
 
             return this.props.children({
-              ref,
-              popper,
-              ...menuProps,
+              ...popper,
+              ...childArgs,
+              props: { ...menuProps, ref, style },
             })
           }}
         </Popper>

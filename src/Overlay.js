@@ -98,17 +98,20 @@ class Overlay extends React.Component {
 
     child = (
       <Popper {...popperProps}>
-        {popper => {
+        {({ arrowProps, style, ref, ...popper }) => {
           this.popper = popper
 
           let innerChild = this.props.children({
             ...popper,
-            show: props.show,
             // popper doesn't set the initial placement
             placement: popper.placement || placement,
+            show: props.show,
             props: {
+              ref,
+              style,
               'aria-labelledby': target && target.id,
             },
+            arrowProps,
           })
           if (Transition) {
             let { onExit, onExiting, onEnter, onEntering, onEntered } = props
@@ -172,14 +175,18 @@ Overlay.propTypes = {
    * the [react-popper documentation](https://github.com/FezVrasta/react-popper#children) for more info.
    *
    * @type {Function ({
-   *   ref: (?HTMLElement) => void,
-   *   style: { [string]: string | number },
-   *   placement: ?Placement,
+   *   show: boolean,
+   *   placement: Placement,
    *   outOfBoundaries: ?boolean,
    *   scheduleUpdate: () => void,
+   *   props: {
+   *     ref: (?HTMLElement) => void,
+   *     style: { [string]: string | number },
+   *     aria-labelledby: ?string
+   *   },
    *   arrowProps: {
-   *    ref: (?HTMLElement) => void,
-   *    style: { [string]: string | number },
+   *     ref: (?HTMLElement) => void,
+   *     style: { [string]: string | number },
    *   },
    * }) => React.Element}
    */

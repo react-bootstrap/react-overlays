@@ -12,6 +12,19 @@ import DropdownToggle from './DropdownToggle'
 
 const propTypes = {
   /**
+   * A render prop that returns the root dropdown element. The `props`
+   * argument should spread throguh to an element containing _both_ the
+   * menu and toggle in order to handle keyboard events for focus management.
+   *
+   * @type {Function ({
+   *   props: {
+   *     onKeyDown: (SyntheticEvent) => void,
+   *   },
+   * }) => React.Element}
+   */
+  children: PropTypes.func.isRequired,
+
+  /**
    * Determines the direction and location of the Menu in relation to it's Toggle.
    */
   drop: PropTypes.oneOf(['up', 'left', 'right', 'down']),
@@ -211,7 +224,7 @@ class Dropdown extends React.Component {
     return (
       <DropdownContext.Provider value={this.state.context}>
         <Popper.Manager>
-          {children({ onKeyDown: this.handleKeyDown })}
+          {children({ props: { onKeyDown: this.handleKeyDown } })}
         </Popper.Manager>
       </DropdownContext.Provider>
     )
