@@ -56,9 +56,18 @@ const defaultProps = {
 }
 
 /**
- * Initial
+ * `Dropdown` is set of structural components for building, accessible dropdown menus with close-on-click,
+ * keyboard navigation, and correct focus handling. As with all the react-overlay's
+ * components its BYOS (bring your own styles). Dropdown is primarily
+ * built from three base components, you should compose to build your Dropdowns.
+ *
+ * - `Dropdown`, which wraps the menu and toggle, and handles keyboard navigation
+ * - `Dropdown.Toggle` generally a button that triggers the menu opening
+ * - `Dropdown.Menu` The overlaid, menu, positioned to the toggle with PopperJs
  */
 class Dropdown extends React.Component {
+  static displayName = 'ReactOverlaysDropdown'
+
   static getDerivedStateFromProps({ drop, alignEnd, show }, prevState) {
     const lastShow = prevState.context.show
     return {
