@@ -13,7 +13,7 @@ import DropdownToggle from './DropdownToggle'
 const propTypes = {
   /**
    * A render prop that returns the root dropdown element. The `props`
-   * argument should spread throguh to an element containing _both_ the
+   * argument should spread through to an element containing _both_ the
    * menu and toggle in order to handle keyboard events for focus management.
    *
    * @type {Function ({
