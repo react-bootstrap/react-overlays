@@ -12,6 +12,19 @@ import DropdownToggle from './DropdownToggle'
 
 const propTypes = {
   /**
+   * A render prop that returns the root dropdown element. The `props`
+   * argument should spread through to an element containing _both_ the
+   * menu and toggle in order to handle keyboard events for focus management.
+   *
+   * @type {Function ({
+   *   props: {
+   *     onKeyDown: (SyntheticEvent) => void,
+   *   },
+   * }) => React.Element}
+   */
+  children: PropTypes.func.isRequired,
+
+  /**
    * Determines the direction and location of the Menu in relation to it's Toggle.
    */
   drop: PropTypes.oneOf(['up', 'left', 'right', 'down']),
@@ -56,9 +69,18 @@ const defaultProps = {
 }
 
 /**
- * Initial
+ * `Dropdown` is set of structural components for building, accessible dropdown menus with close-on-click,
+ * keyboard navigation, and correct focus handling. As with all the react-overlay's
+ * components its BYOS (bring your own styles). Dropdown is primarily
+ * built from three base components, you should compose to build your Dropdowns.
+ *
+ * - `Dropdown`, which wraps the menu and toggle, and handles keyboard navigation
+ * - `Dropdown.Toggle` generally a button that triggers the menu opening
+ * - `Dropdown.Menu` The overlaid, menu, positioned to the toggle with PopperJs
  */
 class Dropdown extends React.Component {
+  static displayName = 'ReactOverlaysDropdown'
+
   static getDerivedStateFromProps({ drop, alignEnd, show }, prevState) {
     const lastShow = prevState.context.show
     return {
@@ -81,8 +103,8 @@ class Dropdown extends React.Component {
 
     this.state = {
       context: {
-        onToggle: this.handleClick,
-        onClose: this.handleClose,
+        close: this.handleClose,
+        toggle: this.handleClick,
         menuRef: r => {
           this.menu = r
         },
@@ -202,7 +224,7 @@ class Dropdown extends React.Component {
     return (
       <DropdownContext.Provider value={this.state.context}>
         <Popper.Manager>
-          {children({ onKeyDown: this.handleKeyDown })}
+          {children({ props: { onKeyDown: this.handleKeyDown } })}
         </Popper.Manager>
       </DropdownContext.Provider>
     )

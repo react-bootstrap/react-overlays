@@ -6,12 +6,12 @@ import ReactDOM from 'react-dom'
 import Portal from './Portal'
 import RootCloseWrapper from './RootCloseWrapper'
 import { Popper, placements } from '@react-bootstrap/react-popper'
-import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps'
-
+import forwardRef from 'react-context-toolbox/lib/forwardRef'
 import WaitForContainer from './WaitForContainer'
 
 /**
- * Built on top of `<Position/>` and `<Portal/>`, the overlay component is great for custom tooltip overlays.
+ * Built on top of `<Position/>` and `<Portal/>`, the overlay component is
+ * great for custom tooltip overlays.
  */
 class Overlay extends React.Component {
   constructor(props, context) {
@@ -62,10 +62,11 @@ class Overlay extends React.Component {
       rootClose,
       children,
       flip,
-      modifiers = {},
+      popperConfig = {},
       transition: Transition,
       ...props
     } = this.props
+    const { target } = this.state
 
     // Don't un-render the overlay while it's transitioning out.
     const mountOverlay = props.show || (Transition && !this.state.exited)
@@ -75,9 +76,12 @@ class Overlay extends React.Component {
     }
 
     let child = children
+
+    const { modifiers = {} } = popperConfig
     const popperProps = {
+      ...popperConfig,
       placement,
-      referenceElement: this.state.target,
+      referenceElement: target,
       enableEvents: props.show,
       modifiers: {
         ...modifiers,
@@ -94,13 +98,20 @@ class Overlay extends React.Component {
 
     child = (
       <Popper {...popperProps}>
-        {popper => {
+        {({ arrowProps, style, ref, ...popper }) => {
           this.popper = popper
 
           let innerChild = this.props.children({
             ...popper,
             // popper doesn't set the initial placement
             placement: popper.placement || placement,
+            show: props.show,
+            props: {
+              ref,
+              style,
+              'aria-labelledby': target && target.id,
+            },
+            arrowProps,
           })
           if (Transition) {
             let { onExit, onExiting, onEnter, onEntering, onEntered } = props
@@ -156,7 +167,35 @@ Overlay.propTypes = {
    */
   show: PropTypes.bool,
 
+  /** Specify where the overlay element is positioned in relation to the target element */
   placement: PropTypes.oneOf(placements),
+
+  /**
+   * A render prop that returns an element to overlay and position. See
+   * the [react-popper documentation](https://github.com/FezVrasta/react-popper#children) for more info.
+   *
+   * @type {Function ({
+   *   show: boolean,
+   *   placement: Placement,
+   *   outOfBoundaries: ?boolean,
+   *   scheduleUpdate: () => void,
+   *   props: {
+   *     ref: (?HTMLElement) => void,
+   *     style: { [string]: string | number },
+   *     aria-labelledby: ?string
+   *   },
+   *   arrowProps: {
+   *     ref: (?HTMLElement) => void,
+   *     style: { [string]: string | number },
+   *   },
+   * }) => React.Element}
+   */
+  children: PropTypes.func.isRequired,
+
+  /**
+   * A set of popper options and props passed directly to react-popper's Popper component.
+   */
+  popperConfig: PropTypes.object,
 
   /**
    * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
@@ -221,8 +260,11 @@ Overlay.propTypes = {
   onExited: PropTypes.func,
 }
 
-export default mapContextToProps(
-  WaitForContainer,
-  container => ({ container }),
-  Overlay
+export default forwardRef(
+  (props, ref) => (
+    <WaitForContainer container={props.container}>
+      {container => <Overlay {...props} ref={ref} container={container} />}
+    </WaitForContainer>
+  ),
+  { displayName: 'withContainer(Overlay)' }
 )

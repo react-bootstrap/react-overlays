@@ -80,30 +80,6 @@ const placementStyles = {
 
 const PLACEMENTS = ['left', 'top', 'right', 'bottom'];
 
-function Tooltip({ placement, children, arrowProps, style, popperRef }) {
-  const placementStyle = placementStyles[placement];
-  return (
-    <div
-      ref={popperRef}
-      style={{
-        ...styles.tooltip,
-        ...placementStyle.tooltip,
-        ...style
-      }}
-    >
-      <div
-        {...arrowProps}
-        style={{
-          ...styles.arrow,
-          ...arrowProps.style,
-          ...placementStyle.arrow
-        }}
-      />
-      <div style={{ ...styles.inner }}>{children}</div>
-    </div>
-  );
-}
-
 class OverlayExample extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -131,6 +107,7 @@ class OverlayExample extends React.Component {
       <div className="overlay-example">
         <Button
           bsStyle="primary"
+          id="overlay-toggle"
           ref={c => {
             this.target = c && ReactDOM.findDOMNode(c);
           }}
@@ -147,16 +124,31 @@ class OverlayExample extends React.Component {
           container={this}
           target={() => this.target}
         >
-          {({ ref, style, arrowProps, placement }) => (
-            <Tooltip
-              popperRef={ref}
-              style={style}
-              placement={placement}
-              arrowProps={arrowProps}
-            >
-              I&rsquo;m placed to the <strong>{placement}</strong>.
-            </Tooltip>
-          )}
+          {({ props, arrowProps, placement }) => {
+            const placementStyle = placementStyles[placement];
+            return (
+              <div
+                {...props}
+                style={{
+                  ...styles.tooltip,
+                  ...placementStyle.tooltip,
+                  ...props.style
+                }}
+              >
+                <div
+                  {...arrowProps}
+                  style={{
+                    ...styles.arrow,
+                    ...placementStyle.arrow,
+                    ...arrowProps.style
+                  }}
+                />
+                <div style={{ ...styles.inner }}>
+                  I&rsquo;m placed to the <strong>{placement}</strong>
+                </div>
+              </div>
+            );
+          }}
         </Overlay>
       </div>
     );
