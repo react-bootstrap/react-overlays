@@ -11,7 +11,7 @@ const propTypes = {
    *
    * @type {Function ({
    *   show: boolean,
-   *   onToggle: (show: boolean) => void,
+   *   toggle: (show: boolean) => void,
    *   props: {
    *     ref: (?HTMLElement) => void,
    *     aria-haspopup: true
@@ -24,10 +24,10 @@ const propTypes = {
 function DropdownToggle({ children }) {
   return (
     <DropdownContext.Consumer>
-      {({ show, onToggle, toggleRef }) =>
+      {({ show, toggle, toggleRef }) =>
         children({
           show,
-          onToggle,
+          toggle,
           props: {
             ref: toggleRef,
             'aria-haspopup': true,

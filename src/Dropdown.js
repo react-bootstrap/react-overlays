@@ -103,8 +103,8 @@ class Dropdown extends React.Component {
 
     this.state = {
       context: {
-        onToggle: this.handleClick,
-        onClose: this.handleClose,
+        close: this.handleClose,
+        toggle: this.handleClick,
         menuRef: r => {
           this.menu = r
         },

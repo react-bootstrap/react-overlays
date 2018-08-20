@@ -7,14 +7,13 @@ import Dropdown from '../src/Dropdown'
 describe('<Dropdown>', () => {
   const Menu = ({ rootCloseEvent, ...props }) => (
     <Dropdown.Menu flip rootCloseEvent={rootCloseEvent}>
-      {({ popper, show, onClose, ref, props: menuProps }) => (
+      {({ show, close, props: menuProps }) => (
         <div
           {...props}
           {...menuProps}
-          ref={ref}
           className="menu"
-          onClick={onClose}
-          style={{ ...popper.style, display: show ? 'flex' : 'none' }}
+          onClick={close}
+          style={{ display: show ? 'flex' : 'none' }}
         />
       )}
     </Dropdown.Menu>
@@ -22,14 +21,13 @@ describe('<Dropdown>', () => {
 
   const Toggle = props => (
     <Dropdown.Toggle>
-      {({ onToggle, ref, props: toggleProps }) => (
+      {({ toggle, props: toggleProps }) => (
         <button
           {...props}
           {...toggleProps}
           id="test-id"
           className="toggle"
-          onClick={onToggle}
-          ref={ref}
+          onClick={toggle}
         />
       )}
     </Dropdown.Toggle>
@@ -47,7 +45,7 @@ describe('<Dropdown>', () => {
 
   const SimpleDropdown = outer => (
     <Dropdown {...outer}>
-      {props => (
+      {({ props }) => (
         <div tabIndex="-1" {...props}>
           {dropdownChildren}
         </div>
@@ -204,7 +202,7 @@ describe('<Dropdown>', () => {
     it('when focused and closed sets focus on first menu item when the key "down" is pressed for role="menu"', () => {
       const wrapper = mount(
         <Dropdown>
-          {props => (
+          {({ props }) => (
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu role="menu">

@@ -17,7 +17,7 @@ class DropdownMenu extends React.Component {
      * @type {Function ({
      *   show: boolean,
      *   alignEnd: boolean,
-     *   onClose: () => void,
+     *   close: (?SyntheticEvent) => void,
      *   placement: Placement,
      *   outOfBoundaries: ?boolean,
      *   scheduleUpdate: () => void,
@@ -140,7 +140,7 @@ class DropdownMenu extends React.Component {
     const childArgs = {
       show,
       alignEnd,
-      onClose: this.handleClose,
+      close: this.handleClose,
     }
 
     if (!usePopper) {
@@ -190,11 +190,11 @@ class DropdownMenu extends React.Component {
 
 const DecoratedDropdownMenu = mapContextToProps(
   DropdownContext,
-  ({ show, alignEnd, onToggle, drop, menuRef, toggleNode }, props) => ({
+  ({ show, alignEnd, toggle, drop, menuRef, toggleNode }, props) => ({
     drop,
     menuRef,
-    onToggle,
     toggleNode,
+    onToggle: toggle,
     show: show == null ? props.show : show,
     alignEnd: alignEnd == null ? props.alignEnd : alignEnd,
   }),
