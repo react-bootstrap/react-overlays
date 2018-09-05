@@ -151,18 +151,6 @@ class Example extends React.Component {
             <ExampleEditor codeText={ModalExample} />
             <PropTable component="Modal" metadata={ModalMetadata} />
           </section>
-          {/* <section>
-            <h2 className="page-header">
-              <Anchor>Position</Anchor>
-            </h2>
-            <p
-              dangerouslySetInnerHTML={{
-                __html: PositionMetadata.Position.description.childMarkdownRemark.html,
-              }}
-            />
-            <ExampleEditor codeText={PositionSource} />
-            <PropTable component="Position" metadata={PositionMetadata} />
-          </section> */}
           <section>
             <h2 className="page-header">
               <Anchor>Overlay</Anchor>

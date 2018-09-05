@@ -4,7 +4,7 @@ import chai from 'chai'
 import sinonChai from 'sinon-chai'
 
 import Enzyme, { ShallowWrapper, ReactWrapper } from 'enzyme'
-import Adapter from '@monastic.panic/enzyme-adapter-react-16'
+import Adapter from 'enzyme-adapter-react-16'
 
 Enzyme.configure({ adapter: new Adapter() })
 

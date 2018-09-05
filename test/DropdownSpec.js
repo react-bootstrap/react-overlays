@@ -67,7 +67,7 @@ describe('<Dropdown>', () => {
 
   it('forwards alignEnd to menu', () => {
     mount(<SimpleDropdown alignEnd />).assertSingle(
-      'DropdownMenu[alignEnd=true]'
+      'ReactOverlaysDropdownMenu[alignEnd=true]'
     )
   })
 
@@ -80,8 +80,8 @@ describe('<Dropdown>', () => {
     wrapper.assertNone('.show')
     wrapper.assertSingle('button[aria-expanded=false]').simulate('click')
 
-    wrapper.assertSingle('Dropdown[show=true]')
-    wrapper.assertSingle('DropdownMenu[show=true]')
+    wrapper.assertSingle('ReactOverlaysDropdown[show=true]')
+    wrapper.assertSingle('ReactOverlaysDropdownMenu[show=true]')
 
     wrapper.assertSingle('button[aria-expanded=true]').simulate('click')
 
@@ -135,7 +135,7 @@ describe('<Dropdown>', () => {
 
     wrapper.find('.toggle').simulate('keyDown', { key: 'ArrowDown' })
 
-    wrapper.assertSingle('Dropdown[show=true]')
+    wrapper.assertSingle('ReactOverlaysDropdown[show=true]')
   })
 
   it('closes when item is clickes', () => {
@@ -143,7 +143,7 @@ describe('<Dropdown>', () => {
 
     const wrapper = mount(<SimpleDropdown />).setProps({ show: true, onToggle })
 
-    wrapper.assertSingle('Dropdown[show=true]')
+    wrapper.assertSingle('ReactOverlaysDropdown[show=true]')
 
     wrapper
       .find('button')
@@ -166,7 +166,7 @@ describe('<Dropdown>', () => {
 
     onToggle.should.have.been.calledWith(false)
     wrapper
-      .find('Dropdown')
+      .find('ReactOverlaysDropdown')
       .prop('show')
       .should.equal(true)
   })

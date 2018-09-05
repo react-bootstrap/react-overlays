@@ -10,10 +10,15 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.54",
-    "gatsby": "2.0.0-beta.59",
-    "gatsby-plugin-less": "2.0.0-beta.5",
-    "gatsby-source-filesystem": "2.0.1-beta.10",
-    "gatsby-transformer-react-docgen": "2.1.1-beta.4",
-    "gatsby-transformer-remark": "2.1.1-beta.4"
+    "gatsby": "^2.0.0-rc.9",
+    "gatsby-link": "^2.0.0-rc.2",
+    "gatsby-mdx": "^0.0.11",
+    "gatsby-plugin-catch-links": "^2.0.2-rc.1",
+    "gatsby-plugin-css-literal-loader": "^1.0.0",
+    "gatsby-plugin-less": "^2.0.0-rc.1",
+    "gatsby-remark-prismjs": "^1.2.17",
+    "gatsby-source-filesystem": "2.0.1-rc.1",
+    "gatsby-transformer-react-docgen": "^2.1.1-rc.1",
+    "gatsby-transformer-remark": "^2.1.1-rc.1"
   }
 }

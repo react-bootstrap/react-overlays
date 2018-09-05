@@ -1,8 +1,7 @@
-
 const { rules, plugins } = require('webpack-atoms')
 
-module.exports = (config) => {
-  const { env } = process;
+module.exports = config => {
+  const { env } = process
 
   config.set({
     frameworks: ['mocha', 'sinon-chai'],
@@ -16,9 +15,7 @@ module.exports = (config) => {
     webpack: {
       mode: 'development',
       module: {
-        rules: [
-          rules.js(),
-        ],
+        rules: [rules.js()],
       },
       plugins: [
         plugins.define({
@@ -52,5 +49,5 @@ module.exports = (config) => {
     },
 
     browsers: env.BROWSER ? env.BROWSER.split(',') : ['Chrome'],
-  });
-};
+  })
+}
