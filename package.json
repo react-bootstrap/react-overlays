@@ -24,18 +24,30 @@
   "scripts": {
     "build:esm": "babel src -d lib/es --env-name esm",
     "build:cjs": "babel src -d lib --delete-dir-on-start",
-    "build": "rimraf lib && yarn build:cjs && yarn build:esm",
-    "build:examples": "webpack --config webpack/docs.config.js --mode production",
+    "build": "yarn build:cjs && yarn build:esm",
     "deploy-docs": "yarn --cwd www build && gh-pages -d www/public",
-    "prepublishOnly": "yarn build && file-butler alt-publish-root",
-    "examples": "yarn --cwd www start",
-    "lint": "eslint www/src src test *.js",
+    "precommit": "lint-staged",
+    "prepublishOnly": "yarn build",
+    "start": "yarn --cwd www start",
+    "lint": "eslint 'www/*.js' www/src src test '*.js'",
     "release": "4c release --publish-dir lib",
     "tdd": "karma start",
     "test": "yarn lint && yarn testonly",
     "testonly": "yarn tdd --single-run"
   },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "npm run lint -- --fix",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
   "dependencies": {
+    "@4c/rollout": "^1.0.0",
     "@react-bootstrap/react-popper": "^1.2.1",
     "classnames": "^2.2.6",
     "dom-helpers": "^3.3.1",
@@ -64,9 +76,11 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.4.0",
     "eslint": "^5.5.0",
+    "eslint-config-prettier": "^3.0.1",
     "eslint-plugin-mocha": "^5.2.0",
     "eslint-plugin-react": "^7.11.1",
     "gh-pages": "^1.2.0",
+    "husky": "^0.14.3",
     "jquery": "^3.3.1",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -76,8 +90,10 @@
     "karma-sinon-chai": "^2.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "4.0.0-rc.1",
+    "lint-staged": "^7.2.2",
     "lodash": "^4.17.10",
     "mocha": "^5.2.0",
+    "prettier": "^1.14.2",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.3",
     "react-dom": "^16.4.2",

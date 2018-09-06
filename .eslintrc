@@ -1,5 +1,10 @@
 {
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
+  ],
   "env": {
     "es6": true,
     "browser": true,

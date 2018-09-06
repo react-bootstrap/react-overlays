@@ -22,3 +22,10 @@ exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
     ],
   })
 }
+
+exports.setBabelOptions = (actions) => ({
+  options: {
+    envName: 'esm',
+    root: path.resolve(__dirname, '../')
+  }
+})

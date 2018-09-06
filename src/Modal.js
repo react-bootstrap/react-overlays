@@ -1,32 +1,32 @@
 /* eslint-disable react/prop-types */
 
-import activeElement from 'dom-helpers/activeElement'
-import contains from 'dom-helpers/query/contains'
-import canUseDom from 'dom-helpers/util/inDOM'
-import listen from 'dom-helpers/events/listen'
-import PropTypes from 'prop-types'
-import componentOrElement from 'prop-types-extra/lib/componentOrElement'
-import elementType from 'prop-types-extra/lib/elementType'
-import React from 'react'
-import ReactDOM from 'react-dom'
+import activeElement from 'dom-helpers/activeElement';
+import contains from 'dom-helpers/query/contains';
+import canUseDom from 'dom-helpers/util/inDOM';
+import listen from 'dom-helpers/events/listen';
+import PropTypes from 'prop-types';
+import componentOrElement from 'prop-types-extra/lib/componentOrElement';
+import elementType from 'prop-types-extra/lib/elementType';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import ModalManager from './ModalManager'
-import Portal from './Portal'
-import getContainer from './utils/getContainer'
-import ownerDocument from './utils/ownerDocument'
+import ModalManager from './ModalManager';
+import Portal from './Portal';
+import getContainer from './utils/getContainer';
+import ownerDocument from './utils/ownerDocument';
 
-let modalManager = new ModalManager()
+let modalManager = new ModalManager();
 
 function omitProps(props, propTypes) {
-  const keys = Object.keys(props)
-  const newProps = {}
+  const keys = Object.keys(props);
+  const newProps = {};
   keys.map(prop => {
     if (!Object.prototype.hasOwnProperty.call(propTypes, prop)) {
-      newProps[prop] = props[prop]
+      newProps[prop] = props[prop];
     }
-  })
+  });
 
-  return newProps
+  return newProps;
 }
 
 /**
@@ -197,7 +197,7 @@ class Modal extends React.Component {
      * Modals. Useful when customizing how modals interact within a container
      */
     manager: PropTypes.object.isRequired,
-  }
+  };
 
   static defaultProps = {
     show: false,
@@ -210,184 +210,184 @@ class Modal extends React.Component {
     onHide: () => {},
     manager: modalManager,
     renderBackdrop: props => <div {...props} />,
-  }
+  };
 
-  state = { exited: !this.props.show }
+  state = { exited: !this.props.show };
 
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.show) {
-      return { exited: false }
+      return { exited: false };
     } else if (!nextProps.transition) {
       // Otherwise let handleHidden take care of marking exited.
-      return { exited: true }
+      return { exited: true };
     }
-    return null
+    return null;
   }
 
   getSnapshotBeforeUpdate(prevProps) {
     if (canUseDom && !prevProps.show && this.props.show) {
-      this.lastFocus = activeElement()
+      this.lastFocus = activeElement();
     }
-    return null
+    return null;
   }
 
   componentDidMount() {
-    this._isMounted = true
+    this._isMounted = true;
     if (this.props.show) {
-      this.onShow()
+      this.onShow();
     }
   }
 
   componentDidUpdate(prevProps) {
-    let { transition } = this.props
+    let { transition } = this.props;
 
     if (prevProps.show && !this.props.show && !transition) {
       // Otherwise handleHidden will call this.
-      this.onHide()
+      this.onHide();
     } else if (!prevProps.show && this.props.show) {
-      this.onShow()
+      this.onShow();
     }
   }
 
   componentWillUnmount() {
-    let { show, transition } = this.props
+    let { show, transition } = this.props;
 
-    this._isMounted = false
+    this._isMounted = false;
 
     if (show || (transition && !this.state.exited)) {
-      this.onHide()
+      this.onHide();
     }
   }
 
   onPortalRendered = () => {
     if (this.props.onShow) {
-      this.props.onShow()
+      this.props.onShow();
     }
     // autofocus after onShow, to not trigger a focus event for previous
     // modals before this own is shown.
-    this.autoFocus()
-  }
+    this.autoFocus();
+  };
 
   onShow = () => {
-    let doc = ownerDocument(this)
-    let container = getContainer(this.props.container, doc.body)
+    let doc = ownerDocument(this);
+    let container = getContainer(this.props.container, doc.body);
 
-    this.props.manager.add(this, container, this.props.containerClassName)
+    this.props.manager.add(this, container, this.props.containerClassName);
 
     this.removeKeydownListener = listen(
       doc,
       'keydown',
-      this.handleDocumentKeyDown
-    )
+      this.handleDocumentKeyDown,
+    );
 
-    this.removeFocusListener = listen(doc, 'focus', this.enforceFocus, true)
-  }
+    this.removeFocusListener = listen(doc, 'focus', this.enforceFocus, true);
+  };
 
   onHide = () => {
-    this.props.manager.remove(this)
+    this.props.manager.remove(this);
 
-    this.removeKeydownListener()
-    this.removeFocusListener()
+    this.removeKeydownListener();
+    this.removeFocusListener();
 
     if (this.props.restoreFocus) {
-      this.restoreLastFocus()
+      this.restoreLastFocus();
     }
-  }
+  };
 
   setDialogRef = ref => {
-    this.dialog = ref
-  }
+    this.dialog = ref;
+  };
 
   setBackdropRef = ref => {
-    this.backdrop = ref && ReactDOM.findDOMNode(ref)
-  }
+    this.backdrop = ref && ReactDOM.findDOMNode(ref);
+  };
 
   handleHidden = (...args) => {
-    this.setState({ exited: true })
-    this.onHide()
+    this.setState({ exited: true });
+    this.onHide();
 
     if (this.props.onExited) {
-      this.props.onExited(...args)
+      this.props.onExited(...args);
     }
-  }
+  };
 
   handleBackdropClick = e => {
     if (e.target !== e.currentTarget) {
-      return
+      return;
     }
 
     if (this.props.onBackdropClick) {
-      this.props.onBackdropClick(e)
+      this.props.onBackdropClick(e);
     }
 
     if (this.props.backdrop === true) {
-      this.props.onHide()
+      this.props.onHide();
     }
-  }
+  };
 
   handleDocumentKeyDown = e => {
     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
       if (this.props.onEscapeKeyDown) {
-        this.props.onEscapeKeyDown(e)
+        this.props.onEscapeKeyDown(e);
       }
 
-      this.props.onHide()
+      this.props.onHide();
     }
-  }
+  };
 
   autoFocus() {
-    if (!this.props.autoFocus) return
+    if (!this.props.autoFocus) return;
 
-    const currentActiveElement = activeElement(ownerDocument(this))
+    const currentActiveElement = activeElement(ownerDocument(this));
 
     if (this.dialog && !contains(this.dialog, currentActiveElement)) {
-      this.lastFocus = currentActiveElement
-      this.dialog.focus()
+      this.lastFocus = currentActiveElement;
+      this.dialog.focus();
     }
   }
 
   restoreLastFocus() {
     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
     if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus()
-      this.lastFocus = null
+      this.lastFocus.focus();
+      this.lastFocus = null;
     }
   }
 
   enforceFocus = () => {
     if (!this.props.enforceFocus || !this._isMounted || !this.isTopModal()) {
-      return
+      return;
     }
 
-    const currentActiveElement = activeElement(ownerDocument(this))
+    const currentActiveElement = activeElement(ownerDocument(this));
 
     if (this.dialog && !contains(this.dialog, currentActiveElement)) {
-      this.dialog.focus()
+      this.dialog.focus();
     }
-  }
+  };
 
   isTopModal() {
-    return this.props.manager.isTopModal(this)
+    return this.props.manager.isTopModal(this);
   }
 
   renderBackdrop = () => {
-    let { renderBackdrop, backdropTransition: Transition } = this.props
+    let { renderBackdrop, backdropTransition: Transition } = this.props;
 
     let backdrop = renderBackdrop({
       ref: this.setBackdropRef,
       onClick: this.handleBackdropClick,
-    })
+    });
 
     if (Transition) {
       backdrop = (
         <Transition appear in={this.props.show}>
           {backdrop}
         </Transition>
-      )
+      );
     }
 
-    return backdrop
-  }
+    return backdrop;
+  };
 
   render() {
     const {
@@ -406,10 +406,10 @@ class Modal extends React.Component {
       onEntering,
       onEntered,
       ...props
-    } = this.props
+    } = this.props;
 
     if (!(show || (Transition && !this.state.exited))) {
-      return null
+      return null;
     }
 
     const dialogProps = {
@@ -421,7 +421,7 @@ class Modal extends React.Component {
       style,
       className,
       tabIndex: '-1',
-    }
+    };
 
     let dialog = renderDialog ? (
       renderDialog(dialogProps)
@@ -429,7 +429,7 @@ class Modal extends React.Component {
       <div {...dialogProps}>
         {React.cloneElement(children, { role: 'document' })}
       </div>
-    )
+    );
 
     if (Transition) {
       dialog = (
@@ -446,20 +446,20 @@ class Modal extends React.Component {
         >
           {dialog}
         </Transition>
-      )
+      );
     }
 
     return (
       <Portal container={container} onRendered={this.onPortalRendered}>
-        <React.Fragment>
+        <>
           {backdrop && this.renderBackdrop()}
           {dialog}
-        </React.Fragment>
+        </>
       </Portal>
-    )
+    );
   }
 }
 
-Modal.Manager = ModalManager
+Modal.Manager = ModalManager;
 
-export default Modal
+export default Modal;

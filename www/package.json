@@ -10,9 +10,8 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.54",
-    "gatsby": "^2.0.0-rc.9",
+    "gatsby": "^2.0.0-rc.11",
     "gatsby-link": "^2.0.0-rc.2",
-    "gatsby-mdx": "^0.0.11",
     "gatsby-plugin-catch-links": "^2.0.2-rc.1",
     "gatsby-plugin-css-literal-loader": "^1.0.0",
     "gatsby-plugin-less": "^2.0.0-rc.1",

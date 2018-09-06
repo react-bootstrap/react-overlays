@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-import elementType from 'prop-types-extra/lib/elementType'
-import React from 'react'
-import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types';
+import elementType from 'prop-types-extra/lib/elementType';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Portal from './Portal'
-import RootCloseWrapper from './RootCloseWrapper'
-import { Popper, placements } from '@react-bootstrap/react-popper'
-import forwardRef from 'react-context-toolbox/lib/forwardRef'
-import WaitForContainer from './WaitForContainer'
+import Portal from './Portal';
+import RootCloseWrapper from './RootCloseWrapper';
+import { Popper, placements } from '@react-bootstrap/react-popper';
+import forwardRef from 'react-context-toolbox/lib/forwardRef';
+import WaitForContainer from './WaitForContainer';
 
 /**
  * Built on top of `<Position/>` and `<Portal/>`, the overlay component is
@@ -15,42 +15,42 @@ import WaitForContainer from './WaitForContainer'
  */
 class Overlay extends React.Component {
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
 
-    this.state = { exited: !props.show }
-    this.onHiddenListener = this.handleHidden.bind(this)
+    this.state = { exited: !props.show };
+    this.onHiddenListener = this.handleHidden.bind(this);
 
-    this._lastTarget = null
+    this._lastTarget = null;
   }
 
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.show) {
-      return { exited: false }
+      return { exited: false };
     } else if (!nextProps.transition) {
       // Otherwise let handleHidden take care of marking exited.
-      return { exited: true }
+      return { exited: true };
     }
-    return null
+    return null;
   }
 
   componentDidMount() {
-    this.setState({ target: this.getTarget() })
+    this.setState({ target: this.getTarget() });
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props === prevProps) return
+    if (this.props === prevProps) return;
 
-    const target = this.getTarget()
+    const target = this.getTarget();
 
     if (target !== this.state.target) {
-      this.setState({ target })
+      this.setState({ target });
     }
   }
 
   getTarget() {
-    let { target } = this.props
-    target = typeof target === 'function' ? target() : target
-    return (target && ReactDOM.findDOMNode(target)) || null
+    let { target } = this.props;
+    target = typeof target === 'function' ? target() : target;
+    return (target && ReactDOM.findDOMNode(target)) || null;
   }
 
   render() {
@@ -65,19 +65,19 @@ class Overlay extends React.Component {
       popperConfig = {},
       transition: Transition,
       ...props
-    } = this.props
-    const { target } = this.state
+    } = this.props;
+    const { target } = this.state;
 
     // Don't un-render the overlay while it's transitioning out.
-    const mountOverlay = props.show || (Transition && !this.state.exited)
+    const mountOverlay = props.show || (Transition && !this.state.exited);
     if (!mountOverlay) {
       // Don't bother showing anything if we don't have to.
-      return null
+      return null;
     }
 
-    let child = children
+    let child = children;
 
-    const { modifiers = {} } = popperConfig
+    const { modifiers = {} } = popperConfig;
     const popperProps = {
       ...popperConfig,
       placement,
@@ -94,27 +94,24 @@ class Overlay extends React.Component {
           ...modifiers.preventOverflow,
         },
       },
-    }
+    };
 
     child = (
       <Popper {...popperProps}>
         {({ arrowProps, style, ref, ...popper }) => {
-          this.popper = popper
+          this.popper = popper;
 
           let innerChild = this.props.children({
             ...popper,
             // popper doesn't set the initial placement
             placement: popper.placement || placement,
             show: props.show,
-            props: {
-              ref,
-              style,
-              'aria-labelledby': target && target.id,
-            },
+
             arrowProps,
-          })
+            props: { ref, style },
+          });
           if (Transition) {
-            let { onExit, onExiting, onEnter, onEntering, onEntered } = props
+            let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
 
             innerChild = (
               <Transition
@@ -129,12 +126,12 @@ class Overlay extends React.Component {
               >
                 {innerChild}
               </Transition>
-            )
+            );
           }
-          return innerChild
+          return innerChild;
         }}
       </Popper>
-    )
+    );
 
     if (rootClose) {
       child = (
@@ -144,19 +141,19 @@ class Overlay extends React.Component {
         >
           {child}
         </RootCloseWrapper>
-      )
+      );
     }
 
-    return <Portal container={container}>{child}</Portal>
+    return <Portal container={container}>{child}</Portal>;
   }
 
   handleHidden = (...args) => {
-    this.setState({ exited: true })
+    this.setState({ exited: true });
 
     if (this.props.onExited) {
-      this.props.onExited(...args)
+      this.props.onExited(...args);
     }
-  }
+  };
 }
 
 Overlay.propTypes = {
@@ -215,12 +212,12 @@ Overlay.propTypes = {
    * @type func
    */
   onHide(props, ...args) {
-    let propType = PropTypes.func
+    let propType = PropTypes.func;
     if (props.rootClose) {
-      propType = propType.isRequired
+      propType = propType.isRequired;
     }
 
-    return propType(props, ...args)
+    return propType(props, ...args);
   },
 
   /**
@@ -258,7 +255,7 @@ Overlay.propTypes = {
    * Callback fired after the Overlay finishes transitioning out
    */
   onExited: PropTypes.func,
-}
+};
 
 export default forwardRef(
   (props, ref) => (
@@ -266,5 +263,5 @@ export default forwardRef(
       {container => <Overlay {...props} ref={ref} container={container} />}
     </WaitForContainer>
   ),
-  { displayName: 'withContainer(Overlay)' }
-)
+  { displayName: 'withContainer(Overlay)' },
+);
