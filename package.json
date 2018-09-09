@@ -30,7 +30,7 @@
     "prepublishOnly": "yarn build",
     "start": "yarn --cwd www start",
     "lint": "eslint 'www/*.js' www/src src test '*.js'",
-    "release": "4c release --publish-dir lib",
+    "release": "rollout --publish-dir lib",
     "tdd": "karma start",
     "test": "yarn lint && yarn testonly",
     "testonly": "yarn tdd --single-run"
@@ -47,13 +47,12 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@4c/rollout": "^1.0.0",
-    "@react-bootstrap/react-popper": "^1.2.1",
     "classnames": "^2.2.6",
     "dom-helpers": "^3.3.1",
     "prop-types": "^15.6.2",
     "prop-types-extra": "^1.1.0",
     "react-context-toolbox": "^1.2.1",
+    "react-popper": "^1.0.2",
     "warning": "^4.0.2"
   },
   "peerDependencies": {
@@ -61,7 +60,7 @@
     "react-dom": ">=16.3.0"
   },
   "devDependencies": {
-    "@4c/cli": "^0.3.0",
+    "@4c/rollout": "^1.1.0",
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
@@ -95,7 +94,7 @@
     "mocha": "^5.2.0",
     "prettier": "^1.14.2",
     "react": "^16.4.2",
-    "react-bootstrap": "^0.32.3",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.4.2",
     "react-live": "^1.11.0",
     "react-transition-group": "^2.4.0",
@@ -104,6 +103,7 @@
     "sinon": "^6.2.0",
     "sinon-chai": "^3.2.0",
     "webpack": "^4.17.2",
-    "webpack-atoms": "^7.0.1"
+    "webpack-atoms": "^7.0.1",
+    "webpack-cli": "^3.1.0"
   }
 }

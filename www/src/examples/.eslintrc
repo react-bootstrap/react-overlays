@@ -18,6 +18,8 @@
     "Overlay": false,
     "Dropdown": false,
     "Portal": false,
-    "RootCloseWrapper": false
+    "RootCloseWrapper": false,
+    "css": false,
+    "styled": false
   }
 }

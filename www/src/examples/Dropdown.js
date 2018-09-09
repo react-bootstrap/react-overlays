@@ -1,43 +1,38 @@
-const dropdownStyle = {
-  position: 'relative',
-  display: 'inline-block'
-};
-const menuStyle = {
-  minWidth: 150,
-  position: 'absolute',
-  flexDirection: 'column',
-  border: '1px solid #e5e5e5',
-  backgroundColor: 'white',
-  boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-  padding: 20
-};
-
 const Menu = () => (
   <Dropdown.Menu flip>
-    {({ show, onClose, props }) => (
-      <div
-        {...props}
-        style={{
-          ...menuStyle,
-          ...props.style,
-          display: show ? 'flex' : 'none'
-        }}
-      >
-        <button onClick={onClose} style={{ textAlign: 'left' }}>
-          Item 1
-        </button>
-        <button onClick={onClose} style={{ textAlign: 'left' }}>
-          Item 2
-        </button>
-      </div>
-    )}
+    {({ show, onClose, props }) => {
+      return (
+        <div
+          {...props}
+          className={css`
+            display: ${show ? 'flex' : 'none'};
+            min-width: 150px;
+            position: absolute;
+            flex-direction: column;
+            border: 1px solid #e5e5e5;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+          `}
+        >
+          <button onClick={onClose} style={{ textAlign: 'left' }}>
+            Item 1
+          </button>
+          <button onClick={onClose} style={{ textAlign: 'left' }}>
+            Item 2
+          </button>
+        </div>
+      );
+    }}
   </Dropdown.Menu>
 );
 
-const Toggle = ({ id }) => (
+const Toggle = ({ id, children }) => (
   <Dropdown.Toggle>
-    {({ onToggle, show, props }) => (
-      <Button id={id} {...props} onClick={onToggle} />
+    {({ toggle, show, props }) => (
+      <Button id={id} {...props} onClick={toggle}>
+        {children}
+      </Button>
     )}
   </Dropdown.Toggle>
 );
@@ -51,7 +46,13 @@ const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
     itemSelector="button:not(:disabled)"
   >
     {({ props }) => (
-      <div {...props} style={dropdownStyle}>
+      <div
+        {...props}
+        className={css`
+          position: relative;
+          display: inline-block;
+        `}
+      >
         <Toggle id="example-toggle">{title}</Toggle>
         <Menu role={role} />
       </div>

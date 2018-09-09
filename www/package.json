@@ -9,6 +9,12 @@
     "build": "gatsby build"
   },
   "devDependencies": {
+    "@babel/standalone": "^7.0.0",
+    "buble": "^0.19.3",
+    "emotion": "^9.2.8",
+    "emotion-server": "^9.2.8",
+    "gatsby-plugin-emotion": "next",
+    "react-emotion": "^9.2.8",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.54",
     "gatsby": "^2.0.0-rc.11",
     "gatsby-link": "^2.0.0-rc.2",

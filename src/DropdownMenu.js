@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { Popper } from '@react-bootstrap/react-popper'
-import DropdownContext from './DropdownContext'
-import RootCloseWrapper from './RootCloseWrapper'
-import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps'
+import { Popper } from 'react-popper';
+import DropdownContext from './DropdownContext';
+import RootCloseWrapper from './RootCloseWrapper';
+import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps';
 
 class DropdownMenu extends React.Component {
-  static displayName = 'ReactOverlaysDropdownMenu'
+  static displayName = 'ReactOverlaysDropdownMenu';
 
   static propTypes = {
     /**
@@ -75,15 +75,15 @@ class DropdownMenu extends React.Component {
     drop: PropTypes.string,
     /** @private */
     toggleNode: PropTypes.any,
-  }
+  };
 
   static defaultProps = {
     usePopper: true,
-  }
+  };
 
-  state = { toggleId: null }
+  state = { toggleId: null };
 
-  popperIsInitialized = false
+  popperIsInitialized = false;
 
   getSnapshotBeforeUpdate(prevProps) {
     // If, to the best we can tell, this update won't reinitialize popper,
@@ -93,26 +93,26 @@ class DropdownMenu extends React.Component {
       this.props.show &&
       this.popperIsInitialized &&
       // a new reference node will already trigger this internally
-      prevProps.toggleNode === this.props.toggleNode
+      prevProps.toggleNode === this.props.toggleNode;
 
     if (this.props.show && this.props.usePopper && !this.popperIsInitialized) {
-      this.popperIsInitialized = true
+      this.popperIsInitialized = true;
     }
 
-    return !!shouldUpdatePopper
+    return !!shouldUpdatePopper;
   }
 
   componentDidUpdate(_, __, shouldUpdatePopper) {
     if (shouldUpdatePopper && this.scheduleUpdate) {
-      this.scheduleUpdate()
+      this.scheduleUpdate();
     }
   }
 
   handleClose = e => {
-    if (!this.props.onToggle) return
+    if (!this.props.onToggle) return;
 
-    this.props.onToggle(false, e)
-  }
+    this.props.onToggle(false, e);
+  };
 
   render() {
     const {
@@ -125,30 +125,30 @@ class DropdownMenu extends React.Component {
       toggleNode,
       rootCloseEvent,
       popperConfig = {},
-    } = this.props
+    } = this.props;
 
-    let placement = alignEnd ? 'bottom-end' : 'bottom-start'
-    if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start'
-    if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start'
-    if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start'
+    let placement = alignEnd ? 'bottom-end' : 'bottom-start';
+    if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
+    if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
+    if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
 
-    let menu = null
+    let menu = null;
     const menuProps = {
       ref: menuRef,
       'aria-labelledby': toggleNode && toggleNode.id,
-    }
+    };
     const childArgs = {
       show,
       alignEnd,
       close: this.handleClose,
-    }
+    };
 
     if (!usePopper) {
-      menu = this.props.children({ ...childArgs, props: menuProps })
+      menu = this.props.children({ ...childArgs, props: menuProps });
     } else if (this.popperIsInitialized || show) {
       // Add it this way, so it doesn't override someones usage
       // with react-poppers <Reference>
-      if (toggleNode) popperConfig.referenceElement = toggleNode
+      if (toggleNode) popperConfig.referenceElement = toggleNode;
 
       menu = (
         <Popper
@@ -162,16 +162,16 @@ class DropdownMenu extends React.Component {
           }}
         >
           {({ ref, style, ...popper }) => {
-            this.scheduleUpdate = popper.scheduleUpdate
+            this.scheduleUpdate = popper.scheduleUpdate;
 
             return this.props.children({
               ...popper,
               ...childArgs,
               props: { ...menuProps, ref, style },
-            })
+            });
           }}
         </Popper>
-      )
+      );
     }
 
     return (
@@ -184,7 +184,7 @@ class DropdownMenu extends React.Component {
           {menu}
         </RootCloseWrapper>
       )
-    )
+    );
   }
 }
 
@@ -198,7 +198,7 @@ const DecoratedDropdownMenu = mapContextToProps(
     show: show == null ? props.show : show,
     alignEnd: alignEnd == null ? props.alignEnd : alignEnd,
   }),
-  DropdownMenu
-)
+  DropdownMenu,
+);
 
-export default DecoratedDropdownMenu
+export default DecoratedDropdownMenu;

@@ -1,7 +1,8 @@
-const path = require('path')
+const path = require('path');
 
-exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
+exports.onCreateWebpackConfig = ({ actions, plugins, loaders, getConfig }) => {
   actions.setWebpackConfig({
+    devtool: 'source-map',
     module: {
       rules: [
         {
@@ -20,12 +21,24 @@ exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
       // See https://github.com/FormidableLabs/react-live/issues/5
       plugins.ignore(/^(xor|props)$/),
     ],
-  })
-}
+    node: {
+      // Mock Node.js modules that Babel require()s but that we don't
+      // particularly care about.
+      fs: 'empty',
+      module: 'empty',
+      net: 'empty',
+    },
+  });
 
-exports.setBabelOptions = (actions) => ({
-  options: {
-    envName: 'esm',
-    root: path.resolve(__dirname, '../')
-  }
-})
+  getConfig().resolve.modules = ['node_modules'];
+};
+
+exports.onCreateBabelConfig = ({ actions }) => {
+  actions.setBabelOptions({
+    options: {
+      babelrc: true,
+      envName: 'docs',
+      root: path.resolve(__dirname, '../'),
+    },
+  });
+};

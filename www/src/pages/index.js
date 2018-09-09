@@ -1,87 +1,39 @@
-import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import PropTable from '../components/PropTable';
+import Playground from '../components/Playground';
 
-import PropTypes from 'prop-types'
-import React from 'react'
-import ReactDOM, { findDOMNode } from 'react-dom'
-import Button from 'react-bootstrap/lib/Button'
-import Transition, {
-  ENTERED,
-  ENTERING,
-} from 'react-transition-group/Transition'
-
-import PropTable from '../components/PropTable'
-
-import AffixSource from '../examples/Affix'
-import ModalExample from '../examples/Modal'
-import OverlaySource from '../examples/Overlay'
-import DropdownSource from '../examples/Dropdown'
-import PortalSource from '../examples/Portal'
-import RootCloseWrapperSource from '../examples/RootCloseWrapper'
-import TransitionSource from '../examples/Transition'
-
-import * as ReactOverlays from 'react-overlays'
-import getOffset from 'dom-helpers/query/offset'
-
-import '../styles.less'
-import injectCss from '../injectCss'
-import { graphql } from 'gatsby'
-
-const scope = {
-  React,
-  ReactDOM,
-  findDOMNode,
-  Button,
-  injectCss,
-  ...ReactOverlays,
-  getOffset,
-  Transition,
-  ENTERED,
-  ENTERING,
-}
+import AffixSource from '../examples/Affix';
+import ModalExample from '../examples/Modal';
+import OverlaySource from '../examples/Overlay';
+import DropdownSource from '../examples/Dropdown';
+import PortalSource from '../examples/Portal';
+import RootCloseWrapperSource from '../examples/RootCloseWrapper';
+import TransitionSource from '../examples/Transition';
 
 class Anchor extends React.Component {
   static propTypes = {
     id: PropTypes.string,
-  }
+  };
 
   render() {
     let id =
-      this.props.id || this.props.children.toLowerCase().replace(/\s+/gi, '_')
+      this.props.id || this.props.children.toLowerCase().replace(/\s+/gi, '_');
 
     return (
       <a id={id} href={'#' + id} className="anchor">
         <span className="anchor-icon">#</span>
         {this.props.children}
       </a>
-    )
-  }
-}
-
-class ExampleEditor extends React.Component {
-  static propTypes = {
-    codeText: PropTypes.string,
-  }
-
-  render() {
-    return (
-      <LiveProvider
-        scope={scope}
-        mountStylesheet={false}
-        code={this.props.codeText}
-        noInline={this.props.codeText.includes('render(')}
-      >
-        <LivePreview />
-        <LiveError />
-        <LiveEditor />
-      </LiveProvider>
-    )
+    );
   }
 }
 
 class Example extends React.Component {
   static propTypes = {
     data: PropTypes.object,
-  }
+  };
 
   render() {
     const {
@@ -94,7 +46,7 @@ class Example extends React.Component {
       DropdownMenuMetadata,
       DropdownToggleMetadata,
       RootCloseWrapperMetadata,
-    } = this.props.data
+    } = this.props.data;
 
     return (
       <div className="app row">
@@ -136,7 +88,7 @@ class Example extends React.Component {
                 __html: PortalMetadata.description.childMarkdownRemark.html,
               }}
             />
-            <ExampleEditor codeText={PortalSource} />
+            <Playground codeText={PortalSource} />
             <PropTable component="Portal" metadata={PortalMetadata} />
           </section>
           <section>
@@ -148,7 +100,7 @@ class Example extends React.Component {
                 __html: ModalMetadata.description.childMarkdownRemark.html,
               }}
             />
-            <ExampleEditor codeText={ModalExample} />
+            <Playground codeText={ModalExample} />
             <PropTable component="Modal" metadata={ModalMetadata} />
           </section>
           <section>
@@ -160,7 +112,7 @@ class Example extends React.Component {
                 __html: OverlayMetadata.description.childMarkdownRemark.html,
               }}
             />
-            <ExampleEditor codeText={OverlaySource} />
+            <Playground codeText={OverlaySource} />
             <PropTable component="Overlay" metadata={OverlayMetadata} />
           </section>
 
@@ -173,7 +125,7 @@ class Example extends React.Component {
                 __html: DropdownMetadata.description.childMarkdownRemark.html,
               }}
             />
-            <ExampleEditor codeText={DropdownSource} />
+            <Playground codeText={DropdownSource} />
             <PropTable component="Dropdown" metadata={DropdownMetadata} />
             <PropTable
               title="Dropdown.Menu"
@@ -201,7 +153,7 @@ class Example extends React.Component {
                 __html: AutoAffixMetadata.description.childMarkdownRemark.html,
               }}
             />
-            <ExampleEditor codeText={AffixSource} />
+            <Playground codeText={AffixSource} />
             <PropTable component="Affix" metadata={AffixMetadata} />
             <PropTable component="AutoAffix" metadata={AutoAffixMetadata} />
           </section>
@@ -215,7 +167,7 @@ class Example extends React.Component {
                   RootCloseWrapperMetadata.description.childMarkdownRemark.html,
               }}
             />
-            <ExampleEditor codeText={RootCloseWrapperSource} />
+            <Playground codeText={RootCloseWrapperSource} />
             <PropTable
               component="RootCloseWrapper"
               metadata={RootCloseWrapperMetadata}
@@ -241,15 +193,15 @@ class Example extends React.Component {
               your own like the below example.
             </p>
 
-            <ExampleEditor codeText={TransitionSource} />
+            <Playground codeText={TransitionSource} />
           </section>
         </main>
       </div>
-    )
+    );
   }
 }
 
-export default Example
+export default Example;
 
 export const pageQuery = graphql`
   query SiteQuery {
@@ -265,7 +217,9 @@ export const pageQuery = graphql`
     OverlayMetadata: componentMetadata(displayName: { eq: "Overlay" }) {
       ...PropTable_metadata
     }
-    DropdownMetadata: componentMetadata(displayName: { eq: "Dropdown" }) {
+    DropdownMetadata: componentMetadata(
+      displayName: { eq: "ReactOverlaysDropdown" }
+    ) {
       ...PropTable_metadata
     }
     DropdownToggleMetadata: componentMetadata(
@@ -287,4 +241,4 @@ export const pageQuery = graphql`
       ...PropTable_metadata
     }
   }
-`
+`;
