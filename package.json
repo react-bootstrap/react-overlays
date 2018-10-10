@@ -37,7 +37,7 @@
     "prop-types": "^15.5.10",
     "prop-types-extra": "^1.0.1",
     "react-transition-group": "^2.2.0",
-    "warning": "^3.0.0"
+    "warning": "^4.0.0"
   },
   "peerDependencies": {
     "react": "^0.14.9 || >=15.3.0",
