@@ -189,7 +189,7 @@ class DropdownMenu extends React.Component {
 }
 
 const DecoratedDropdownMenu = mapContextToProps(
-  DropdownContext,
+  DropdownContext.Consumer,
   ({ show, alignEnd, toggle, drop, menuRef, toggleNode }, props) => ({
     drop,
     menuRef,
