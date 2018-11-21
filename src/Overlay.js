@@ -83,6 +83,7 @@ class Overlay extends React.Component {
         <RootCloseWrapper
           onRootClose={props.onHide}
           event={props.rootCloseEvent}
+          disabled={props.rootCloseDisabled}
         >
           {child}
         </RootCloseWrapper>
@@ -123,7 +124,11 @@ Overlay.propTypes = {
    * Specify event for toggling overlay
    */
   rootCloseEvent: RootCloseWrapper.propTypes.event,
-
+  
+  /**
+   * Specify disabled for disable RootCloseWrapper
+   */
+  rootCloseDisabled: RootCloseWrapper.propTypes.disabled,
   /**
    * A Callback fired by the Overlay when it wishes to be hidden.
    *
