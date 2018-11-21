@@ -65,5 +65,15 @@ describe('Overlay', () => {
 
       expect(wrapper.props.event).to.equal('mousedown');
     });
+    
+    it('passes down the rootCloseDisabled', () => {
+      instance = instance.renderWithProps({ ...props, rootCloseDisabled: true });
+
+      const wrapper = ReactTestUtils.findRenderedComponentWithType(
+        instance, RootCloseWrapper
+      );
+
+      expect(wrapper.props.disabled).to.equal(true);
+    });
   });
 });
