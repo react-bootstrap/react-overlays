@@ -1,9 +1,10 @@
-const Menu = () => (
+const Menu = ({ role }) => (
   <Dropdown.Menu flip>
     {({ show, onClose, props }) => {
       return (
         <div
           {...props}
+          role={role}
           className={css`
             display: ${show ? 'flex' : 'none'};
             min-width: 150px;
