@@ -1,28 +1,21 @@
-import isWindow from 'dom-helpers/query/isWindow';
-import ownerDocument from 'dom-helpers/ownerDocument';
+import isWindow from 'dom-helpers/query/isWindow'
+import ownerDocument from 'dom-helpers/ownerDocument'
 
-function isBody(node){
-  return node && node.tagName.toLowerCase() === 'body';
+function isBody(node) {
+  return node && node.tagName.toLowerCase() === 'body'
 }
 
-function bodyIsOverflowing(node){
-  let doc = ownerDocument(node);
-  let win = isWindow(doc);
-  let fullWidth = win.innerWidth;
+function bodyIsOverflowing(node) {
+  let doc = ownerDocument(node)
+  let win = isWindow(doc)
 
-  // Support: ie8, no innerWidth
-  if (!fullWidth) {
-    let documentElementRect = doc.documentElement.getBoundingClientRect();
-    fullWidth = documentElementRect.right - Math.abs(documentElementRect.left);
-  }
-
-  return doc.body.clientWidth < fullWidth;
+  return doc.body.clientWidth < win.innerWidth
 }
 
 export default function isOverflowing(container) {
-  let win = isWindow(container);
+  let win = isWindow(container)
 
   return win || isBody(container)
-      ? bodyIsOverflowing(container)
-      : container.scrollHeight > container.clientHeight;
+    ? bodyIsOverflowing(container)
+    : container.scrollHeight > container.clientHeight
 }
