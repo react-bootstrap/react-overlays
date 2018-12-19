@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import DropdownContext from './DropdownContext'
+import DropdownContext from './DropdownContext';
 
 const propTypes = {
   /**
@@ -20,7 +20,7 @@ const propTypes = {
    * }) => React.Element}
    */
   children: PropTypes.func.isRequired,
-}
+};
 function DropdownToggle({ children }) {
   return (
     <DropdownContext.Consumer>
@@ -36,10 +36,10 @@ function DropdownToggle({ children }) {
         })
       }
     </DropdownContext.Consumer>
-  )
+  );
 }
 
-DropdownToggle.displayName = 'ReactOverlaysDropdownToggle'
-DropdownToggle.propTypes = propTypes
+DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';
+DropdownToggle.propTypes = propTypes;
 
-export default DropdownToggle
+export default DropdownToggle;

@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import Portal from './Portal';
 import RootCloseWrapper from './RootCloseWrapper';
 import { Popper, placements } from 'react-popper';
-import forwardRef from 'react-context-toolbox/lib/forwardRef';
+import forwardRef from 'react-context-toolbox/forwardRef';
 import WaitForContainer from './WaitForContainer';
 
 /**

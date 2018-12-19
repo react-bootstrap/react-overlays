@@ -4,7 +4,7 @@ import React from 'react';
 import { Popper } from 'react-popper';
 import DropdownContext from './DropdownContext';
 import RootCloseWrapper from './RootCloseWrapper';
-import mapContextToProps from 'react-context-toolbox/lib/mapContextToProps';
+import mapContextToProps from 'react-context-toolbox/mapContextToProps';
 
 class DropdownMenu extends React.Component {
   static displayName = 'ReactOverlaysDropdownMenu';
@@ -189,7 +189,7 @@ class DropdownMenu extends React.Component {
 }
 
 const DecoratedDropdownMenu = mapContextToProps(
-  DropdownContext.Consumer,
+  DropdownContext,
   ({ show, alignEnd, toggle, drop, menuRef, toggleNode }, props) => ({
     drop,
     menuRef,
