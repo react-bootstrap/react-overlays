@@ -168,6 +168,13 @@ Overlay.propTypes = {
   placement: PropTypes.oneOf(placements),
 
   /**
+   * Enables the Popper.js `flip` modifier, allowing the Overlay to
+   * automatically adjust it's placement in case of overlap with the viewport or toggle.
+   * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
+   */
+  flip: PropTypes.bool,
+
+  /**
    * A render prop that returns an element to overlay and position. See
    * the [react-popper documentation](https://github.com/FezVrasta/react-popper#children) for more info.
    *
