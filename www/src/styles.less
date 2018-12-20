@@ -1,17 +1,23 @@
-
 // .panel-default {
 //   border-radius: 0;
 // }
 
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+}
+
 .app {
-  font-family: "Helvetica";
+  font-family: 'Helvetica';
   max-width: 900px;
   margin: 0 auto;
   padding-top: 0;
 }
 
 .side-panel {
-
   ul {
     position: fixed;
     top: 40px;
@@ -29,111 +35,51 @@ pre {
 
 code {
   color: #555;
-  margin: -.05rem -.15em;
-  padding: .05rem .35em;
-  background-color: rgba(0,0,0,0.04);
+  margin: -0.05rem -0.15em;
+  padding: 0.05rem 0.35em;
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
-.playgroundStage,
+.playground-editor,
 .cm-s-neo.CodeMirror {
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   height: auto;
   min-height: 75px;
 }
-
-.CodeMirror {
-  font-size: 12px;
-
-}
-
-.cm-s-neo div.CodeMirror-cursor {
-  border-left: 1px solid #9b9da2;
-}
-
-.cm-s-neo .CodeMirror-linenumber {
-  color: #ccc;
-}
-
-.cm-s-neo .cm-atom,
-.cm-s-neo .cm-number {
-  color: #905;
-}
-
 
 .prop-table {
   font-size: 14 px;
 }
 
-.playgroundStage {
+.playground {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.playground-editor {
   padding: 15px 0 15px 15px;
-  //border-bottom: 1px solid #ddd;
+  position: relative;
+  margin: 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 
-.playground.collapsableCode .playgroundCode {
-  height: 0;
-  overflow: hidden;
-}
-
-.playground.collapsableCode .playgroundCode.expandedCode {
-  height: auto;
-}
-
-
-
-.playgroundPreview {
+.react-live-preview {
   position: relative;
   padding: 40px 15px 15px 15px;
 }
 
-
-
-.playgroundPreview:before {
+.react-live-preview:before {
   position: absolute;
   top: 3px;
   left: 7px;
   color: #959595;
-  border-bottom: 1px solid  #eee;
   padding: 0 3px;
   content: 'Result';
 }
 
-
-.playground  {
-  position: relative;
-  margin:  0;
-  margin-bottom: 20px;
-  border-top: 1px solid #ccc;
-}
-
-.playgroundCode,
-.playgroundPreview {
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-}
-
-.playgroundToggleCodeBar {
-  padding: 1px;
-  border-top: 1px solid #ccc;
-}
-
-.playgroundToggleCodeLink {
-  color: #333;
-  background-color: #ccc;
-  margin-top: 1px;
-  margin-left: -1px;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  padding: 3px 5px;
-
-  &:hover,
-  &:focus {
-    color: black;
-  }
-}
-
-
-.playgroundStage {
-
+.playground-editor__collapsed {
+  display: none;
 }
 
 .anchor,
@@ -163,21 +109,21 @@ h4 a:focus .anchor-icon {
   opacity: 0.5;
 }
 
-
 /** examples */
 
 .modal-example,
 .portal-example,
 .overlay-example,
+.dropdown-example,
 .root-close-wrapper-example {
   text-align: center;
 }
 
-.overlay-example {
+.overlay-example,
+.dropdown-example {
   position: relative;
-  height: 120px;
+  height: 320px;
   padding-top: 30px;
-
 
   p {
     padding-top: 10px;

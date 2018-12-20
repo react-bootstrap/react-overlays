@@ -1,20 +1,20 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
   ],
   "env": {
+    "es6": true,
     "browser": true,
     "node": true
   },
   "parser": "babel-eslint",
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     "comma-spacing": "error",
     "comma-style": ["error", "last"],
-    "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
     "no-var": "error",
     "one-var": ["error", { "initialized": "never" }],
     "quotes": ["error", "single", "avoid-escape"],
@@ -23,10 +23,21 @@
     "react/no-find-dom-node": "off",
     "react/jsx-boolean-value": ["error", "never"],
     "react/jsx-wrap-multilines": "error",
-    "react/no-unescaped-entities": "off",
-    "react/prop-types": ["error", {
-      "ignore": ["children", "className"]
-    }],
-    "react/self-closing-comp": "error"
+    "react/prop-types": [
+      "error",
+      {
+        "ignore": ["children", "className"]
+      }
+    ],
+    "react/self-closing-comp": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ]
   }
 }

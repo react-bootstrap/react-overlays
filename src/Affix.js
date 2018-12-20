@@ -1,17 +1,17 @@
-import classNames from 'classnames';
-import getHeight from 'dom-helpers/query/height';
-import getOffset from 'dom-helpers/query/offset';
-import getOffsetParent from 'dom-helpers/query/offsetParent';
-import getScrollTop from 'dom-helpers/query/scrollTop';
-import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import classNames from 'classnames'
+import getHeight from 'dom-helpers/query/height'
+import getOffset from 'dom-helpers/query/offset'
+import listen from 'dom-helpers/events/listen'
+import getOffsetParent from 'dom-helpers/query/offsetParent'
+import getScrollTop from 'dom-helpers/query/scrollTop'
+import requestAnimationFrame from 'dom-helpers/util/requestAnimationFrame'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import addEventListener from './utils/addEventListener';
-import getDocumentHeight from './utils/getDocumentHeight';
-import ownerDocument from './utils/ownerDocument';
-import ownerWindow from './utils/ownerWindow';
+import getDocumentHeight from './utils/getDocumentHeight'
+import ownerDocument from './utils/ownerDocument'
+import ownerWindow from './utils/ownerWindow'
 
 /**
  * The `<Affix/>` component toggles `position: fixed;` on and off, emulating
@@ -19,104 +19,96 @@ import ownerWindow from './utils/ownerWindow';
  */
 class Affix extends React.Component {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
     this.state = {
       affixed: 'top',
       position: null,
-      top: null
-    };
-
-    this._needPositionUpdate = false;
+      top: null,
+    }
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this._isMounted = true
 
-    this._windowScrollListener = addEventListener(
-      ownerWindow(this), 'scroll', () => this.onWindowScroll()
-    );
-    this._documentClickListener = addEventListener(
-      ownerDocument(this), 'click', () => this.onDocumentClick()
-    );
+    this.removeScrollListener = listen(ownerWindow(this), 'scroll', () =>
+      this.onWindowScroll()
+    )
+    this.removeClickListener = listen(ownerDocument(this), 'click', () =>
+      this.onDocumentClick()
+    )
 
-    this.onUpdate();
+    this.onUpdate()
   }
 
-  componentWillReceiveProps() {
-    this._needPositionUpdate = true;
-  }
-
-  componentDidUpdate() {
-    if (this._needPositionUpdate) {
-      this._needPositionUpdate = false;
-      this.onUpdate();
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.onUpdate()
     }
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this._isMounted = false
 
-    if (this._windowScrollListener) {
-      this._windowScrollListener.remove();
-    }
-    if (this._documentClickListener) {
-      this._documentClickListener.remove();
-    }
+    if (this.removeClickListener) this.removeClickListener()
+    if (this.removeScrollListener) this.removeScrollListener()
   }
 
   onWindowScroll = () => {
-    this.onUpdate();
+    this.onUpdate()
   }
 
   onDocumentClick = () => {
-    requestAnimationFrame(() => this.onUpdate());
+    requestAnimationFrame(() => this.onUpdate())
   }
 
   onUpdate = () => {
     if (!this._isMounted) {
-      return;
+      return
     }
 
-    const {offsetTop, viewportOffsetTop} = this.props;
-    const scrollTop = getScrollTop(ownerWindow(this));
-    const positionTopMin = scrollTop + (viewportOffsetTop || 0);
+    const { offsetTop, viewportOffsetTop } = this.props
+    const scrollTop = getScrollTop(ownerWindow(this))
+    const positionTopMin = scrollTop + (viewportOffsetTop || 0)
 
     if (positionTopMin <= offsetTop) {
-      this.updateState('top', null, null);
-      return;
+      this.updateState('top', null, null)
+      return
     }
 
     if (positionTopMin > this.getPositionTopMax()) {
       if (this.state.affixed === 'bottom') {
-        this.updateStateAtBottom();
+        this.updateStateAtBottom()
       } else {
         // Setting position away from `fixed` can change the offset parent of
         // the affix, so we can't calculate the correct position until after
         // we've updated its position.
-        this.setState({
-          affixed: 'bottom',
-          position: 'absolute',
-          top: null
-        }, () => {
-          if (!this._isMounted) {
-            return;
-          }
+        this.setState(
+          {
+            affixed: 'bottom',
+            position: 'absolute',
+            top: null,
+          },
+          () => {
+            if (!this._isMounted) {
+              return
+            }
 
-          this.updateStateAtBottom();
-        });
+            this.updateStateAtBottom()
+          }
+        )
       }
-      return;
+      return
     }
 
-    this.updateState('affix', 'fixed', viewportOffsetTop);
+    this.updateState('affix', 'fixed', viewportOffsetTop)
   }
 
   getPositionTopMax = () => {
-    const documentHeight = getDocumentHeight(ownerDocument(this));
-    const height = getHeight(ReactDOM.findDOMNode(this));
+    const documentHeight = getDocumentHeight(ownerDocument(this))
+    const height = getHeight(ReactDOM.findDOMNode(this))
 
-    return documentHeight - height - this.props.offsetBottom;
+    return documentHeight - height - this.props.offsetBottom
   }
 
   updateState = (affixed, position, top) => {
@@ -125,55 +117,57 @@ class Affix extends React.Component {
       position === this.state.position &&
       top === this.state.top
     ) {
-      return;
+      return
     }
 
-    let upperName = affixed === 'affix'
-      ? '' : affixed.charAt(0).toUpperCase() + affixed.substr(1);
+    let upperName =
+      affixed === 'affix'
+        ? ''
+        : affixed.charAt(0).toUpperCase() + affixed.substr(1)
 
     if (this.props['onAffix' + upperName]) {
-      this.props['onAffix' + upperName]();
+      this.props['onAffix' + upperName]()
     }
 
-    this.setState({affixed, position, top}, ()=>{
+    this.setState({ affixed, position, top }, () => {
       if (this.props['onAffixed' + upperName]) {
-        this.props['onAffixed' + upperName]();
+        this.props['onAffixed' + upperName]()
       }
-    });
+    })
   }
 
   updateStateAtBottom = () => {
-    const positionTopMax = this.getPositionTopMax();
-    const offsetParent = getOffsetParent(ReactDOM.findDOMNode(this));
-    const parentTop = getOffset(offsetParent).top;
+    const positionTopMax = this.getPositionTopMax()
+    const offsetParent = getOffsetParent(ReactDOM.findDOMNode(this))
+    const parentTop = getOffset(offsetParent).top
 
-    this.updateState('bottom', 'absolute', positionTopMax - parentTop);
+    this.updateState('bottom', 'absolute', positionTopMax - parentTop)
   }
 
   render() {
-    const child = React.Children.only(this.props.children);
-    const {className, style} = child.props;
+    const child = React.Children.only(this.props.children)
+    const { className, style } = child.props
 
-    const {affixed, position, top} = this.state;
-    const positionStyle = {position, top};
+    const { affixed, position, top } = this.state
+    const positionStyle = { position, top }
 
-    let affixClassName;
-    let affixStyle;
+    let affixClassName
+    let affixStyle
     if (affixed === 'top') {
-      affixClassName = this.props.topClassName;
-      affixStyle = this.props.topStyle;
+      affixClassName = this.props.topClassName
+      affixStyle = this.props.topStyle
     } else if (affixed === 'bottom') {
-      affixClassName = this.props.bottomClassName;
-      affixStyle = this.props.bottomStyle;
+      affixClassName = this.props.bottomClassName
+      affixStyle = this.props.bottomStyle
     } else {
-      affixClassName = this.props.affixClassName;
-      affixStyle = this.props.affixStyle;
+      affixClassName = this.props.affixClassName
+      affixStyle = this.props.affixStyle
     }
 
     return React.cloneElement(child, {
       className: classNames(affixClassName, className),
-      style: {...positionStyle, ...affixStyle, ...style}
-    });
+      style: { ...positionStyle, ...affixStyle, ...style },
+    })
   }
 }
 
@@ -251,13 +245,13 @@ Affix.propTypes = {
   /**
    * Callback fired after the component `bottomStyle` and `bottomClassName` props have been rendered
    */
-  onAffixedBottom: PropTypes.func
-};
+  onAffixedBottom: PropTypes.func,
+}
 
 Affix.defaultProps = {
   offsetTop: 0,
   viewportOffsetTop: null,
-  offsetBottom: 0
-};
+  offsetBottom: 0,
+}
 
-export default Affix;
+export default Affix

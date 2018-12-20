@@ -1,19 +1,20 @@
-import contains from 'dom-helpers/query/contains';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import contains from 'dom-helpers/query/contains'
+import listen from 'dom-helpers/events/listen'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import addEventListener from './utils/addEventListener';
-import ownerDocument from './utils/ownerDocument';
+import ownerDocument from './utils/ownerDocument'
 
-const escapeKeyCode = 27;
+const escapeKeyCode = 27
+const noop = () => {}
 
 function isLeftClickEvent(event) {
-  return event.button === 0;
+  return event.button === 0
 }
 
 function isModifiedEvent(event) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
 }
 
 /**
@@ -24,88 +25,88 @@ function isModifiedEvent(event) {
  */
 class RootCloseWrapper extends React.Component {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
-    this.preventMouseRootClose = false;
+    this.preventMouseRootClose = false
   }
 
   componentDidMount() {
     if (!this.props.disabled) {
-      this.addEventListeners();
+      this.addEventListeners()
     }
   }
 
   componentDidUpdate(prevProps) {
     if (!this.props.disabled && prevProps.disabled) {
-      this.addEventListeners();
+      this.addEventListeners()
     } else if (this.props.disabled && !prevProps.disabled) {
-      this.removeEventListeners();
+      this.removeEventListeners()
     }
   }
 
   componentWillUnmount() {
     if (!this.props.disabled) {
-      this.removeEventListeners();
+      this.removeEventListeners()
     }
   }
 
   addEventListeners = () => {
-    const { event } = this.props;
-    const doc = ownerDocument(this);
+    const { event } = this.props
+    const doc = ownerDocument(this)
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
     // element is removed in the React mouse callback.
-    this.documentMouseCaptureListener =
-      addEventListener(doc, event, this.handleMouseCapture, true);
+    this.removeMouseCaptureListener = listen(
+      doc,
+      event,
+      this.handleMouseCapture,
+      true
+    )
 
-    this.documentMouseListener =
-      addEventListener(doc, event, this.handleMouse);
+    this.removeMouseListener = listen(doc, event, this.handleMouse)
+    this.removeKeyupListener = listen(doc, 'keyup', this.handleKeyUp)
 
-    this.documentKeyupListener =
-      addEventListener(doc, 'keyup', this.handleKeyUp);
+    if ('ontouchstart' in doc.documentElement) {
+      this.mobileSafariHackListeners = [].slice
+        .call(document.body.children)
+        .map(el => listen(el, 'mousemove', noop))
+    }
   }
 
   removeEventListeners = () => {
-    if (this.documentMouseCaptureListener) {
-      this.documentMouseCaptureListener.remove();
-    }
-
-    if (this.documentMouseListener) {
-      this.documentMouseListener.remove();
-    }
-
-    if (this.documentKeyupListener) {
-      this.documentKeyupListener.remove();
-    }
+    if (this.removeMouseCaptureListener) this.removeMouseCaptureListener()
+    if (this.removeMouseListener) this.removeMouseListener()
+    if (this.removeKeyupListener) this.removeKeyupListener()
+    if (this.mobileSafariHackListeners)
+      this.mobileSafariHackListeners.forEach(remove => remove())
   }
 
-  handleMouseCapture = (e) => {
-    this.preventMouseRootClose = (
+  handleMouseCapture = e => {
+    this.preventMouseRootClose =
       isModifiedEvent(e) ||
       !isLeftClickEvent(e) ||
       contains(ReactDOM.findDOMNode(this), e.target)
-    );
-  };
+  }
 
-  handleMouse = (e) => {
+  handleMouse = e => {
     if (!this.preventMouseRootClose && this.props.onRootClose) {
-      this.props.onRootClose(e);
+      this.props.onRootClose(e)
     }
-  };
+  }
 
-  handleKeyUp = (e) => {
+  handleKeyUp = e => {
     if (e.keyCode === escapeKeyCode && this.props.onRootClose) {
-      this.props.onRootClose(e);
+      this.props.onRootClose(e)
     }
-  };
+  }
 
   render() {
-    return this.props.children;
+    return this.props.children
   }
 }
 
-RootCloseWrapper.displayName = 'RootCloseWrapper';
+RootCloseWrapper.displayName = 'RootCloseWrapper'
 
 RootCloseWrapper.propTypes = {
   /**
@@ -123,11 +124,11 @@ RootCloseWrapper.propTypes = {
   /**
    * Choose which document mouse event to bind to.
    */
-  event: PropTypes.oneOf(['click', 'mousedown'])
-};
+  event: PropTypes.oneOf(['click', 'mousedown']),
+}
 
 RootCloseWrapper.defaultProps = {
-  event: 'click'
-};
+  event: 'click',
+}
 
-export default RootCloseWrapper;
+export default RootCloseWrapper

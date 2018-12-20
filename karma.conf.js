@@ -1,7 +1,7 @@
-const webpack = require('webpack');
+const { rules, plugins } = require('webpack-atoms')
 
-module.exports = (config) => {
-  const { env } = process;
+module.exports = config => {
+  const { env } = process
 
   config.set({
     frameworks: ['mocha', 'sinon-chai'],
@@ -13,13 +13,12 @@ module.exports = (config) => {
     },
 
     webpack: {
+      mode: 'development',
       module: {
-        rules: [
-          { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
-        ],
+        rules: [rules.js()],
       },
       plugins: [
-        new webpack.DefinePlugin({
+        plugins.define({
           'process.env.NODE_ENV': JSON.stringify('test'),
           __DEV__: true,
         }),
@@ -50,5 +49,5 @@ module.exports = (config) => {
     },
 
     browsers: env.BROWSER ? env.BROWSER.split(',') : ['Chrome'],
-  });
-};
+  })
+}
