@@ -68,6 +68,6 @@ describe('Overlay', () => {
       const wrapper = instance.find('RootCloseWrapper')
 
       expect(wrapper.props().disabled).to.equal(true)
-    });
-  });
-});
+    })
+  })
+})
