@@ -4217,6 +4217,15 @@ gatsby-plugin-page-creator@^2.0.0-rc.1:
     parse-filepath "^1.0.1"
     slash "^1.0.0"
 
+gatsby-plugin-sorted-assets@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-sorted-assets/-/gatsby-plugin-sorted-assets-1.0.2.tgz#09a3b66850fc9c12b0fd2658626bb7322b706c8a"
+  integrity sha512-gjdx0LeP25aM6xwPvbQlnWYyjgDNAd0Z7nYWmymJPAE0GO6GYZ5S7iLIwkEfwf5VfhQ0kFxCHE7zqRoqLL6O1g==
+  dependencies:
+    fs-extra "^7.0.0"
+    lodash "^4.17.11"
+    toposort "^2.0.2"
+
 gatsby-react-router-scroll@^2.0.0-rc.2:
   version "2.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/gatsby-react-router-scroll/-/gatsby-react-router-scroll-2.0.0-rc.2.tgz#292f013af77b8a75d3289945c5103a578884dfb3"
@@ -5825,6 +5834,11 @@ lodash.uniq@^4.5.0:
 lodash@^4.11.1, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
+
+lodash@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
+  integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
 log-symbols@^2.1.0:
   version "2.2.0"
@@ -8739,6 +8753,11 @@ topo@2.x.x:
   resolved "https://registry.yarnpkg.com/topo/-/topo-2.0.2.tgz#cd5615752539057c0dc0491a621c3bc6fbe1d182"
   dependencies:
     hoek "4.x.x"
+
+toposort@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
+  integrity sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=
 
 touch@^1.0.0:
   version "1.0.0"

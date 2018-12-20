@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  pathPrefix: '/react-overlays',
   siteMetadata: {
     title: 'react-overlays Documentation',
     author: 'Jason Quense',
@@ -12,6 +13,7 @@ module.exports = {
     ],
   },
   plugins: [
+    'gatsby-plugin-sorted-assets',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
