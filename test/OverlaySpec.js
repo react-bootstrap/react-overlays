@@ -63,11 +63,9 @@ describe('Overlay', () => {
     });
     
     it('passes down the rootCloseDisabled', () => {
-      instance = instance.renderWithProps({ ...props, rootCloseDisabled: true });
+      instance.setProps({ rootCloseDisabled: true });
 
-      const wrapper = ReactTestUtils.findRenderedComponentWithType(
-        instance, RootCloseWrapper
-      );
+      const wrapper = instance.find('RootCloseWrapper');
 
       expect(wrapper.props.disabled).to.equal(true);
     });
