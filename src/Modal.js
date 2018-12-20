@@ -264,7 +264,7 @@ class Modal extends React.Component {
       this.props.onShow();
     }
     // autofocus after onShow, to not trigger a focus event for previous
-    // modals before this own is shown.
+    // modals before this one is shown.
     this.autoFocus();
   };
 
@@ -280,7 +280,14 @@ class Modal extends React.Component {
       this.handleDocumentKeyDown,
     );
 
-    this.removeFocusListener = listen(doc, 'focus', this.enforceFocus, true);
+    this.removeFocusListener = listen(
+      doc,
+      'focus',
+      // the timeout is necessary b/c this will run before the new modal is mounted
+      // and so steals focus from it
+      () => setTimeout(this.enforceFocus),
+      true,
+    );
   };
 
   onHide = () => {
