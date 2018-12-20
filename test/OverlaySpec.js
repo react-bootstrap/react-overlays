@@ -57,17 +57,17 @@ describe('Overlay', () => {
     it('passes down the rootCloseEvent', () => {
       instance.setProps({ rootCloseEvent: 'mousedown' })
 
-      const wrapper = instance.find('RootCloseWrapper');
-      
-      expect(wrapper.props.event).to.equal('mousedown');
-    });
+      const wrapper = instance.find('RootCloseWrapper')
+
+      expect(wrapper.props().event).to.equal('mousedown')
+    })
     
     it('passes down the rootCloseDisabled', () => {
       instance.setProps({ rootCloseDisabled: true });
 
       const wrapper = instance.find('RootCloseWrapper');
 
-      expect(wrapper.props.disabled).to.equal(true);
+      expect(wrapper.props().disabled).to.equal(true);
     });
   });
 });
