@@ -30,7 +30,7 @@
     "prepublishOnly": "yarn build",
     "start": "yarn --cwd www start",
     "lint": "eslint 'www/*.js' www/src src test '*.js'",
-    "release": "rollout --publish-dir lib",
+    "release": "rollout",
     "tdd": "karma start",
     "test": "yarn lint && yarn testonly",
     "testonly": "yarn tdd --single-run"
@@ -45,6 +45,10 @@
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "release": {
+    "publishDir": "lib",
+    "conventionalCommits": true
   },
   "dependencies": {
     "classnames": "^2.2.6",
