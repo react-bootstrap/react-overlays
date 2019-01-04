@@ -1,3 +1,14 @@
+## [1.1.1](https://github.com/react-bootstrap/react-overlays/compare/v1.1.0...v1.1.1) (2019-01-04)
+
+
+### Bug Fixes
+
+* release config ([31a379a](https://github.com/react-bootstrap/react-overlays/commit/31a379a))
+
+
+
+
+
 # [1.1.0](https://github.com/react-bootstrap/react-overlays/compare/v1.0.0...v1.1.0) (2019-01-03)
 
 
