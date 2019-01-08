@@ -61,5 +61,13 @@ describe('Overlay', () => {
 
       expect(wrapper.props().event).to.equal('mousedown')
     })
+    
+    it('passes down the rootCloseDisabled', () => {
+      instance.setProps({ rootCloseDisabled: true })
+
+      const wrapper = instance.find('RootCloseWrapper')
+
+      expect(wrapper.props().disabled).to.equal(true)
+    })
   })
 })

@@ -1,3 +1,30 @@
+## [1.1.1](https://github.com/react-bootstrap/react-overlays/compare/v1.1.0...v1.1.1) (2019-01-04)
+
+
+### Bug Fixes
+
+* release config ([31a379a](https://github.com/react-bootstrap/react-overlays/commit/31a379a))
+
+
+
+
+
+# [1.1.0](https://github.com/react-bootstrap/react-overlays/compare/v1.0.0...v1.1.0) (2019-01-03)
+
+
+### Bug Fixes
+
+* add uncontrollable to deps ([#276](https://github.com/react-bootstrap/react-overlays/issues/276)) ([e07cf96](https://github.com/react-bootstrap/react-overlays/commit/e07cf96)), closes [#262](https://github.com/react-bootstrap/react-overlays/issues/262)
+
+
+### Features
+
+* add RootCloseWrapper's disabled support to Overlay ([#273](https://github.com/react-bootstrap/react-overlays/issues/273)) ([2e316d1](https://github.com/react-bootstrap/react-overlays/commit/2e316d1))
+
+
+
+
+
 ## [v0.8.3]
 > 2017-10-24
 
