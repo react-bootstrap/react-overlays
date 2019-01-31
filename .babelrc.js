@@ -14,6 +14,7 @@ module.exports = api => ({
   ],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],
+    '@babel/plugin-transform-runtime',
     api.env() !== 'esm' && 'add-module-exports',
   ].filter(Boolean),
 
@@ -22,4 +23,4 @@ module.exports = api => ({
       plugins: ['istanbul'],
     },
   },
-})
+});
