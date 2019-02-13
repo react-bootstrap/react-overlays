@@ -1,3 +1,14 @@
+## [1.1.2](https://github.com/react-bootstrap/react-overlays/compare/v1.1.1...v1.1.2) (2019-02-13)
+
+
+### Bug Fixes
+
+* modal focus ([#277](https://github.com/react-bootstrap/react-overlays/issues/277)) ([d348903](https://github.com/react-bootstrap/react-overlays/commit/d348903))
+
+
+
+
+
 ## [1.1.1](https://github.com/react-bootstrap/react-overlays/compare/v1.1.0...v1.1.1) (2019-01-04)
 
 
