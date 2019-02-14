@@ -30,6 +30,16 @@ const propTypes = {
   drop: PropTypes.oneOf(['up', 'left', 'right', 'down']),
 
   /**
+   * Controls the focus behavior for when the Dropdown is opened. Set to
+   * `true` to always focus the first menu item, `keyboard` to focus only when
+   * navigating via the keyboard, or `false` to disable completely
+   *
+   * The Default behavior is `false` **unless** the Menu has a `role="menu"`
+   * where it will default to `keyboard` to match the recommended [ARIA Authoring practices](https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton).
+   */
+  focusFirstItemOnShow: PropTypes.oneOf([false, true, 'keyboard']),
+
+  /**
    * A css slector string that will return __focusable__ menu items.
    * Selectors should be relative to the menu component:
    * e.g. ` > li:not('.disabled')`
@@ -125,6 +135,8 @@ class Dropdown extends React.Component {
     if (show && !prevOpen) {
       this.maybeFocusFirst();
     }
+    this._lastSourceEvent = null;
+
     if (!show && prevOpen) {
       // if focus hasn't already moved from the menu let's return it
       // to the toggle
@@ -159,7 +171,18 @@ class Dropdown extends React.Component {
   }
 
   maybeFocusFirst() {
-    if (!this.hasMenuRole()) return;
+    const type = this._lastSourceEvent;
+    let { focusFirstItemOnShow } = this.props;
+    if (focusFirstItemOnShow == null) {
+      focusFirstItemOnShow = this.hasMenuRole() ? 'keyboard' : false;
+    }
+
+    if (
+      focusFirstItemOnShow === false ||
+      (focusFirstItemOnShow === 'keyboard' && !/^key.+$/.test(type))
+    ) {
+      return;
+    }
 
     const { itemSelector } = this.props;
     let first = qsa(this.menu, itemSelector)[0];
@@ -172,15 +195,18 @@ class Dropdown extends React.Component {
 
   handleKeyDown = event => {
     const { key, target } = event;
-    const isInput = /input|textarea/i.test(target.tagName);
+
     // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400
     // in inscrutability
+    const isInput = /input|textarea/i.test(target.tagName);
     if (
       isInput &&
       (key === ' ' || (key !== 'Escape' && this.menu.contains(target)))
     ) {
       return;
     }
+
+    this._lastSourceEvent = event.type;
 
     switch (key) {
       case 'ArrowUp': {
@@ -209,6 +235,7 @@ class Dropdown extends React.Component {
 
   toggleOpen(event) {
     let show = !this.props.show;
+
     this.props.onToggle(show, event);
   }
 
