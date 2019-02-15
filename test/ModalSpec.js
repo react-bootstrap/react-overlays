@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';

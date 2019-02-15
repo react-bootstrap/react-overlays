@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import elementType from 'prop-types-extra/lib/elementType';
+import componentOrElement from 'prop-types-extra/lib/componentOrElement';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -169,6 +170,12 @@ Overlay.propTypes = {
   placement: PropTypes.oneOf(placements),
 
   /**
+   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
+   * appended to it.
+   */
+  container: PropTypes.oneOfType([componentOrElement, PropTypes.func]),
+
+  /**
    * Enables the Popper.js `flip` modifier, allowing the Overlay to
    * automatically adjust it's placement in case of overlap with the viewport or toggle.
    * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
@@ -211,7 +218,7 @@ Overlay.propTypes = {
    * Specify event for toggling overlay
    */
   rootCloseEvent: RootCloseWrapper.propTypes.event,
-  
+
   /**
    * Specify disabled for disable RootCloseWrapper
    */
@@ -271,6 +278,7 @@ Overlay.propTypes = {
 
 export default forwardRef(
   (props, ref) => (
+    // eslint-disable-next-line react/prop-types
     <WaitForContainer container={props.container}>
       {container => <Overlay {...props} ref={ref} container={container} />}
     </WaitForContainer>
