@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/react-bootstrap/react-overlays/compare/v1.1.2...v1.2.0) (2019-03-07)
+
+
+### Features
+
+* allow configurable menu focus behavior ([#286](https://github.com/react-bootstrap/react-overlays/issues/286)) ([76a63d4](https://github.com/react-bootstrap/react-overlays/commit/76a63d4))
+
+
+
+
+
 ## [1.1.2](https://github.com/react-bootstrap/react-overlays/compare/v1.1.1...v1.1.2) (2019-02-13)
 
 
