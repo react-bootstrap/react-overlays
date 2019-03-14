@@ -73,7 +73,7 @@ class Example extends React.Component {
           </ul>
         </article>
         <main className="col-md-10">
-          <section>
+          {/* <section>
             <h2 className="page-header">
               <Anchor>Portals</Anchor>
             </h2>
@@ -85,7 +85,7 @@ class Example extends React.Component {
             <Playground codeText={PortalSource} />
             <PropTable component="Portal" metadata={PortalMetadata} />
           </section>
-          <section>
+           <section>
             <h2 className="page-header">
               <Anchor>Modals</Anchor>
             </h2>
@@ -96,19 +96,20 @@ class Example extends React.Component {
             />
             <Playground codeText={ModalExample} />
             <PropTable component="Modal" metadata={ModalMetadata} />
-          </section>
+          </section> */}
           <section>
             <h2 className="page-header">
               <Anchor>Overlay</Anchor>
             </h2>
-            <p
+            {/* <p
               dangerouslySetInnerHTML={{
                 __html: OverlayMetadata.description.childMarkdownRemark.html,
               }}
-            />
+            /> */}
             <Playground codeText={OverlaySource} />
-            <PropTable component="Overlay" metadata={OverlayMetadata} />
+            {/* <PropTable component="Overlay" metadata={OverlayMetadata} /> */}
           </section>
+          {/*
           <section>
             <h2 className="page-header">
               <Anchor>Dropdown</Anchor>
@@ -125,7 +126,7 @@ class Example extends React.Component {
               component="ReactOverlaysDropdownMenu"
               metadata={DropdownMenuMetadata}
             />
-            <PropTable
+           <PropTable
               title="Dropdown.Toggle"
               component="ReactOverlaysDropdownToggle"
               metadata={DropdownToggleMetadata}
@@ -146,7 +147,7 @@ class Example extends React.Component {
               component="RootCloseWrapper"
               metadata={RootCloseWrapperMetadata}
             />
-          </section>
+          </section> */}
           <section>
             <h2 className="page-header">
               <Anchor>Transitions</Anchor>

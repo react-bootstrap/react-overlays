@@ -80,79 +80,78 @@ const placementStyles = {
 
 const PLACEMENTS = ['left', 'top', 'right', 'bottom'];
 
-class OverlayExample extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+const initialSstate = {
+  show: false,
+  placement: null
+};
 
-    this.state = {
-      show: false,
-      placement: null
-    };
-
-    this.onClick = () => {
-      const { placement } = this.state;
-      const nextPlacement = PLACEMENTS[PLACEMENTS.indexOf(placement) + 1];
-
-      return this.setState({
-        show: !!nextPlacement,
-        placement: nextPlacement
-      });
-    };
+function reducer(state, [type, payload]) {
+  switch (type) {
+    case 'placement':
+      return { show: !!payload, placement: payload };
+    case 'hide':
+      return { ...state, show: false };
   }
+}
 
-  render() {
-    const { show, placement } = this.state;
+function OverlayExample() {
+  const [{ show, placement }, dispatch] = useReducer(reducer, initialSstate);
+  const triggerRef = useRef(null);
+  const containerRef = useRef(null);
 
-    return (
-      <div className="overlay-example">
-        <Button
-          bsStyle="primary"
-          id="overlay-toggle"
-          ref={c => {
-            this.target = c && ReactDOM.findDOMNode(c);
-          }}
-          onClick={this.onClick}
-        >
-          I am an Overlay target
-        </Button>
-        <p>Keep clicking to see the placement change.</p>
+  const handleClick = () => {
+    const nextPlacement = PLACEMENTS[PLACEMENTS.indexOf(placement) + 1];
 
-        <Overlay
-          show={show}
-          onHide={() => this.setState({ show: false })}
-          placement={placement}
-          container={this}
-          target={() => this.target}
-        >
-          {({ props, arrowProps, placement }) => {
-            const placementStyle = placementStyles[placement];
-            return (
+    dispatch(['placement', nextPlacement]);
+  };
+
+  return (
+    <div className="overlay-example" ref={containerRef}>
+      <Button
+        bsStyle="primary"
+        id="overlay-toggle"
+        ref={triggerRef}
+        onClick={handleClick}
+      >
+        I am an Overlay target
+      </Button>
+      <p>Keep clicking to see the placement change.</p>
+
+      <Overlay
+        show={show}
+        onHide={() => dispatch('hide')}
+        placement={placement}
+        container={containerRef}
+        target={triggerRef}
+      >
+        {({ props, arrowProps, placement }) => {
+          const placementStyle = placementStyles[placement];
+          return (
+            <div
+              {...props}
+              style={{
+                ...styles.tooltip,
+                ...placementStyle.tooltip,
+                ...props.style
+              }}
+            >
               <div
-                {...props}
+                {...arrowProps}
                 style={{
-                  ...styles.tooltip,
-                  ...placementStyle.tooltip,
-                  ...props.style
+                  ...styles.arrow,
+                  ...placementStyle.arrow,
+                  ...arrowProps.style
                 }}
-              >
-                <div
-                  {...arrowProps}
-                  style={{
-                    ...styles.arrow,
-                    ...placementStyle.arrow,
-                    ...arrowProps.style
-                  }}
-                />
-                <div style={{ ...styles.inner }}>
-                  I&rsquo;m placed to the <strong>{placement}</strong>
-                </div>
+              />
+              <div style={{ ...styles.inner }}>
+                I&rsquo;m placed to the <strong>{placement}</strong>
               </div>
-            );
-          }}
-        </Overlay>
-      </div>
-    );
-  }
+            </div>
+          );
+        }}
+      </Overlay>
+    </div>
+  );
 }
 
 render(<OverlayExample />);

@@ -1,57 +1,56 @@
-import { graphql } from 'gatsby'
-import capitalize from 'lodash/capitalize'
-import React from 'react'
-import PropTypes from 'prop-types'
+import { graphql } from 'gatsby';
+import capitalize from 'lodash/capitalize';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Glyphicon from 'react-bootstrap/lib/Glyphicon'
-import Label from 'react-bootstrap/lib/Label'
-import Table from 'react-bootstrap/lib/Table'
+import Label from 'react-bootstrap/lib/Label';
+import Table from 'react-bootstrap/lib/Table';
 
 function cleanDocletValue(str) {
   return str
     .trim()
     .replace(/^\{/, '')
-    .replace(/\}$/, '')
+    .replace(/\}$/, '');
 }
 function getDisplayTypeName(typeName) {
-  if (typeName === 'func') return 'function'
-  else if (typeName === 'bool') return 'boolean'
+  if (typeName === 'func') return 'function';
+  else if (typeName === 'bool') return 'boolean';
 
-  return typeName
+  return typeName;
 }
 function getTypeName(prop) {
-  const type = prop.type || {}
-  let name = getDisplayTypeName(type.name)
-  let doclets = prop.doclets || {}
-  if (name === 'custom') return cleanDocletValue(doclets.type || type.raw)
-  return name
+  const type = prop.type || {};
+  let name = getDisplayTypeName(type.name);
+  let doclets = prop.doclets || {};
+  if (name === 'custom') return cleanDocletValue(doclets.type || type.raw);
+  return name;
 }
 
 export default class PropTable extends React.Component {
   static propTypes = {
     metadata: PropTypes.object.isRequired,
-  }
+  };
 
   getType(prop) {
-    let type = prop.type || {}
-    let name = getDisplayTypeName(type.name)
-    let doclets = prop.doclets || {}
+    let type = prop.type || {};
+    let name = getDisplayTypeName(type.name);
+    let doclets = prop.doclets || {};
 
     switch (name) {
       case 'object':
-        return name
+        return name;
       case 'union':
         return type.value.reduce((current, val, i, list) => {
-          let item = this.getType({ type: val })
+          let item = this.getType({ type: val });
           if (React.isValidElement(item)) {
-            item = React.cloneElement(item, { key: i })
+            item = React.cloneElement(item, { key: i });
           }
-          current = current.concat(item)
+          current = current.concat(item);
 
-          return i === list.length - 1 ? current : current.concat(' | ')
-        }, [])
+          return i === list.length - 1 ? current : current.concat(' | ');
+        }, []);
       case 'array': {
-        let child = this.getType({ type: type.value })
+        let child = this.getType({ type: type.value });
 
         return (
           <span>
@@ -59,25 +58,25 @@ export default class PropTable extends React.Component {
             {child}
             {'>'}
           </span>
-        )
+        );
       }
       case 'enum':
-        return this.renderEnum(type)
+        return this.renderEnum(type);
       case 'custom':
-        return cleanDocletValue(doclets.type || type.raw)
+        return cleanDocletValue(doclets.type || type.raw);
       default:
-        return <div style={{ whiteSpace: 'pre' }}>{name}</div>
+        return <div style={{ whiteSpace: 'pre' }}>{name}</div>;
     }
   }
 
   _renderRows(propsData) {
     return propsData
       .filter(
-        prop => prop.type && !prop.doclets.private && !prop.doclets.ignore
+        prop => prop.type && !prop.doclets.private && !prop.doclets.ignore,
       )
       .map(propData => {
-        const { name, description, doclets } = propData
-        let descHtml = description && description.childMarkdownRemark.html
+        const { name, description, doclets } = propData;
+        let descHtml = description && description.childMarkdownRemark.html;
 
         return (
           <tr key={name} className="prop-table-row">
@@ -102,24 +101,24 @@ export default class PropTable extends React.Component {
               <p dangerouslySetInnerHTML={{ __html: descHtml }} />
             </td>
           </tr>
-        )
-      })
+        );
+      });
   }
 
   renderDefaultValue(prop) {
-    let value = prop.defaultValue && prop.defaultValue.value
-    if (value == null) return null
+    let value = prop.defaultValue && prop.defaultValue.value;
+    if (value == null) return null;
     if (getTypeName(prop) === 'elementType')
-      value = `<${value.replace(/('|")/g, '')}>`
-    return <code>{value}</code>
+      value = `<${value.replace(/('|")/g, '')}>`;
+    return <code>{value}</code>;
   }
 
   renderControllableNote(prop, propName) {
-    let controllable = prop.doclets.controllable
-    let isHandler = getDisplayTypeName(prop.type.name) === 'function'
+    let controllable = prop.doclets.controllable;
+    let isHandler = getDisplayTypeName(prop.type.name) === 'function';
 
     if (!controllable) {
-      return false
+      return false;
     }
 
     let text = isHandler ? (
@@ -131,54 +130,54 @@ export default class PropTable extends React.Component {
         controlled by: <code>{controllable}</code>, initial prop:{' '}
         <code>{`default${capitalize(propName)}`}</code>
       </span>
-    )
+    );
 
     return (
       <div className="mb-2">
         <small>
           <em className="text-info">
-            <Glyphicon glyph="info-sign" />
+            {/* <Glyphicon glyph="info-sign" /> */}
             &nbsp;{text}
           </em>
         </small>
       </div>
-    )
+    );
   }
 
   renderEnum(enumType) {
-    const enumValues = enumType.value || []
+    const enumValues = enumType.value || [];
 
-    if (!Array.isArray(enumValues)) return enumValues
+    if (!Array.isArray(enumValues)) return enumValues;
 
-    const renderedEnumValues = []
+    const renderedEnumValues = [];
     enumValues.forEach(({ value }, i) => {
       if (i > 0) {
-        renderedEnumValues.push(<span key={`${i}c`}> | </span>)
+        renderedEnumValues.push(<span key={`${i}c`}> | </span>);
       }
 
-      renderedEnumValues.push(<code key={i}>{value}</code>)
-    })
+      renderedEnumValues.push(<code key={i}>{value}</code>);
+    });
 
-    return <span>{renderedEnumValues}</span>
+    return <span>{renderedEnumValues}</span>;
   }
 
   renderRequiredBadge(prop) {
     if (!prop.required) {
-      return null
+      return null;
     }
 
-    return <Label>required</Label>
+    return <Label>required</Label>;
   }
 
   render() {
-    let propsData = this.props.metadata.props || []
+    let propsData = this.props.metadata.props || [];
 
     if (!propsData.length) {
       return (
         <div className="text-muted">
           <em>There are no public props for this component.</em>
         </div>
-      )
+      );
     }
 
     return (
@@ -193,7 +192,7 @@ export default class PropTable extends React.Component {
         </thead>
         <tbody>{this._renderRows(propsData)}</tbody>
       </Table>
-    )
+    );
   }
 }
 
@@ -227,4 +226,4 @@ export const metadataFragment = graphql`
       }
     }
   }
-`
+`;

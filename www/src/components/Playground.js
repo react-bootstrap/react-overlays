@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useState, useReducer, useRef, useEffect } from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
-import Button from 'react-bootstrap/lib/Button';
+import Button from 'react-bootstrap/Button';
 import Transition, {
   ENTERED,
   ENTERING,
@@ -12,10 +13,9 @@ import * as ReactOverlays from 'react-overlays';
 
 import getOffset from 'dom-helpers/query/offset';
 
-import '../styles.less';
 import injectCss from '../injectCss';
-import { css } from 'emotion';
-import styled from 'react-emotion';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 
 Babel.registerPreset('env', require('@babel/preset-env'));
 Babel.registerPlugin(
@@ -24,6 +24,11 @@ Babel.registerPlugin(
 );
 
 const scope = {
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+
   ReactDOM,
   findDOMNode,
   Button,

@@ -21,7 +21,7 @@ module.exports = {
         name: 'source',
       },
     },
-    'gatsby-plugin-emotion',
+    // 'gatsby-plugin-emotion',
     'gatsby-plugin-less',
     'gatsby-transformer-react-docgen',
     'gatsby-transformer-remark',
