@@ -1,39 +1,23 @@
-class PortalExample extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = { show: false };
+function PortalExample() {
+  const [show, setShow] = useState(false);
+  const containerRef = useRef(null);
 
-    this.show = () => this.setState({ show: true });
-  }
+  let child = <span>But I actually render here!</span>;
 
-  render() {
-    let child = <span>But I actually render here!</span>;
+  return (
+    <div className="portal-example">
+      <button className="btn btn-primary" onClick={() => setShow(true)}>
+        Render Child
+      </button>
+      <div className="card card-body mb-4">
+        <span>It looks like I will render in here.</span>
 
-    return (
-      <div className="portal-example">
-        <Button bsStyle="primary" onClick={this.show}>
-          Render Child
-        </Button>
-        <div className="panel panel-default">
-          <div className="panel-body">
-            <span>It looks like I will render here.</span>
-
-            <Portal container={() => this.container}>
-              {this.state.show && child}
-            </Portal>
-          </div>
-        </div>
-
-        <div className="panel panel-default">
-          <div
-            ref={c => {
-              this.container = c;
-            }}
-            className="panel-body"
-          />
-        </div>
+        <Portal container={containerRef}>{show && child}</Portal>
       </div>
-    );
-  }
+
+      <div className="card card-body" ref={containerRef} />
+    </div>
+  );
 }
+
 render(<PortalExample />);

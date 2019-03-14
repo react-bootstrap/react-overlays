@@ -3,9 +3,6 @@ import capitalize from 'lodash/capitalize';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Label from 'react-bootstrap/lib/Label';
-import Table from 'react-bootstrap/lib/Table';
-
 function cleanDocletValue(str) {
   return str
     .trim()
@@ -166,7 +163,7 @@ export default class PropTable extends React.Component {
       return null;
     }
 
-    return <Label>required</Label>;
+    return <span className="badge">required</span>;
   }
 
   render() {
@@ -181,7 +178,7 @@ export default class PropTable extends React.Component {
     }
 
     return (
-      <Table bordered striped>
+      <table className="tabel table-border">
         <thead>
           <tr>
             <th>Name</th>
@@ -191,7 +188,7 @@ export default class PropTable extends React.Component {
           </tr>
         </thead>
         <tbody>{this._renderRows(propsData)}</tbody>
-      </Table>
+      </table>
     );
   }
 }

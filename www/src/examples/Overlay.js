@@ -107,14 +107,14 @@ function OverlayExample() {
 
   return (
     <div className="overlay-example" ref={containerRef}>
-      <Button
-        bsStyle="primary"
+      <button
+        className="btn btn-primary"
         id="overlay-toggle"
         ref={triggerRef}
         onClick={handleClick}
       >
         I am an Overlay target
-      </Button>
+      </button>
       <p>Keep clicking to see the placement change.</p>
 
       <Overlay

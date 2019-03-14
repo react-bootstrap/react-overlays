@@ -31,9 +31,9 @@ const Menu = ({ role }) => (
 const Toggle = ({ id, children }) => (
   <Dropdown.Toggle>
     {({ toggle, show, props }) => (
-      <Button id={id} {...props} onClick={toggle}>
+      <button className="btn btn-primary" id={id} {...props} onClick={toggle}>
         {children}
-      </Button>
+      </button>
     )}
   </Dropdown.Toggle>
 );

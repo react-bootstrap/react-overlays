@@ -73,19 +73,19 @@ class Example extends React.Component {
           </ul>
         </article>
         <main className="col-md-10">
-          {/* <section>
+          <section>
             <h2 className="page-header">
               <Anchor>Portals</Anchor>
             </h2>
-            <p
+            {/* <p
               dangerouslySetInnerHTML={{
                 __html: PortalMetadata.description.childMarkdownRemark.html,
               }}
-            />
+            /> */}
             <Playground codeText={PortalSource} />
-            <PropTable component="Portal" metadata={PortalMetadata} />
+            {/* <PropTable component="Portal" metadata={PortalMetadata} /> */}
           </section>
-           <section>
+          {/*<section>
             <h2 className="page-header">
               <Anchor>Modals</Anchor>
             </h2>

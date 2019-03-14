@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useState, useReducer, useRef, useEffect } from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
-import Button from 'react-bootstrap/Button';
 import Transition, {
   ENTERED,
   ENTERING,
@@ -31,7 +30,6 @@ const scope = {
 
   ReactDOM,
   findDOMNode,
-  Button,
   injectCss,
   ...ReactOverlays,
   getOffset,

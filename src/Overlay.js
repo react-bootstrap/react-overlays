@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import Portal from './Portal';
 import RootCloseWrapper from './RootCloseWrapper';
 import { Popper, placements } from 'react-popper';
-import useWaitForDOMRef from './utils/useWaitForContainer';
+import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
 /**
  * Built on top of `Popper.js`, the overlay component is

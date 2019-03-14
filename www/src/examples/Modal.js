@@ -51,7 +51,9 @@ class ModalExample extends React.Component {
   render() {
     return (
       <div className="modal-example">
-        <Button onClick={this.open}>Open Modal</Button>
+        <button className="btn btn-primary" onClick={this.open}>
+          Open Modal
+        </button>
         <p>Click to get the full Modal experience!</p>
 
         <Modal

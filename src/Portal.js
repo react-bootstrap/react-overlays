@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import componentOrElement from 'prop-types-extra/lib/componentOrElement';
 import ReactDOM from 'react-dom';
 
-import useWaitForContainer from './utils/useWaitForContainer';
+import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
 const propTypes = {
   /**
@@ -20,7 +20,7 @@ const propTypes = {
  * The children of `<Portal/>` component will be appended to the `container` specified.
  */
 const Portal = ({ container, children, onRendered }) => {
-  const resolvedContainer = useWaitForContainer(container, onRendered);
+  const resolvedContainer = useWaitForDOMRef(container, onRendered);
 
   return resolvedContainer
     ? ReactDOM.createPortal(children, resolvedContainer)

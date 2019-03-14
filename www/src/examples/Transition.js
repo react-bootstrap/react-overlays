@@ -75,17 +75,17 @@ class TransitionExample extends React.Component {
   render() {
     return (
       <div className="transition-example">
-        <Button bsStyle="primary" onClick={this.toggleModal}>
+        <button className="btn btn-primary" onClick={this.toggleModal}>
           Show Animated Modal
-        </Button>
+        </button>
 
-        <Button
-          bsStyle="primary"
+        <button
+          className="btn btn-primary"
           onClick={this.toggleTooltip}
           ref={this.tooltipRef}
         >
           Show Tooltip
-        </Button>
+        </button>
 
         <Overlay
           placement="top"

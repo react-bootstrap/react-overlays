@@ -11,9 +11,9 @@ class RootCloseWrapperExample extends React.Component {
   render() {
     return (
       <div className="root-close-wrapper-example">
-        <Button bsStyle="primary" onClick={this.show}>
+        <button className="btn btn-primary" onClick={this.show}>
           Render RootCloseWrapper
-        </Button>
+        </button>
 
         {this.state.show && (
           <RootCloseWrapper onRootClose={this.hide}>
