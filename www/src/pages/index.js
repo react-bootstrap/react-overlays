@@ -4,7 +4,6 @@ import { graphql } from 'gatsby';
 import PropTable from '../components/PropTable';
 import Playground from '../components/Playground';
 
-import AffixSource from '../examples/Affix';
 import ModalExample from '../examples/Modal';
 import OverlaySource from '../examples/Overlay';
 import DropdownSource from '../examples/Dropdown';
@@ -37,8 +36,6 @@ class Example extends React.Component {
 
   render() {
     const {
-      AffixMetadata,
-      AutoAffixMetadata,
       ModalMetadata,
       PortalMetadata,
       OverlayMetadata,
@@ -66,9 +63,6 @@ class Example extends React.Component {
             </li>
             <li>
               <a href="#overlay">Overlay</a>
-            </li>
-            <li>
-              <a href="#affixes">Affixes</a>
             </li>
             <li>
               <a href="#root-close-wrapper">RootCloseWrapper</a>
@@ -115,7 +109,6 @@ class Example extends React.Component {
             <Playground codeText={OverlaySource} />
             <PropTable component="Overlay" metadata={OverlayMetadata} />
           </section>
-
           <section>
             <h2 className="page-header">
               <Anchor>Dropdown</Anchor>
@@ -137,25 +130,6 @@ class Example extends React.Component {
               component="ReactOverlaysDropdownToggle"
               metadata={DropdownToggleMetadata}
             />
-          </section>
-
-          <section>
-            <h2 className="page-header">
-              <Anchor>Affixes</Anchor>
-            </h2>
-            <p
-              dangerouslySetInnerHTML={{
-                __html: AffixMetadata.description.childMarkdownRemark.html,
-              }}
-            />
-            <p
-              dangerouslySetInnerHTML={{
-                __html: AutoAffixMetadata.description.childMarkdownRemark.html,
-              }}
-            />
-            <Playground codeText={AffixSource} />
-            <PropTable component="Affix" metadata={AffixMetadata} />
-            <PropTable component="AutoAffix" metadata={AutoAffixMetadata} />
           </section>
           <section>
             <h2 className="page-header">
@@ -205,12 +179,6 @@ export default Example;
 
 export const pageQuery = graphql`
   query SiteQuery {
-    AffixMetadata: componentMetadata(displayName: { eq: "Affix" }) {
-      ...PropTable_metadata
-    }
-    AutoAffixMetadata: componentMetadata(displayName: { eq: "AutoAffix" }) {
-      ...PropTable_metadata
-    }
     ModalMetadata: componentMetadata(displayName: { eq: "Modal" }) {
       ...PropTable_metadata
     }
