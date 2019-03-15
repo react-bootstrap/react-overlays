@@ -6,10 +6,10 @@ import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
 const propTypes = {
   /**
-   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
+   * A DOM element, Ref to an element, or function that returns either. The `container` will have the Portal children
    * appended to it.
    */
-  container: PropTypes.oneOfType([componentOrElement, PropTypes.func]),
+  container: PropTypes.any,
 
   onRendered: PropTypes.func,
 };

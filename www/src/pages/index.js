@@ -85,7 +85,7 @@ class Example extends React.Component {
             <Playground codeText={PortalSource} />
             {/* <PropTable component="Portal" metadata={PortalMetadata} /> */}
           </section>
-          {/*<section>
+          <section>
             <h2 className="page-header">
               <Anchor>Modals</Anchor>
             </h2>
@@ -96,7 +96,7 @@ class Example extends React.Component {
             />
             <Playground codeText={ModalExample} />
             <PropTable component="Modal" metadata={ModalMetadata} />
-          </section> */}
+          </section>
           <section>
             <h2 className="page-header">
               <Anchor>Overlay</Anchor>

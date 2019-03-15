@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
-import elementType from 'prop-types-extra/lib/elementType';
-import componentOrElement from 'prop-types-extra/lib/componentOrElement';
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import Portal from './Portal';
 import RootCloseWrapper from './RootCloseWrapper';
 import { Popper, placements } from 'react-popper';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
@@ -124,8 +121,6 @@ const Overlay = React.forwardRef((props, ref) => {
 
 Overlay.displayName = 'Overlay';
 Overlay.propTypes = {
-  ...Portal.propTypes,
-
   /**
    * Set the visibility of the Overlay
    */
@@ -135,10 +130,10 @@ Overlay.propTypes = {
   placement: PropTypes.oneOf(placements),
 
   /**
-   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
+   * A DOM Element, Ref to an element, or function that returns either. The `container` will have the Portal children
    * appended to it.
    */
-  container: PropTypes.oneOfType([componentOrElement, PropTypes.func]),
+  container: PropTypes.any,
 
   /**
    * Enables the Popper.js `flip` modifier, allowing the Overlay to
@@ -208,7 +203,7 @@ Overlay.propTypes = {
    * A `react-transition-group@2.0.0` `<Transition/>` component
    * used to animate the overlay as it changes visibility.
    */
-  transition: elementType,
+  transition: PropTypes.elementType,
 
   /**
    * Callback fired before the Overlay transitions in
@@ -241,16 +236,4 @@ Overlay.propTypes = {
   onExited: PropTypes.func,
 };
 
-<<<<<<< HEAD
-export default forwardRef(
-  (props, ref) => (
-    // eslint-disable-next-line react/prop-types
-    <WaitForContainer container={props.container}>
-      {container => <Overlay {...props} ref={ref} container={container} />}
-    </WaitForContainer>
-  ),
-  { displayName: 'withContainer(Overlay)' },
-);
-=======
 export default Overlay;
->>>>>>> WIP

@@ -5,15 +5,13 @@ import contains from 'dom-helpers/query/contains';
 import canUseDom from 'dom-helpers/util/inDOM';
 import listen from 'dom-helpers/events/listen';
 import PropTypes from 'prop-types';
-import componentOrElement from 'prop-types-extra/lib/componentOrElement';
-import elementType from 'prop-types-extra/lib/elementType';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ModalManager from './ModalManager';
-import Portal from './Portal';
 import getContainer from './utils/getContainer';
 import ownerDocument from './utils/ownerDocument';
+import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
 let modalManager = new ModalManager();
 
@@ -57,12 +55,12 @@ class Modal extends React.Component {
     show: PropTypes.bool,
 
     /**
-     * A Node, Component instance, or function that returns either. The Modal is appended to it's container element.
+     * A DOM element, a `ref` to an element, or function that returns either. The Modal is appended to it's `container` element.
      *
      * For the sake of assistive technologies, the container should usually be the document body, so that the rest of the
      * page content can be placed behind a virtual backdrop as well as a visual one.
      */
-    container: PropTypes.oneOfType([componentOrElement, PropTypes.func]),
+    container: PropTypes.any,
 
     /**
      * A callback fired when the Modal is opening.
@@ -130,13 +128,13 @@ class Modal extends React.Component {
      * A `react-transition-group@2.0.0` `<Transition/>` component used
      * to control animations for the dialog component.
      */
-    transition: elementType,
+    transition: PropTypes.elementType,
 
     /**
      * A `react-transition-group@2.0.0` `<Transition/>` component used
      * to control animations for the backdrop components.
      */
-    backdropTransition: elementType,
+    backdropTransition: PropTypes.elementType,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and
@@ -268,15 +266,6 @@ class Modal extends React.Component {
     }
   }
 
-  onPortalRendered = () => {
-    if (this.props.onShow) {
-      this.props.onShow();
-    }
-    // autofocus after onShow, to not trigger a focus event for previous
-    // modals before this one is shown.
-    this.autoFocus();
-  };
-
   onShow = () => {
     let doc = ownerDocument(this);
     let container = getContainer(this.props.container, doc.body);
@@ -297,6 +286,14 @@ class Modal extends React.Component {
       () => setTimeout(this.enforceFocus),
       true,
     );
+
+    if (this.props.onShow) {
+      this.props.onShow();
+    }
+
+    // autofocus after onShow, to not trigger a focus event for previous
+    // modals before this one is shown.
+    this.autoFocus();
   };
 
   onHide = () => {
@@ -465,17 +462,22 @@ class Modal extends React.Component {
       );
     }
 
-    return (
-      <Portal container={container} onRendered={this.onPortalRendered}>
-        <>
-          {backdrop && this.renderBackdrop()}
-          {dialog}
-        </>
-      </Portal>
+    return ReactDOM.createPortal(
+      <>
+        {backdrop && this.renderBackdrop()}
+        {dialog}
+      </>,
+      container,
     );
   }
 }
 
-Modal.Manager = ModalManager;
+// eslint-disable-next-line react/display-name
+const ModalWithContainer = React.forwardRef((props, ref) => {
+  const resolved = useWaitForDOMRef(props.container);
+  return resolved ? <Modal {...props} ref={ref} container={resolved} /> : null;
+});
 
-export default Modal;
+ModalWithContainer.Manager = ModalManager;
+
+export default ModalWithContainer;

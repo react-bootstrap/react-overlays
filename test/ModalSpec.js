@@ -41,6 +41,7 @@ describe('<Modal>', () => {
 
   it('should disable scrolling on the modal container while open', done => {
     class Container extends React.Component {
+      ref = React.createRef();
       state = {
         modalOpen: true,
       };
@@ -51,11 +52,11 @@ describe('<Modal>', () => {
 
       render() {
         return (
-          <div>
+          <div ref={this.ref}>
             <Modal
               show={this.state.modalOpen}
               onHide={this.handleCloseModal}
-              container={this}
+              container={this.ref}
             >
               <strong>Message</strong>
             </Modal>
@@ -83,17 +84,20 @@ describe('<Modal>', () => {
   it('should add and remove container classes', () => {
     class Container extends React.Component {
       state = { modalOpen: true };
+
+      ref = React.createRef();
+
       handleCloseModal = () => {
         this.setState({ modalOpen: false });
       };
       render() {
         return (
-          <div>
+          <div ref={this.ref}>
             <Modal
               show={this.state.modalOpen}
               onHide={this.handleCloseModal}
               containerClassName="test test2"
-              container={this}
+              container={this.ref}
             >
               <strong>Message</strong>
             </Modal>

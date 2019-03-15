@@ -9,6 +9,8 @@ import mapContextToProps from 'react-context-toolbox/mapContextToProps';
 class DropdownMenu extends React.Component {
   static displayName = 'ReactOverlaysDropdownMenu';
 
+  static contextType = DropdownContext;
+
   static propTypes = {
     /**
      * A render prop that returns a Menu element. The `props`
@@ -66,15 +68,6 @@ class DropdownMenu extends React.Component {
      * Override the default event used by RootCloseWrapper.
      */
     rootCloseEvent: PropTypes.string,
-
-    /** @private */
-    onToggle: PropTypes.func,
-    /** @private */
-    menuRef: PropTypes.func,
-    /** @private */
-    drop: PropTypes.string,
-    /** @private */
-    toggleNode: PropTypes.any,
   };
 
   static defaultProps = {
@@ -89,11 +82,7 @@ class DropdownMenu extends React.Component {
     // If, to the best we can tell, this update won't reinitialize popper,
     // manually schedule an update
     const shouldUpdatePopper =
-      !prevProps.show &&
-      this.props.show &&
-      this.popperIsInitialized &&
-      // a new reference node will already trigger this internally
-      prevProps.toggleNode === this.props.toggleNode;
+      !prevProps.show && this.props.show && this.popperIsInitialized;
 
     if (this.props.show && this.props.usePopper && !this.popperIsInitialized) {
       this.popperIsInitialized = true;
@@ -109,23 +98,23 @@ class DropdownMenu extends React.Component {
   }
 
   handleClose = e => {
-    if (!this.props.onToggle) return;
+    if (!this.context.onToggle) return;
 
-    this.props.onToggle(false, e);
+    this.context.onToggle(false, e);
   };
 
   render() {
-    const {
-      show,
-      flip,
-      menuRef,
-      alignEnd,
-      drop,
-      usePopper,
-      toggleNode,
-      rootCloseEvent,
-      popperConfig = {},
-    } = this.props;
+    const { flip, usePopper, rootCloseEvent, popperConfig = {} } = this.props;
+
+    const { drop, menuRef, toggleNode } = this.context;
+
+    const show =
+      this.context.show == null ? this.props.show : this.context.show;
+
+    const alignEnd =
+      this.context.alignEnd == null
+        ? this.props.alignEnd
+        : this.context.alignEnd;
 
     let placement = alignEnd ? 'bottom-end' : 'bottom-start';
     if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
@@ -188,17 +177,13 @@ class DropdownMenu extends React.Component {
   }
 }
 
-const DecoratedDropdownMenu = mapContextToProps(
-  DropdownContext,
-  ({ show, alignEnd, toggle, drop, menuRef, toggleNode }, props) => ({
-    drop,
-    menuRef,
-    toggleNode,
-    onToggle: toggle,
-    show: show == null ? props.show : show,
-    alignEnd: alignEnd == null ? props.alignEnd : alignEnd,
-  }),
-  DropdownMenu,
-);
+const f = ({ show, alignEnd, toggle, drop, menuRef, toggleNode }, props) => ({
+  drop,
+  menuRef,
+  toggleNode,
+  onToggle: toggle,
+  show: show == null ? props.show : show,
+  alignEnd: alignEnd == null ? props.alignEnd : alignEnd,
+});
 
-export default DecoratedDropdownMenu;
+export default DropdownMenu;
