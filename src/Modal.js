@@ -163,6 +163,15 @@ class Modal extends React.Component {
     restoreFocus: PropTypes.bool,
 
     /**
+     * Options passed to focus function when `restoreFocus` is set to `true`
+     *
+     * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
+     */
+    restoreFocusOptions: PropTypes.shape({
+      preventScroll: PropTypes.bool,
+    }),
+
+    /**
      * Callback fired before the Modal transitions in
      */
     onEnter: PropTypes.func,
@@ -297,7 +306,7 @@ class Modal extends React.Component {
     this.removeFocusListener();
 
     if (this.props.restoreFocus) {
-      this.restoreLastFocus();
+      this.restoreLastFocus(this.props.restoreFocusOption);
     }
   };
 
@@ -353,10 +362,10 @@ class Modal extends React.Component {
     }
   }
 
-  restoreLastFocus() {
+  restoreLastFocus(focusOptions) {
     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
     if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus();
+      this.lastFocus.focus(focusOptions);
       this.lastFocus = null;
     }
   }
