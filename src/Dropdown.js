@@ -201,7 +201,8 @@ class Dropdown extends React.Component {
     const isInput = /input|textarea/i.test(target.tagName);
     if (
       isInput &&
-      (key === ' ' || (key !== 'Escape' && this.menu.contains(target)))
+      (key === ' ' ||
+        (key !== 'Escape' && this.menu && this.menu.contains(target)))
     ) {
       return;
     }
