@@ -306,7 +306,7 @@ class Modal extends React.Component {
     this.removeFocusListener();
 
     if (this.props.restoreFocus) {
-      this.restoreLastFocus(this.props.restoreFocusOption);
+      this.restoreLastFocus();
     }
   };
 
@@ -362,10 +362,10 @@ class Modal extends React.Component {
     }
   }
 
-  restoreLastFocus(focusOptions) {
+  restoreLastFocus() {
     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
     if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus(focusOptions);
+      this.lastFocus.focus(this.props.restoreFocusOptions);
       this.lastFocus = null;
     }
   }
