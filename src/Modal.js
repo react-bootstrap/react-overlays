@@ -216,7 +216,6 @@ class Modal extends React.Component {
     autoFocus: true,
     enforceFocus: true,
     restoreFocus: true,
-    restoreFocusOptions: {},
     onHide: () => {},
     manager: modalManager,
     renderBackdrop: props => <div {...props} />,
