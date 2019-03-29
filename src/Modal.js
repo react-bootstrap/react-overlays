@@ -9,7 +9,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ModalManager from './ModalManager';
-import getContainer from './utils/getContainer';
 import ownerDocument from './utils/ownerDocument';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
@@ -267,19 +266,18 @@ class Modal extends React.Component {
   }
 
   onShow = () => {
-    let doc = ownerDocument(this);
-    let container = getContainer(this.props.container, doc.body);
+    let { container, containerClassName, manager, onShow } = this.props;
 
-    this.props.manager.add(this, container, this.props.containerClassName);
+    manager.add(this, container, containerClassName);
 
     this.removeKeydownListener = listen(
-      doc,
+      document,
       'keydown',
       this.handleDocumentKeyDown,
     );
 
     this.removeFocusListener = listen(
-      doc,
+      document,
       'focus',
       // the timeout is necessary b/c this will run before the new modal is mounted
       // and so steals focus from it
@@ -287,8 +285,8 @@ class Modal extends React.Component {
       true,
     );
 
-    if (this.props.onShow) {
-      this.props.onShow();
+    if (onShow) {
+      onShow();
     }
 
     // autofocus after onShow, to not trigger a focus event for previous
@@ -472,12 +470,21 @@ class Modal extends React.Component {
   }
 }
 
-// eslint-disable-next-line react/display-name
-const ModalWithContainer = React.forwardRef((props, ref) => {
-  const resolved = useWaitForDOMRef(props.container);
-  return resolved ? <Modal {...props} ref={ref} container={resolved} /> : null;
-});
+// dumb HOC for the sake react-docgen
+function forwardRef(Component) {
+  // eslint-disable-next-line react/display-name
+  const ModalWithContainer = React.forwardRef((props, ref) => {
+    const resolved = useWaitForDOMRef(props.container);
+    return resolved ? (
+      <Component {...props} ref={ref} container={resolved} />
+    ) : null;
+  });
 
+  ModalWithContainer.Manager = ModalManager;
+  return ModalWithContainer;
+}
+
+const ModalWithContainer = forwardRef(Modal);
 ModalWithContainer.Manager = ModalManager;
 
 export default ModalWithContainer;

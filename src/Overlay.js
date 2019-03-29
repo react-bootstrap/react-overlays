@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import RootCloseWrapper from './RootCloseWrapper';
 import { Popper, placements } from 'react-popper';
+import { useRootClose } from './RootCloseWrapper';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
+import { useMergedRefs } from './utils/mergeRefs';
 
 /**
  * Built on top of `Popper.js`, the overlay component is
  * great for custom tooltip overlays.
  */
-const Overlay = React.forwardRef((props, ref) => {
+const Overlay = React.forwardRef((props, outerRef) => {
+  const rootCloseRef = useRef(null);
   const container = useWaitForDOMRef(props.container);
   const target = useWaitForDOMRef(props.target);
 
@@ -29,6 +31,7 @@ const Overlay = React.forwardRef((props, ref) => {
       props.onExited(...args);
     }
   };
+
   const {
     children,
     flip,
@@ -40,6 +43,12 @@ const Overlay = React.forwardRef((props, ref) => {
 
   // Don't un-render the overlay while it's transitioning out.
   const mountOverlay = props.show || (Transition && !exited);
+  const innerRef = useMergedRefs(rootCloseRef, outerRef);
+
+  useRootClose(rootCloseRef, props.onHide, {
+    disabled: !props.rootClose || props.rootCloseDisabled,
+    clickTrigger: props.rootCloseEvent,
+  });
 
   if (!mountOverlay) {
     // Don't bother showing anything if we don't have to.
@@ -51,8 +60,8 @@ const Overlay = React.forwardRef((props, ref) => {
   const { modifiers = {} } = popperConfig;
   const popperProps = {
     ...popperConfig,
+    innerRef,
     placement,
-    innerRef: ref,
     referenceElement: target,
     enableEvents: props.show,
     modifiers: {
@@ -104,22 +113,11 @@ const Overlay = React.forwardRef((props, ref) => {
     </Popper>
   );
 
-  if (props.rootClose) {
-    child = (
-      <RootCloseWrapper
-        onRootClose={props.onHide}
-        event={props.rootCloseEvent}
-        disabled={props.rootCloseDisabled}
-      >
-        {child}
-      </RootCloseWrapper>
-    );
-  }
-
   return container ? ReactDOM.createPortal(child, container) : null;
 });
 
 Overlay.displayName = 'Overlay';
+
 Overlay.propTypes = {
   /**
    * Set the visibility of the Overlay
@@ -128,6 +126,12 @@ Overlay.propTypes = {
 
   /** Specify where the overlay element is positioned in relation to the target element */
   placement: PropTypes.oneOf(placements),
+
+  /**
+   * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
+   * the overlay is positioned relative to.
+   */
+  target: PropTypes.any,
 
   /**
    * A DOM Element, Ref to an element, or function that returns either. The `container` will have the Portal children
@@ -165,6 +169,12 @@ Overlay.propTypes = {
   children: PropTypes.func.isRequired,
 
   /**
+   * Control how much space there is between the edge of the boundary element and overlay.
+   * A convenience shortcut to setting `popperConfig.modfiers.preventOverflow.padding`
+   */
+  containerPadding: PropTypes.number,
+
+  /**
    * A set of popper options and props passed directly to react-popper's Popper component.
    */
   popperConfig: PropTypes.object,
@@ -177,12 +187,12 @@ Overlay.propTypes = {
   /**
    * Specify event for toggling overlay
    */
-  rootCloseEvent: RootCloseWrapper.propTypes.event,
+  rootCloseEvent: PropTypes.oneOf(['click', 'mousedown']),
 
   /**
    * Specify disabled for disable RootCloseWrapper
    */
-  rootCloseDisabled: RootCloseWrapper.propTypes.disabled,
+  rootCloseDisabled: PropTypes.bool,
   /**
    * A Callback fired by the Overlay when it wishes to be hidden.
    *
@@ -234,6 +244,10 @@ Overlay.propTypes = {
    * Callback fired after the Overlay finishes transitioning out
    */
   onExited: PropTypes.func,
+};
+
+Overlay.defaultProps = {
+  containerPadding: 5,
 };
 
 export default Overlay;

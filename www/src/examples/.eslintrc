@@ -13,6 +13,10 @@
     "React": false,
     "ReactDOM": false,
     "injectCss": false,
+    "useRef": false,
+    "useEffect": false,
+    "useState": false,
+    "useReducer": false,
 
     "Modal": false,
     "Overlay": false,

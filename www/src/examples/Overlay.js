@@ -119,6 +119,7 @@ function OverlayExample() {
 
       <Overlay
         show={show}
+        rootClose
         onHide={() => dispatch('hide')}
         placement={placement}
         container={containerRef}

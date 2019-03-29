@@ -46,8 +46,8 @@ class Example extends React.Component {
     } = this.props.data;
 
     return (
-      <div className="app row">
-        <article className="side-panel col-md-2">
+      <div className="app d-flex">
+        <article className="side-panel">
           <ul className="list-unstyled">
             <li>
               <a href="#portals">Portals</a>
@@ -77,13 +77,13 @@ class Example extends React.Component {
             <h2 className="page-header">
               <Anchor>Portals</Anchor>
             </h2>
-            {/* <p
+            <p
               dangerouslySetInnerHTML={{
                 __html: PortalMetadata.description.childMarkdownRemark.html,
               }}
-            /> */}
+            />
             <Playground codeText={PortalSource} />
-            {/* <PropTable component="Portal" metadata={PortalMetadata} /> */}
+            <PropTable component="Portal" metadata={PortalMetadata} />
           </section>
           <section>
             <h2 className="page-header">
@@ -101,15 +101,15 @@ class Example extends React.Component {
             <h2 className="page-header">
               <Anchor>Overlay</Anchor>
             </h2>
-            {/* <p
+            <p
               dangerouslySetInnerHTML={{
                 __html: OverlayMetadata.description.childMarkdownRemark.html,
               }}
-            /> */}
+            />
             <Playground codeText={OverlaySource} />
-            {/* <PropTable component="Overlay" metadata={OverlayMetadata} /> */}
+            <PropTable component="Overlay" metadata={OverlayMetadata} />
           </section>
-          {/*
+
           <section>
             <h2 className="page-header">
               <Anchor>Dropdown</Anchor>
@@ -126,7 +126,7 @@ class Example extends React.Component {
               component="ReactOverlaysDropdownMenu"
               metadata={DropdownMenuMetadata}
             />
-           <PropTable
+            <PropTable
               title="Dropdown.Toggle"
               component="ReactOverlaysDropdownToggle"
               metadata={DropdownToggleMetadata}
@@ -147,7 +147,7 @@ class Example extends React.Component {
               component="RootCloseWrapper"
               metadata={RootCloseWrapperMetadata}
             />
-          </section> */}
+          </section>
           <section>
             <h2 className="page-header">
               <Anchor>Transitions</Anchor>

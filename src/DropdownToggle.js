@@ -47,4 +47,5 @@ function DropdownToggle({ children }) {
 DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';
 DropdownToggle.propTypes = propTypes;
 
+/** @component */
 export default DropdownToggle;

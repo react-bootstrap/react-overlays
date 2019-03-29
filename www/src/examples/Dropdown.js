@@ -1,28 +1,26 @@
+const MenuContainer = styled('div')`
+  display: ${p => (p.show ? 'flex' : 'none')};
+  min-width: 150px;
+  position: absolute;
+  flex-direction: column;
+  border: 1px solid #e5e5e5;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+`;
+
 const Menu = ({ role }) => (
   <Dropdown.Menu flip>
     {({ show, onClose, props }) => {
       return (
-        <div
-          {...props}
-          role={role}
-          className={css`
-            display: ${show ? 'flex' : 'none'};
-            min-width: 150px;
-            position: absolute;
-            flex-direction: column;
-            border: 1px solid #e5e5e5;
-            background-color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-          `}
-        >
+        <MenuContainer {...props} role={role} show={show}>
           <button onClick={onClose} style={{ textAlign: 'left' }}>
             Item 1
           </button>
           <button onClick={onClose} style={{ textAlign: 'left' }}>
             Item 2
           </button>
-        </div>
+        </MenuContainer>
       );
     }}
   </Dropdown.Menu>
@@ -47,13 +45,7 @@ const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
     itemSelector="button:not(:disabled)"
   >
     {({ props }) => (
-      <div
-        {...props}
-        className={css`
-          position: relative;
-          display: inline-block;
-        `}
-      >
+      <div {...props} className="position-relative d-inline-block">
         <Toggle id="example-toggle">{title}</Toggle>
         <Menu role={role} />
       </div>

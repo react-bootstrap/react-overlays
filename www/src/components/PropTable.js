@@ -178,7 +178,7 @@ export default class PropTable extends React.Component {
     }
 
     return (
-      <table className="tabel table-border">
+      <table className="table table-border">
         <thead>
           <tr>
             <th>Name</th>

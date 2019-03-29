@@ -1,14 +1,13 @@
 import ownerDocument from 'dom-helpers/ownerDocument';
-import { useState, useLayoutEffect, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const resolveRef = ref => {
   if (ref == null) return ownerDocument().body;
   if (typeof ref === 'function') ref = ref();
 
-  if (ref) {
-    if (ref.current) ref = ref.current;
-    if (ref.nodeType) return ref;
-  }
+  if (ref && ref.current) ref = ref.current;
+  if (ref && ref.nodeType) return ref;
+
   return null;
 };
 
@@ -20,9 +19,9 @@ export default function useWaitForDOMRef(ref, onResolved) {
     if (earlyRef) setRef(earlyRef);
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (onResolved && resolvedRef) {
-      onResolved();
+      onResolved(resolvedRef);
     }
   }, [!!resolvedRef, !!onResolved]);
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 
 import Portal from '../src/Portal';
@@ -81,7 +82,10 @@ describe('Portal', () => {
       }
     }
 
-    const instance = mount(<Container />).instance();
+    let instance;
+    act(() => {
+      instance = mount(<Container />).instance();
+    });
 
     expect(instance.div).to.exist;
     expect(
@@ -105,45 +109,6 @@ describe('Portal', () => {
     const nodes = mount(<Container />).getDOMNode().childNodes;
 
     expect(nodes).to.be.empty;
-  });
-
-  it('should change container on prop change', () => {
-    class ContainerTest extends React.Component {
-      state = {};
-
-      render() {
-        return (
-          <div>
-            <div
-              ref={c => {
-                this.container = c;
-              }}
-            />
-            <Portal
-              ref={c => {
-                this.portal = c;
-              }}
-              {...this.props}
-              container={this.state.container}
-            >
-              {this.props.overlay}
-            </Portal>
-          </div>
-        );
-      }
-    }
-
-    const container = mount(<ContainerTest overlay={<div id="test1" />} />);
-
-    expect(container.find('#test1').getDOMNode().parentNode).to.equal(
-      document.body,
-    );
-
-    container.setState({ container: container.instance().container });
-
-    expect(container.find('#test1').getDOMNode().parentNode.nodeName).to.equal(
-      'DIV',
-    );
   });
 
   it('should unmount when parent unmounts', () => {

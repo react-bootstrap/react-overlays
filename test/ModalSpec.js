@@ -12,7 +12,7 @@ import { render } from './helpers';
 
 const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode));
 
-describe('<Modal>', () => {
+describe.only('<Modal>', () => {
   let mountPoint;
 
   beforeEach(() => {
