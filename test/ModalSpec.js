@@ -2,41 +2,49 @@
 import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
+import { act } from 'react-dom/test-utils';
 import Transition from 'react-transition-group/Transition';
 import simulant from 'simulant';
 
-import Modal from '../src/Modal';
+import { mount } from 'enzyme';
 
-import { render } from './helpers';
+import Modal from '../src/Modal';
 
 const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode));
 
-describe.only('<Modal>', () => {
-  let mountPoint;
+describe('<Modal>', () => {
+  let attachTo;
+  let wrapper;
+
+  const mountWithRef = (el, options) => {
+    const ref = React.createRef();
+    const Why = props => React.cloneElement(el, { ...props, ref });
+    wrapper = mount(<Why />, options);
+    return ref;
+  };
 
   beforeEach(() => {
-    mountPoint = document.createElement('div');
-    document.body.appendChild(mountPoint);
+    attachTo = document.createElement('div');
+    document.body.appendChild(attachTo);
   });
 
   afterEach(() => {
-    const unmounted = ReactDOM.unmountComponentAtNode(mountPoint);
-    if (unmounted) {
-      document.body.removeChild(mountPoint);
+    if (wrapper) {
+      wrapper.unmount();
+      wrapper = null;
     }
-    mountPoint.remove();
+    attachTo.remove();
   });
 
   it('should render the modal content', () => {
-    let instance = render(
+    const ref = mountWithRef(
       <Modal show>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    expect(instance.dialog.querySelectorAll('strong')).to.have.lengthOf(1);
+    expect(ref.current.dialog.querySelectorAll('strong')).to.have.lengthOf(1);
   });
 
   it('should disable scrolling on the modal container while open', done => {
@@ -65,17 +73,18 @@ describe.only('<Modal>', () => {
       }
     }
 
-    let instance = render(<Container />, mountPoint);
+    wrapper = mount(<Container />, { attachTo });
 
     setTimeout(() => {
-      let modal = ReactTestUtils.findRenderedComponentWithType(instance, Modal);
+      const container = wrapper.instance().ref.current;
+      let modal = wrapper.find('Modal').instance();
       let backdrop = modal.backdrop;
 
-      expect($(instance).css('overflow')).to.equal('hidden');
+      expect($(container).css('overflow')).to.equal('hidden');
 
-      ReactTestUtils.Simulate.click(backdrop);
+      backdrop.click();
 
-      expect($(instance).css('overflow')).to.not.equal('hidden');
+      expect($(container).css('overflow')).to.not.equal('hidden');
 
       done();
     });
@@ -106,29 +115,31 @@ describe.only('<Modal>', () => {
       }
     }
 
-    let instance = render(<Container />, mountPoint);
-    let modal = ReactTestUtils.findRenderedComponentWithType(instance, Modal);
+    wrapper = mount(<Container />, { attachTo });
+
+    const container = wrapper.instance().ref.current;
+    let modal = wrapper.find('Modal').instance();
     let backdrop = modal.backdrop;
 
-    expect($(instance).hasClass('test test2')).to.be.true;
+    expect($(container).hasClass('test test2')).to.be.true;
 
-    ReactTestUtils.Simulate.click(backdrop);
+    backdrop.click();
 
-    expect($(instance).hasClass('test test2')).to.be.false;
+    expect($(container).hasClass('test test2')).to.be.false;
   });
 
   it('should fire backdrop click callback', () => {
     let onClickSpy = sinon.spy();
-    let instance = render(
+    let ref = mountWithRef(
       <Modal show onBackdropClick={onClickSpy}>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    let backdrop = instance.backdrop;
+    let backdrop = ref.current.backdrop;
 
-    ReactTestUtils.Simulate.click(backdrop);
+    backdrop.click();
 
     expect(onClickSpy).to.have.been.calledOnce;
   });
@@ -137,30 +148,31 @@ describe.only('<Modal>', () => {
     let doneOp = () => {
       done();
     };
-    let instance = render(
+    let ref = mountWithRef(
       <Modal show onHide={doneOp}>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    let backdrop = instance.backdrop;
+    let backdrop = ref.current.backdrop;
 
-    ReactTestUtils.Simulate.click(backdrop);
+    backdrop.click();
   });
 
   it('should not close the modal when the "static" backdrop is clicked', () => {
     let onHideSpy = sinon.spy();
-    let instance = render(
+
+    let ref = mountWithRef(
       <Modal show onHide={onHideSpy} backdrop="static">
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    let backdrop = instance.backdrop;
+    let { backdrop } = ref.current;
 
-    ReactTestUtils.Simulate.click(backdrop);
+    backdrop.click();
 
     expect(onHideSpy).to.not.have.been.called;
   });
@@ -169,21 +181,22 @@ describe.only('<Modal>', () => {
     let doneOp = () => {
       done();
     };
-    let instance = render(
+
+    let ref = mountWithRef(
       <Modal show onHide={doneOp}>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    let backdrop = instance.backdrop;
+    let { backdrop } = ref.current;
 
     simulant.fire(backdrop, 'keydown', { keyCode: 27 });
   });
 
   it('should add role to child', () => {
     let dialog;
-    render(
+    wrapper = mount(
       <Modal show>
         <strong
           ref={r => {
@@ -193,7 +206,7 @@ describe.only('<Modal>', () => {
           Message
         </strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
     expect(dialog.getAttribute('role')).to.equal('document');
@@ -201,7 +214,7 @@ describe.only('<Modal>', () => {
 
   it('should allow custom rendering', () => {
     let dialog;
-    render(
+    wrapper = mount(
       <Modal
         show
         renderDialog={props => (
@@ -216,25 +229,25 @@ describe.only('<Modal>', () => {
           </strong>
         )}
       />,
-      mountPoint,
+      { attachTo },
     );
 
     expect(dialog.getAttribute('role')).to.equal('group');
   });
 
   it('should unbind listeners when unmounted', () => {
-    render(
+    wrapper = mount(
       <div>
         <Modal show containerClassName="modal-open">
           <strong>Foo bar</strong>
         </Modal>
       </div>,
-      mountPoint,
+      { attachTo },
     );
 
     assert.ok(document.body.classList.contains('modal-open'));
 
-    render(<div />, mountPoint);
+    mount(<div />, { attachTo });
 
     assert.ok(!document.body.classList.contains('modal-open'));
   });
@@ -243,7 +256,7 @@ describe.only('<Modal>', () => {
     let count = 0;
     let increment = () => count++;
 
-    let instance = render(
+    wrapper = mount(
       <Modal
         show
         transition={p => <Transition {...p} timeout={0} />}
@@ -258,22 +271,23 @@ describe.only('<Modal>', () => {
         onEntering={increment}
         onEntered={() => {
           increment();
-          instance.renderWithProps({ show: false });
+          wrapper.setProps({ show: false });
         }}
       >
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
   });
 
   it('should fire show callback on mount', () => {
     let onShowSpy = sinon.spy();
-    render(
+
+    mount(
       <Modal show onShow={onShowSpy}>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
     expect(onShowSpy).to.have.been.calledOnce;
@@ -281,54 +295,57 @@ describe.only('<Modal>', () => {
 
   it('should fire show callback on update', () => {
     let onShowSpy = sinon.spy();
-    let instance = render(
+    wrapper = mount(
       <Modal onShow={onShowSpy}>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    instance.renderWithProps({ show: true });
+    wrapper.setProps({ show: true });
 
     expect(onShowSpy).to.have.been.calledOnce;
   });
 
   it('should fire onEscapeKeyDown callback on escape close', () => {
     let onEscapeSpy = sinon.spy();
-    let instance = render(
+
+    let ref = mountWithRef(
       <Modal onEscapeKeyDown={onEscapeSpy}>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    instance.renderWithProps({ show: true });
+    wrapper.setProps({ show: true });
 
-    simulant.fire(instance.backdrop, 'keydown', { keyCode: 27 });
+    act(() => {
+      simulant.fire(ref.current.backdrop, 'keydown', { keyCode: 27 });
+    });
 
     expect(onEscapeSpy).to.have.been.calledOnce;
   });
 
   it('should accept role on the Modal', () => {
-    let instance = render(
+    const ref = mountWithRef(
       <Modal role="alertdialog" show>
         <strong>Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    expect(instance.dialog.getAttribute('role')).to.equal('alertdialog');
+    expect(ref.current.dialog.getAttribute('role')).to.equal('alertdialog');
   });
 
   it('should accept the `aria-describedby` property on the Modal', () => {
-    let instance = render(
+    const ref = mountWithRef(
       <Modal aria-describedby="modal-description" show>
         <strong id="modal-description">Message</strong>
       </Modal>,
-      mountPoint,
+      { attachTo },
     );
 
-    expect(instance.dialog.getAttribute('aria-describedby')).to.equal(
+    expect(ref.current.dialog.getAttribute('aria-describedby')).to.equal(
       'modal-description',
     );
   });
@@ -352,26 +369,26 @@ describe.only('<Modal>', () => {
     it('should focus on the Modal when it is opened', () => {
       expect(document.activeElement).to.equal(focusableContainer);
 
-      let instance = render(
+      wrapper = mount(
         <Modal show className="modal">
           <strong>Message</strong>
         </Modal>,
-        focusableContainer,
+        { attachTo: focusableContainer },
       );
 
       document.activeElement.className.should.contain('modal');
 
-      instance.renderWithProps({ show: false });
+      wrapper.setProps({ show: false });
 
       expect(document.activeElement).to.equal(focusableContainer);
     });
 
     it('should not focus on the Modal when autoFocus is false', () => {
-      render(
+      mount(
         <Modal show autoFocus={false}>
           <strong>Message</strong>
         </Modal>,
-        focusableContainer,
+        { attachTo: focusableContainer },
       );
 
       expect(document.activeElement).to.equal(focusableContainer);
@@ -380,13 +397,13 @@ describe.only('<Modal>', () => {
     it('should not focus Modal when child has focus', () => {
       expect(document.activeElement).to.equal(focusableContainer);
 
-      render(
+      mount(
         <Modal show className="modal">
           <div>
             <input autoFocus />
           </div>
         </Modal>,
-        focusableContainer,
+        { attachTo: focusableContainer },
       );
 
       let input = document.getElementsByTagName('input')[0];
@@ -397,13 +414,13 @@ describe.only('<Modal>', () => {
     it('should return focus to the modal', done => {
       expect(document.activeElement).to.equal(focusableContainer);
 
-      render(
+      mount(
         <Modal show className="modal">
           <div>
             <input autoFocus />
           </div>
         </Modal>,
-        focusableContainer,
+        { attachTo: focusableContainer },
       );
 
       focusableContainer.focus();
@@ -417,11 +434,11 @@ describe.only('<Modal>', () => {
     it('should not attempt to focus nonexistent children', () => {
       const Dialog = React.forwardRef((_, __) => null);
 
-      render(
+      mount(
         <Modal show>
           <Dialog />
         </Modal>,
-        focusableContainer,
+        { attachTo: focusableContainer },
       );
     });
   });

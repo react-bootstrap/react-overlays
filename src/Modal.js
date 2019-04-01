@@ -475,16 +475,19 @@ function forwardRef(Component) {
   // eslint-disable-next-line react/display-name
   const ModalWithContainer = React.forwardRef((props, ref) => {
     const resolved = useWaitForDOMRef(props.container);
+
     return resolved ? (
       <Component {...props} ref={ref} container={resolved} />
     ) : null;
   });
 
   ModalWithContainer.Manager = ModalManager;
+  ModalWithContainer._Inner = Component;
   return ModalWithContainer;
 }
 
 const ModalWithContainer = forwardRef(Modal);
+
 ModalWithContainer.Manager = ModalManager;
 
 export default ModalWithContainer;

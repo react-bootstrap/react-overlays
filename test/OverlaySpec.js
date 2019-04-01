@@ -62,8 +62,6 @@ describe('Overlay', () => {
       instance.setProps({ rootCloseEvent: 'mousedown' });
 
       act(() => {
-        const evt = new MouseEvent('mousedown', { button: 0 });
-
         mountPoint.click();
       });
       setTimeout(() => {
