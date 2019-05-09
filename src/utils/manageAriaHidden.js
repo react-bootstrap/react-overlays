@@ -1,30 +1,30 @@
-const BLACKLIST = ['template', 'script', 'style']
+const BLACKLIST = ['template', 'script', 'style'];
 
 let isHidable = ({ nodeType, tagName }) =>
-  nodeType === 1 && BLACKLIST.indexOf(tagName.toLowerCase()) === -1
+  nodeType === 1 && BLACKLIST.indexOf(tagName.toLowerCase()) === -1;
 
 let siblings = (container, exclude, cb) => {
-  exclude = [].concat(exclude)
-  ;[].forEach.call(container.children, node => {
+  exclude = [].concat(exclude);
+  [].forEach.call(container.children, node => {
     if (exclude.indexOf(node) === -1 && isHidable(node)) {
-      cb(node)
+      cb(node);
     }
-  })
-}
+  });
+};
 
 export function ariaHidden(show, node) {
-  if (!node) return
+  if (!node) return;
   if (show) {
-    node.setAttribute('aria-hidden', 'true')
+    node.setAttribute('aria-hidden', 'true');
   } else {
-    node.removeAttribute('aria-hidden')
+    node.removeAttribute('aria-hidden');
   }
 }
 
-export function hideSiblings(container, { root, backdrop }) {
-  siblings(container, [root, backdrop], node => ariaHidden(true, node))
+export function hideSiblings(container, { dialog: root, backdrop }) {
+  siblings(container, [root, backdrop], node => ariaHidden(true, node));
 }
 
-export function showSiblings(container, { root, backdrop }) {
-  siblings(container, [root, backdrop], node => ariaHidden(false, node))
+export function showSiblings(container, { dialog: root, backdrop }) {
+  siblings(container, [root, backdrop], node => ariaHidden(false, node));
 }
