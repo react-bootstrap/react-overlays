@@ -203,7 +203,7 @@ describe('ModalManager', () => {
       manager.add(modal, container);
 
       expect(container.style.paddingRight).to.equal(
-        getScrollbarSize() + 20 + 'px',
+        `${getScrollbarSize() + 20}px`,
       );
     });
 

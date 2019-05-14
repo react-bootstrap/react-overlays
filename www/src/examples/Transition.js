@@ -43,18 +43,16 @@ const fadeStyles = {
   entered: 'in'
 };
 
-const Fade = ({ children, ...props }) => {
-  return (
-    <Transition {...props} timeout={FADE_DURATION}>
-      {(status, innerProps) =>
-        React.cloneElement(children, {
-          ...innerProps,
-          className: `fade ${fadeStyles[status]} ${children.props.className}`
-        })
-      }
-    </Transition>
-  );
-};
+const Fade = ({ children, ...props }) => (
+  <Transition {...props} timeout={FADE_DURATION}>
+    {(status, innerProps) =>
+      React.cloneElement(children, {
+        ...innerProps,
+        className: `fade ${fadeStyles[status]} ${children.props.className}`
+      })
+    }
+  </Transition>
+);
 
 class TransitionExample extends React.Component {
   constructor(...args) {
@@ -62,11 +60,11 @@ class TransitionExample extends React.Component {
 
     this.state = { showModal: false };
     this.toggleModal = () => {
-      this.setState({ showModal: !this.state.showModal });
+      this.setState(state => ({ showModal: !state.showModal }));
     };
 
     this.toggleTooltip = () => {
-      this.setState({ showTooltip: !this.state.showTooltip });
+      this.setState(state => ({ showTooltip: !state.showTooltip }));
     };
 
     this.tooltipRef = React.createRef();
@@ -75,11 +73,16 @@ class TransitionExample extends React.Component {
   render() {
     return (
       <div className="transition-example">
-        <button className="btn btn-primary" onClick={this.toggleModal}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={this.toggleModal}
+        >
           Show Animated Modal
         </button>
 
         <button
+          type="button"
           className="btn btn-primary"
           onClick={this.toggleTooltip}
           ref={this.tooltipRef}
@@ -110,7 +113,7 @@ class TransitionExample extends React.Component {
           onHide={this.toggleModal}
         >
           <div className="transition-example-dialog">
-            <h4 id="modal-label">{"I'm fading in!"}</h4>
+            <h4 id="modal-label">I&apos;m fading in!</h4>
             <p>
               Anim pariatur cliche reprehenderit, enim eiusmod high life
               accusamus terry richardson ad squid. Nihil anim keffiyeh

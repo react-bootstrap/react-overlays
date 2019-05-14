@@ -148,6 +148,7 @@ function DropdownMenu(props) {
           ...popperConfig.modifiers,
         }}
       >
+        {/* eslint-disable-next-line no-shadow */}
         {({ ref, style, ...popper }) => {
           scheduleUpdateRef.current = popper.scheduleUpdate;
 

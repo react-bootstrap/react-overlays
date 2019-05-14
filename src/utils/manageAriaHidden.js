@@ -21,10 +21,10 @@ export function ariaHidden(show, node) {
   }
 }
 
-export function hideSiblings(container, { dialog: root, backdrop }) {
+export function hideSiblings(container, { root, backdrop }) {
   siblings(container, [root, backdrop], node => ariaHidden(true, node));
 }
 
-export function showSiblings(container, { dialog: root, backdrop }) {
+export function showSiblings(container, { root, backdrop }) {
   siblings(container, [root, backdrop], node => ariaHidden(false, node));
 }

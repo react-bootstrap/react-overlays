@@ -13,6 +13,8 @@ exports.onCreateWebpackConfig = ({ actions, plugins, loaders, getConfig }) => {
     },
     resolve: {
       alias: {
+        react: require.resolve('react'),
+        'react-dom': require.resolve('react-dom'),
         'react-overlays$': path.resolve(__dirname, '../src/index.js'),
         'react-overlays/lib': path.resolve(__dirname, '../src'),
       },

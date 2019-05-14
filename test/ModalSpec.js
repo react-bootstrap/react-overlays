@@ -50,6 +50,7 @@ describe('<Modal>', () => {
   it('should disable scrolling on the modal container while open', done => {
     class Container extends React.Component {
       ref = React.createRef();
+
       state = {
         modalOpen: true,
       };
@@ -99,6 +100,7 @@ describe('<Modal>', () => {
       handleCloseModal = () => {
         this.setState({ modalOpen: false });
       };
+
       render() {
         return (
           <div ref={this.ref}>
@@ -432,6 +434,7 @@ describe('<Modal>', () => {
     });
 
     it('should not attempt to focus nonexistent children', () => {
+      // eslint-disable-next-line no-unused-vars
       const Dialog = React.forwardRef((_, __) => null);
 
       mount(

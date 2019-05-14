@@ -91,6 +91,8 @@ function reducer(state, [type, payload]) {
       return { show: !!payload, placement: payload };
     case 'hide':
       return { ...state, show: false };
+    default:
+      return state;
   }
 }
 
@@ -108,6 +110,7 @@ function OverlayExample() {
   return (
     <div className="overlay-example" ref={containerRef}>
       <button
+        type="button"
         className="btn btn-primary"
         id="overlay-toggle"
         ref={triggerRef}

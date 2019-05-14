@@ -1,7 +1,7 @@
 import contains from 'dom-helpers/query/contains';
 import listen from 'dom-helpers/events/listen';
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import warning from 'warning';
@@ -25,37 +25,40 @@ export function useRootClose(
   { disabled, clickTrigger = 'click' } = {},
 ) {
   const preventMouseRootCloseRef = useRef(false);
-  const onClose = useEventCallback(onRootClose || noop);
+  const onClose = onRootClose || noop;
 
-  const handleMouseCapture = e => {
-    const currentTarget = ref && ('current' in ref ? ref.current : ref);
-    warning(
-      !!currentTarget,
-      'RootClose captured a close event but does not have a ref to compare it to. ' +
-        'useRootClose(), should be passed a ref that resolves to a DOM node',
-    );
+  const handleMouseCapture = useCallback(
+    e => {
+      const currentTarget = ref && ('current' in ref ? ref.current : ref);
+      warning(
+        !!currentTarget,
+        'RootClose captured a close event but does not have a ref to compare it to. ' +
+          'useRootClose(), should be passed a ref that resolves to a DOM node',
+      );
 
-    preventMouseRootCloseRef.current =
-      !currentTarget ||
-      isModifiedEvent(e) ||
-      !isLeftClickEvent(e) ||
-      contains(currentTarget, e.target);
-  };
+      preventMouseRootCloseRef.current =
+        !currentTarget ||
+        isModifiedEvent(e) ||
+        !isLeftClickEvent(e) ||
+        contains(currentTarget, e.target);
+    },
+    [ref],
+  );
 
-  const handleMouse = e => {
+  const handleMouse = useEventCallback(e => {
     if (!preventMouseRootCloseRef.current) {
       onClose(e);
     }
-  };
+  });
 
-  const handleKeyUp = e => {
+  const handleKeyUp = useEventCallback(e => {
     if (e.keyCode === escapeKeyCode) {
       onClose(e);
     }
-  };
+  });
 
   useEffect(() => {
-    if (disabled) return;
+    if (disabled) return undefined;
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
@@ -83,7 +86,7 @@ export function useRootClose(
       removeKeyupListener();
       mobileSafariHackListeners.forEach(remove => remove());
     };
-  }, [disabled, clickTrigger]);
+  }, [disabled, clickTrigger, handleMouseCapture, handleMouse, handleKeyUp]);
 }
 
 /**

@@ -17,7 +17,7 @@ let modalManager = new ModalManager();
 function omitProps(props, propTypes) {
   const keys = Object.keys(props);
   const newProps = {};
-  keys.map(prop => {
+  keys.forEach(prop => {
     if (!Object.prototype.hasOwnProperty.call(propTypes, prop)) {
       newProps[prop] = props[prop];
     }
@@ -223,16 +223,10 @@ class Modal extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.show) {
       return { exited: false };
-    } else if (!nextProps.transition) {
+    }
+    if (!nextProps.transition) {
       // Otherwise let handleHidden take care of marking exited.
       return { exited: true };
-    }
-    return null;
-  }
-
-  getSnapshotBeforeUpdate(prevProps) {
-    if (canUseDom && !prevProps.show && this.props.show) {
-      this.lastFocus = activeElement();
     }
     return null;
   }
@@ -263,6 +257,13 @@ class Modal extends React.Component {
     if (show || (transition && !this.state.exited)) {
       this.onHide();
     }
+  }
+
+  getSnapshotBeforeUpdate(prevProps) {
+    if (canUseDom && !prevProps.show && this.props.show) {
+      this.lastFocus = activeElement();
+    }
+    return null;
   }
 
   onShow = () => {
@@ -346,25 +347,6 @@ class Modal extends React.Component {
     }
   };
 
-  autoFocus() {
-    if (!this.props.autoFocus) return;
-
-    const currentActiveElement = activeElement(ownerDocument(this));
-
-    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
-      this.lastFocus = currentActiveElement;
-      this.dialog.focus();
-    }
-  }
-
-  restoreLastFocus() {
-    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
-    if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus(this.props.restoreFocusOptions);
-      this.lastFocus = null;
-    }
-  }
-
   enforceFocus = () => {
     if (!this.props.enforceFocus || !this._isMounted || !this.isTopModal()) {
       return;
@@ -376,6 +358,25 @@ class Modal extends React.Component {
       this.dialog.focus();
     }
   };
+
+  restoreLastFocus() {
+    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
+    if (this.lastFocus && this.lastFocus.focus) {
+      this.lastFocus.focus(this.props.restoreFocusOptions);
+      this.lastFocus = null;
+    }
+  }
+
+  autoFocus() {
+    if (!this.props.autoFocus) return;
+
+    const currentActiveElement = activeElement(ownerDocument(this));
+
+    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
+      this.lastFocus = currentActiveElement;
+      this.dialog.focus();
+    }
+  }
 
   isTopModal() {
     return this.props.manager.isTopModal(this);

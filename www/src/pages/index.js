@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
@@ -21,7 +22,7 @@ class Anchor extends React.Component {
       this.props.id || this.props.children.toLowerCase().replace(/\s+/gi, '_');
 
     return (
-      <a id={id} href={'#' + id} className="anchor">
+      <a id={id} href={`#${id}`} className="anchor">
         <span className="anchor-icon">#</span>
         {this.props.children}
       </a>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const DropdownContext = React.createContext({
   menuRef() {},
@@ -8,6 +8,6 @@ const DropdownContext = React.createContext({
   alignEnd: null,
   show: null,
   drop: null,
-})
+});
 
-export default DropdownContext
+export default DropdownContext;

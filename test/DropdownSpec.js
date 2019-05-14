@@ -33,6 +33,7 @@ describe('<Dropdown>', () => {
           {...props}
           {...toggleProps}
           id="test-id"
+          type="button"
           className="toggle"
           onClick={toggle}
         />
@@ -48,10 +49,10 @@ describe('<Dropdown>', () => {
             <>
               <Toggle key="toggle">Child Title</Toggle>,
               <Menu key="menu" renderSpy={menuSpy} usePopper={usePopper}>
-                <button>Item 1</button>
-                <button>Item 2</button>
-                <button>Item 3</button>
-                <button>Item 4</button>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
+                <button type="button">Item 3</button>
+                <button type="button">Item 4</button>
               </Menu>
             </>
           )}
@@ -126,8 +127,8 @@ describe('<Dropdown>', () => {
           <div>
             <Toggle>Child Title</Toggle>,
             <Menu rootCloseEvent="mousedown">
-              <button>Item 1</button>
-              <button>Item 2</button>
+              <button type="button">Item 1</button>
+              <button type="button">Item 2</button>
             </Menu>
           </div>
         )}
@@ -225,7 +226,7 @@ describe('<Dropdown>', () => {
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu>
-                <button>Item 1</button>
+                <button type="button">Item 1</button>
               </Menu>
             </div>
           )}
@@ -250,8 +251,8 @@ describe('<Dropdown>', () => {
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu role="menu">
-                <button>Item 1</button>
-                <button>Item 2</button>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
               </Menu>
             </div>
           )}
@@ -281,8 +282,8 @@ describe('<Dropdown>', () => {
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu>
-                <button>Item 1</button>
-                <button>Item 2</button>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
               </Menu>
             </div>
           )}

@@ -6,7 +6,11 @@ function PortalExample() {
 
   return (
     <div className="portal-example">
-      <button className="btn btn-primary" onClick={() => setShow(true)}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => setShow(true)}
+      >
         Render Child
       </button>
       <div className="card card-body mb-4">

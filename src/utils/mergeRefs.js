@@ -1,19 +1,18 @@
 import { useMemo } from 'react';
 
-const toFnRef = ref => {
-  return !ref || typeof ref === 'function'
+const toFnRef = ref =>
+  !ref || typeof ref === 'function'
     ? ref
     : value => {
         ref.current = value;
       };
-};
 
 export default function mergeRefs(refA, refB) {
   const a = toFnRef(refA);
   const b = toFnRef(refB);
   return value => {
-    a && a(value);
-    b && b(value);
+    if (a) a(value);
+    if (b) b(value);
   };
 }
 

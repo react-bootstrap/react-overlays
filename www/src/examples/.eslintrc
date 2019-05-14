@@ -1,6 +1,7 @@
 {
   "rules": {
     "no-alert": "off",
+    "no-shadow": "off",
     "no-unused-expressions": "off",
     "no-unused-vars": "off",
     "react/jsx-no-undef": "off",

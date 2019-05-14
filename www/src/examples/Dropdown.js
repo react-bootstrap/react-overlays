@@ -11,25 +11,29 @@ const MenuContainer = styled('div')`
 
 const Menu = ({ role }) => (
   <Dropdown.Menu flip>
-    {({ show, onClose, props }) => {
-      return (
-        <MenuContainer {...props} role={role} show={show}>
-          <button onClick={onClose} style={{ textAlign: 'left' }}>
-            Item 1
-          </button>
-          <button onClick={onClose} style={{ textAlign: 'left' }}>
-            Item 2
-          </button>
-        </MenuContainer>
-      );
-    }}
+    {({ show, onClose, props }) => (
+      <MenuContainer {...props} role={role} show={show}>
+        <button type="button" onClick={onClose} style={{ textAlign: 'left' }}>
+          Item 1
+        </button>
+        <button type="button" onClick={onClose} style={{ textAlign: 'left' }}>
+          Item 2
+        </button>
+      </MenuContainer>
+    )}
   </Dropdown.Menu>
 );
 
 const Toggle = ({ id, children }) => (
   <Dropdown.Toggle>
     {({ toggle, show, props }) => (
-      <button className="btn btn-primary" id={id} {...props} onClick={toggle}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        id={id}
+        {...props}
+        onClick={toggle}
+      >
         {children}
       </button>
     )}
@@ -65,7 +69,7 @@ class DropdownExample extends React.Component {
       <div className="dropdown-example">
         <DropdownButton
           show={show}
-          onToggle={show => this.setState({ show })}
+          onToggle={nextShow => this.setState({ show: nextShow })}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
         <DropdownButton alignEnd title="Align right" />

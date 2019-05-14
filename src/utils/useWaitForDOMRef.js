@@ -23,14 +23,14 @@ export default function useWaitForDOMRef(ref, onResolved) {
     if (onResolved && resolvedRef) {
       onResolved(resolvedRef);
     }
-  }, [!!resolvedRef, !!onResolved]);
+  }, [onResolved, resolvedRef]);
 
   useEffect(() => {
     const nextRef = resolveRef(ref);
     if (nextRef !== resolvedRef) {
       setRef(nextRef);
     }
-  });
+  }, [ref, resolvedRef]);
 
   return resolvedRef;
 }

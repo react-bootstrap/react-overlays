@@ -11,7 +11,7 @@ function cleanDocletValue(str) {
 }
 function getDisplayTypeName(typeName) {
   if (typeName === 'func') return 'function';
-  else if (typeName === 'bool') return 'boolean';
+  if (typeName === 'bool') return 'boolean';
 
   return typeName;
 }

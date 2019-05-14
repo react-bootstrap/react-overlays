@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "plugin:mocha/recommended"
-  ],
+  "extends": ["plugin:mocha/recommended"],
   "env": {
     "mocha": true
   },
@@ -10,11 +8,14 @@
     "expect": true,
     "sinon": true
   },
-  "plugins": [
-    "mocha"
-  ],
+  "plugins": ["mocha"],
   "rules": {
-    "no-console": "off",
-    "react/prop-types": "off"
+    "no-script-url": 0,
+    "no-unused-expressions": 0,
+    "padded-blocks": 0,
+    "react/no-multi-comp": 0,
+    "react/prop-types": 0,
+    "mocha/no-exclusive-tests": 2,
+    "no-unused-vars": [2, { "varsIgnorePattern": "^_$" }]
   }
 }

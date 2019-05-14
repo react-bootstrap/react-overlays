@@ -1,3 +1,6 @@
 {
-  "extends": "../.eslintrc"
+  "extends": "../.eslintrc",
+  "rules": {
+    "import/prefer-default-export": "off"
+  }
 }

@@ -114,6 +114,7 @@ describe('Portal', () => {
   it('should unmount when parent unmounts', () => {
     class Parent extends React.Component {
       state = { show: true };
+
       render() {
         return <div>{(this.state.show && <Child />) || null}</div>;
       }
