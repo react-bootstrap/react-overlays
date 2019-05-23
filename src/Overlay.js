@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Popper, placements } from 'react-popper';
-import { useRootClose } from './RootCloseWrapper';
+import useRootClose from './useRootClose';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
 import { useMergedRefs } from './utils/mergeRefs';
 

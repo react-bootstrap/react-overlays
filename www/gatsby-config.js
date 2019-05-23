@@ -21,6 +21,7 @@ module.exports = {
     ],
   },
   plugins: [
+    'gatsby-transformer-documentationjs',
     'gatsby-plugin-sorted-assets',
     {
       resolve: 'gatsby-source-filesystem',

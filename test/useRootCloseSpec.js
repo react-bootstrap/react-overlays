@@ -1,25 +1,24 @@
 /* eslint-disable no-use-before-define */
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactDOM from 'react-dom';
 import simulant from 'simulant';
+import { mount } from 'enzyme';
 
-import RootCloseWrapper from '../src/RootCloseWrapper';
-
-import { render } from './helpers';
+import useRootClose from '../src/useRootClose';
 
 const escapeKeyCode = 27;
 
 describe('RootCloseWrapper', () => {
-  let mountPoint;
+  let attachTo;
 
   beforeEach(() => {
-    mountPoint = document.createElement('div');
-    document.body.appendChild(mountPoint);
+    attachTo = document.createElement('div');
+    document.body.appendChild(attachTo);
   });
 
   afterEach(() => {
-    ReactDOM.unmountComponentAtNode(mountPoint);
-    document.body.removeChild(mountPoint);
+    ReactDOM.unmountComponentAtNode(attachTo);
+    document.body.removeChild(attachTo);
   });
 
   describe('using default event', () => {
@@ -34,20 +33,30 @@ describe('RootCloseWrapper', () => {
     shouldCloseOn('mousedown', 'mousedown');
   });
 
-  function shouldCloseOn(eventProp, eventName) {
+  function shouldCloseOn(clickTrigger, eventName) {
+    function Wrapper({ onRootClose, disabled }) {
+      const ref = useRef();
+      useRootClose(ref, onRootClose, {
+        disabled,
+        clickTrigger,
+      });
+
+      return (
+        <div ref={ref} id="my-div">
+          hello there
+        </div>
+      );
+    }
+
     it('should close when clicked outside', () => {
       let spy = sinon.spy();
-      render(
-        <RootCloseWrapper onRootClose={spy} event={eventProp}>
-          <div id="my-div">hello there</div>
-        </RootCloseWrapper>,
-        mountPoint,
-      );
+
+      mount(<Wrapper onRootClose={spy} />, { attachTo });
 
       simulant.fire(document.getElementById('my-div'), eventName);
 
       expect(spy).to.not.have.been.called;
-
+      console.log(eventName);
       simulant.fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;
@@ -57,12 +66,7 @@ describe('RootCloseWrapper', () => {
 
     it('should not close when right-clicked outside', () => {
       let spy = sinon.spy();
-      render(
-        <RootCloseWrapper onRootClose={spy} event={eventProp}>
-          <div id="my-div">hello there</div>
-        </RootCloseWrapper>,
-        mountPoint,
-      );
+      mount(<Wrapper onRootClose={spy} />, { attachTo });
 
       simulant.fire(document.getElementById('my-div'), eventName, {
         button: 1,
@@ -77,12 +81,7 @@ describe('RootCloseWrapper', () => {
 
     it('should not close when disabled', () => {
       let spy = sinon.spy();
-      render(
-        <RootCloseWrapper onRootClose={spy} event={eventProp} disabled>
-          <div id="my-div">hello there</div>
-        </RootCloseWrapper>,
-        mountPoint,
-      );
+      mount(<Wrapper onRootClose={spy} disabled />, { attachTo });
 
       simulant.fire(document.getElementById('my-div'), eventName);
 
@@ -97,17 +96,30 @@ describe('RootCloseWrapper', () => {
       let outerSpy = sinon.spy();
       let innerSpy = sinon.spy();
 
-      render(
-        <RootCloseWrapper onRootClose={outerSpy} event={eventProp}>
-          <div>
-            <div id="my-div">hello there</div>
-            <RootCloseWrapper onRootClose={innerSpy} event={eventProp}>
-              <div id="my-other-div">hello there</div>
-            </RootCloseWrapper>
+      function Inner() {
+        const ref = useRef();
+        useRootClose(ref, innerSpy, { clickTrigger });
+
+        return (
+          <div ref={ref} id="my-other-div">
+            hello there
           </div>
-        </RootCloseWrapper>,
-        mountPoint,
-      );
+        );
+      }
+
+      function Outer() {
+        const ref = useRef();
+        useRootClose(ref, outerSpy, { clickTrigger });
+
+        return (
+          <div ref={ref}>
+            <div id="my-div">hello there</div>
+            <Inner />
+          </div>
+        );
+      }
+
+      mount(<Outer />, { attachTo });
 
       simulant.fire(document.getElementById('my-div'), eventName);
 
@@ -122,12 +134,23 @@ describe('RootCloseWrapper', () => {
   }
 
   describe('using keyup event', () => {
+    function Wrapper({ children, onRootClose, event: clickTrigger }) {
+      const ref = useRef();
+      useRootClose(ref, onRootClose, { clickTrigger });
+
+      return (
+        <div ref={ref} id="my-div">
+          {children}
+        </div>
+      );
+    }
+
     it('should close when escape keyup', () => {
       let spy = sinon.spy();
-      render(
-        <RootCloseWrapper onRootClose={spy}>
+      mount(
+        <Wrapper onRootClose={spy}>
           <div id="my-div">hello there</div>
-        </RootCloseWrapper>,
+        </Wrapper>,
       );
 
       expect(spy).to.not.have.been.called;
@@ -145,15 +168,15 @@ describe('RootCloseWrapper', () => {
       let outerSpy = sinon.spy();
       let innerSpy = sinon.spy();
 
-      render(
-        <RootCloseWrapper onRootClose={outerSpy}>
+      mount(
+        <Wrapper onRootClose={outerSpy}>
           <div>
             <div id="my-div">hello there</div>
-            <RootCloseWrapper onRootClose={innerSpy}>
+            <Wrapper onRootClose={innerSpy}>
               <div id="my-other-div">hello there</div>
-            </RootCloseWrapper>
+            </Wrapper>
           </div>
-        </RootCloseWrapper>,
+        </Wrapper>,
       );
 
       simulant.fire(document.body, 'keyup', { keyCode: escapeKeyCode });

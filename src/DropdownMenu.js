@@ -3,7 +3,7 @@ import React, { useContext, useRef, useEffect } from 'react';
 import { Popper } from 'react-popper';
 import usePrevious from '@restart/hooks/usePrevious';
 
-import { useRootClose } from './RootCloseWrapper';
+import useRootClose from './useRootClose';
 import { useMergedRefs } from './utils/mergeRefs';
 import DropdownContext from './DropdownContext';
 

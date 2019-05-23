@@ -23,7 +23,7 @@
     "Overlay": false,
     "Dropdown": false,
     "Portal": false,
-    "RootCloseWrapper": false,
+    "useRootClose": false,
     "css": false,
     "styled": false
   }
