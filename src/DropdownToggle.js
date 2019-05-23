@@ -1,7 +1,19 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useContext } from 'react';
 
 import DropdownContext from './DropdownContext';
+
+export function useDropdownToggle() {
+  const { show, toggle, toggleRef } = useContext(DropdownContext);
+  return [
+    {
+      ref: toggleRef,
+      'aria-haspopup': true,
+      'aria-expanded': !!show,
+    },
+    { show, toggle },
+  ];
+}
 
 const propTypes = {
   /**
@@ -21,25 +33,19 @@ const propTypes = {
    */
   children: PropTypes.func.isRequired,
 };
+
 function DropdownToggle({ children }) {
-  return (
-    <DropdownContext.Consumer>
-      {({ show, toggle, toggleRef }) =>
-        children({
-          show,
-          toggle,
-          props: {
-            ref: toggleRef,
-            'aria-haspopup': true,
-            'aria-expanded': !!show,
-          },
-        })
-      }
-    </DropdownContext.Consumer>
-  );
+  const [props, { show, toggle }] = useDropdownToggle(DropdownContext);
+
+  return children({
+    show,
+    toggle,
+    props,
+  });
 }
 
 DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';
 DropdownToggle.propTypes = propTypes;
 
+/** @component */
 export default DropdownToggle;

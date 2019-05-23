@@ -5,22 +5,19 @@ import contains from 'dom-helpers/query/contains';
 import canUseDom from 'dom-helpers/util/inDOM';
 import listen from 'dom-helpers/events/listen';
 import PropTypes from 'prop-types';
-import componentOrElement from 'prop-types-extra/lib/componentOrElement';
-import elementType from 'prop-types-extra/lib/elementType';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ModalManager from './ModalManager';
-import Portal from './Portal';
-import getContainer from './utils/getContainer';
 import ownerDocument from './utils/ownerDocument';
+import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
 let modalManager = new ModalManager();
 
 function omitProps(props, propTypes) {
   const keys = Object.keys(props);
   const newProps = {};
-  keys.map(prop => {
+  keys.forEach(prop => {
     if (!Object.prototype.hasOwnProperty.call(propTypes, prop)) {
       newProps[prop] = props[prop];
     }
@@ -57,12 +54,12 @@ class Modal extends React.Component {
     show: PropTypes.bool,
 
     /**
-     * A Node, Component instance, or function that returns either. The Modal is appended to it's container element.
+     * A DOM element, a `ref` to an element, or function that returns either. The Modal is appended to it's `container` element.
      *
      * For the sake of assistive technologies, the container should usually be the document body, so that the rest of the
      * page content can be placed behind a virtual backdrop as well as a visual one.
      */
-    container: PropTypes.oneOfType([componentOrElement, PropTypes.func]),
+    container: PropTypes.any,
 
     /**
      * A callback fired when the Modal is opening.
@@ -130,13 +127,13 @@ class Modal extends React.Component {
      * A `react-transition-group@2.0.0` `<Transition/>` component used
      * to control animations for the dialog component.
      */
-    transition: elementType,
+    transition: PropTypes.elementType,
 
     /**
      * A `react-transition-group@2.0.0` `<Transition/>` component used
      * to control animations for the backdrop components.
      */
-    backdropTransition: elementType,
+    backdropTransition: PropTypes.elementType,
 
     /**
      * When `true` The modal will automatically shift focus to itself when it opens, and
@@ -226,16 +223,10 @@ class Modal extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.show) {
       return { exited: false };
-    } else if (!nextProps.transition) {
+    }
+    if (!nextProps.transition) {
       // Otherwise let handleHidden take care of marking exited.
       return { exited: true };
-    }
-    return null;
-  }
-
-  getSnapshotBeforeUpdate(prevProps) {
-    if (canUseDom && !prevProps.show && this.props.show) {
-      this.lastFocus = activeElement();
     }
     return null;
   }
@@ -268,35 +259,40 @@ class Modal extends React.Component {
     }
   }
 
-  onPortalRendered = () => {
-    if (this.props.onShow) {
-      this.props.onShow();
+  getSnapshotBeforeUpdate(prevProps) {
+    if (canUseDom && !prevProps.show && this.props.show) {
+      this.lastFocus = activeElement();
     }
-    // autofocus after onShow, to not trigger a focus event for previous
-    // modals before this one is shown.
-    this.autoFocus();
-  };
+    return null;
+  }
 
   onShow = () => {
-    let doc = ownerDocument(this);
-    let container = getContainer(this.props.container, doc.body);
+    let { container, containerClassName, manager, onShow } = this.props;
 
-    this.props.manager.add(this, container, this.props.containerClassName);
+    manager.add(this, container, containerClassName);
 
     this.removeKeydownListener = listen(
-      doc,
+      document,
       'keydown',
       this.handleDocumentKeyDown,
     );
 
     this.removeFocusListener = listen(
-      doc,
+      document,
       'focus',
       // the timeout is necessary b/c this will run before the new modal is mounted
       // and so steals focus from it
       () => setTimeout(this.enforceFocus),
       true,
     );
+
+    if (onShow) {
+      onShow();
+    }
+
+    // autofocus after onShow, to not trigger a focus event for previous
+    // modals before this one is shown.
+    this.autoFocus();
   };
 
   onHide = () => {
@@ -351,25 +347,6 @@ class Modal extends React.Component {
     }
   };
 
-  autoFocus() {
-    if (!this.props.autoFocus) return;
-
-    const currentActiveElement = activeElement(ownerDocument(this));
-
-    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
-      this.lastFocus = currentActiveElement;
-      this.dialog.focus();
-    }
-  }
-
-  restoreLastFocus() {
-    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
-    if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus(this.props.restoreFocusOptions);
-      this.lastFocus = null;
-    }
-  }
-
   enforceFocus = () => {
     if (!this.props.enforceFocus || !this._isMounted || !this.isTopModal()) {
       return;
@@ -381,6 +358,25 @@ class Modal extends React.Component {
       this.dialog.focus();
     }
   };
+
+  restoreLastFocus() {
+    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
+    if (this.lastFocus && this.lastFocus.focus) {
+      this.lastFocus.focus(this.props.restoreFocusOptions);
+      this.lastFocus = null;
+    }
+  }
+
+  autoFocus() {
+    if (!this.props.autoFocus) return;
+
+    const currentActiveElement = activeElement(ownerDocument(this));
+
+    if (this.dialog && !contains(this.dialog, currentActiveElement)) {
+      this.lastFocus = currentActiveElement;
+      this.dialog.focus();
+    }
+  }
 
   isTopModal() {
     return this.props.manager.isTopModal(this);
@@ -465,17 +461,34 @@ class Modal extends React.Component {
       );
     }
 
-    return (
-      <Portal container={container} onRendered={this.onPortalRendered}>
-        <>
-          {backdrop && this.renderBackdrop()}
-          {dialog}
-        </>
-      </Portal>
+    return ReactDOM.createPortal(
+      <>
+        {backdrop && this.renderBackdrop()}
+        {dialog}
+      </>,
+      container,
     );
   }
 }
 
-Modal.Manager = ModalManager;
+// dumb HOC for the sake react-docgen
+function forwardRef(Component) {
+  // eslint-disable-next-line react/display-name
+  const ModalWithContainer = React.forwardRef((props, ref) => {
+    const resolved = useWaitForDOMRef(props.container);
 
-export default Modal;
+    return resolved ? (
+      <Component {...props} ref={ref} container={resolved} />
+    ) : null;
+  });
+
+  ModalWithContainer.Manager = ModalManager;
+  ModalWithContainer._Inner = Component;
+  return ModalWithContainer;
+}
+
+const ModalWithContainer = forwardRef(Modal);
+
+ModalWithContainer.Manager = ModalManager;
+
+export default ModalWithContainer;

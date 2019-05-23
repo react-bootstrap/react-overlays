@@ -1,4 +1,12 @@
 const path = require('path');
+const { resolver } = require('react-docgen');
+const annotationResolver = require('react-docgen-annotation-resolver').default;
+
+function combinedResolver(ast, recast) {
+  const exportedComponents = resolver.findAllComponentDefinitions(ast, recast);
+  const annotated = annotationResolver(ast, recast);
+  return exportedComponents.concat(annotated);
+}
 
 module.exports = {
   pathPrefix: '/react-overlays',
@@ -13,6 +21,7 @@ module.exports = {
     ],
   },
   plugins: [
+    'gatsby-transformer-documentationjs',
     'gatsby-plugin-sorted-assets',
     {
       resolve: 'gatsby-source-filesystem',
@@ -21,9 +30,14 @@ module.exports = {
         name: 'source',
       },
     },
-    'gatsby-plugin-emotion',
+    // 'gatsby-plugin-emotion',
     'gatsby-plugin-less',
-    'gatsby-transformer-react-docgen',
+    {
+      resolve: 'gatsby-transformer-react-docgen',
+      options: {
+        resolver: combinedResolver,
+      },
+    },
     'gatsby-transformer-remark',
   ],
 };

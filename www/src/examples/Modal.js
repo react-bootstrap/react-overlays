@@ -11,7 +11,7 @@ const backdropStyle = {
   opacity: 0.5
 };
 
-const modalStyle = function() {
+const modalStyle = () => {
   // we use some psuedo random coords so nested modals
   // don't sit right on top of each other.
   let top = 50 + rand();
@@ -21,8 +21,8 @@ const modalStyle = function() {
     position: 'fixed',
     width: 400,
     zIndex: 1040,
-    top: top + '%',
-    left: left + '%',
+    top: `${top}%`,
+    left: `${left}%`,
     border: '1px solid #e5e5e5',
     backgroundColor: 'white',
     boxShadow: '0 5px 15px rgba(0,0,0,.5)',
@@ -51,7 +51,9 @@ class ModalExample extends React.Component {
   render() {
     return (
       <div className="modal-example">
-        <Button onClick={this.open}>Open Modal</Button>
+        <button type="button" className="btn btn-primary" onClick={this.open}>
+          Open Modal
+        </button>
         <p>Click to get the full Modal experience!</p>
 
         <Modal

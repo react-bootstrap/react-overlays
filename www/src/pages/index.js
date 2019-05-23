@@ -1,14 +1,16 @@
+/* eslint-disable react/no-danger */
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
 import PropTable from '../components/PropTable';
 import Playground from '../components/Playground';
+import HookDocumentation from '../components/HookDocumentation';
 
 import ModalExample from '../examples/Modal';
 import OverlaySource from '../examples/Overlay';
 import DropdownSource from '../examples/Dropdown';
 import PortalSource from '../examples/Portal';
-import RootCloseWrapperSource from '../examples/RootCloseWrapper';
+import useRootCloseSource from '../examples/useRootClose';
 import TransitionSource from '../examples/Transition';
 
 class Anchor extends React.Component {
@@ -21,7 +23,7 @@ class Anchor extends React.Component {
       this.props.id || this.props.children.toLowerCase().replace(/\s+/gi, '_');
 
     return (
-      <a id={id} href={'#' + id} className="anchor">
+      <a id={id} href={`#${id}`} className="anchor">
         <span className="anchor-icon">#</span>
         {this.props.children}
       </a>
@@ -42,12 +44,12 @@ class Example extends React.Component {
       DropdownMetadata,
       DropdownMenuMetadata,
       DropdownToggleMetadata,
-      RootCloseWrapperMetadata,
+      useRootCloseDocs,
     } = this.props.data;
 
     return (
-      <div className="app row">
-        <article className="side-panel col-md-2">
+      <div className="app d-flex">
+        <article className="side-panel">
           <ul className="list-unstyled">
             <li>
               <a href="#portals">Portals</a>
@@ -65,7 +67,7 @@ class Example extends React.Component {
               <a href="#overlay">Overlay</a>
             </li>
             <li>
-              <a href="#root-close-wrapper">RootCloseWrapper</a>
+              <a href="#root-close-wrapper">useRootClose</a>
             </li>
             <li>
               <a href="#transitions">Transitions</a>
@@ -109,6 +111,7 @@ class Example extends React.Component {
             <Playground codeText={OverlaySource} />
             <PropTable component="Overlay" metadata={OverlayMetadata} />
           </section>
+
           <section>
             <h2 className="page-header">
               <Anchor>Dropdown</Anchor>
@@ -133,19 +136,15 @@ class Example extends React.Component {
           </section>
           <section>
             <h2 className="page-header">
-              <Anchor id="root-close-wrapper">RootCloseWrapper</Anchor>
+              <Anchor id="root-close-wrapper">useRootClose</Anchor>
             </h2>
             <p
               dangerouslySetInnerHTML={{
-                __html:
-                  RootCloseWrapperMetadata.description.childMarkdownRemark.html,
+                __html: useRootCloseDocs.description.childMarkdownRemark.html,
               }}
             />
-            <Playground codeText={RootCloseWrapperSource} />
-            <PropTable
-              component="RootCloseWrapper"
-              metadata={RootCloseWrapperMetadata}
-            />
+            <Playground codeText={useRootCloseSource} />
+            <HookDocumentation docs={useRootCloseDocs} />
           </section>
           <section>
             <h2 className="page-header">
@@ -203,10 +202,8 @@ export const pageQuery = graphql`
     PortalMetadata: componentMetadata(displayName: { eq: "Portal" }) {
       ...PropTable_metadata
     }
-    RootCloseWrapperMetadata: componentMetadata(
-      displayName: { eq: "RootCloseWrapper" }
-    ) {
-      ...PropTable_metadata
+    useRootCloseDocs: documentationJs(name: { eq: "useRootClose" }) {
+      ...HookDocumentation_docs
     }
   }
 `;

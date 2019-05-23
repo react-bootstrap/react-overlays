@@ -104,8 +104,8 @@ class Dropdown extends React.Component {
     };
   }
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(...args) {
+    super(...args);
 
     this._focusInDropdown = false;
 
@@ -159,36 +159,6 @@ class Dropdown extends React.Component {
     return items[index];
   }
 
-  hasMenuRole() {
-    return this.menu && matches(this.menu, '[role=menu]');
-  }
-
-  focus() {
-    const { toggleNode } = this.state.context;
-    if (toggleNode && toggleNode.focus) {
-      toggleNode.focus();
-    }
-  }
-
-  maybeFocusFirst() {
-    const type = this._lastSourceEvent;
-    let { focusFirstItemOnShow } = this.props;
-    if (focusFirstItemOnShow == null) {
-      focusFirstItemOnShow = this.hasMenuRole() ? 'keyboard' : false;
-    }
-
-    if (
-      focusFirstItemOnShow === false ||
-      (focusFirstItemOnShow === 'keyboard' && !/^key.+$/.test(type))
-    ) {
-      return;
-    }
-
-    const { itemSelector } = this.props;
-    let first = qsa(this.menu, itemSelector)[0];
-    if (first && first.focus) first.focus();
-  }
-
   handleClick = event => {
     this.toggleOpen(event);
   };
@@ -233,6 +203,36 @@ class Dropdown extends React.Component {
       default:
     }
   };
+
+  hasMenuRole() {
+    return this.menu && matches(this.menu, '[role=menu]');
+  }
+
+  focus() {
+    const { toggleNode } = this.state.context;
+    if (toggleNode && toggleNode.focus) {
+      toggleNode.focus();
+    }
+  }
+
+  maybeFocusFirst() {
+    const type = this._lastSourceEvent;
+    let { focusFirstItemOnShow } = this.props;
+    if (focusFirstItemOnShow == null) {
+      focusFirstItemOnShow = this.hasMenuRole() ? 'keyboard' : false;
+    }
+
+    if (
+      focusFirstItemOnShow === false ||
+      (focusFirstItemOnShow === 'keyboard' && !/^key.+$/.test(type))
+    ) {
+      return;
+    }
+
+    const { itemSelector } = this.props;
+    let first = qsa(this.menu, itemSelector)[0];
+    if (first && first.focus) first.focus();
+  }
 
   toggleOpen(event) {
     let show = !this.props.show;

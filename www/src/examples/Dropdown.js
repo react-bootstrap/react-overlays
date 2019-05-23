@@ -1,39 +1,41 @@
+const MenuContainer = styled('div')`
+  display: ${p => (p.show ? 'flex' : 'none')};
+  min-width: 150px;
+  position: absolute;
+  flex-direction: column;
+  border: 1px solid #e5e5e5;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+`;
+
 const Menu = ({ role }) => (
   <Dropdown.Menu flip>
-    {({ show, onClose, props }) => {
-      return (
-        <div
-          {...props}
-          role={role}
-          className={css`
-            display: ${show ? 'flex' : 'none'};
-            min-width: 150px;
-            position: absolute;
-            flex-direction: column;
-            border: 1px solid #e5e5e5;
-            background-color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-          `}
-        >
-          <button onClick={onClose} style={{ textAlign: 'left' }}>
-            Item 1
-          </button>
-          <button onClick={onClose} style={{ textAlign: 'left' }}>
-            Item 2
-          </button>
-        </div>
-      );
-    }}
+    {({ show, onClose, props }) => (
+      <MenuContainer {...props} role={role} show={show}>
+        <button type="button" onClick={onClose} style={{ textAlign: 'left' }}>
+          Item 1
+        </button>
+        <button type="button" onClick={onClose} style={{ textAlign: 'left' }}>
+          Item 2
+        </button>
+      </MenuContainer>
+    )}
   </Dropdown.Menu>
 );
 
 const Toggle = ({ id, children }) => (
   <Dropdown.Toggle>
     {({ toggle, show, props }) => (
-      <Button id={id} {...props} onClick={toggle}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        id={id}
+        {...props}
+        onClick={toggle}
+      >
         {children}
-      </Button>
+      </button>
     )}
   </Dropdown.Toggle>
 );
@@ -47,13 +49,7 @@ const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
     itemSelector="button:not(:disabled)"
   >
     {({ props }) => (
-      <div
-        {...props}
-        className={css`
-          position: relative;
-          display: inline-block;
-        `}
-      >
+      <div {...props} className="position-relative d-inline-block">
         <Toggle id="example-toggle">{title}</Toggle>
         <Menu role={role} />
       </div>
@@ -73,7 +69,7 @@ class DropdownExample extends React.Component {
       <div className="dropdown-example">
         <DropdownButton
           show={show}
-          onToggle={show => this.setState({ show })}
+          onToggle={nextShow => this.setState({ show: nextShow })}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
         <DropdownButton alignEnd title="Align right" />

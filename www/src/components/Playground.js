@@ -1,7 +1,9 @@
-import React from 'react';
+/* eslint-disable import/no-extraneous-dependencies, import/no-unresolved */
+
+import React, { useState, useReducer, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+
 import ReactDOM, { findDOMNode } from 'react-dom';
-import Button from 'react-bootstrap/lib/Button';
 import Transition, {
   ENTERED,
   ENTERING,
@@ -12,10 +14,9 @@ import * as ReactOverlays from 'react-overlays';
 
 import getOffset from 'dom-helpers/query/offset';
 
-import '../styles.less';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 import injectCss from '../injectCss';
-import { css } from 'emotion';
-import styled from 'react-emotion';
 
 Babel.registerPreset('env', require('@babel/preset-env'));
 Babel.registerPlugin(
@@ -24,9 +25,13 @@ Babel.registerPlugin(
 );
 
 const scope = {
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+
   ReactDOM,
   findDOMNode,
-  Button,
   injectCss,
   ...ReactOverlays,
   getOffset,
@@ -49,8 +54,8 @@ export default class Playground extends React.Component {
         mountStylesheet={false}
         code={this.props.codeText}
         noInline={this.props.codeText.includes('render(')}
-        transformCode={code => {
-          return Babel.transform(code, {
+        transformCode={code =>
+          Babel.transform(code, {
             presets: [
               [
                 'env',
@@ -64,8 +69,8 @@ export default class Playground extends React.Component {
               'react',
             ],
             plugins: [['class-properties', { loose: true }]],
-          }).code;
-        }}
+          }).code
+        }
       >
         <LivePreview />
         <LiveError />

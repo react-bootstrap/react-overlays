@@ -1,21 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 
 import Dropdown from '../src/Dropdown';
 
 describe('<Dropdown>', () => {
-  const Menu = ({ rootCloseEvent, ...props }) => (
-    <Dropdown.Menu flip rootCloseEvent={rootCloseEvent}>
-      {({ show, close, props: menuProps }) => (
-        <div
-          {...props}
-          {...menuProps}
-          className="menu"
-          onClick={close}
-          style={{ display: show ? 'flex' : 'none' }}
-        />
-      )}
+  const Menu = ({ usePopper, rootCloseEvent, renderSpy, ...props }) => (
+    <Dropdown.Menu flip usePopper={usePopper} rootCloseEvent={rootCloseEvent}>
+      {args => {
+        renderSpy && renderSpy(args);
+        const { show, close, props: menuProps } = args;
+        return (
+          <div
+            {...props}
+            {...menuProps}
+            data-show={show}
+            className="menu"
+            onClick={close}
+            style={{ display: show ? 'flex' : 'none' }}
+          />
+        );
+      }}
     </Dropdown.Menu>
   );
 
@@ -26,6 +33,7 @@ describe('<Dropdown>', () => {
           {...props}
           {...toggleProps}
           id="test-id"
+          type="button"
           className="toggle"
           onClick={toggle}
         />
@@ -33,21 +41,21 @@ describe('<Dropdown>', () => {
     </Dropdown.Toggle>
   );
 
-  const dropdownChildren = [
-    <Toggle key="toggle">Child Title</Toggle>,
-    <Menu key="menu">
-      <button>Item 1</button>
-      <button>Item 2</button>
-      <button>Item 3</button>
-      <button>Item 4</button>
-    </Menu>,
-  ];
-
-  const SimpleDropdown = outer => (
+  const SimpleDropdown = ({ children, menuSpy, usePopper, ...outer }) => (
     <Dropdown {...outer}>
       {({ props }) => (
         <div tabIndex="-1" {...props}>
-          {dropdownChildren}
+          {children || (
+            <>
+              <Toggle key="toggle">Child Title</Toggle>,
+              <Menu key="menu" renderSpy={menuSpy} usePopper={usePopper}>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
+                <button type="button">Item 3</button>
+                <button type="button">Item 4</button>
+              </Menu>
+            </>
+          )}
         </div>
       )}
     </Dropdown>
@@ -66,9 +74,13 @@ describe('<Dropdown>', () => {
   });
 
   it('forwards alignEnd to menu', () => {
-    mount(<SimpleDropdown alignEnd />).assertSingle(
-      'ReactOverlaysDropdownMenu[alignEnd=true]',
-    );
+    const renderSpy = sinon.spy(args => {
+      args.alignEnd.should.equal(true);
+    });
+
+    mount(<SimpleDropdown alignEnd usePopper={false} menuSpy={renderSpy} />);
+
+    renderSpy.should.have.been.called;
   });
 
   // NOTE: The onClick event handler is invoked for both the Enter and Space
@@ -81,8 +93,8 @@ describe('<Dropdown>', () => {
     wrapper.assertSingle('button[aria-expanded=false]').simulate('click');
 
     wrapper.assertSingle('ReactOverlaysDropdown[show=true]');
-    wrapper.assertSingle('ReactOverlaysDropdownMenu[show=true]');
 
+    wrapper.assertSingle('div[data-show=true]');
     wrapper.assertSingle('button[aria-expanded=true]').simulate('click');
 
     wrapper.assertNone('.show');
@@ -94,7 +106,9 @@ describe('<Dropdown>', () => {
     const closeSpy = sinon.spy();
     const wrapper = mount(<SimpleDropdown onToggle={closeSpy} />);
 
-    wrapper.find('.toggle').simulate('click');
+    act(() => {
+      wrapper.find('.toggle').simulate('click');
+    });
 
     // Use native events as the click doesn't have to be in the React portion
     const event = new MouseEvent('click');
@@ -106,21 +120,24 @@ describe('<Dropdown>', () => {
 
   it('closes when mousedown outside if rootCloseEvent set', () => {
     const closeSpy = sinon.spy();
+
     const wrapper = mount(
       <Dropdown onToggle={closeSpy} id="test-id">
         {() => (
           <div>
             <Toggle>Child Title</Toggle>,
             <Menu rootCloseEvent="mousedown">
-              <button>Item 1</button>
-              <button>Item 2</button>
+              <button type="button">Item 1</button>
+              <button type="button">Item 2</button>
             </Menu>
           </div>
         )}
       </Dropdown>,
     );
 
-    wrapper.find('.toggle').simulate('click');
+    act(() => {
+      wrapper.find('.toggle').simulate('click');
+    });
 
     // Use native events as the click doesn't have to be in the React portion
     const event = new MouseEvent('mousedown');
@@ -209,7 +226,7 @@ describe('<Dropdown>', () => {
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu>
-                <button>Item 1</button>
+                <button type="button">Item 1</button>
               </Menu>
             </div>
           )}
@@ -234,8 +251,8 @@ describe('<Dropdown>', () => {
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu role="menu">
-                <button>Item 1</button>
-                <button>Item 2</button>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
               </Menu>
             </div>
           )}
@@ -265,8 +282,8 @@ describe('<Dropdown>', () => {
             <div {...props}>
               <Toggle>Child Title</Toggle>,
               <Menu>
-                <button>Item 1</button>
-                <button>Item 2</button>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
               </Menu>
             </div>
           )}

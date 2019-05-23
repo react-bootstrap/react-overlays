@@ -1,166 +1,124 @@
 import PropTypes from 'prop-types';
-import elementType from 'prop-types-extra/lib/elementType';
-import componentOrElement from 'prop-types-extra/lib/componentOrElement';
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import Portal from './Portal';
-import RootCloseWrapper from './RootCloseWrapper';
 import { Popper, placements } from 'react-popper';
-import forwardRef from 'react-context-toolbox/forwardRef';
-import WaitForContainer from './WaitForContainer';
+import useRootClose from './useRootClose';
+import useWaitForDOMRef from './utils/useWaitForDOMRef';
+import { useMergedRefs } from './utils/mergeRefs';
 
 /**
- * Built on top of `<Position/>` and `<Portal/>`, the overlay component is
+ * Built on top of `Popper.js`, the overlay component is
  * great for custom tooltip overlays.
  */
-class Overlay extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+const Overlay = React.forwardRef((props, outerRef) => {
+  const rootCloseRef = useRef(null);
+  const container = useWaitForDOMRef(props.container);
+  const target = useWaitForDOMRef(props.target);
 
-    this.state = { exited: !props.show };
-    this.onHiddenListener = this.handleHidden.bind(this);
+  const [exited, setExited] = useState(!props.show);
 
-    this._lastTarget = null;
+  if (props.show) {
+    if (exited) setExited(false);
+  } else if (!props.transition && !exited) {
+    setExited(true);
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    if (nextProps.show) {
-      return { exited: false };
-    } else if (!nextProps.transition) {
-      // Otherwise let handleHidden take care of marking exited.
-      return { exited: true };
+  const handleHidden = (...args) => {
+    setExited(true);
+
+    if (props.onExited) {
+      props.onExited(...args);
     }
+  };
+
+  const {
+    children,
+    flip,
+    placement,
+    containerPadding,
+    popperConfig = {},
+    transition: Transition,
+  } = props;
+
+  // Don't un-render the overlay while it's transitioning out.
+  const mountOverlay = props.show || (Transition && !exited);
+  const innerRef = useMergedRefs(rootCloseRef, outerRef);
+
+  useRootClose(rootCloseRef, props.onHide, {
+    disabled: !props.rootClose || props.rootCloseDisabled,
+    clickTrigger: props.rootCloseEvent,
+  });
+
+  if (!mountOverlay) {
+    // Don't bother showing anything if we don't have to.
     return null;
   }
 
-  componentDidMount() {
-    this.setState({ target: this.getTarget() });
-  }
+  let child = children;
 
-  componentDidUpdate(prevProps) {
-    if (this.props === prevProps) return;
-
-    const target = this.getTarget();
-
-    if (target !== this.state.target) {
-      this.setState({ target });
-    }
-  }
-
-  getTarget() {
-    let { target } = this.props;
-    target = typeof target === 'function' ? target() : target;
-    return (target && ReactDOM.findDOMNode(target)) || null;
-  }
-
-  render() {
-    let {
-      target: _0,
-      container,
-      containerPadding,
-      placement,
-      rootClose,
-      children,
-      flip,
-      popperConfig = {},
-      transition: Transition,
-      ...props
-    } = this.props;
-    const { target } = this.state;
-
-    // Don't un-render the overlay while it's transitioning out.
-    const mountOverlay = props.show || (Transition && !this.state.exited);
-    if (!mountOverlay) {
-      // Don't bother showing anything if we don't have to.
-      return null;
-    }
-
-    let child = children;
-
-    const { modifiers = {} } = popperConfig;
-    const popperProps = {
-      ...popperConfig,
-      placement,
-      referenceElement: target,
-      enableEvents: props.show,
-      modifiers: {
-        ...modifiers,
-        preventOverflow: {
-          padding: containerPadding || 5,
-          ...modifiers.preventOverflow,
-        },
-        flip: {
-          enabled: !!flip,
-          ...modifiers.preventOverflow,
-        },
+  const { modifiers = {} } = popperConfig;
+  const popperProps = {
+    ...popperConfig,
+    innerRef,
+    placement,
+    referenceElement: target,
+    enableEvents: props.show,
+    modifiers: {
+      ...modifiers,
+      preventOverflow: {
+        padding: containerPadding || 5,
+        ...modifiers.preventOverflow,
       },
-    };
-
-    child = (
-      <Popper {...popperProps}>
-        {({ arrowProps, style, ref, ...popper }) => {
-          this.popper = popper;
-
-          let innerChild = this.props.children({
-            ...popper,
-            // popper doesn't set the initial placement
-            placement: popper.placement || placement,
-            show: props.show,
-
-            arrowProps,
-            props: { ref, style },
-          });
-          if (Transition) {
-            let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
-
-            innerChild = (
-              <Transition
-                in={props.show}
-                appear
-                onExit={onExit}
-                onExiting={onExiting}
-                onExited={this.onHiddenListener}
-                onEnter={onEnter}
-                onEntering={onEntering}
-                onEntered={onEntered}
-              >
-                {innerChild}
-              </Transition>
-            );
-          }
-          return innerChild;
-        }}
-      </Popper>
-    );
-
-    if (rootClose) {
-      child = (
-        <RootCloseWrapper
-          onRootClose={props.onHide}
-          event={props.rootCloseEvent}
-          disabled={props.rootCloseDisabled}
-        >
-          {child}
-        </RootCloseWrapper>
-      );
-    }
-
-    return <Portal container={container}>{child}</Portal>;
-  }
-
-  handleHidden = (...args) => {
-    this.setState({ exited: true });
-
-    if (this.props.onExited) {
-      this.props.onExited(...args);
-    }
+      flip: {
+        enabled: !!flip,
+        ...modifiers.preventOverflow,
+      },
+    },
   };
-}
+
+  child = (
+    <Popper {...popperProps}>
+      {({ arrowProps, style, ref, ...popper }) => {
+        let innerChild = props.children({
+          ...popper,
+          // popper doesn't set the initial placement
+          placement: popper.placement || placement,
+          show: props.show,
+
+          arrowProps,
+          props: { ref, style },
+        });
+
+        if (Transition) {
+          let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
+
+          innerChild = (
+            <Transition
+              in={props.show}
+              appear
+              onExit={onExit}
+              onExiting={onExiting}
+              onExited={handleHidden}
+              onEnter={onEnter}
+              onEntering={onEntering}
+              onEntered={onEntered}
+            >
+              {innerChild}
+            </Transition>
+          );
+        }
+        return innerChild;
+      }}
+    </Popper>
+  );
+
+  return container ? ReactDOM.createPortal(child, container) : null;
+});
+
+Overlay.displayName = 'Overlay';
 
 Overlay.propTypes = {
-  ...Portal.propTypes,
-
   /**
    * Set the visibility of the Overlay
    */
@@ -170,10 +128,16 @@ Overlay.propTypes = {
   placement: PropTypes.oneOf(placements),
 
   /**
-   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
+   * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
+   * the overlay is positioned relative to.
+   */
+  target: PropTypes.any,
+
+  /**
+   * A DOM Element, Ref to an element, or function that returns either. The `container` will have the Portal children
    * appended to it.
    */
-  container: PropTypes.oneOfType([componentOrElement, PropTypes.func]),
+  container: PropTypes.any,
 
   /**
    * Enables the Popper.js `flip` modifier, allowing the Overlay to
@@ -205,6 +169,12 @@ Overlay.propTypes = {
   children: PropTypes.func.isRequired,
 
   /**
+   * Control how much space there is between the edge of the boundary element and overlay.
+   * A convenience shortcut to setting `popperConfig.modfiers.preventOverflow.padding`
+   */
+  containerPadding: PropTypes.number,
+
+  /**
    * A set of popper options and props passed directly to react-popper's Popper component.
    */
   popperConfig: PropTypes.object,
@@ -217,12 +187,12 @@ Overlay.propTypes = {
   /**
    * Specify event for toggling overlay
    */
-  rootCloseEvent: RootCloseWrapper.propTypes.event,
+  rootCloseEvent: PropTypes.oneOf(['click', 'mousedown']),
 
   /**
    * Specify disabled for disable RootCloseWrapper
    */
-  rootCloseDisabled: RootCloseWrapper.propTypes.disabled,
+  rootCloseDisabled: PropTypes.bool,
   /**
    * A Callback fired by the Overlay when it wishes to be hidden.
    *
@@ -243,7 +213,7 @@ Overlay.propTypes = {
    * A `react-transition-group@2.0.0` `<Transition/>` component
    * used to animate the overlay as it changes visibility.
    */
-  transition: elementType,
+  transition: PropTypes.elementType,
 
   /**
    * Callback fired before the Overlay transitions in
@@ -276,12 +246,8 @@ Overlay.propTypes = {
   onExited: PropTypes.func,
 };
 
-export default forwardRef(
-  (props, ref) => (
-    // eslint-disable-next-line react/prop-types
-    <WaitForContainer container={props.container}>
-      {container => <Overlay {...props} ref={ref} container={container} />}
-    </WaitForContainer>
-  ),
-  { displayName: 'withContainer(Overlay)' },
-);
+Overlay.defaultProps = {
+  containerPadding: 5,
+};
+
+export default Overlay;

@@ -1,65 +1,105 @@
-import React from 'react'
-import { mount } from 'enzyme'
+/* eslint-disable no-shadow */
+import React, { useRef } from 'react';
+import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 
-import WaitForContainer from '../src/WaitForContainer'
+import useWaitForDOMRef from '../src/utils/useWaitForDOMRef';
 
-describe('WaitForContainer', function() {
+describe('useWaitForDOMRef', () => {
   it('should resolve on first render if possible (element)', () => {
-    const container = document.createElement('div')
-    const renderSpy = sinon.spy(WaitForContainer.prototype, 'render')
+    let renderCount = 0;
+    const container = document.createElement('div');
 
-    mount(
-      <WaitForContainer container={container}>
-        {resolved => {
-          expect(resolved).to.equal(container)
-          return null
-        }}
-      </WaitForContainer>
-    )
-
-    renderSpy.should.have.been.calledOnce
-    renderSpy.restore()
-  })
-
-  it('should resolve on first render if possible (function)', () => {
-    const div = document.createElement('div')
-    const container = () => div
-    const renderSpy = sinon.spy(WaitForContainer.prototype, 'render')
-
-    mount(
-      <WaitForContainer container={container}>
-        {resolved => {
-          expect(resolved).to.equal(div)
-          return null
-        }}
-      </WaitForContainer>
-    )
-
-    renderSpy.should.have.been.calledOnce
-
-    renderSpy.restore()
-  })
-
-  it('should not throw if an unmounted component instance is provided', () => {
-    const renderSpy = sinon.spy(WaitForContainer.prototype, 'render')
-    class Wrapper extends React.Component {
-      div = React.createRef()
-      render() {
-        return (
-          <div ref={this.div}>
-            <WaitForContainer container={this}>
-              {resolved => {
-                expect(resolved).to.equal(this.div.current)
-                return null
-              }}
-            </WaitForContainer>
-          </div>
-        )
-      }
+    function Test({ container, onResolved }) {
+      useWaitForDOMRef(container, onResolved);
+      renderCount++;
+      return null;
     }
 
-    mount(<Wrapper />)
+    const onResolved = sinon.spy(resolved => {
+      expect(resolved).to.equal(container);
+    });
 
-    renderSpy.should.have.been.calledTwice
-  })
-})
+    act(() => {
+      mount(<Test container={container} onResolved={onResolved} />);
+    });
+
+    renderCount.should.equal(1);
+    onResolved.should.have.been.calledOnce;
+  });
+
+  it('should resolve on first render if possible (ref)', () => {
+    let renderCount = 0;
+    const container = React.createRef();
+    container.current = document.createElement('div');
+
+    function Test({ container, onResolved }) {
+      useWaitForDOMRef(container, onResolved);
+      renderCount++;
+      return null;
+    }
+
+    const onResolved = sinon.spy(resolved => {
+      expect(resolved).to.equal(container.current);
+    });
+
+    act(() => {
+      mount(<Test container={container} onResolved={onResolved} />);
+    });
+
+    renderCount.should.equal(1);
+    onResolved.should.have.been.calledOnce;
+  });
+
+  it('should resolve on first render if possible (function)', () => {
+    const div = document.createElement('div');
+    const container = () => div;
+    let renderCount = 0;
+
+    function Test({ container, onResolved }) {
+      useWaitForDOMRef(container, onResolved);
+      renderCount++;
+      return null;
+    }
+
+    const onResolved = sinon.spy(resolved => {
+      expect(resolved).to.equal(div);
+    });
+
+    act(() => {
+      mount(<Test container={container} onResolved={onResolved} />);
+    });
+    renderCount.should.equal(1);
+    onResolved.should.have.been.calledOnce;
+  });
+
+  it('should resolve after if required', () => {
+    let renderCount = 0;
+
+    function Test({ container, onResolved }) {
+      useWaitForDOMRef(container, onResolved);
+      renderCount++;
+      return null;
+    }
+
+    const onResolved = sinon.spy(resolved => {
+      expect(resolved.tagName).to.equal('DIV');
+    });
+
+    function Wrapper() {
+      const container = useRef(null);
+
+      return (
+        <>
+          <Test container={container} onResolved={onResolved} />
+          <div ref={container} />
+        </>
+      );
+    }
+    act(() => {
+      mount(<Wrapper onResolved={onResolved} />).update();
+    });
+    renderCount.should.equal(2);
+    onResolved.should.have.been.calledOnce;
+  });
+});
