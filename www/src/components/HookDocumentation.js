@@ -1,24 +1,21 @@
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import styled from 'astroturf';
 import { graphql } from 'gatsby';
 import React from 'react';
 
 const Wrapper = styled('span')`
-  ${p =>
-    p.block &&
-    css`
-      display: block;
-      margin-top: 20px;
-    `}
+  &.block {
+    display: block;
+    margin-top: 20px;
+  }
 
-  :before,
-  :after {
+  &:before,
+  &:after {
     color: #969584;
   }
-  :before {
+  &:before {
     content: '{ ';
   }
-  :after {
+  &:after {
     content: ' }';
   }
 `;

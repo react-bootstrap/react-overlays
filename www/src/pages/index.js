@@ -2,6 +2,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
+
+import styled from 'astroturf';
 import PropTable from '../components/PropTable';
 import Playground from '../components/Playground';
 import HookDocumentation from '../components/HookDocumentation';
@@ -12,6 +14,13 @@ import DropdownSource from '../examples/Dropdown';
 import PortalSource from '../examples/Portal';
 import useRootCloseSource from '../examples/useRootClose';
 import TransitionSource from '../examples/Transition';
+
+const NavList = styled('ul')`
+  composes: nav d-flex flex-column from global;
+
+  position: sticky;
+  top: 40px;
+`;
 
 class Anchor extends React.Component {
   static propTypes = {
@@ -49,32 +58,41 @@ class Example extends React.Component {
 
     return (
       <div className="app d-flex">
-        <article className="side-panel">
-          <ul className="list-unstyled">
-            <li>
-              <a href="#portals">Portals</a>
+        <article className="col-md-3">
+          <NavList>
+            <li className="nav-item">
+              <a className="nav-link" href="#portals">
+                Portals
+              </a>
             </li>
-            <li>
-              <a href="#modals">Modals</a>
+            <li className="nav-item">
+              <a className="nav-link" href="#modals">
+                Modals
+              </a>
             </li>
-            <li>
-              <a href="#position">Position</a>
+            <li className="nav-item">
+              <a className="nav-link" href="#dropdown">
+                Dropdown
+              </a>
             </li>
-            <li>
-              <a href="#dropdown">Dropdown</a>
+            <li className="nav-item">
+              <a className="nav-link" href="#overlay">
+                Overlay
+              </a>
             </li>
-            <li>
-              <a href="#overlay">Overlay</a>
+            <li className="nav-item">
+              <a className="nav-link" href="#root-close-wrapper">
+                useRootClose
+              </a>
             </li>
-            <li>
-              <a href="#root-close-wrapper">useRootClose</a>
+            <li className="nav-item">
+              <a className="nav-link" href="#transitions">
+                Transitions
+              </a>
             </li>
-            <li>
-              <a href="#transitions">Transitions</a>
-            </li>
-          </ul>
+          </NavList>
         </article>
-        <main className="col-md-10">
+        <main className="col-md-9">
           <section>
             <h2 className="page-header">
               <Anchor>Portals</Anchor>

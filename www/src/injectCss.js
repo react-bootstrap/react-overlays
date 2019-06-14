@@ -8,7 +8,7 @@ export default function injectCss(rules) {
 
   style =
     style ||
-    (function() {
+    (() => {
       let _style = document.createElement('style');
       _style.appendChild(document.createTextNode(''));
       document.head.appendChild(_style);
