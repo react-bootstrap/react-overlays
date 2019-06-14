@@ -1,6 +1,5 @@
-// .panel-default {
-//   border-radius: 0;
-// }
+@import './variables.scss';
+@import '~bootstrap/scss/bootstrap.scss';
 
 button {
   padding: 0;
@@ -17,17 +16,6 @@ button {
   padding-top: 0;
 }
 
-.side-panel {
-  ul {
-    position: sticky;
-    top: 40px;
-  }
-
-  ul > li {
-    padding: 5px;
-  }
-}
-
 pre {
   border-radius: 0;
   border: none;
@@ -36,10 +24,10 @@ pre {
 }
 
 code {
-  color: #555;
+  color: $primary;
   margin: -0.05rem -0.15em;
   padding: 0.05rem 0.35em;
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: transparentize($primary, 0.9);
 }
 
 .playground-editor,

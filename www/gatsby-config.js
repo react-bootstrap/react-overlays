@@ -30,8 +30,11 @@ module.exports = {
         name: 'source',
       },
     },
-    // 'gatsby-plugin-emotion',
-    'gatsby-plugin-less',
+    'gatsby-plugin-sass',
+    {
+      resolve: 'gatsby-plugin-astroturf',
+      options: { extension: '.module.scss' },
+    },
     {
       resolve: 'gatsby-transformer-react-docgen',
       options: {

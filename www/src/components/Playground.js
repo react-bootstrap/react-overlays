@@ -14,8 +14,8 @@ import * as ReactOverlays from 'react-overlays';
 
 import getOffset from 'dom-helpers/query/offset';
 
-import { css } from '@emotion/core';
-import styled from '@emotion/styled';
+import { css as emotionCss } from '@emotion/core';
+import emotionStyled from '@emotion/styled';
 import injectCss from '../injectCss';
 
 Babel.registerPreset('env', require('@babel/preset-env'));
@@ -38,8 +38,8 @@ const scope = {
   Transition,
   ENTERED,
   ENTERING,
-  css,
-  styled,
+  css: emotionCss,
+  styled: emotionStyled,
 };
 
 export default class Playground extends React.Component {

@@ -4,10 +4,10 @@ import { useContext } from 'react';
 import DropdownContext from './DropdownContext';
 
 export function useDropdownToggle() {
-  const { show, toggle, toggleRef } = useContext(DropdownContext);
+  const { show, toggle, setToggle } = useContext(DropdownContext);
   return [
     {
-      ref: toggleRef,
+      ref: setToggle,
       'aria-haspopup': true,
       'aria-expanded': !!show,
     },
