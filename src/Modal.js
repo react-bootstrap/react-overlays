@@ -12,8 +12,6 @@ import ModalManager from './ModalManager';
 import ownerDocument from './utils/ownerDocument';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
-let modalManager = new ModalManager();
-
 function omitProps(props, propTypes) {
   const keys = Object.keys(props);
   const newProps = {};
@@ -202,7 +200,7 @@ class Modal extends React.Component {
      * A ModalManager instance used to track and manage the state of open
      * Modals. Useful when customizing how modals interact within a container
      */
-    manager: PropTypes.object.isRequired,
+    manager: PropTypes.object,
   };
 
   static defaultProps = {
@@ -214,7 +212,6 @@ class Modal extends React.Component {
     enforceFocus: true,
     restoreFocus: true,
     onHide: () => {},
-    manager: modalManager,
     renderBackdrop: props => <div {...props} />,
   };
 
@@ -233,6 +230,7 @@ class Modal extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
+    this.manager = new ModalManager();
     if (this.props.show) {
       this.onShow();
     }
@@ -267,9 +265,9 @@ class Modal extends React.Component {
   }
 
   onShow = () => {
-    let { container, containerClassName, manager, onShow } = this.props;
+    let { container, containerClassName, onShow } = this.props;
 
-    manager.add(this, container, containerClassName);
+    this.manager.add(this, container, containerClassName);
 
     this.removeKeydownListener = listen(
       document,
@@ -296,7 +294,7 @@ class Modal extends React.Component {
   };
 
   onHide = () => {
-    this.props.manager.remove(this);
+    this.manager.remove(this);
 
     this.removeKeydownListener();
     this.removeFocusListener();
@@ -379,7 +377,7 @@ class Modal extends React.Component {
   }
 
   isTopModal() {
-    return this.props.manager.isTopModal(this);
+    return this.manager.isTopModal(this);
   }
 
   renderBackdrop = () => {
