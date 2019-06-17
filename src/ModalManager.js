@@ -36,6 +36,7 @@ class ModalManager {
     this.modals = [];
     this.containers = [];
     this.data = [];
+    this.scrollbarSize = getScrollbarSize();
   }
 
   isContainerOverflowing(modal) {
@@ -51,20 +52,19 @@ class ModalManager {
     let style = { overflow: 'hidden' };
 
     // we are only interested in the actual `style` here
-    // because we will override it
+    // becasue we will override it
     containerState.style = {
       overflow: container.style.overflow,
       paddingRight: container.style.paddingRight,
     };
 
     if (containerState.overflowing) {
-      const scrollbarSize = getScrollbarSize();
       // use computed style, here to get the real padding
       // to add our scrollbar width
       style.paddingRight = `${parseInt(
         css(container, 'paddingRight') || 0,
         10,
-      ) + scrollbarSize}px`;
+      ) + this.scrollbarSize}px`;
     }
 
     css(container, style);
