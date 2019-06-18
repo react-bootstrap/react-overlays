@@ -24,6 +24,8 @@ function omitProps(props, propTypes) {
   return newProps;
 }
 
+let manager;
+
 /**
  * Love them or hate them, `<Modal />` provides a solid foundation for creating dialogs, lightboxes, or whatever else.
  * The Modal component renders its `children` node in front of a backdrop component.
@@ -230,7 +232,6 @@ class Modal extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.manager = new ModalManager();
     if (this.props.show) {
       this.onShow();
     }
@@ -267,7 +268,7 @@ class Modal extends React.Component {
   onShow = () => {
     let { container, containerClassName, onShow } = this.props;
 
-    this.manager.add(this, container, containerClassName);
+    this.getModalManager().add(this, container, containerClassName);
 
     this.removeKeydownListener = listen(
       document,
@@ -294,7 +295,7 @@ class Modal extends React.Component {
   };
 
   onHide = () => {
-    this.manager.remove(this);
+    this.getModalManager().remove(this);
 
     this.removeKeydownListener();
     this.removeFocusListener();
@@ -310,6 +311,18 @@ class Modal extends React.Component {
 
   setBackdropRef = ref => {
     this.backdrop = ref && ReactDOM.findDOMNode(ref);
+  };
+
+  getModalManager = () => {
+    if (this.props.manager) {
+      return this.props.manager;
+    }
+
+    if (!manager) {
+      manager = new ModalManager();
+    }
+
+    return manager;
   };
 
   handleHidden = (...args) => {
@@ -377,7 +390,7 @@ class Modal extends React.Component {
   }
 
   isTopModal() {
-    return this.manager.isTopModal(this);
+    return this.getModalManager().isTopModal(this);
   }
 
   renderBackdrop = () => {
