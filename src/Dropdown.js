@@ -3,7 +3,7 @@ import qsa from 'dom-helpers/query/querySelectorAll';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import uncontrollable from 'uncontrollable';
+import { uncontrollable } from 'uncontrollable';
 
 import * as Popper from 'react-popper';
 import DropdownContext from './DropdownContext';
