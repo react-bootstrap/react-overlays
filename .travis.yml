@@ -8,8 +8,8 @@ env:
   - BROWSER=ChromeCi
 
 cache:
-  directories:
-    - node_modules
+  - npm
+  - yarn
 
 before_install:
   - export CHROME_BIN=chromium-browser
@@ -17,6 +17,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 install:
+  - yarn
   - yarn --cwd www
 
 after_script:
