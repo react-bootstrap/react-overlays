@@ -5,8 +5,8 @@
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "repository": "react-bootstrap/react-overlays",
   "license": "MIT",
-  "main": "lib/index.js",
-  "module": "lib/es/index.js",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
   "files": [
     "lib"
   ],
@@ -23,9 +23,10 @@
   ],
   "scripts": {
     "bootstrap": "yarn && yarn --cwd www",
-    "build": "yarn build:cjs && yarn build:esm",
-    "build:cjs": "babel src -d lib --delete-dir-on-start",
-    "build:esm": "babel src -d lib/es --env-name esm",
+    "build": "rimraf lib && yarn build:cjs && yarn build:esm && yarn build:pick",
+    "build:cjs": "babel src -d lib/cjs",
+    "build:esm": "babel src -d lib/esm --env-name esm",
+    "build:pick": "cherry-pick --name=react-overlays ../src --cjs-dir=cjs --esm-dir=esm --cwd=lib",
     "deploy-docs": "yarn --cwd www build --prefix-paths && gh-pages -d www/public",
     "lint": "eslint 'www/*.js' www/src src test '*.js'",
     "precommit": "lint-staged",
@@ -52,6 +53,7 @@
     "conventionalCommits": true
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.5",
     "@restart/hooks": "^0.3.2",
     "dom-helpers": "^3.4.0",
     "prop-types": "^15.7.2",
@@ -68,6 +70,7 @@
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
@@ -77,6 +80,7 @@
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-istanbul": "^5.1.4",
     "chai": "^4.2.0",
+    "cherry-pick": "^0.3.0",
     "codecov": "^3.2.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.0",
