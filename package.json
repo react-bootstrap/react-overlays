@@ -29,7 +29,6 @@
     "build:pick": "cherry-pick --name=react-overlays ../src --cjs-dir=cjs --esm-dir=esm --cwd=lib",
     "deploy-docs": "yarn --cwd www build --prefix-paths && gh-pages -d www/public",
     "lint": "eslint 'www/*.js' www/src src test '*.js'",
-    "precommit": "lint-staged",
     "prepublishOnly": "yarn build",
     "release": "rollout",
     "start": "yarn --cwd www start",
@@ -37,10 +36,14 @@
     "test": "yarn lint && yarn testonly",
     "testonly": "yarn tdd --single-run"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.js": [
-      "prettier --write",
-      "npm run lint -- --fix",
+      "eslint --fix",
       "git add"
     ]
   },
