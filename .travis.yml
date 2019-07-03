@@ -7,9 +7,11 @@ node_js:
 env:
   - BROWSER=ChromeCi
 
+dist: xenial
+
 cache:
-  directories:
-    - node_modules
+  - npm
+  - yarn
 
 before_install:
   - export CHROME_BIN=chromium-browser
