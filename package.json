@@ -51,13 +51,11 @@
     "conventionalCommits": true
   },
   "dependencies": {
-    "@restart/hooks": "^0.2.12",
-    "classnames": "^2.2.6",
+    "@restart/hooks": "^0.3.2",
     "dom-helpers": "^3.4.0",
     "prop-types": "^15.7.2",
-    "prop-types-extra": "^1.1.0",
     "react-popper": "^1.3.3",
-    "uncontrollable": "^6.1.0",
+    "uncontrollable": "^7.0.0",
     "warning": "^4.0.3"
   },
   "peerDependencies": {

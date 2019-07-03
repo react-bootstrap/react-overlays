@@ -12,7 +12,6 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/standalone": "^7.4.5",
     "buble": "^0.19.7",
-    "classnames": "^2.2.6",
     "dom-helpers": "^3.4.0",
     "emotion": "^10.0.9",
     "emotion-server": "^10.0.9",
