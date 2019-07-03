@@ -22,15 +22,16 @@
     "modal"
   ],
   "scripts": {
-    "build:esm": "babel src -d lib/es --env-name esm",
-    "build:cjs": "babel src -d lib --delete-dir-on-start",
+    "bootstrap": "yarn && yarn --cwd www",
     "build": "yarn build:cjs && yarn build:esm",
+    "build:cjs": "babel src -d lib --delete-dir-on-start",
+    "build:esm": "babel src -d lib/es --env-name esm",
     "deploy-docs": "yarn --cwd www build --prefix-paths && gh-pages -d www/public",
+    "lint": "eslint 'www/*.js' www/src src test '*.js'",
     "precommit": "lint-staged",
     "prepublishOnly": "yarn build",
-    "start": "yarn --cwd www start",
-    "lint": "eslint 'www/*.js' www/src src test '*.js'",
     "release": "rollout",
+    "start": "yarn --cwd www start",
     "tdd": "karma start",
     "test": "yarn lint && yarn testonly",
     "testonly": "yarn tdd --single-run"
