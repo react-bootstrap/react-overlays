@@ -17,6 +17,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 install:
+  - yarn
   - yarn --cwd www
 
 after_script:
