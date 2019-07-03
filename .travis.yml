@@ -7,8 +7,6 @@ node_js:
 env:
   - BROWSER=ChromeCi
 
-dist: xenial
-
 cache:
   - npm
   - yarn
