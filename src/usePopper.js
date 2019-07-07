@@ -36,7 +36,7 @@ export default function usePopper(
     if (popperInstanceRef.current) {
       popperInstanceRef.current.scheduleUpdate();
     }
-  }, [popperInstanceRef]);
+  }, []);
 
   const [state, setState] = useState({
     placement,
@@ -62,7 +62,7 @@ export default function usePopper(
         ? popperInstanceRef.current.enableEventListeners()
         : popperInstanceRef.current.disableEventListeners();
     }
-  }, [eventsEnabled, popperInstanceRef]);
+  }, [eventsEnabled]);
 
   useEffect(() => {
     if (!enabled || referenceElement === null || popperElement === null) {
