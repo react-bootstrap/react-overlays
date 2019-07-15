@@ -1,6 +1,6 @@
 const path = require('path');
 const { resolver } = require('react-docgen');
-const annotationResolver = require('react-docgen-annotation-resolver').default;
+const annotationResolver = require('react-docgen-annotation-resolver');
 
 function combinedResolver(ast, recast) {
   const exportedComponents = resolver.findAllComponentDefinitions(ast, recast);
