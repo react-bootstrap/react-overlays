@@ -22,14 +22,17 @@ describe('RootCloseWrapper', () => {
   });
 
   describe('using default event', () => {
+    // eslint-disable-next-line mocha/no-setup-in-describe
     shouldCloseOn(undefined, 'click');
   });
 
   describe('using click event', () => {
+    // eslint-disable-next-line mocha/no-setup-in-describe
     shouldCloseOn('click', 'click');
   });
 
   describe('using mousedown event', () => {
+    // eslint-disable-next-line mocha/no-setup-in-describe
     shouldCloseOn('mousedown', 'mousedown');
   });
 
