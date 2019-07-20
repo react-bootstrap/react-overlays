@@ -4,6 +4,5 @@
   "rules": {
     "prettier/prettier": "error",
     "jsx-a11y/no-autofocus": "off",
-    "mocha/no-mocha-arrows": "off"
   }
 }
