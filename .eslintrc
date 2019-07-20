@@ -3,6 +3,6 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "jsx-a11y/no-autofocus": "off",
+    "jsx-a11y/no-autofocus": "off"
   }
 }
