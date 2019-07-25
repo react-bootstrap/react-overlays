@@ -22,7 +22,7 @@ function findIndexOf(arr, cb) {
 }
 
 /**
- * Proper state managment for containers and the modals in those containers.
+ * Proper state management for containers and the modals in those containers.
  *
  * @internal Used by the Modal to ensure proper styling of containers.
  */
