@@ -52,7 +52,7 @@ class ModalManager {
     let style = { overflow: 'hidden' };
 
     // we are only interested in the actual `style` here
-    // becasue we will override it
+    // because we will override it
     containerState.style = {
       overflow: container.style.overflow,
       paddingRight: container.style.paddingRight,

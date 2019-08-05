@@ -2,7 +2,7 @@ import matches from 'dom-helpers/query/matches';
 import qsa from 'dom-helpers/query/querySelectorAll';
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import useUncontrolled from 'uncontrollable/hook';
+import { useUncontrolled } from 'uncontrollable';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import usePrevious from '@restart/hooks/usePrevious';
 import useEventCallback from '@restart/hooks/useEventCallback';

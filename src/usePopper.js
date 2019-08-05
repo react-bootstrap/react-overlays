@@ -12,11 +12,6 @@ const initialPopperStyles = {
 
 const initialArrowStyles = {};
 
-const getRefValue = refOrValue =>
-  refOrValue !== null && 'current' in refOrValue
-    ? refOrValue.current
-    : refOrValue;
-
 export default function usePopper(
   referenceElement,
   popperElement,
@@ -36,7 +31,7 @@ export default function usePopper(
     if (popperInstanceRef.current) {
       popperInstanceRef.current.scheduleUpdate();
     }
-  }, [popperInstanceRef]);
+  }, []);
 
   const [state, setState] = useState({
     placement,
@@ -62,7 +57,7 @@ export default function usePopper(
         ? popperInstanceRef.current.enableEventListeners()
         : popperInstanceRef.current.disableEventListeners();
     }
-  }, [eventsEnabled, popperInstanceRef]);
+  }, [eventsEnabled]);
 
   useEffect(() => {
     if (!enabled || referenceElement === null || popperElement === null) {
@@ -71,7 +66,7 @@ export default function usePopper(
 
     const arrow = modifiers.arrow && {
       ...modifiers.arrow,
-      element: getRefValue(modifiers.arrow.element),
+      element: modifiers.arrow.element,
     };
 
     popperInstanceRef.current = new PopperJS(referenceElement, popperElement, {

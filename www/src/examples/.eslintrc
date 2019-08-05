@@ -10,7 +10,6 @@
   },
   "globals": {
     "render": false,
-    "classNames": false,
     "React": false,
     "ReactDOM": false,
     "injectCss": false,

@@ -16,6 +16,7 @@
     "react/no-multi-comp": 0,
     "react/prop-types": 0,
     "mocha/no-exclusive-tests": 2,
+    "mocha/no-mocha-arrows": 0,
     "no-unused-vars": [2, { "varsIgnorePattern": "^_$" }]
   }
 }
