@@ -22,8 +22,8 @@ const Overlay = React.forwardRef((props, outerRef) => {
     transition: Transition,
   } = props;
 
-  const [ref, attachRef] = useCallbackRef();
-  const [arrowRef, attachArrowRef] = useCallbackRef();
+  const [rootElement, attachRef] = useCallbackRef();
+  const [arrowElement, attachArrowRef] = useCallbackRef();
   const mergedRef = useMergedRefs(attachRef, outerRef);
 
   const container = useWaitForDOMRef(props.container);
@@ -33,7 +33,7 @@ const Overlay = React.forwardRef((props, outerRef) => {
 
   const { modifiers = {} } = popperConfig;
 
-  const { styles, arrowStyles, ...popper } = usePopper(target, ref, {
+  const { styles, arrowStyles, ...popper } = usePopper(target, rootElement, {
     ...popperConfig,
     placement: placement || 'bottom',
     enableEvents: props.show,
@@ -45,8 +45,8 @@ const Overlay = React.forwardRef((props, outerRef) => {
       },
       arrow: {
         ...modifiers.arrow,
-        enabled: !!arrowRef,
-        element: arrowRef,
+        enabled: !!arrowElement,
+        element: arrowElement,
       },
       flip: {
         enabled: !!flip,
@@ -72,7 +72,7 @@ const Overlay = React.forwardRef((props, outerRef) => {
   // Don't un-render the overlay while it's transitioning out.
   const mountOverlay = props.show || (Transition && !exited);
 
-  useRootClose(ref, props.onHide, {
+  useRootClose(rootElement, props.onHide, {
     disabled: !props.rootClose || props.rootCloseDisabled,
     clickTrigger: props.rootCloseEvent,
   });

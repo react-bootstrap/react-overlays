@@ -7,11 +7,9 @@ import useRootClose from './useRootClose';
 import DropdownContext from './DropdownContext';
 
 export function useDropdownMenu(options = {}) {
-  // const prevProps = usePrevious(props);
   const context = useContext(DropdownContext);
 
-  // const [ref, attachRef] = useCallbackRef();
-  const [arrowRef, attachArrowRef] = useCallbackRef();
+  const [arrowElement, attachArrowRef] = useCallbackRef();
 
   const hasShownRef = useRef(false);
 
@@ -51,8 +49,8 @@ export function useDropdownMenu(options = {}) {
       flip: { enabled: !!flip },
       arrow: {
         ...(popperConfig.modifiers && popperConfig.modifiers.arrow),
-        enabled: !!arrowRef,
-        element: arrowRef,
+        enabled: !!arrowElement,
+        element: arrowElement,
       },
       ...popperConfig.modifiers,
     },

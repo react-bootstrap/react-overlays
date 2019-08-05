@@ -1,15 +1,26 @@
 import matches from 'dom-helpers/query/matches';
 import qsa from 'dom-helpers/query/querySelectorAll';
-import React, { useCallback, useRef, useEffect, useMemo } from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolled } from 'uncontrollable';
-import useCallbackRef from '@restart/hooks/useCallbackRef';
 import usePrevious from '@restart/hooks/usePrevious';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
 import DropdownContext from './DropdownContext';
 import DropdownMenu from './DropdownMenu';
 import DropdownToggle from './DropdownToggle';
+
+function useForceUpdate() {
+  const [, setState] = useState(false);
+  return useCallback(() => setState(value => !value), []);
+}
 
 const propTypes = {
   /**
@@ -104,12 +115,28 @@ function Dropdown({
   focusFirstItemOnShow,
   children,
 }) {
+  const forceUpdate = useForceUpdate();
   const { show, onToggle } = useUncontrolled(
     { defaultShow, show: rawShow, onToggle: rawOnToggle },
     { show: 'onToggle' },
   );
-  const [toggleElement, attachToggle] = useCallbackRef();
-  const [menuElement, attachMenu] = useCallbackRef();
+
+  const [toggleElement, setToggle] = useCallbackRef();
+
+  // We use normal refs instead of useCallbackRef in order to populate the
+  // the value as quickly as possible, otherwise the effect to focus the element
+  // may run before the state value is set
+  const menuRef = useRef();
+  const menuElement = menuRef.current;
+
+  const setMenu = useCallback(
+    ref => {
+      menuRef.current = ref;
+      // ensure that a menu set triggers an update for consumers
+      forceUpdate();
+    },
+    [forceUpdate],
+  );
 
   const lastShow = usePrevious(show);
   const lastSourceEvent = useRef(null);
@@ -130,18 +157,18 @@ function Dropdown({
       alignEnd,
       menuElement,
       toggleElement,
-      setMenu: attachMenu,
-      setToggle: attachToggle,
+      setMenu,
+      setToggle,
     }),
     [
-      alignEnd,
-      attachMenu,
-      attachToggle,
-      drop,
-      menuElement,
-      show,
       toggle,
+      drop,
+      show,
+      alignEnd,
+      menuElement,
       toggleElement,
+      setMenu,
+      setToggle,
     ],
   );
 
@@ -149,7 +176,7 @@ function Dropdown({
     focusInDropdown.current = menuElement.contains(document.activeElement);
   }
 
-  const focus = useEventCallback(() => {
+  const focusToggle = useEventCallback(() => {
     if (toggleElement && toggleElement.focus) {
       toggleElement.focus();
     }
@@ -158,9 +185,12 @@ function Dropdown({
   const maybeFocusFirst = useEventCallback(() => {
     const type = lastSourceEvent.current;
     let focusStype = focusFirstItemOnShow;
+
     if (focusStype == null) {
       focusStype =
-        menuElement && matches(menuElement, '[role=menu]') ? 'keyboard' : false;
+        menuRef.current && matches(menuRef.current, '[role=menu]')
+          ? 'keyboard'
+          : false;
     }
 
     if (
@@ -170,7 +200,7 @@ function Dropdown({
       return;
     }
 
-    let first = qsa(menuElement, itemSelector)[0];
+    let first = qsa(menuRef.current, itemSelector)[0];
     if (first && first.focus) first.focus();
   });
 
@@ -178,18 +208,19 @@ function Dropdown({
     if (show) maybeFocusFirst();
     else if (focusInDropdown.current) {
       focusInDropdown.current = false;
+      focusToggle();
     }
     // only `show` should be changing
-  }, [show, focusInDropdown, focus, maybeFocusFirst]);
+  }, [show, focusInDropdown, focusToggle, maybeFocusFirst]);
 
   useEffect(() => {
     lastSourceEvent.current = null;
   });
 
   const getNextFocusedChild = (current, offset) => {
-    if (!menuElement) return null;
+    if (!menuRef.current) return null;
 
-    let items = qsa(menuElement, itemSelector);
+    let items = qsa(menuRef.current, itemSelector);
 
     let index = items.indexOf(current) + offset;
     index = Math.max(0, Math.min(index, items.length));
@@ -206,7 +237,9 @@ function Dropdown({
     if (
       isInput &&
       (key === ' ' ||
-        (key !== 'Escape' && menuElement && menuElement.contains(target)))
+        (key !== 'Escape' &&
+          menuRef.current &&
+          menuRef.current.contains(target)))
     ) {
       return;
     }

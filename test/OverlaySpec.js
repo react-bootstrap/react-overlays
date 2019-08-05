@@ -30,7 +30,7 @@ describe('Overlay', () => {
     document.body.removeChild(trigger);
   });
   // these don't test a lot over rootCloseWrapper
-  xdescribe('is wrapped with RootCloseWrapper if rootClose prop passed', () => {
+  describe('is wrapped with RootCloseWrapper if rootClose prop passed', () => {
     const props = {
       rootClose: true,
       show: true,
@@ -65,7 +65,6 @@ describe('Overlay', () => {
         mountPoint.click();
       });
       setTimeout(() => {
-        console.log(props.onHide.callCount === 1);
         expect(props.onHide).to.have.been.calledOnce();
         done();
       }, 0);

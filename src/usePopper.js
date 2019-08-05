@@ -12,6 +12,18 @@ const initialPopperStyles = {
 
 const initialArrowStyles = {};
 
+/**
+ * Position an element relative some reference element using Popper.js
+ *
+ * @param {HTMLElement} referenceElement The element
+ * @param {HTMLElement} popperElement
+ * @param {Object}      options
+ * @param {Object}      options.modifiers Popper.js modifiers
+ * @param {Boolean}     options.enabled toggle the popper functionality on/off
+ * @param {String}      options.placement The popper element placement relative to the reference element
+ * @param {Boolean}     options.positionFixed use fixed positioning
+ * @param {Boolean}     options.eventsEnabled have Popper listen on window resize events to reposition the element
+ */
 export default function usePopper(
   referenceElement,
   popperElement,
