@@ -1,26 +1,16 @@
 import matches from 'dom-helpers/query/matches';
 import qsa from 'dom-helpers/query/querySelectorAll';
-import React, {
-  useCallback,
-  useRef,
-  useEffect,
-  useState,
-  useMemo,
-} from 'react';
+import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolled } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
+import useForceUpdate from '@restart/hooks/useForceUpdate';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
 import DropdownContext from './DropdownContext';
 import DropdownMenu from './DropdownMenu';
 import DropdownToggle from './DropdownToggle';
-
-function useForceUpdate() {
-  const [, setState] = useState(false);
-  return useCallback(() => setState(value => !value), []);
-}
 
 const propTypes = {
   /**
