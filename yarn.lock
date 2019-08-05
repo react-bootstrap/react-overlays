@@ -852,18 +852,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.2.tgz#7f4c71b7654068dfcccad29553520f984cc66b30"
   integrity sha512-hnHhwQzvPCW1QjBWFyBtsETdllOM92BfrKWbUTmh9aeOlcVOiXvlPsK4104xH8NsaKfg86PTFsWkueQeUfMA/w==
 
-"@emotion/serialize@^0.11.8":
-  version "0.11.8"
-  resolved "https://registry.yarnpkg.com/@emotion/serialize/-/serialize-0.11.8.tgz#e41dcf7029e45286a3e0cf922933e670fe05402c"
-  integrity sha512-Qb6Us2Yk1ZW8SOYH6s5z7qzXXb2iHwVeqc6FjXtac0vvxC416ki0eTtHNw4Q5smoyxdyZh3519NKGrQvvvrZ/Q==
-  dependencies:
-    "@emotion/hash" "0.7.2"
-    "@emotion/memoize" "0.7.2"
-    "@emotion/unitless" "0.7.4"
-    "@emotion/utils" "0.11.2"
-    csstype "^2.5.7"
-
-"@emotion/serialize@^0.11.9":
+"@emotion/serialize@^0.11.8", "@emotion/serialize@^0.11.9":
   version "0.11.9"
   resolved "https://registry.yarnpkg.com/@emotion/serialize/-/serialize-0.11.9.tgz#123e0f51d2dee9693fae1057bd7fc27b021d6868"
   integrity sha512-/Cn4V81z3ZyFiDQRw8nhGFaHkxHtmCSSBUit4vgTuLA1BqxfJUYiqSq97tq/vV8z9LfIoqs6a9v6QrUFWZpK7A==
@@ -966,7 +955,7 @@
   dependencies:
     type-detect "4.0.8"
 
-"@sinonjs/formatio@^3.1.0", "@sinonjs/formatio@^3.2.1":
+"@sinonjs/formatio@^3.2.1":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/formatio/-/formatio-3.2.1.tgz#52310f2f9bcbc67bdac18c94ad4901b95fde267e"
   integrity sha512-tsHvOB24rvyvV2+zKMmPkZ7dXX6LSLKZ7aOtXY6Edklp0uRcgGpOsQTTGTcWViFyx4uhWc6GV8QdnALbIbIdeQ==
@@ -974,7 +963,7 @@
     "@sinonjs/commons" "^1"
     "@sinonjs/samsam" "^3.1.0"
 
-"@sinonjs/samsam@^3.1.0", "@sinonjs/samsam@^3.3.1":
+"@sinonjs/samsam@^3.1.0", "@sinonjs/samsam@^3.3.2":
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/@sinonjs/samsam/-/samsam-3.3.2.tgz#63942e3d5eb0b79f6de3bef9abfad15fb4b6401b"
   integrity sha512-ILO/rR8LfAb60Y1Yfp9vxfYAASK43NFC2mLzpvLUbCQY/Qu8YwReboseu8aheCEkyElZF2L2T9mHcR2bgdvZyA==
@@ -1209,12 +1198,7 @@ acorn-jsx@^5.0.0:
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.0.1.tgz#32a064fd925429216a09b141102bfdd185fae40e"
   integrity sha512-HJ7CfNHrfJLlNTzIEUTj43LNWGkqpRLxm3YjAlcD0ACydk9XynzYsCBHxut+iqt+1aBXkx9UP/w/ZqMr13XIzg==
 
-acorn@^6.0.7:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.2.0.tgz#67f0da2fc339d6cfb5d6fb244fd449f33cd8bbe3"
-  integrity sha512-8oe72N3WPMjA+2zVG71Ia0nXZ8DpQH+QyyHO+p06jT8eg8FGG3FbcUIi8KziHlAfheJQZeoqbvq1mQSQHXKYLw==
-
-acorn@^6.2.1:
+acorn@^6.0.7, acorn@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.2.1.tgz#3ed8422d6dec09e6121cc7a843ca86a330a86b51"
   integrity sha512-JD0xT5FCRDNyjDda3Lrg/IxFscp9q4tiYtxE1/nOzlKCk7hIRuYjhq1kCNkbPjMRMZuFq20HNQn1I9k8Oj0E+Q==
@@ -6438,10 +6422,10 @@ log4js@^4.0.0:
     rfdc "^1.1.4"
     streamroller "^1.0.6"
 
-lolex@^4.0.1, lolex@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/lolex/-/lolex-4.1.0.tgz#ecdd7b86539391d8237947a3419aa8ac975f0fe1"
-  integrity sha512-BYxIEXiVq5lGIXeVHnsFzqa1TxN5acnKnPCdlZSpzm8viNEOhiigupA4vTQ9HEFQ6nLTQ9wQOgBknJgzUYQ9Aw==
+lolex@^4.1.0, lolex@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lolex/-/lolex-4.2.0.tgz#ddbd7f6213ca1ea5826901ab1222b65d714b3cd7"
+  integrity sha512-gKO5uExCXvSm6zbF562EvM+rd1kQDnB9AZBbiQVzf1ZmdDpxUSvpnAaVOP83N/31mRK8Ml8/VE8DMvsAZQ+7wg==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -6942,12 +6926,12 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-nise@^1.4.10:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/nise/-/nise-1.5.0.tgz#d03ea0e6c1b75c638015aa3585eddc132949a50d"
-  integrity sha512-Z3sfYEkLFzFmL8KY6xnSJLRxwQwYBjOXi/24lb62ZnZiGA0JUzGGTI6TBIgfCSMIDl9Jlu8SRmHNACLTemDHww==
+nise@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/nise/-/nise-1.5.1.tgz#de61d99a1d3b46b5233be4531569b9a8e27372b2"
+  integrity sha512-edFWm0fsFG2n318rfEnKlTZTkjlbVOFF9XIA+fj+Ed+Qz1laYW2lobwavWoMzGrYDHH1EpiNJgDfvGnkZztR/g==
   dependencies:
-    "@sinonjs/formatio" "^3.1.0"
+    "@sinonjs/formatio" "^3.2.1"
     "@sinonjs/text-encoding" "^0.7.1"
     just-extend "^4.0.2"
     lolex "^4.1.0"
@@ -9124,16 +9108,16 @@ sinon-chai@^3.3.0:
   integrity sha512-r2JhDY7gbbmh5z3Q62pNbrjxZdOAjpsqW/8yxAZRSqLZqowmfGZPGUZPFf3UX36NLis0cv8VEM5IJh9HgkSOAA==
 
 sinon@^7.3.2:
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-7.3.2.tgz#82dba3a6d85f6d2181e1eca2c10d8657c2161f28"
-  integrity sha512-thErC1z64BeyGiPvF8aoSg0LEnptSaWE7YhdWWbWXgelOyThent7uKOnnEh9zBxDbKixtr5dEko+ws1sZMuFMA==
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-7.4.0.tgz#1e0c12538aa2170a3a98467d112cf361c7ade8a8"
+  integrity sha512-Els0KRgijhuHz9qEyzUFmZtpS1kuj6CMwyKdyWyPW1dnYGOcwqdqFp95u7fcLJbuga/SrVYGxaqCY3JPWMOJAQ==
   dependencies:
     "@sinonjs/commons" "^1.4.0"
     "@sinonjs/formatio" "^3.2.1"
-    "@sinonjs/samsam" "^3.3.1"
+    "@sinonjs/samsam" "^3.3.2"
     diff "^3.5.0"
-    lolex "^4.0.1"
-    nise "^1.4.10"
+    lolex "^4.2.0"
+    nise "^1.5.1"
     supports-color "^5.5.0"
 
 slash@^1.0.0:
@@ -9726,23 +9710,7 @@ teeny-request@^3.11.3:
     node-fetch "^2.2.0"
     uuid "^3.3.2"
 
-terser-webpack-plugin@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-1.3.0.tgz#69aa22426299f4b5b3775cbed8cb2c5d419aa1d4"
-  integrity sha512-W2YWmxPjjkUcOWa4pBEv4OP4er1aeQJlSo2UhtCFQCuRXEHjOFscO8VyWHj9JLlA0RzQb8Y2/Ta78XZvT54uGg==
-  dependencies:
-    cacache "^11.3.2"
-    find-cache-dir "^2.0.0"
-    is-wsl "^1.1.0"
-    loader-utils "^1.2.3"
-    schema-utils "^1.0.0"
-    serialize-javascript "^1.7.0"
-    source-map "^0.6.1"
-    terser "^4.0.0"
-    webpack-sources "^1.3.0"
-    worker-farm "^1.7.0"
-
-terser-webpack-plugin@^1.4.1:
+terser-webpack-plugin@^1.3.0, terser-webpack-plugin@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-1.4.1.tgz#61b18e40eaee5be97e771cdbb10ed1280888c2b4"
   integrity sha512-ZXmmfiwtCLfz8WKZyYUuuHf3dMYEjg8NrjHMb0JqHVHVOSkzp3cW2/XG1fP3tRhqEqSzMwzzRQGtAPbs4Cncxg==
@@ -9756,15 +9724,6 @@ terser-webpack-plugin@^1.4.1:
     terser "^4.1.2"
     webpack-sources "^1.4.0"
     worker-farm "^1.7.0"
-
-terser@^4.0.0:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-4.1.2.tgz#b2656c8a506f7ce805a3f300a2ff48db022fa391"
-  integrity sha512-jvNoEQSPXJdssFwqPSgWjsOrb+ELoE+ILpHPKXC83tIxOlh2U75F1KuB2luLD/3a6/7K3Vw5pDn+hvu0C4AzSw==
-  dependencies:
-    commander "^2.20.0"
-    source-map "~0.6.1"
-    source-map-support "~0.5.12"
 
 terser@^4.1.2:
   version "4.1.3"
@@ -10402,18 +10361,10 @@ webpack-log@^2.0.0:
     ansi-colors "^3.0.0"
     uuid "^3.3.2"
 
-webpack-sources@^1.1.0, webpack-sources@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.3.0.tgz#2a28dcb9f1f45fe960d8f1493252b5ee6530fa85"
-  integrity sha512-OiVgSrbGu7NEnEvQJJgdSFPl2qWKkWq5lHMhgiToIiN9w34EBnjYzSYs+VbL5KoYiLNtFFa7BZIKxRED3I32pA==
-  dependencies:
-    source-list-map "^2.0.0"
-    source-map "~0.6.1"
-
-webpack-sources@^1.4.0, webpack-sources@^1.4.1:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.4.3.tgz#eedd8ec0b928fbf1cbfe994e22d2d890f330a933"
-  integrity sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ==
+webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.4.1.tgz#b91b2c5b1c4e890ff50d1d35b7fa3657040da1da"
+  integrity sha512-XSz38193PTo/1csJabKaV4b53uRVotlMgqJXm3s3eje0Bu6gQTxYDqpD38CmQfDBA+gN+QqaGjasuC8I/7eW3Q==
   dependencies:
     source-list-map "^2.0.0"
     source-map "~0.6.1"

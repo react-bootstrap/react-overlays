@@ -92,7 +92,7 @@
 ## [v0.7.0]
 > 2017-04-22
 
-- **Chore:** Update depedencies to avoid React deprecation warnings
+- **Chore:** Update dependencies to avoid React deprecation warnings
 - **Chore:** Use function refs ([#159])
 
 [v0.7.0]: https://github.com/react-bootstrap/react-overlays/compare/v0.6.12...v0.7.0
