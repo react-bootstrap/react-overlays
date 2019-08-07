@@ -174,18 +174,18 @@ function Dropdown({
 
   const maybeFocusFirst = useEventCallback(() => {
     const type = lastSourceEvent.current;
-    let focusStype = focusFirstItemOnShow;
+    let focusType = focusFirstItemOnShow;
 
-    if (focusStype == null) {
-      focusStype =
+    if (focusType == null) {
+      focusType =
         menuRef.current && matches(menuRef.current, '[role=menu]')
           ? 'keyboard'
           : false;
     }
 
     if (
-      focusStype === false ||
-      (focusStype === 'keyboard' && !/^key.+$/.test(type))
+      focusType === false ||
+      (focusType === 'keyboard' && !/^key.+$/.test(type))
     ) {
       return;
     }

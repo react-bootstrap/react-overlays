@@ -30,7 +30,6 @@ export function useDropdownMenu(options = {}) {
 
   const handleClose = e => {
     if (!context.toggle) return;
-
     context.toggle(false, e);
   };
 
@@ -38,8 +37,8 @@ export function useDropdownMenu(options = {}) {
 
   let placement = alignEnd ? 'bottom-end' : 'bottom-start';
   if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
-  if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
-  if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
+  else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
+  else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
 
   const popper = usePopper(toggleElement, menuElement, {
     placement,
