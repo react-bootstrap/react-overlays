@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useRef, useEffect } from 'react';
 import { Popper } from 'react-popper';
-import { usePrevious } from '@restart/hooks';
+import usePrevious from '@restart/hooks/usePrevious';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 
 import useRootClose from './useRootClose';
