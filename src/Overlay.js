@@ -3,9 +3,9 @@ import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Popper, placements } from 'react-popper';
+import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useRootClose from './useRootClose';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
-import { useMergedRefs } from './utils/mergeRefs';
 
 /**
  * Built on top of `Popper.js`, the overlay component is
