@@ -1,6 +1,7 @@
 # react-overlays
 
 [![Travis Build Status][build-badge]][build]
+[![codecov][codecov-badge]][codecov]
 
 Utilities for creating robust overlay components
 
@@ -22,3 +23,5 @@ Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patche
 
 [build-badge]: https://travis-ci.org/react-bootstrap/react-overlays.svg?branch=master
 [build]: https://travis-ci.org/react-bootstrap/react-overlays
+[codecov]: https://codecov.io/gh/react-bootstrap/react-overlays
+[codecov-badge]: https://codecov.io/gh/react-bootstrap/react-overlays/branch/master/graph/badge.svg

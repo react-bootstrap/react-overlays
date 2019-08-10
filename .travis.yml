@@ -23,7 +23,7 @@ install:
   - yarn bootstrap
 
 after_script:
-  - node_modules/.bin/codecov
+  - yarn run codecov
 
 branches:
   only:
