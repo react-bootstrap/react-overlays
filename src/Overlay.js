@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
 import PopperJS from 'popper.js';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
-
-import useRootClose from './useRootClose';
+import useMergedRefs from '@restart/hooks/useMergedRefs';
 import usePopper from './usePopper';
+import useRootClose from './useRootClose';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
-import { useMergedRefs } from './utils/mergeRefs';
 
 /**
  * Built on top of `Popper.js`, the overlay component is

@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import { useContext, useRef } from 'react';
-
 import useCallbackRef from '@restart/hooks/useCallbackRef';
+import DropdownContext from './DropdownContext';
 import usePopper from './usePopper';
 import useRootClose from './useRootClose';
-import DropdownContext from './DropdownContext';
 
 export function useDropdownMenu(options = {}) {
   const context = useContext(DropdownContext);
