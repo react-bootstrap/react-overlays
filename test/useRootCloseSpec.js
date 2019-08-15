@@ -59,7 +59,7 @@ describe('RootCloseWrapper', () => {
       simulant.fire(document.getElementById('my-div'), eventName);
 
       expect(spy).to.not.have.been.called;
-      console.log(eventName);
+
       simulant.fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;

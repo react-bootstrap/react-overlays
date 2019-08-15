@@ -21,6 +21,8 @@
     "Modal": false,
     "Overlay": false,
     "Dropdown": false,
+    "useDropdownMenu": false,
+    "useDropdownToggle": false,
     "Portal": false,
     "useRootClose": false,
     "css": false,

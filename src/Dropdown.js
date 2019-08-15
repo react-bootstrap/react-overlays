@@ -1,11 +1,13 @@
 import matches from 'dom-helpers/query/matches';
 import qsa from 'dom-helpers/query/querySelectorAll';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { uncontrollable } from 'uncontrollable';
+import { useUncontrolled } from 'uncontrollable';
+import usePrevious from '@restart/hooks/usePrevious';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
+import useForceUpdate from '@restart/hooks/useForceUpdate';
+import useEventCallback from '@restart/hooks/useEventCallback';
 
-import * as Popper from 'react-popper';
 import DropdownContext from './DropdownContext';
 import DropdownMenu from './DropdownMenu';
 import DropdownToggle from './DropdownToggle';
@@ -59,6 +61,11 @@ const propTypes = {
   show: PropTypes.bool,
 
   /**
+   * Sets the initial show position of the Dropdown.
+   */
+  defaultShow: PropTypes.bool,
+
+  /**
    * A callback fired when the Dropdown wishes to change visibility. Called with the requested
    * `show` value, the DOM event, and the source that fired it: `'click'`,`'keydown'`,`'rootClose'`, or `'select'`.
    *
@@ -88,82 +95,130 @@ const defaultProps = {
  * - `Dropdown.Toggle` generally a button that triggers the menu opening
  * - `Dropdown.Menu` The overlaid, menu, positioned to the toggle with PopperJs
  */
-class Dropdown extends React.Component {
-  static displayName = 'ReactOverlaysDropdown';
+function Dropdown({
+  drop,
+  alignEnd,
+  defaultShow,
+  show: rawShow,
+  onToggle: rawOnToggle,
+  itemSelector,
+  focusFirstItemOnShow,
+  children,
+}) {
+  const forceUpdate = useForceUpdate();
+  const { show, onToggle } = useUncontrolled(
+    { defaultShow, show: rawShow, onToggle: rawOnToggle },
+    { show: 'onToggle' },
+  );
 
-  static getDerivedStateFromProps({ drop, alignEnd, show }, prevState) {
-    const lastShow = prevState.context.show;
-    return {
-      lastShow,
-      context: {
-        ...prevState.context,
-        drop,
-        show,
-        alignEnd,
-      },
-    };
+  const [toggleElement, setToggle] = useCallbackRef();
+
+  // We use normal refs instead of useCallbackRef in order to populate the
+  // the value as quickly as possible, otherwise the effect to focus the element
+  // may run before the state value is set
+  const menuRef = useRef();
+  const menuElement = menuRef.current;
+
+  const setMenu = useCallback(
+    ref => {
+      menuRef.current = ref;
+      // ensure that a menu set triggers an update for consumers
+      forceUpdate();
+    },
+    [forceUpdate],
+  );
+
+  const lastShow = usePrevious(show);
+  const lastSourceEvent = useRef(null);
+  const focusInDropdown = useRef(false);
+
+  const toggle = useCallback(
+    event => {
+      onToggle(!show, event);
+    },
+    [onToggle, show],
+  );
+
+  const context = useMemo(
+    () => ({
+      toggle,
+      drop,
+      show,
+      alignEnd,
+      menuElement,
+      toggleElement,
+      setMenu,
+      setToggle,
+    }),
+    [
+      toggle,
+      drop,
+      show,
+      alignEnd,
+      menuElement,
+      toggleElement,
+      setMenu,
+      setToggle,
+    ],
+  );
+
+  if (menuElement && lastShow && !show) {
+    focusInDropdown.current = menuElement.contains(document.activeElement);
   }
 
-  constructor(...args) {
-    super(...args);
-
-    this._focusInDropdown = false;
-
-    this.menu = null;
-
-    this.state = {
-      context: {
-        close: this.handleClose,
-        toggle: this.handleClick,
-        menuRef: r => {
-          this.menu = r;
-        },
-        toggleRef: r => {
-          const toggleNode = r && ReactDOM.findDOMNode(r);
-          this.setState(({ context }) => ({
-            context: { ...context, toggleNode },
-          }));
-        },
-      },
-    };
-  }
-
-  componentDidUpdate(prevProps) {
-    const { show } = this.props;
-    const prevOpen = prevProps.show;
-
-    if (show && !prevOpen) {
-      this.maybeFocusFirst();
+  const focusToggle = useEventCallback(() => {
+    if (toggleElement && toggleElement.focus) {
+      toggleElement.focus();
     }
-    this._lastSourceEvent = null;
+  });
 
-    if (!show && prevOpen) {
-      // if focus hasn't already moved from the menu let's return it
-      // to the toggle
-      if (this._focusInDropdown) {
-        this._focusInDropdown = false;
-        this.focus();
-      }
+  const maybeFocusFirst = useEventCallback(() => {
+    const type = lastSourceEvent.current;
+    let focusType = focusFirstItemOnShow;
+
+    if (focusType == null) {
+      focusType =
+        menuRef.current && matches(menuRef.current, '[role=menu]')
+          ? 'keyboard'
+          : false;
     }
-  }
 
-  getNextFocusedChild(current, offset) {
-    if (!this.menu) return null;
+    if (
+      focusType === false ||
+      (focusType === 'keyboard' && !/^key.+$/.test(type))
+    ) {
+      return;
+    }
 
-    const { itemSelector } = this.props;
-    let items = qsa(this.menu, itemSelector);
+    let first = qsa(menuRef.current, itemSelector)[0];
+    if (first && first.focus) first.focus();
+  });
+
+  useEffect(() => {
+    if (show) maybeFocusFirst();
+    else if (focusInDropdown.current) {
+      focusInDropdown.current = false;
+      focusToggle();
+    }
+    // only `show` should be changing
+  }, [show, focusInDropdown, focusToggle, maybeFocusFirst]);
+
+  useEffect(() => {
+    lastSourceEvent.current = null;
+  });
+
+  const getNextFocusedChild = (current, offset) => {
+    if (!menuRef.current) return null;
+
+    let items = qsa(menuRef.current, itemSelector);
 
     let index = items.indexOf(current) + offset;
     index = Math.max(0, Math.min(index, items.length));
 
     return items[index];
-  }
-
-  handleClick = event => {
-    this.toggleOpen(event);
   };
 
-  handleKeyDown = event => {
+  const handleKeyDown = event => {
     const { key, target } = event;
 
     // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400
@@ -172,16 +227,18 @@ class Dropdown extends React.Component {
     if (
       isInput &&
       (key === ' ' ||
-        (key !== 'Escape' && this.menu && this.menu.contains(target)))
+        (key !== 'Escape' &&
+          menuRef.current &&
+          menuRef.current.contains(target)))
     ) {
       return;
     }
 
-    this._lastSourceEvent = event.type;
+    lastSourceEvent.current = event.type;
 
     switch (key) {
       case 'ArrowUp': {
-        let next = this.getNextFocusedChild(target, -1);
+        let next = getNextFocusedChild(target, -1);
         if (next && next.focus) next.focus();
         event.preventDefault();
 
@@ -189,82 +246,34 @@ class Dropdown extends React.Component {
       }
       case 'ArrowDown':
         event.preventDefault();
-        if (!this.props.show) {
-          this.toggleOpen(event);
+        if (!show) {
+          toggle(event);
         } else {
-          let next = this.getNextFocusedChild(target, 1);
+          let next = getNextFocusedChild(target, 1);
           if (next && next.focus) next.focus();
         }
         return;
       case 'Escape':
       case 'Tab':
-        this.props.onToggle(false, event);
+        onToggle(false, event);
         break;
       default:
     }
   };
 
-  hasMenuRole() {
-    return this.menu && matches(this.menu, '[role=menu]');
-  }
-
-  focus() {
-    const { toggleNode } = this.state.context;
-    if (toggleNode && toggleNode.focus) {
-      toggleNode.focus();
-    }
-  }
-
-  maybeFocusFirst() {
-    const type = this._lastSourceEvent;
-    let { focusFirstItemOnShow } = this.props;
-    if (focusFirstItemOnShow == null) {
-      focusFirstItemOnShow = this.hasMenuRole() ? 'keyboard' : false;
-    }
-
-    if (
-      focusFirstItemOnShow === false ||
-      (focusFirstItemOnShow === 'keyboard' && !/^key.+$/.test(type))
-    ) {
-      return;
-    }
-
-    const { itemSelector } = this.props;
-    let first = qsa(this.menu, itemSelector)[0];
-    if (first && first.focus) first.focus();
-  }
-
-  toggleOpen(event) {
-    let show = !this.props.show;
-
-    this.props.onToggle(show, event);
-  }
-
-  render() {
-    const { children, ...props } = this.props;
-
-    delete props.onToggle;
-
-    if (this.menu && this.state.lastShow && !this.props.show) {
-      this._focusInDropdown = this.menu.contains(document.activeElement);
-    }
-
-    return (
-      <DropdownContext.Provider value={this.state.context}>
-        <Popper.Manager>
-          {children({ props: { onKeyDown: this.handleKeyDown } })}
-        </Popper.Manager>
-      </DropdownContext.Provider>
-    );
-  }
+  return (
+    <DropdownContext.Provider value={context}>
+      {children({ props: { onKeyDown: handleKeyDown } })}
+    </DropdownContext.Provider>
+  );
 }
+
+Dropdown.displayName = 'ReactOverlaysDropdown';
 
 Dropdown.propTypes = propTypes;
 Dropdown.defaultProps = defaultProps;
 
-const UncontrolledDropdown = uncontrollable(Dropdown, { show: 'onToggle' });
+Dropdown.Menu = DropdownMenu;
+Dropdown.Toggle = DropdownToggle;
 
-UncontrolledDropdown.Menu = DropdownMenu;
-UncontrolledDropdown.Toggle = DropdownToggle;
-
-export default UncontrolledDropdown;
+export default Dropdown;

@@ -1,11 +1,96 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useRef, useEffect } from 'react';
-import { Popper } from 'react-popper';
-import usePrevious from '@restart/hooks/usePrevious';
-import useMergedRefs from '@restart/hooks/useMergedRefs';
-
-import useRootClose from './useRootClose';
+import { useContext, useRef } from 'react';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
 import DropdownContext from './DropdownContext';
+import usePopper from './usePopper';
+import useRootClose from './useRootClose';
+
+export function useDropdownMenu(options = {}) {
+  const context = useContext(DropdownContext);
+
+  const [arrowElement, attachArrowRef] = useCallbackRef();
+
+  const hasShownRef = useRef(false);
+
+  const {
+    flip,
+    rootCloseEvent,
+    popperConfig = {},
+    usePopper: shouldUsePopper = true,
+  } = options;
+
+  const show = context.show == null ? options.show : context.show;
+  const alignEnd =
+    context.alignEnd == null ? options.alignEnd : context.alignEnd;
+
+  if (show && !hasShownRef.current) {
+    hasShownRef.current = true;
+  }
+
+  const handleClose = e => {
+    if (!context.toggle) return;
+    context.toggle(false, e);
+  };
+
+  const { drop, setMenu, menuElement, toggleElement } = context;
+
+  let placement = alignEnd ? 'bottom-end' : 'bottom-start';
+  if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
+  else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
+  else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
+
+  const popper = usePopper(toggleElement, menuElement, {
+    placement,
+    enabled: !!(shouldUsePopper && show),
+    eventsEnabled: !!show,
+    modifiers: {
+      flip: { enabled: !!flip },
+      arrow: {
+        ...(popperConfig.modifiers && popperConfig.modifiers.arrow),
+        enabled: !!arrowElement,
+        element: arrowElement,
+      },
+      ...popperConfig.modifiers,
+    },
+  });
+
+  let menu = null;
+
+  const menuProps = {
+    ref: setMenu,
+    'aria-labelledby': toggleElement && toggleElement.id,
+  };
+  const childArgs = {
+    show,
+    alignEnd,
+    hasShown: hasShownRef.current,
+    close: handleClose,
+  };
+
+  if (!shouldUsePopper) {
+    menu = { ...childArgs, props: menuProps };
+  } else {
+    menu = {
+      ...popper,
+      ...childArgs,
+      props: {
+        ...menuProps,
+        style: popper.styles,
+      },
+      arrowProps: {
+        ref: attachArrowRef,
+        style: popper.arrowStyles,
+      },
+    };
+  }
+
+  useRootClose(menuElement, handleClose, {
+    clickTrigger: rootCloseEvent,
+    disabled: !(menu && show),
+  });
+
+  return menu;
+}
 
 const propTypes = {
   /**
@@ -70,104 +155,10 @@ const defaultProps = {
   usePopper: true,
 };
 
-function DropdownMenu(props) {
-  const prevProps = usePrevious(props);
-  const context = useContext(DropdownContext);
+function DropdownMenu({ children, ...options }) {
+  const args = useDropdownMenu(options);
 
-  const ref = useRef(null);
-  const popperIsInitialized = useRef(false);
-  const scheduleUpdateRef = useRef(null);
-
-  const {
-    flip,
-    usePopper,
-    rootCloseEvent,
-    children,
-    popperConfig = {},
-  } = props;
-
-  const show = context.show == null ? props.show : context.show;
-  const alignEnd = context.alignEnd == null ? props.alignEnd : context.alignEnd;
-
-  // If, to the best we can tell, this update won't reinitialize popper,
-  // manually schedule an update
-  const shouldUpdatePopper =
-    popperIsInitialized.current && !prevProps.show && show;
-
-  if (show && usePopper && !popperIsInitialized.current) {
-    popperIsInitialized.current = true;
-  }
-
-  const handleClose = e => {
-    if (!context.toggle) return;
-
-    context.toggle(false, e);
-  };
-
-  useEffect(() => {
-    if (shouldUpdatePopper && scheduleUpdateRef.current) {
-      scheduleUpdateRef.current();
-    }
-  });
-
-  const { drop, menuRef, toggleNode } = context;
-  const mergedRef = useMergedRefs(menuRef, ref);
-
-  let placement = alignEnd ? 'bottom-end' : 'bottom-start';
-  if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
-  if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
-  if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
-
-  let menu = null;
-
-  const menuProps = {
-    ref: mergedRef,
-    'aria-labelledby': toggleNode && toggleNode.id,
-  };
-  const childArgs = {
-    show,
-    alignEnd,
-    close: handleClose,
-  };
-
-  if (!usePopper) {
-    menu = children({ ...childArgs, props: menuProps });
-  } else if (popperIsInitialized.current || show) {
-    // Add it this way, so it doesn't override someones usage
-    // with react-poppers <Reference>
-    if (toggleNode) popperConfig.referenceElement = toggleNode;
-
-    menu = (
-      <Popper
-        {...popperConfig}
-        innerRef={mergedRef}
-        placement={placement}
-        eventsEnabled={!!show}
-        modifiers={{
-          flip: { enabled: !!flip },
-          ...popperConfig.modifiers,
-        }}
-      >
-        {/* eslint-disable-next-line no-shadow */}
-        {({ ref, style, ...popper }) => {
-          scheduleUpdateRef.current = popper.scheduleUpdate;
-
-          return children({
-            ...popper,
-            ...childArgs,
-            props: { ...menuProps, ref, style },
-          });
-        }}
-      </Popper>
-    );
-  }
-
-  useRootClose(ref, handleClose, {
-    clickTrigger: rootCloseEvent,
-    disabled: !(menu && show),
-  });
-
-  return menu;
+  return args.hasShown ? children(args) : null;
 }
 
 DropdownMenu.displayName = 'ReactOverlaysDropdownMenu';

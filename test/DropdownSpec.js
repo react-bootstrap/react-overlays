@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
+import simulant from 'simulant';
 
 import Dropdown from '../src/Dropdown';
 
@@ -78,7 +79,9 @@ describe('<Dropdown>', () => {
       args.alignEnd.should.equal(true);
     });
 
-    mount(<SimpleDropdown alignEnd usePopper={false} menuSpy={renderSpy} />);
+    mount(
+      <SimpleDropdown show alignEnd usePopper={false} menuSpy={renderSpy} />,
+    );
 
     renderSpy.should.have.been.called;
   });
@@ -90,9 +93,10 @@ describe('<Dropdown>', () => {
     const wrapper = mount(<SimpleDropdown />);
 
     wrapper.assertNone('.show');
+    wrapper.assertNone('ReactOverlaysDropdownMenu > *');
     wrapper.assertSingle('button[aria-expanded=false]').simulate('click');
 
-    wrapper.assertSingle('ReactOverlaysDropdown[show=true]');
+    wrapper.assertSingle('ReactOverlaysDropdown');
 
     wrapper.assertSingle('div[data-show=true]');
     wrapper.assertSingle('button[aria-expanded=true]').simulate('click');
@@ -106,13 +110,12 @@ describe('<Dropdown>', () => {
     const closeSpy = sinon.spy();
     const wrapper = mount(<SimpleDropdown onToggle={closeSpy} />);
 
-    act(() => {
-      wrapper.find('.toggle').simulate('click');
-    });
+    wrapper.find('.toggle').simulate('click');
 
-    // Use native events as the click doesn't have to be in the React portion
-    const event = new MouseEvent('click');
-    document.dispatchEvent(event);
+    act(() => {
+      // Use native events as the click doesn't have to be in the React portion
+      simulant.fire(document.body, 'click');
+    });
 
     closeSpy.should.have.been.calledTwice;
     closeSpy.lastCall.args[0].should.equal(false);
@@ -152,10 +155,10 @@ describe('<Dropdown>', () => {
 
     wrapper.find('.toggle').simulate('keyDown', { key: 'ArrowDown' });
 
-    wrapper.assertSingle('ReactOverlaysDropdown[show=true]');
+    wrapper.assertSingle('ReactOverlaysDropdownMenu div');
   });
 
-  it('closes when item is clickes', () => {
+  it('closes when item is clicked', () => {
     const onToggle = sinon.spy();
 
     const wrapper = mount(<SimpleDropdown />).setProps({

@@ -17,10 +17,12 @@
     "emotion-server": "^10.0.14",
     "gatsby": "^2.13.23",
     "gatsby-link": "^2.2.2",
+    "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-catch-links": "^2.1.2",
     "gatsby-plugin-css-literal-loader": "^1.0.0",
     "gatsby-plugin-emotion": "^4.1.2",
     "gatsby-plugin-less": "^2.1.2",
+    "gatsby-plugin-sass": "^2.0.11",
     "gatsby-plugin-sorted-assets": "^1.0.2",
     "gatsby-remark-prismjs": "^3.3.3",
     "gatsby-source-filesystem": "2.1.5",
@@ -38,7 +40,10 @@
   "dependencies": {
     "@emotion/core": "^10.0.14",
     "@emotion/styled": "^10.0.14",
+    "astroturf": "^0.9.5",
+    "bootstrap": "^4.3.1",
     "gatsby-transformer-documentationjs": "^4.1.2",
+    "node-sass": "^4.12.0",
     "react-docgen": "^4.1.1"
   }
 }
