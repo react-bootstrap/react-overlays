@@ -1,19 +1,17 @@
+import styled from 'astroturf';
+import { graphql } from 'gatsby';
 /* eslint-disable react/no-danger */
 import PropTypes from 'prop-types';
 import React from 'react';
-import { graphql } from 'gatsby';
-
-import styled from 'astroturf';
-import PropTable from '../components/PropTable';
-import Playground from '../components/Playground';
 import HookDocumentation from '../components/HookDocumentation';
-
+import Playground from '../components/Playground';
+import PropTable from '../components/PropTable';
+import DropdownSource from '../examples/Dropdown';
 import ModalExample from '../examples/Modal';
 import OverlaySource from '../examples/Overlay';
-import DropdownSource from '../examples/Dropdown';
 import PortalSource from '../examples/Portal';
-import useRootCloseSource from '../examples/useRootClose';
 import TransitionSource from '../examples/Transition';
+import useRootCloseSource from '../examples/useRootClose';
 
 const NavList = styled('ul')`
   composes: nav d-flex flex-column from global;
@@ -54,6 +52,7 @@ class Example extends React.Component {
       DropdownMenuMetadata,
       DropdownToggleMetadata,
       useRootCloseDocs,
+      usePopperDocs,
     } = this.props.data;
 
     return (
@@ -83,6 +82,11 @@ class Example extends React.Component {
             <li className="nav-item">
               <a className="nav-link" href="#root-close-wrapper">
                 useRootClose
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#use-popper">
+                usePopper
               </a>
             </li>
             <li className="nav-item">
@@ -166,6 +170,18 @@ class Example extends React.Component {
           </section>
           <section>
             <h2 className="page-header">
+              <Anchor id="use-popper">usePopper</Anchor>
+            </h2>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: usePopperDocs.description.childMarkdownRemark.html,
+              }}
+            />
+
+            <HookDocumentation docs={usePopperDocs} />
+          </section>
+          <section>
+            <h2 className="page-header">
               <Anchor>Transitions</Anchor>
             </h2>
             <p>
@@ -221,6 +237,9 @@ export const pageQuery = graphql`
       ...PropTable_metadata
     }
     useRootCloseDocs: documentationJs(name: { eq: "useRootClose" }) {
+      ...HookDocumentation_docs
+    }
+    usePopperDocs: documentationJs(name: { eq: "usePopper" }) {
       ...HookDocumentation_docs
     }
   }

@@ -3,7 +3,6 @@ const styles = {
   tooltip: {
     position: 'absolute',
     padding: '0 5px'
-    // transition: 'all 0.2s ease-out 0.2s',
   },
 
   inner: {
@@ -45,7 +44,7 @@ const placementStyles = {
     },
 
     arrow: {
-      left: 0,
+      left: '0',
       borderWidth: '5px 5px 5px 0',
       borderColor: 'transparent #232323 transparent transparent'
     }
@@ -90,7 +89,7 @@ function reducer(state, [type, payload]) {
     case 'placement':
       return { show: !!payload, placement: payload };
     case 'hide':
-      return { ...state, show: false };
+      return { ...state, show: false, placement: null };
     default:
       return state;
   }
@@ -135,16 +134,16 @@ function OverlayExample() {
               {...props}
               style={{
                 ...styles.tooltip,
-                ...placementStyle.tooltip,
-                ...props.style
+                ...props.style,
+                ...placementStyle.tooltip
               }}
             >
               <div
                 {...arrowProps}
                 style={{
                   ...styles.arrow,
-                  ...placementStyle.arrow,
-                  ...arrowProps.style
+                  ...arrowProps.style,
+                  ...placementStyle.arrow
                 }}
               />
               <div style={{ ...styles.inner }}>

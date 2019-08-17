@@ -75,7 +75,7 @@ class TransitionExample extends React.Component {
       <div className="transition-example">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary mr-3"
           onClick={this.toggleModal}
         >
           Show Animated Modal
