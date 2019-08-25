@@ -1,0 +1,20 @@
+name: Release New Version
+on:
+  push:
+    branches:
+      - master
+jobs:
+  release:
+    steps:
+      - name: Checking out Repository
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Dependencies
+        run: yarn bootstrap
+      - name: Build Production Files
+        run: yarn build
+      - name: Release To NPM and GitHub
+        run: npx semantic-release
