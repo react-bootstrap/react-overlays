@@ -1,6 +1,7 @@
 # react-overlays
 
-[![Travis Build Status][build-badge]][build]
+[![test status][test-badge]][actions]
+[![build status][build-badge]][actions]
 [![codecov][codecov-badge]][codecov]
 
 Utilities for creating robust overlay components
@@ -21,7 +22,8 @@ If you are looking for more complete overlays, modals, or tooltips--something yo
 
 Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patches accompany a `patch` bump.
 
-[build-badge]: https://travis-ci.org/react-bootstrap/react-overlays.svg?branch=master
-[build]: https://travis-ci.org/react-bootstrap/react-overlays
+[actions]: https://github.com/react-bootstrap/react-overlays/actions
+[build-badge]: https://github.com/react-bootstrap/react-overlays/workflows/build/badge.svg 
 [codecov]: https://codecov.io/gh/react-bootstrap/react-overlays
 [codecov-badge]: https://codecov.io/gh/react-bootstrap/react-overlays/branch/master/graph/badge.svg
+[test-badge]: https://github.com/react-bootstrap/react-overlays/workflows/test/badge.svg
