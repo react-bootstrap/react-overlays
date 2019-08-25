@@ -23,11 +23,11 @@
   ],
   "scripts": {
     "bootstrap": "yarn && yarn --cwd www",
-    "build": "rimraf lib && yarn build:cjs && yarn build:esm && yarn build:pick",
+    "build": "rimraf lib && yarn build:cjs && yarn build:esm && yarn build:pick && yarn build:docs",
     "build:cjs": "babel src -d lib/cjs",
     "build:esm": "babel src -d lib/esm --env-name esm",
     "build:pick": "cherry-pick ../src --cjs-dir=cjs --esm-dir=esm --cwd=lib",
-    "deploy-docs": "yarn --cwd www build --prefix-paths && gh-pages -d www/public",
+    "build:docs": "yarn --cwd www build --prefix-paths",
     "lint": "eslint 'www/*.js' www/src src test '*.js'",
     "prepublishOnly": "yarn build",
     "release": "rollout",
@@ -52,8 +52,16 @@
     "trailingComma": "all"
   },
   "release": {
-    "publishDir": "lib",
-    "conventionalCommits": false
+    "plugins": [
+      "@semantic-release/commit-analyzer", 
+      "@semantic-release/release-notes-generator", 
+      "@semantic-release/changelog",
+      "@semantic-release/npm", 
+      "@semantic-release/github",
+      ["@qiwi/semantic-release-gh-pages-plugin", {
+        "src": "www/public"
+      }]
+    ]
   },
   "dependencies": {
     "@babel/runtime": "^7.4.5",
@@ -78,7 +86,13 @@
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
     "@emotion/core": "^10.0.15",
+    "@qiwi/semantic-release-gh-pages-plugin": "^1.10.5",
     "@react-bootstrap/eslint-config": "^1.2.0",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/commit-analyzer": "^6.3.0",
+    "@semantic-release/github": "^5.4.3",
+    "@semantic-release/npm": "^5.1.15",
+    "@semantic-release/release-notes-generator": "^7.3.0",
     "babel-eslint": "^10.0.2",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-istanbul": "^5.2.0",
@@ -96,7 +110,6 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
-    "gh-pages": "^2.1.0",
     "husky": "^3.0.2",
     "jquery": "^3.4.1",
     "karma": "^4.2.0",
