@@ -28,7 +28,7 @@
     "build:esm": "babel src -d lib/esm --env-name esm",
     "build:pick": "cherry-pick ../src --cjs-dir=cjs --esm-dir=esm --cwd=lib",
     "build:docs": "yarn --cwd www build --prefix-paths",
-    "lint": "eslint 'www/*.js' www/src src test '*.js'",
+    "lint": "eslint www/*.js www/src src test *.js",
     "prepublishOnly": "yarn build",
     "release": "rollout",
     "start": "yarn --cwd www start",
