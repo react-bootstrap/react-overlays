@@ -40,7 +40,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.16",
     "@emotion/styled": "^10.0.14",
-    "astroturf": "^0.9.5",
+    "astroturf": "^0.9.14",
     "bootstrap": "^4.3.1",
     "gatsby-transformer-documentationjs": "^4.1.2",
     "node-sass": "^4.12.0",
