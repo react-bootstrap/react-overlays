@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.16",
-    "@emotion/styled": "^10.0.14",
+    "@emotion/styled": "^10.0.15",
     "astroturf": "^0.9.14",
     "bootstrap": "^4.3.1",
     "gatsby-transformer-documentationjs": "^4.1.2",
