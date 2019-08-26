@@ -2,28 +2,45 @@ name: Run Tests
 on: [push]
 jobs:
   test:
+    name: Run Testing Suite
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        browser: [ChromeHeadless]
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-    - name: Checking out Repository
-      uses: actions/checkout@v1
-    - name: Setup Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - name: Install Chrome (macOS)
-      if: matrix.os == 'macOS-latest'
-      run: brew cask install google-chrome
-    - name: Install Dependencies
-      run: yarn bootstrap
-    - name: Run Tests
-      run: yarn test
-      env:
-        BROWSER: ${{ matrix.browser }}
-    - name: Upload Test Coverage to codecov
-      # Only upload it a single time
-      if: matrix.os == 'ubuntu-latest'
-      run: yarn run codecov
+      - name: Checking out Repository
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Chrome (macOS)
+        if: matrix.os == 'macOS-latest'
+        run: brew cask install google-chrome
+      - name: Install Dependencies
+        run: yarn bootstrap
+      - name: Run Tests
+        run: yarn test
+        env:
+          BROWSER: ChromeHeadless
+  upload:
+    name: Upload Code Coverage Report
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out Repository
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Dependencies
+        run: yarn bootstrap
+      - name: Run Tests
+        run: yarn test
+        env:
+          BROWSER: ChromeHeadless
+      - name: Upload Test Coverage to CodeCov
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
