@@ -23,23 +23,6 @@ jobs:
         run: yarn test
         env:
           BROWSER: ChromeHeadless
-  upload:
-    name: Upload Code Coverage Report
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out Repository
-        uses: actions/checkout@v1
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: Install Dependencies
-        run: yarn bootstrap
-      - name: Run Tests
-        run: yarn test
-        env:
-          BROWSER: ChromeHeadless
       - name: Upload Test Coverage to CodeCov
         uses: codecov/codecov-action@v1.0.2
         with:
