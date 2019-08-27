@@ -52,19 +52,8 @@
     "trailingComma": "all"
   },
   "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/github",
-      [
-        "@qiwi/semantic-release-gh-pages-plugin",
-        {
-          "src": "www/public"
-        }
-      ]
-    ]
+    "publishDir": "lib",
+    "conventionalCommits": false
   },
   "dependencies": {
     "@babel/runtime": "^7.4.5",
