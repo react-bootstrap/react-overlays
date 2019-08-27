@@ -6,27 +6,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-    steps:
-      - name: Checking out Repository
-        uses: actions/checkout@v1
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: Install Chrome (macOS)
-        if: matrix.os == 'macOS-latest'
-        run: brew cask install google-chrome
-      - name: Install Dependencies
-        run: yarn bootstrap
-      - name: Run Tests
-        run: yarn test
-        env:
-          BROWSER: ChromeHeadless
-  upload:
-    name: Upload Test Results
-    # CodeCov can only run on linux containers
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest, windows-latest]
     steps:
       - name: Checking out Repository
         uses: actions/checkout@v1
