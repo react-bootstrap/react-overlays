@@ -24,4 +24,4 @@ Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patche
 [actions]: https://github.com/react-bootstrap/react-overlays/actions
 [codecov]: https://codecov.io/gh/react-bootstrap/react-overlays
 [codecov-badge]: https://codecov.io/gh/react-bootstrap/react-overlays/branch/master/graph/badge.svg
-[test-badge]: https://github.com/react-bootstrap/react-overlays/workflows/test/badge.svg
+[test-badge]: https://github.com/react-bootstrap/react-overlays/workflows/Run%20Tests/badge.svg
