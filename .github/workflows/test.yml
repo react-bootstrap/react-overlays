@@ -1,0 +1,28 @@
+name: Run Tests
+on: [push]
+jobs:
+  test:
+    name: Run Testing Suite
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checking out Repository
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Dependencies
+        run: yarn bootstrap
+      - name: Run Tests
+        run: yarn test
+        env:
+          BROWSER: ChromeHeadless
+      - name: Upload Test Coverage to CodeCov
+        # Container actions can only run on linux containers, which is sad.
+        if: matrix.os == 'ubuntu-latest'
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
