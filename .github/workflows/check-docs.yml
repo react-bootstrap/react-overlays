@@ -10,8 +10,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
       - name: Install Dependencies
-        working-directory: www
-        run: yarn install
+        run: yarn bootstrap
       - name: Build Production Files
         working-directory: www
         run: yarn build
