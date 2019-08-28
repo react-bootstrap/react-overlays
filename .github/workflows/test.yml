@@ -21,6 +21,8 @@ jobs:
         env:
           BROWSER: ChromeHeadless
       - name: Upload Test Coverage to CodeCov
+        # Container actions can only run on linux containers, which is sad.
+        if: matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
