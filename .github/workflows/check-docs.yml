@@ -1,0 +1,17 @@
+name: Check Docs
+on: [push]
+jobs:
+  build_docs:
+    name: Build Doc Production Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out Repository
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+      - name: Install Dependencies
+        working-directory: www
+        run: yarn install
+      - name: Build Production Files
+        working-directory: www
+        run: yarn build
