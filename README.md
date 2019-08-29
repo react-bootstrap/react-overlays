@@ -1,7 +1,7 @@
 # react-overlays
 
 [![test status][test-badge]][actions]
-[![check docs status][check-docs-badge]][actions]
+[![deploy docs status][deploy-docs-badge]][actions]
 [![codecov][codecov-badge]][codecov]
 
 Utilities for creating robust overlay components
@@ -26,4 +26,4 @@ Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patche
 [codecov]: https://codecov.io/gh/react-bootstrap/react-overlays
 [codecov-badge]: https://codecov.io/gh/react-bootstrap/react-overlays/branch/master/graph/badge.svg
 [test-badge]: https://github.com/react-bootstrap/react-overlays/workflows/Run%20Tests/badge.svg
-[check-docs-badge]: https://github.com/react-bootstrap/react-overlays/workflows/Check%20Docs/badge.svg
+[deploy-docs-badge]: https://github.com/react-bootstrap/react-overlays/workflows/Deploy%20Documentation/badge.svg

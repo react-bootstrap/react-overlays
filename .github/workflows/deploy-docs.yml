@@ -1,8 +1,11 @@
-name: Check Docs
-on: [push]
+name: Deploy Documentation
+on:
+  push:
+    branches:
+    - master
 jobs:
   build_docs:
-    name: Build Doc Production Files
+    name: Build and Deploy Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Checking out Repository
@@ -11,6 +14,5 @@ jobs:
         uses: actions/setup-node@v1
       - name: Install Dependencies
         run: yarn bootstrap
-      - name: Build Production Files
-        working-directory: www
-        run: yarn build
+      - name: Build and Deploy Production Files
+        run: yarn deploy-docs
