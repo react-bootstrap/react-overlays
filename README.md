@@ -3,6 +3,7 @@
 [![test status][test-badge]][actions]
 [![deploy docs status][deploy-docs-badge]][actions]
 [![codecov][codecov-badge]][codecov]
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e86fa356-4480-409e-9c24-52ea0660a923/deploy-status)](https://app.netlify.com/sites/react-overlays/deploys)
 
 Utilities for creating robust overlay components
 
