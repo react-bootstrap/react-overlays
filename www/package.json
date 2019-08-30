@@ -15,7 +15,7 @@
     "dom-helpers": "^3.4.0",
     "emotion": "^10.0.14",
     "emotion-server": "^10.0.14",
-    "gatsby": "^2.14.4",
+    "gatsby": "^2.14.6",
     "gatsby-link": "^2.2.10",
     "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-catch-links": "^2.1.5",
