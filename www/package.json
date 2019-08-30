@@ -10,18 +10,18 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/standalone": "^7.5.4",
+    "@babel/standalone": "^7.5.5",
     "buble": "^0.19.8",
     "dom-helpers": "^3.4.0",
     "emotion": "^10.0.14",
     "emotion-server": "^10.0.14",
-    "gatsby": "^2.14.0",
-    "gatsby-link": "^2.2.9",
+    "gatsby": "^2.14.6",
+    "gatsby-link": "^2.2.10",
     "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-catch-links": "^2.1.5",
     "gatsby-plugin-css-literal-loader": "^1.0.0",
-    "gatsby-plugin-emotion": "^4.1.2",
-    "gatsby-plugin-less": "^3.0.2",
+    "gatsby-plugin-emotion": "^4.1.4",
+    "gatsby-plugin-less": "^3.0.4",
     "gatsby-plugin-sass": "^2.1.12",
     "gatsby-plugin-sorted-assets": "^1.0.2",
     "gatsby-remark-prismjs": "^3.3.9",
@@ -35,14 +35,14 @@
     "react-dom": "^16.9.0",
     "react-emotion": "^10.0.0",
     "react-live": "^2.2.0",
-    "react-transition-group": "^4.2.1"
+    "react-transition-group": "^4.2.2"
   },
   "dependencies": {
     "@emotion/core": "^10.0.16",
     "@emotion/styled": "^10.0.15",
     "astroturf": "^0.9.14",
     "bootstrap": "^4.3.1",
-    "gatsby-transformer-documentationjs": "^4.1.2",
+    "gatsby-transformer-documentationjs": "^4.1.7",
     "node-sass": "^4.12.0",
     "react-docgen": "^4.1.1"
   }
