@@ -1,0 +1,20 @@
+name: Deploy Documentation
+on:
+  push:
+    branches:
+    - master
+jobs:
+  build_docs:
+    name: Build and Deploy Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out Repository
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+      - name: Install Dependencies
+        run: yarn bootstrap
+      - name: Build and Deploy Production Files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn deploy-docs
