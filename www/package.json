@@ -42,7 +42,7 @@
     "@emotion/styled": "^10.0.15",
     "astroturf": "^0.9.14",
     "bootstrap": "^4.3.1",
-    "gatsby-transformer-documentationjs": "^4.1.7",
+    "gatsby-transformer-documentationjs": "^4.1.8",
     "node-sass": "^4.12.0",
     "react-docgen": "^4.1.1"
   }
