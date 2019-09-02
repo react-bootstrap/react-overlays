@@ -38,7 +38,7 @@
     "react-transition-group": "^4.2.2"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.16",
+    "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.15",
     "astroturf": "^0.9.14",
     "bootstrap": "^4.3.1",
