@@ -112,6 +112,17 @@ describe('ModalManager', () => {
       expect(app.getAttribute('aria-hidden')).to.equal('true');
     });
 
+    it('should not add aria-hidden to modal', () => {
+      let modal = new Modal({});
+      let mount = document.createElement('div');
+
+      modal.dialog = mount;
+      container.appendChild(mount);
+      manager.add(modal, container);
+
+      expect(modal.dialog.getAttribute('aria-hidden')).to.equal(null);
+    });
+
     it('should add aria-hidden to previous modals', () => {
       let modalA = new Modal({});
       let mount = document.createElement('div');
