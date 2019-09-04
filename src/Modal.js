@@ -2,7 +2,7 @@
 
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/contains';
-import canUseDom from 'dom-helpers/canUseDom';
+import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -260,7 +260,7 @@ class Modal extends React.Component {
   }
 
   getSnapshotBeforeUpdate(prevProps) {
-    if (canUseDom && !prevProps.show && this.props.show) {
+    if (canUseDOM && !prevProps.show && this.props.show) {
       this.lastFocus = activeElement();
     }
     return null;
