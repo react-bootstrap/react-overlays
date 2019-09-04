@@ -1,5 +1,5 @@
-import css from 'dom-helpers/style';
-import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
+import css from 'dom-helpers/css';
+import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
 import ModalContainer from '../src/Modal';
 import ModalManager from '../src/ModalManager';

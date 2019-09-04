@@ -1,4 +1,4 @@
-import isWindow from 'dom-helpers/query/isWindow';
+import isWindow from 'dom-helpers/isWindow';
 import ownerDocument from 'dom-helpers/ownerDocument';
 
 function isBody(node) {

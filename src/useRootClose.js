@@ -1,5 +1,5 @@
-import contains from 'dom-helpers/query/contains';
-import listen from 'dom-helpers/events/listen';
+import contains from 'dom-helpers/contains';
+import listen from 'dom-helpers/listen';
 import { useCallback, useEffect, useRef } from 'react';
 
 import useEventCallback from '@restart/hooks/useEventCallback';

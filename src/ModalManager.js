@@ -1,6 +1,7 @@
-import classes from 'dom-helpers/class';
-import css from 'dom-helpers/style';
-import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
+import addClass from 'dom-helpers/addClass';
+import removeClass from 'dom-helpers/removeClass';
+import css from 'dom-helpers/css';
+import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
 import isOverflowing from './utils/isOverflowing';
 import {
@@ -109,7 +110,7 @@ class ModalManager {
       this.setContainerStyle(data, container);
     }
 
-    data.classes.forEach(classes.addClass.bind(null, container));
+    data.classes.forEach(addClass.bind(null, container));
 
     this.containers.push(container);
     this.data.push(data);
@@ -135,7 +136,7 @@ class ModalManager {
     // if that was the last modal in a container,
     // clean up the container
     if (data.modals.length === 0) {
-      data.classes.forEach(classes.removeClass.bind(null, container));
+      data.classes.forEach(removeClass.bind(null, container));
 
       if (this.handleContainerOverflow) {
         this.removeContainerStyle(data, container);

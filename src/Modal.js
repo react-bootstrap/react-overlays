@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 
 import activeElement from 'dom-helpers/activeElement';
-import contains from 'dom-helpers/query/contains';
-import canUseDom from 'dom-helpers/util/inDOM';
-import listen from 'dom-helpers/events/listen';
+import contains from 'dom-helpers/contains';
+import canUseDom from 'dom-helpers/canUseDom';
+import listen from 'dom-helpers/listen';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
