@@ -1351,7 +1351,7 @@
   resolved "https://registry.yarnpkg.com/@babel/preset-stage-0/-/preset-stage-0-7.0.0.tgz#999aaec79ee8f0a763042c68c06539c97c6e0646"
   integrity sha512-FBMd0IiARPtH5aaOFUVki6evHiJQiY0pFy7fizyRF7dtwc+el3nwpzvhb9qBNzceG1OIJModG1xpE0DDFjPXwA==
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.3", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.5":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
   integrity sha512-28QvEGyQyNkB0/m2B4FU7IEZGK2NUrcMtT6BZEFALTguLk+AUT6ofsHtPk5QyjAdUkpMJ+/Em+quwz4HOt30AQ==
@@ -2296,10 +2296,10 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astroturf@^0.9.14:
-  version "0.9.14"
-  resolved "https://registry.yarnpkg.com/astroturf/-/astroturf-0.9.14.tgz#f9398bfb13ba030b36bbe95f998e8264daf7425c"
-  integrity sha512-Rs3PqVgAMNL8WeAJ6fDmcwf1ClHpWrSNnqVm9rPbcSED3SLov+RzPE7Vgwj6vudc54pen72gWcvrnjWku4/5bg==
+astroturf@^0.9.16:
+  version "0.9.16"
+  resolved "https://registry.yarnpkg.com/astroturf/-/astroturf-0.9.16.tgz#e35d4370c2da1e34ba71ee23999cdcececb5e912"
+  integrity sha512-iq95Nwq59DcRwMhOeGhtTzKXHcU24+vHEi2IYYGtXgXX4nSgJGdNwBWW/SVJ2JoQhv/uSuhib2B6y7uAfvA3sg==
   dependencies:
     "@babel/code-frame" "^7.5.5"
     "@babel/core" "^7.5.5"
