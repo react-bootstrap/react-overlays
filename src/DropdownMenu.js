@@ -20,8 +20,7 @@ export function useDropdownMenu(options = {}) {
   } = options;
 
   const show = context.show == null ? options.show : context.show;
-  const alignEnd =
-    context.alignEnd == null ? options.alignEnd : context.alignEnd;
+  const align = context.align == null ? options.align : context.align;
 
   if (show && !hasShownRef.current) {
     hasShownRef.current = true;
@@ -34,10 +33,11 @@ export function useDropdownMenu(options = {}) {
 
   const { drop, setMenu, menuElement, toggleElement } = context;
 
-  let placement = alignEnd ? 'bottom-end' : 'bottom-start';
-  if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
-  else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
-  else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
+  let placement = 'bottom';
+  if (drop === 'up') placement = 'top';
+  else if (drop === 'right' || drop === 'left') placement = drop;
+  if (align === 'right') placement += `-end`;
+  else placement += `-${align || 'start'}`;
 
   const popper = usePopper(toggleElement, menuElement, {
     placement,
@@ -62,7 +62,7 @@ export function useDropdownMenu(options = {}) {
   };
   const childArgs = {
     show,
-    alignEnd,
+    align,
     hasShown: hasShownRef.current,
     close: handleClose,
   };
@@ -99,7 +99,7 @@ const propTypes = {
    *
    * @type {Function ({
    *   show: boolean,
-   *   alignEnd: boolean,
+   *   align: string,
    *   close: (?SyntheticEvent) => void,
    *   placement: Placement,
    *   outOfBoundaries: ?boolean,
@@ -129,7 +129,7 @@ const propTypes = {
    * Generally this is provided by the parent `Dropdown` component,
    * but may also be specified as a prop directly.
    */
-  alignEnd: PropTypes.bool,
+  align: PropTypes.string,
 
   /**
    * Enables the Popper.js `flip` modifier, allowing the Dropdown to

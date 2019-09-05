@@ -38,12 +38,12 @@ const Toggle = ({ id, children }) => {
   );
 };
 
-const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
+const DropdownButton = ({ show, onToggle, drop, align, title, role }) => (
   <Dropdown
     show={show}
     onToggle={onToggle}
     drop={drop}
-    alignEnd={alignEnd}
+    align={align}
     itemSelector="button:not(:disabled)"
   >
     {({ props }) => (
@@ -70,7 +70,8 @@ class DropdownExample extends React.Component {
           onToggle={nextShow => this.setState({ show: nextShow })}
           title={`${show ? 'Close' : 'Open'} Dropdown`}
         />
-        <DropdownButton alignEnd title="Align right" />
+        <DropdownButton align="center" title="Align center" />
+        <DropdownButton align="right" title="Align right" />
 
         <DropdownButton drop="up" title="Drop up" />
         <DropdownButton role="menu" title="Role 'menu'" />

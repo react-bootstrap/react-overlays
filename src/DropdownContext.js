@@ -5,7 +5,7 @@ const DropdownContext = React.createContext({
   toggleRef() {},
   onToggle() {},
   toggleNode: undefined,
-  alignEnd: null,
+  align: null,
   show: null,
   drop: null,
 });

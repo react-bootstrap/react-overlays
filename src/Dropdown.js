@@ -49,9 +49,9 @@ const propTypes = {
   itemSelector: PropTypes.string.isRequired,
 
   /**
-   * Align the menu to the 'end' side of the placement side of the Dropdown toggle. The default placement is `top-start` or `bottom-start`.
+   * Align the menu to the 'center' or 'end' side of the placement side of the Dropdown toggle. The default placement is `top-start` or `bottom-start`.
    */
-  alignEnd: PropTypes.bool,
+  align: PropTypes.string,
 
   /**
    * Whether or not the Dropdown is visible.
@@ -97,7 +97,7 @@ const defaultProps = {
  */
 function Dropdown({
   drop,
-  alignEnd,
+  align,
   defaultShow,
   show: rawShow,
   onToggle: rawOnToggle,
@@ -144,22 +144,13 @@ function Dropdown({
       toggle,
       drop,
       show,
-      alignEnd,
+      align,
       menuElement,
       toggleElement,
       setMenu,
       setToggle,
     }),
-    [
-      toggle,
-      drop,
-      show,
-      alignEnd,
-      menuElement,
-      toggleElement,
-      setMenu,
-      setToggle,
-    ],
+    [toggle, drop, show, align, menuElement, toggleElement, setMenu, setToggle],
   );
 
   if (menuElement && lastShow && !show) {
