@@ -4073,14 +4073,10 @@ csso@^3.5.0:
   dependencies:
     css-tree "1.0.0-alpha.29"
 
-csstype@^2.2.0:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.6.tgz#2ae1db2319642d8b80a668d2d025c6196071e788"
-
-csstype@^2.5.7:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.3.tgz#b701e5968245bf9b08d54ac83d00b624e622a9fa"
-  integrity sha512-rINUZXOkcBmoHWEyu7JdHu5JMzkGRoMX4ov9830WNgxf5UYxcBUO0QTKAqeJ5EZfSdlrcJYkC8WwfVW7JYi4yg==
+csstype@^2.2.0, csstype@^2.5.7, csstype@^2.6.6:
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.6.tgz#c34f8226a94bbb10c32cc0d714afdf942291fc41"
+  integrity sha512-RpFbQGUE74iyPgvr46U9t1xoQBM8T4BL8SxrN66Le2xYAPSaDJJKeztV3awugusb3g3G9iL8StmkBBXhcbbXhg==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -4477,6 +4473,14 @@ dom-helpers@^3.2.1, dom-helpers@^3.4.0:
   integrity sha512-LnuPJ+dwqKDIyotW1VzmOZ5TONUN7CwkCR5hrgawTUbkBGYdeoNLZo6nNfGkCrjtE1nXXaj7iMMpDa8/d9WoIA==
   dependencies:
     "@babel/runtime" "^7.1.2"
+
+dom-helpers@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-5.0.1.tgz#f419eec93625c0b56e5d7f7aa326238e26a81aee"
+  integrity sha512-+FoTEtqaob4YbwCFawRcvRvMeHe6ggNLRnHyh8EpTkcZHErX9PLZFBjT6kRHzzZNiRUDXbIHslJg7li45TM5Cw==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    csstype "^2.6.6"
 
 dom-iterator@^1.0.0:
   version "1.0.0"
