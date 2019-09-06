@@ -4474,10 +4474,10 @@ dom-helpers@^3.2.1, dom-helpers@^3.4.0:
   dependencies:
     "@babel/runtime" "^7.1.2"
 
-dom-helpers@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-5.0.1.tgz#f419eec93625c0b56e5d7f7aa326238e26a81aee"
-  integrity sha512-+FoTEtqaob4YbwCFawRcvRvMeHe6ggNLRnHyh8EpTkcZHErX9PLZFBjT6kRHzzZNiRUDXbIHslJg7li45TM5Cw==
+dom-helpers@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-5.1.0.tgz#57a726de04abcc2a8bbfe664b3e21c584bde514e"
+  integrity sha512-zRRYDhpiKuAJHasOqCm7lBnsd22nrM4+OYI4ASWCxen+ocTMl7BIAKgGag97TlLiTl6rrau5aPe1VGUm9jQBng==
   dependencies:
     "@babel/runtime" "^7.5.5"
     csstype "^2.6.6"
