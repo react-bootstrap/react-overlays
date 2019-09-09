@@ -12,7 +12,7 @@ import * as Babel from '@babel/standalone';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import * as ReactOverlays from 'react-overlays';
 
-import getOffset from 'dom-helpers/query/offset';
+import getOffset from 'dom-helpers/offset';
 
 import { css as emotionCss } from '@emotion/core';
 import emotionStyled from '@emotion/styled';
