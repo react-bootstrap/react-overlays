@@ -5109,12 +5109,12 @@ gatsby-plugin-css-literal-loader@^1.0.0:
   dependencies:
     css-literal-loader "^0.5.2"
 
-gatsby-plugin-emotion@^4.1.5:
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-emotion/-/gatsby-plugin-emotion-4.1.5.tgz#dd89a9123b264964321839ed347df442dd20ca99"
-  integrity sha512-QMNAPN6kYSsvmr87k6scN8JIocHJ5QERtl8iYO1Y6vs6j6exFx3gx/RxxqHjbOLlXEaO7bPAk7btaQ/ySPuOag==
+gatsby-plugin-emotion@^4.1.6:
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-emotion/-/gatsby-plugin-emotion-4.1.6.tgz#a1a4b0d6be51448897ea3e456c23154cc50ce795"
+  integrity sha512-3iOPkDG54ByYYyO7/M/3pFuCbt6IAtANznVNHb2GdqCVqgx71u2MD9uQlUrs6FdMAmlsVWLxr/b3kUTHO//jJA==
   dependencies:
-    "@babel/runtime" "^7.5.5"
+    "@babel/runtime" "^7.6.0"
     "@emotion/babel-preset-css-prop" "^10.0.17"
 
 gatsby-plugin-less@^3.0.5:
