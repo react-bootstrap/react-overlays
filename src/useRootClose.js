@@ -3,7 +3,6 @@ import listen from 'dom-helpers/listen';
 import { useCallback, useEffect, useRef } from 'react';
 
 import useEventCallback from '@restart/hooks/useEventCallback';
-import warning from 'warning';
 
 const escapeKeyCode = 27;
 const noop = () => {};
@@ -39,11 +38,14 @@ function useRootClose(
   const handleMouseCapture = useCallback(
     e => {
       const currentTarget = ref && ('current' in ref ? ref.current : ref);
-      warning(
-        !!currentTarget,
-        'RootClose captured a close event but does not have a ref to compare it to. ' +
-          'useRootClose(), should be passed a ref that resolves to a DOM node',
-      );
+      if (process.env.NODE_ENV !== 'production') {
+        if (!currentTarget) {
+          console.error(
+            'RootClose captured a close event but does not have a ref to compare it to. ' +
+              'useRootClose(), should be passed a ref that resolves to a DOM node',
+          );
+        }
+      }
 
       preventMouseRootCloseRef.current =
         !currentTarget ||
