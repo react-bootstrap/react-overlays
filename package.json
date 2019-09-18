@@ -1,9 +1,15 @@
 {
   "name": "react-overlays",
-  "version": "2.0.0-0",
+  "version": "2.0.0-1",
   "description": "Utilities for creating robust overlay components",
-  "author": "Jason Quense <monastic.panic@gmail.com>",
-  "repository": "react-bootstrap/react-overlays",
+  "author": {
+    "name": "Jason Quense",
+    "email": "monastic.panic@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-bootstrap/react-overlays.git"
+  },
   "license": "MIT",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -122,5 +128,11 @@
     "webpack": "^4.39.1",
     "webpack-atoms": "^11.0.4",
     "webpack-cli": "^3.3.6"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/react-bootstrap/react-overlays/issues"
+  },
+  "readme": "ERROR: No README data found!",
+  "homepage": "https://github.com/react-bootstrap/react-overlays#readme",
+  "_id": "react-overlays@2.0.0-0"
 }
