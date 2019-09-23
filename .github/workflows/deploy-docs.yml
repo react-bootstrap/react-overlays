@@ -2,7 +2,7 @@ name: Deploy Documentation
 on:
   push:
     branches:
-    - master
+      - master
 jobs:
   build_docs:
     name: Build and Deploy Documentation
@@ -15,6 +15,9 @@ jobs:
       - name: Install Dependencies
         run: yarn bootstrap
       - name: Build and Deploy Production Files
+        uses: JamesIves/github-pages-deploy-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn deploy-docs
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: www/public
+          BUILD_SCRIPT: yarn build-docs
