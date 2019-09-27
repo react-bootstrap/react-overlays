@@ -919,10 +919,10 @@
   resolved "https://registry.yarnpkg.com/@babel/preset-stage-0/-/preset-stage-0-7.0.0.tgz#999aaec79ee8f0a763042c68c06539c97c6e0646"
   integrity sha512-FBMd0IiARPtH5aaOFUVki6evHiJQiY0pFy7fizyRF7dtwc+el3nwpzvhb9qBNzceG1OIJModG1xpE0DDFjPXwA==
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.0.tgz#4fc1d642a9fd0299754e8b5de62c631cf5568205"
-  integrity sha512-89eSBLJsxNxOERC0Op4vd+0Bqm6wRMqMbFtV3i0/fbaWw/mJ8Q3eBvgX0G4SyrOOLCtbu98HspF8o09MRT+KzQ==
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0", "@babel/runtime@^7.6.2":
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.2.tgz#c3d6e41b304ef10dcf13777a33e7694ec4a9a6dd"
+  integrity sha512-EXxN64agfUqqIGeEjI5dL5z0Sw0ZwWo1mLTi4mQowCZ42O59b7DRpZAnTC6OqdF28wMBMFKNb/4uFGrVaigSpg==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -5225,12 +5225,12 @@ gatsby-telemetry@^1.1.26:
     stack-utils "1.0.2"
     uuid "3.3.3"
 
-gatsby-transformer-documentationjs@^4.1.11:
-  version "4.1.11"
-  resolved "https://registry.yarnpkg.com/gatsby-transformer-documentationjs/-/gatsby-transformer-documentationjs-4.1.11.tgz#870ce41ca84fe0dd775b5f4ddaeb524d559c8ba7"
-  integrity sha512-CIbhvnFfgKuhZKb1OAR9j7jzOztpcfY3O8s9Pn7tbTQrxWJdsjyEJRr88bXQwTDmmUAK8SP6cnVWfpx9Pl/8RQ==
+gatsby-transformer-documentationjs@^4.1.13:
+  version "4.1.13"
+  resolved "https://registry.yarnpkg.com/gatsby-transformer-documentationjs/-/gatsby-transformer-documentationjs-4.1.13.tgz#3b2365d9e2830dd3bed9e577b8abd5213c1c0989"
+  integrity sha512-kAns05kowQu7hSk9kscFFWOSOXJfDecphyYOsCxZQg20NxbU07HTjfRrg7pJEuSLG0qtnPhCQ4pLkhFwpsn9HA==
   dependencies:
-    "@babel/runtime" "^7.6.0"
+    "@babel/runtime" "^7.6.2"
     documentation "^12.1.2"
     prismjs "^1.17.1"
 
