@@ -74,13 +74,18 @@ describe('<Dropdown>', () => {
     buttonNode.getAttribute('id').should.be.ok;
   });
 
-  it('forwards alignEnd to menu', () => {
+  it('forwards align to menu', () => {
     const renderSpy = sinon.spy(args => {
-      args.alignEnd.should.equal(true);
+      args.align.should.equal('center');
     });
 
     mount(
-      <SimpleDropdown show alignEnd usePopper={false} menuSpy={renderSpy} />,
+      <SimpleDropdown
+        show
+        align="center"
+        usePopper={false}
+        menuSpy={renderSpy}
+      />,
     );
 
     renderSpy.should.have.been.called;
