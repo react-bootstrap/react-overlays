@@ -175,7 +175,7 @@ function renderParam(definition) {
   }
 
   return (
-    <li>
+    <li key={definition.name}>
       <div className="prism-code">
         {titleElement}{' '}
         <SignatureElement
@@ -193,8 +193,8 @@ function renderParam(definition) {
 function HookDocumentation({ docs }) {
   const { params } = docs;
   return (
-    <section>
-      <h3>Parameters</h3>
+    <section className="mb-4">
+      <h3 className="h4">Parameters</h3>
       <ul>{params.map(renderParam)}</ul>
     </section>
   );

@@ -1,81 +1,84 @@
 // Styles mostly from Bootstrap.
-const styles = {
-  tooltip: {
-    position: 'absolute',
-    padding: '0 5px'
-  },
 
-  inner: {
-    padding: '3px 8px',
-    color: '#fff',
-    textAlign: 'center',
-    borderRadius: 3,
-    backgroundColor: '#000',
-    opacity: 0.75
-  },
+const Tooltip = styled('div')`
+  position: absolute;
+  padding: 0 5px;
 
-  arrow: {
-    position: 'absolute',
-    width: 0,
-    height: 0,
-    borderStyle: 'solid',
-    opacity: 0.75
-  }
-};
-
-const placementStyles = {
-  left: {
-    tooltip: {
-      marginLeft: -3,
-      padding: '0 5px'
-    },
-
-    arrow: {
-      right: 0,
-      borderWidth: '5px 0 5px 5px',
-      borderColor: 'transparent transparent transparent #000'
+  ${p => {
+    switch (p.placement) {
+      case 'left':
+        return css`
+          margin-left: -3px;
+          padding: 0 5px;
+        `;
+      case 'right':
+        return css`
+          margin-left: 3px;
+          padding: 0 5px;
+        `;
+      case 'top':
+        return css`
+          margin-top: -3px;
+          padding: 5px 0;
+        `;
+      case 'bottom':
+        return css`
+          margin-bottom: 3px;
+          padding: 5px 0;
+        `;
+      default:
+        return '';
     }
-  },
+  }}
+`;
 
-  right: {
-    tooltip: {
-      marginLeft: 3,
-      padding: '0 5px'
-    },
+const Arrow = styled('div')`
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  opacity: 0.75;
 
-    arrow: {
-      left: '0',
-      borderWidth: '5px 5px 5px 0',
-      borderColor: 'transparent #232323 transparent transparent'
+  ${p => {
+    switch (p.placement) {
+      case 'left':
+        return css`
+          right: 0;
+          border-width: 5px 0 5px 5px;
+          border-color: transparent transparent transparent #000;
+        `;
+      case 'right':
+        return css`
+          left: 0;
+          border-width: 5px 5px 5px 0;
+          border-color: transparent #232323 transparent transparent;
+        `;
+      case 'top':
+        return css`
+          bottom: 0;
+          border-width: 5px 5px 0;
+          border-color: #232323 transparent transparent transparent;
+        `;
+      case 'bottom':
+        return css`
+          top: 0;
+          border-width: 0 5px 5px;
+          border-color: transparent transparent #232323 transparent;
+        `;
+      default:
+        return '';
     }
-  },
+  }}
+`;
 
-  top: {
-    tooltip: {
-      marginTop: -3,
-      padding: '5px 0'
-    },
-
-    arrow: {
-      bottom: 0,
-      borderWidth: '5px 5px 0',
-      borderColor: '#232323 transparent transparent transparent'
-    }
-  },
-
-  bottom: {
-    tooltip: {
-      marginBottom: 3,
-      padding: '5px 0'
-    },
-
-    arrow: {
-      top: 0,
-      borderWidth: '0 5px 5px',
-      borderColor: 'transparent transparent #232323 transparent'
-    }
-  }
-};
+const Body = styled('div')`
+  padding: 3px 8px;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #000;
+  opacity: 0.75;
+`;
 
 const PLACEMENTS = ['left', 'top', 'right', 'bottom'];
 
@@ -127,31 +130,18 @@ function OverlayExample() {
         container={containerRef}
         target={triggerRef}
       >
-        {({ props, arrowProps, placement }) => {
-          const placementStyle = placementStyles[placement];
-          return (
-            <div
-              {...props}
-              style={{
-                ...styles.tooltip,
-                ...props.style,
-                ...placementStyle.tooltip
-              }}
-            >
-              <div
-                {...arrowProps}
-                style={{
-                  ...styles.arrow,
-                  ...arrowProps.style,
-                  ...placementStyle.arrow
-                }}
-              />
-              <div style={{ ...styles.inner }}>
-                I&rsquo;m placed to the <strong>{placement}</strong>
-              </div>
-            </div>
-          );
-        }}
+        {({ props, arrowProps, placement }) => (
+          <Tooltip {...props} placement={placement}>
+            <Arrow
+              {...arrowProps}
+              placement={placement}
+              style={arrowProps.style}
+            />
+            <Body>
+              I&rsquo;m placed to the <strong>{placement}</strong>
+            </Body>
+          </Tooltip>
+        )}
       </Overlay>
     </div>
   );
