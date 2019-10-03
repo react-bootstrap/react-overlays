@@ -54,4 +54,10 @@ exports.createPages = ({ actions }) => {
     isPermanent: true,
     redirectInBrowser: true,
   });
+  createRedirect({
+    fromPath: `/react-overlays`,
+    toPath: `/react-overlays/modal`,
+    isPermanent: true,
+    redirectInBrowser: true,
+  });
 };
