@@ -1,4 +1,4 @@
-const MenuContainer = styled('div')`
+const MenuContainer = styled('ButtonToolbar')`
   display: ${p => (p.show ? 'flex' : 'none')};
   min-width: 150px;
   position: absolute;
@@ -55,28 +55,28 @@ const DropdownButton = ({ show, onToggle, drop, alignEnd, title, role }) => (
   </Dropdown>
 );
 
-class DropdownExample extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = { show: false };
+const ButtonToolbar = styled('div')`
+  & > * + * {
+    margin-left: 12px;
   }
+`;
 
-  render() {
-    const { show } = this.state;
-    return (
-      <div className="dropdown-example">
-        <DropdownButton
-          show={show}
-          onToggle={nextShow => this.setState({ show: nextShow })}
-          title={`${show ? 'Close' : 'Open'} Dropdown`}
-        />
-        <DropdownButton alignEnd title="Align right" />
+function DropdownExample() {
+  const [show, setShow] = useState(false);
 
-        <DropdownButton drop="up" title="Drop up" />
-        <DropdownButton role="menu" title="Role 'menu'" />
-      </div>
-    );
-  }
+  return (
+    <ButtonToolbar className="dropdown-example">
+      <DropdownButton
+        show={show}
+        onToggle={nextShow => setShow(nextShow)}
+        title={`${show ? 'Close' : 'Open'} Dropdown`}
+      />
+      <DropdownButton alignEnd title="Align right" />
+
+      <DropdownButton drop="up" title="Drop up" />
+      <DropdownButton role="menu" title="Role 'menu'" />
+    </ButtonToolbar>
+  );
 }
 
 render(<DropdownExample />);

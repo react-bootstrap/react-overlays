@@ -44,3 +44,14 @@ exports.onCreateBabelConfig = ({ actions }) => {
     },
   });
 };
+
+exports.createPages = ({ actions }) => {
+  const { createRedirect } = actions;
+
+  createRedirect({
+    fromPath: `/`,
+    toPath: `/modal`,
+    isPermanent: true,
+    redirectInBrowser: true,
+  });
+};
