@@ -32,7 +32,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-docgen-annotation-resolver": "^2.0.0",
-    "react-dom": "^16.10.1",
+    "react-dom": "^16.10.2",
     "react-emotion": "^10.0.0",
     "react-live": "^2.2.1",
     "react-transition-group": "^4.3.0",
