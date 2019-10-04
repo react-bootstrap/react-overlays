@@ -39,7 +39,7 @@
     "sass": "^1.23.0"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.17",
+    "@emotion/core": "^10.0.20",
     "@emotion/styled": "^10.0.17",
     "astroturf": "^0.9.18",
     "bootstrap": "^4.3.1",
