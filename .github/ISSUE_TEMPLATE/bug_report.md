@@ -36,7 +36,7 @@ If applicable, add screenshots to help explain your problem.
 
 - Operating System: [e.g. macOS]
 - Browser, Version [e.g. Chrome 74]
-- React-Bootstrap Version [e.g. 1.0.0-beta.8]
+- react-overlays Version [e.g. 2.0.0]
 
 ## Additional context
 
