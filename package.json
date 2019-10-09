@@ -86,7 +86,6 @@
     "sinon": "^2.4.1",
     "sinon-chai": "^2.13.0",
     "style-loader": "^0.18.2",
-    "teaspoon": "^6.6.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   }
