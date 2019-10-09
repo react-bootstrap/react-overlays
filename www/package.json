@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/standalone": "^7.6.2",
+    "@babel/standalone": "^7.6.3",
     "buble": "^0.19.8",
     "dom-helpers": "^5.1.0",
     "emotion": "^10.0.17",
