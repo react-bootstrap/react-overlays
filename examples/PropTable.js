@@ -32,7 +32,7 @@ class PropTable extends React.Component {
     metadata: PropTypes.object
   }
 
-  componentWillMount(){
+  UNSAFE_componentWillMount(){
     let componentData = this.props.metadata[this.props.component] || {};
     this.propsData = getPropsData(componentData, this.props.metadata);
   }

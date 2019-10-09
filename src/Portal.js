@@ -34,7 +34,7 @@ class Portal extends React.Component {
     this.forceUpdate(this.props.onRendered)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.container !== this.props.container) {
       this.setContainer(nextProps)
     }

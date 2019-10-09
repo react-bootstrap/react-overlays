@@ -34,12 +34,12 @@ describe('Position', function () {
 
   describe('position recalculation', function () {
     beforeEach(function () {
-      sinon.spy(Position.prototype, 'componentWillReceiveProps');
+      sinon.spy(Position.prototype, 'UNSAFE_componentWillReceiveProps');
       sinon.spy(Position.prototype, 'updatePosition');
     });
 
     afterEach(function () {
-      Position.prototype.componentWillReceiveProps.restore();
+      Position.prototype.UNSAFE_componentWillReceiveProps.restore();
       Position.prototype.updatePosition.restore();
     });
 
@@ -74,7 +74,7 @@ describe('Position', function () {
       const instance = ReactTestUtils.renderIntoDocument(<TargetChanger />);
 
       // Position calculates initial position.
-      expect(Position.prototype.componentWillReceiveProps)
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps)
         .to.have.not.been.called;
       expect(Position.prototype.updatePosition)
         .to.have.been.calledOnce;
@@ -82,7 +82,7 @@ describe('Position', function () {
       instance.setState({target: 'bar'});
 
       // Position receives new props and recalculates position.
-      expect(Position.prototype.componentWillReceiveProps)
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps)
         .to.have.been.calledOnce;
       expect(Position.prototype.updatePosition)
         .to.have.been.calledTwice;
@@ -90,7 +90,7 @@ describe('Position', function () {
       instance.setState({fakeProp: 1});
 
       // Position receives new props but should not recalculate position.
-      expect(Position.prototype.componentWillReceiveProps)
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps)
         .to.have.been.calledTwice;
       expect(Position.prototype.updatePosition)
         .to.have.been.calledTwice;
@@ -127,7 +127,7 @@ describe('Position', function () {
       const instance = ReactTestUtils.renderIntoDocument(<Target />);
 
       // Position calculates initial position.
-      expect(Position.prototype.componentWillReceiveProps)
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps)
         .to.have.not.been.called;
       expect(Position.prototype.updatePosition)
         .to.have.been.calledOnce;
@@ -135,7 +135,7 @@ describe('Position', function () {
       instance.setState({fakeProp: 1});
 
       // Position receives new props and position should be recalculated
-      expect(Position.prototype.componentWillReceiveProps)
+      expect(Position.prototype.UNSAFE_componentWillReceiveProps)
         .to.have.been.calledOnce;
       expect(Position.prototype.updatePosition)
         .to.have.been.calledTwice;
