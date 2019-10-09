@@ -32,10 +32,10 @@
     "testonly": "npm run tdd -- --single-run"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
+    "classnames": "^2.2.6",
     "dom-helpers": "^3.2.1",
-    "prop-types": "^15.5.10",
-    "prop-types-extra": "^1.0.1",
+    "prop-types": "^15.7.2",
+    "prop-types-extra": "^1.1.0",
     "react-transition-group": "^2.2.0",
     "warning": "^3.0.0"
   },
