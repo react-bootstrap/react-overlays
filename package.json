@@ -134,5 +134,6 @@
   },
   "readme": "ERROR: No README data found!",
   "homepage": "https://github.com/react-bootstrap/react-overlays#readme",
+  "sideEffects": false,
   "_id": "react-overlays@2.0.0-1"
 }
