@@ -41,6 +41,6 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v1.0.2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: 00d6e6b8-62d5-4887-8d32-3f32a1f42914
       - name: Build Project
         run: yarn build
