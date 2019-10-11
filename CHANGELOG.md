@@ -1,3 +1,19 @@
+# [2.1.0](https://github.com/react-bootstrap/react-overlays/compare/v2.0.0...v2.1.0) (2019-10-11)
+
+
+### Bug Fixes
+
+* **github:** correct name of bug report template ([30ab079](https://github.com/react-bootstrap/react-overlays/commit/30ab079))
+
+
+### Features
+
+* **github:** add issue templates ([4fc4e52](https://github.com/react-bootstrap/react-overlays/commit/4fc4e52))
+
+
+
+
+
 # [2.0.0](https://github.com/react-bootstrap/react-overlays/compare/v2.0.0-1...v2.0.0) (2019-10-03)
 
 > No changes from 2.0.0-1
