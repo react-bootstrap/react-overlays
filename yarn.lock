@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@4c/cli-core@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@4c/cli-core/-/cli-core-2.0.0.tgz#7afbbba241508fe9b790377154e4de3c775473a6"
-  integrity sha512-rHvu3m6NsE52MSVbs3bayZn+beAb5P/aoetYOf4gUJAJMRoHotckBFOr8n8NBANunpazzlnjN1WALIzW++tdQw==
+"@4c/cli-core@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@4c/cli-core/-/cli-core-2.0.1.tgz#8911805190ad5a87e03c8c12f16351d0086c1aa2"
+  integrity sha512-/EQN19rbbPTPz9y4GeayrHYKojAaXe+n8R2KuQBSjMSSYHRwWtogNxEcr4pKiAn4Aim4tZfozSlIHK1+4RTbjQ==
   dependencies:
     chalk "^2.4.2"
     execa "^2.0.4"
@@ -30,24 +30,24 @@
     cli-source-preview "^1.0.0"
     loader-utils "^1.1.0"
 
-"@4c/file-butler@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@4c/file-butler/-/file-butler-4.0.0.tgz#d351c29ca0cdde65d097104ea106776618160186"
-  integrity sha512-Z/vIlvCHk/JYX+9kUIdStlPLHBiHtkycRfx1vBfDR0RrVAnTcSig12XsA7j+TptuXKRl4H+SI05vQaMZfQB3ig==
+"@4c/file-butler@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@4c/file-butler/-/file-butler-4.0.1.tgz#8a97ed09d9778bd676c7d5fcf4e32f22df4dc49b"
+  integrity sha512-6ti0ovqoXkGOQ1R0hauwh+DW5tILp/VHjVa4CxKzE0E0vA547cBQ5RrlRUxtUIzTBE2CvJ1KZHfkqOPyByjDOQ==
   dependencies:
-    "@4c/cli-core" "^2.0.0"
+    "@4c/cli-core" "^2.0.1"
     cpy "^7.0.0"
     fs-extra "^8.1.0"
     globby "^10.0.1"
     yargs "^14.0.0"
 
-"@4c/rollout@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@4c/rollout/-/rollout-2.0.0.tgz#80fbb26da53d7248379eb1b6b805b79bb2b27508"
-  integrity sha512-vTTN0lo6fpnJ5rFeqPeTGurhkRGp6XJGS4juXn6wTld5Gl/kBbTn5l2UTVtS/DDuYzGLn8QID/5GE/tD/f7v2A==
+"@4c/rollout@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@4c/rollout/-/rollout-2.0.1.tgz#d8bddce9ffaa1e9e55d5d7cafa8da79f91d600ab"
+  integrity sha512-d8CBPiWIHKyCLLmoDW0GwEhkzv16KhvZaP+iU282rZ5J1Y8qytAyugsl7AdBjiBh45y7M3pilcmhlyhFf3rBcA==
   dependencies:
-    "@4c/cli-core" "^2.0.0"
-    "@4c/file-butler" "^4.0.0"
+    "@4c/cli-core" "^2.0.1"
+    "@4c/file-butler" "^4.0.1"
     chalk "^2.4.2"
     common-tags "^1.8.0"
     conventional-changelog "^3.0.6"
@@ -10561,10 +10561,10 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.39.1:
-  version "4.41.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.41.0.tgz#db6a254bde671769f7c14e90a1a55e73602fc70b"
-  integrity sha512-yNV98U4r7wX1VJAj5kyMsu36T8RPPQntcb5fJLOsMz/pt/WrKC0Vp1bAlqPLkA1LegSwQwf6P+kAbyhRKVQ72g==
+webpack@^4.41.1:
+  version "4.41.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.41.1.tgz#5388dd3047d680d5d382a84249fd4750e87372fd"
+  integrity sha512-ak7u4tUu/U63sCVxA571IuPZO/Q0pZ9cEXKg+R/woxkDzVovq57uB6L2Hlg/pC8LCU+TWpvtcYwsstivQwMJmw==
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"
