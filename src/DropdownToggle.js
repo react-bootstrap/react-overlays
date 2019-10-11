@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
-
 import DropdownContext from './DropdownContext';
 
 /**
@@ -39,7 +38,7 @@ const propTypes = {
 };
 
 function DropdownToggle({ children }) {
-  const [props, { show, toggle }] = useDropdownToggle(DropdownContext);
+  const [props, { show, toggle }] = useDropdownToggle();
 
   return children({
     show,
