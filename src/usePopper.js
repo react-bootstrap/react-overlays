@@ -1,6 +1,5 @@
 import PopperJS from 'popper.js';
-
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const initialPopperStyles = {
   position: 'absolute',
@@ -72,7 +71,7 @@ export default function usePopper(
   }, [eventsEnabled]);
 
   useEffect(() => {
-    if (!enabled || referenceElement === null || popperElement === null) {
+    if (!enabled || referenceElement == null || popperElement == null) {
       return undefined;
     }
 
