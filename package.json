@@ -57,9 +57,11 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
+  "publishConfig": {
+    "directory": "lib"
+  },
   "release": {
-    "publishDir": "lib",
-    "conventionalCommits": false
+    "conventionalCommits": true
   },
   "dependencies": {
     "@babel/runtime": "^7.4.5",
