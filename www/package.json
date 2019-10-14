@@ -22,7 +22,7 @@
     "gatsby-plugin-css-literal-loader": "^1.0.0",
     "gatsby-plugin-emotion": "^4.1.11",
     "gatsby-plugin-less": "^3.0.10",
-    "gatsby-plugin-sass": "^2.1.18",
+    "gatsby-plugin-sass": "^2.1.19",
     "gatsby-plugin-sorted-assets": "^1.0.2",
     "gatsby-remark-prismjs": "^3.3.18",
     "gatsby-source-filesystem": "2.1.32",
