@@ -5054,10 +5054,10 @@ gatsby-plugin-emotion@^4.1.12:
     "@babel/runtime" "^7.6.3"
     "@emotion/babel-preset-css-prop" "^10.0.17"
 
-gatsby-plugin-less@^3.0.11:
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-less/-/gatsby-plugin-less-3.0.11.tgz#956617e3e66cf64d038d38a1564f888896570e80"
-  integrity sha512-atmQx34dfuLX+Bb5JweBQQ32dgaAeN7jduZ2haq3H6JHqSiL0f9bdYg+dfhAVWLC74jviopHZm7q4C3vxMi0Ag==
+gatsby-plugin-less@^3.0.12:
+  version "3.0.12"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-less/-/gatsby-plugin-less-3.0.12.tgz#004159f029fdaa8bcf35b7cd6898e23112e4d104"
+  integrity sha512-YXB3nfFASqJK3jT1MoU1o/mnCxMSmfyeJeRSzNeXARv5PWDWF7QdyOGW4kIMwHxBApRq+ha2uyGaRMdoJ826Fw==
   dependencies:
     "@babel/runtime" "^7.6.3"
     less-loader "^5.0.0"
