@@ -5110,10 +5110,10 @@ gatsby-remark-prismjs@^3.3.20:
     parse-numeric-range "^0.0.2"
     unist-util-visit "^1.4.1"
 
-gatsby-source-filesystem@2.1.32:
-  version "2.1.32"
-  resolved "https://registry.yarnpkg.com/gatsby-source-filesystem/-/gatsby-source-filesystem-2.1.32.tgz#640c57f2f7bf842be4f901ea595c7c668ba58105"
-  integrity sha512-ZZObsQYGQrwkrEPWuYCj2r52lP1GNS/nq0hp1ikJiMWVYfq4IuFXMSMxX8nL4p3TmSsUfhRkwBWgpjEw57UHXA==
+gatsby-source-filesystem@2.1.33:
+  version "2.1.33"
+  resolved "https://registry.yarnpkg.com/gatsby-source-filesystem/-/gatsby-source-filesystem-2.1.33.tgz#6a6e4a075be7af5db603acb695b9eabdc885985e"
+  integrity sha512-QhhHM8lalThJs5OsNgL6ILxIA36rRYsC+9ynUSEBku88+qBajycURxPjg+gn4NfWYfGAUXigxQzomQagHOLvlQ==
   dependencies:
     "@babel/runtime" "^7.6.3"
     better-queue "^3.8.10"
@@ -5121,7 +5121,7 @@ gatsby-source-filesystem@2.1.32:
     chokidar "3.2.1"
     file-type "^12.3.0"
     fs-extra "^8.1.0"
-    gatsby-core-utils "^1.0.14"
+    gatsby-core-utils "^1.0.15"
     got "^7.1.0"
     md5-file "^3.2.3"
     mime "^2.4.4"
