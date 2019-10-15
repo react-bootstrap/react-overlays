@@ -5154,10 +5154,10 @@ gatsby-telemetry@^1.1.33:
     stack-utils "1.0.2"
     uuid "3.3.3"
 
-gatsby-transformer-documentationjs@^4.1.15:
-  version "4.1.15"
-  resolved "https://registry.yarnpkg.com/gatsby-transformer-documentationjs/-/gatsby-transformer-documentationjs-4.1.15.tgz#01b0cc237cdfc9db3ecfaa17c36d2e9ee2c6394c"
-  integrity sha512-GmqrSyBuYjehAaTd09vdrwzjOPKYgbRg8/xFmdfWwWIF0itTJbh+KP0VzWuEpXNCDXFzhOdcwRj/PvqirPF4GA==
+gatsby-transformer-documentationjs@^4.1.16:
+  version "4.1.16"
+  resolved "https://registry.yarnpkg.com/gatsby-transformer-documentationjs/-/gatsby-transformer-documentationjs-4.1.16.tgz#c242021f7a4a4004dec08ce9f57c752c9c738d39"
+  integrity sha512-bJGRGKJ99tnk5USQal4g3At2k2RQxOlJ59yXyzwCA7bY3FhPJ26DKq1gTQc84yUg6gzJNCTgYJHObo8pqseUig==
   dependencies:
     "@babel/runtime" "^7.6.3"
     documentation "^12.1.2"
