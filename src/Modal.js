@@ -313,7 +313,7 @@ class Modal extends React.Component {
     this.backdrop = ref && ReactDOM.findDOMNode(ref);
   };
 
-  getModalManager = () => {
+  getModalManager() {
     if (this.props.manager) {
       return this.props.manager;
     }
@@ -323,7 +323,7 @@ class Modal extends React.Component {
     }
 
     return manager;
-  };
+  }
 
   handleHidden = (...args) => {
     this.setState({ exited: true });
