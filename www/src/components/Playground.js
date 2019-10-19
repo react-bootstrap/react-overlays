@@ -1,21 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies, import/no-unresolved */
 
-import React, { useState, useReducer, useRef, useEffect } from 'react';
+import getOffset from 'dom-helpers/offset';
 import PropTypes from 'prop-types';
-
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
+import { LiveEditor, LiveError, LivePreview, LiveProvider } from 'react-live';
+import * as ReactOverlays from 'react-overlays';
 import Transition, {
   ENTERED,
   ENTERING,
 } from 'react-transition-group/Transition';
 import * as Babel from '@babel/standalone';
-import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
-import * as ReactOverlays from 'react-overlays';
-
-import getOffset from 'dom-helpers/query/offset';
-
-import { css } from '@emotion/core';
-import styled from '@emotion/styled';
+import { css as emotionCss } from '@emotion/core';
+import emotionStyled from '@emotion/styled';
 import injectCss from '../injectCss';
 
 Babel.registerPreset('env', require('@babel/preset-env'));
@@ -38,8 +35,8 @@ const scope = {
   Transition,
   ENTERED,
   ENTERING,
-  css,
-  styled,
+  css: emotionCss,
+  styled: emotionStyled,
 };
 
 export default class Playground extends React.Component {
@@ -62,7 +59,7 @@ export default class Playground extends React.Component {
                 {
                   loose: true,
                   targets: {
-                    browsers: ['> 1%', 'not ie <= 8'],
+                    browsers: ['> 1%', 'not ie <= 10'],
                   },
                 },
               ],
@@ -72,9 +69,11 @@ export default class Playground extends React.Component {
           }).code
         }
       >
-        <LivePreview />
+        <LivePreview className="border rounded p-5 mb-2" />
         <LiveError />
-        <LiveEditor />
+        <div className="bg-grey px-5 py-4 bg-light mb-4">
+          <LiveEditor />
+        </div>
       </LiveProvider>
     );
   }

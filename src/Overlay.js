@@ -1,22 +1,58 @@
+import PopperJS from 'popper.js';
 import PropTypes from 'prop-types';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-
-import { Popper, placements } from 'react-popper';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
+import useMergedRefs from '@restart/hooks/useMergedRefs';
+import usePopper from './usePopper';
 import useRootClose from './useRootClose';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
-import { useMergedRefs } from './utils/mergeRefs';
 
 /**
  * Built on top of `Popper.js`, the overlay component is
  * great for custom tooltip overlays.
  */
 const Overlay = React.forwardRef((props, outerRef) => {
-  const rootCloseRef = useRef(null);
+  const {
+    flip,
+    placement,
+    containerPadding,
+    popperConfig = {},
+    transition: Transition,
+  } = props;
+
+  const [rootElement, attachRef] = useCallbackRef();
+  const [arrowElement, attachArrowRef] = useCallbackRef();
+  const mergedRef = useMergedRefs(attachRef, outerRef);
+
   const container = useWaitForDOMRef(props.container);
   const target = useWaitForDOMRef(props.target);
 
   const [exited, setExited] = useState(!props.show);
+
+  const { modifiers = {} } = popperConfig;
+
+  const { styles, arrowStyles, ...popper } = usePopper(target, rootElement, {
+    ...popperConfig,
+    placement: placement || 'bottom',
+    enableEvents: props.show,
+    modifiers: {
+      ...modifiers,
+      preventOverflow: {
+        padding: containerPadding || 5,
+        ...modifiers.preventOverflow,
+      },
+      arrow: {
+        ...modifiers.arrow,
+        enabled: !!arrowElement,
+        element: arrowElement,
+      },
+      flip: {
+        enabled: !!flip,
+        ...modifiers.preventOverflow,
+      },
+    },
+  });
 
   if (props.show) {
     if (exited) setExited(false);
@@ -32,20 +68,10 @@ const Overlay = React.forwardRef((props, outerRef) => {
     }
   };
 
-  const {
-    children,
-    flip,
-    placement,
-    containerPadding,
-    popperConfig = {},
-    transition: Transition,
-  } = props;
-
   // Don't un-render the overlay while it's transitioning out.
   const mountOverlay = props.show || (Transition && !exited);
-  const innerRef = useMergedRefs(rootCloseRef, outerRef);
 
-  useRootClose(rootCloseRef, props.onHide, {
+  useRootClose(rootElement, props.onHide, {
     disabled: !props.rootClose || props.rootCloseDisabled,
     clickTrigger: props.rootCloseEvent,
   });
@@ -55,63 +81,37 @@ const Overlay = React.forwardRef((props, outerRef) => {
     return null;
   }
 
-  let child = children;
-
-  const { modifiers = {} } = popperConfig;
-  const popperProps = {
-    ...popperConfig,
-    innerRef,
-    placement,
-    referenceElement: target,
-    enableEvents: props.show,
-    modifiers: {
-      ...modifiers,
-      preventOverflow: {
-        padding: containerPadding || 5,
-        ...modifiers.preventOverflow,
-      },
-      flip: {
-        enabled: !!flip,
-        ...modifiers.preventOverflow,
-      },
+  let child = props.children({
+    ...popper,
+    show: props.show,
+    props: {
+      style: styles,
+      ref: mergedRef,
     },
-  };
+    arrowProps: {
+      style: arrowStyles,
+      ref: attachArrowRef,
+    },
+  });
 
-  child = (
-    <Popper {...popperProps}>
-      {({ arrowProps, style, ref, ...popper }) => {
-        let innerChild = props.children({
-          ...popper,
-          // popper doesn't set the initial placement
-          placement: popper.placement || placement,
-          show: props.show,
+  if (Transition) {
+    let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
 
-          arrowProps,
-          props: { ref, style },
-        });
-
-        if (Transition) {
-          let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
-
-          innerChild = (
-            <Transition
-              in={props.show}
-              appear
-              onExit={onExit}
-              onExiting={onExiting}
-              onExited={handleHidden}
-              onEnter={onEnter}
-              onEntering={onEntering}
-              onEntered={onEntered}
-            >
-              {innerChild}
-            </Transition>
-          );
-        }
-        return innerChild;
-      }}
-    </Popper>
-  );
+    child = (
+      <Transition
+        in={props.show}
+        appear
+        onExit={onExit}
+        onExiting={onExiting}
+        onExited={handleHidden}
+        onEnter={onEnter}
+        onEntering={onEntering}
+        onEntered={onEntered}
+      >
+        {child}
+      </Transition>
+    );
+  }
 
   return container ? ReactDOM.createPortal(child, container) : null;
 });
@@ -125,7 +125,7 @@ Overlay.propTypes = {
   show: PropTypes.bool,
 
   /** Specify where the overlay element is positioned in relation to the target element */
-  placement: PropTypes.oneOf(placements),
+  placement: PropTypes.oneOf(PopperJS.placements),
 
   /**
    * A DOM Element, Ref to an element, or function that returns either. The `target` element is where

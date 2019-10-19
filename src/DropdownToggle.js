@@ -1,13 +1,16 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
-
 import DropdownContext from './DropdownContext';
 
+/**
+ * Wires up Dropdown toggle functinality, returning a set a props to attach
+ * to the element that functions as the dropdown toggle (generally a button).
+ */
 export function useDropdownToggle() {
-  const { show, toggle, toggleRef } = useContext(DropdownContext);
+  const { show, toggle, setToggle } = useContext(DropdownContext);
   return [
     {
-      ref: toggleRef,
+      ref: setToggle,
       'aria-haspopup': true,
       'aria-expanded': !!show,
     },
@@ -35,7 +38,7 @@ const propTypes = {
 };
 
 function DropdownToggle({ children }) {
-  const [props, { show, toggle }] = useDropdownToggle(DropdownContext);
+  const [props, { show, toggle }] = useDropdownToggle();
 
   return children({
     show,

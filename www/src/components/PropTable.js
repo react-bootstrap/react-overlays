@@ -1,7 +1,7 @@
 import { graphql } from 'gatsby';
 import capitalize from 'lodash/capitalize';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 function cleanDocletValue(str) {
   return str
@@ -28,7 +28,7 @@ export default class PropTable extends React.Component {
     metadata: PropTypes.object.isRequired,
   };
 
-  getType(prop) {
+  getType(prop, depth = 0) {
     let type = prop.type || {};
     let name = getDisplayTypeName(type.name);
     let doclets = prop.doclets || {};
@@ -38,7 +38,7 @@ export default class PropTable extends React.Component {
         return name;
       case 'union':
         return type.value.reduce((current, val, i, list) => {
-          let item = this.getType({ type: val });
+          let item = this.getType({ type: val }, depth + 1);
           if (React.isValidElement(item)) {
             item = React.cloneElement(item, { key: i });
           }
@@ -47,7 +47,7 @@ export default class PropTable extends React.Component {
           return i === list.length - 1 ? current : current.concat(' | ');
         }, []);
       case 'array': {
-        let child = this.getType({ type: type.value });
+        let child = this.getType({ type: type.value }, depth + 1);
 
         return (
           <span>
@@ -62,11 +62,18 @@ export default class PropTable extends React.Component {
       case 'custom':
         return cleanDocletValue(doclets.type || type.raw);
       default:
-        return <div style={{ whiteSpace: 'pre' }}>{name}</div>;
+        return (
+          <span
+            className="text-monospace"
+            style={!depth ? { whiteSpace: 'pre' } : undefined}
+          >
+            {name}
+          </span>
+        );
     }
   }
 
-  _renderRows(propsData) {
+  renderRows(propsData) {
     return propsData
       .filter(
         prop => prop.type && !prop.doclets.private && !prop.doclets.ignore,
@@ -75,39 +82,47 @@ export default class PropTable extends React.Component {
         const { name, description, doclets } = propData;
         let descHtml = description && description.childMarkdownRemark.html;
 
+        let defaultValue = propData.defaultValue && propData.defaultValue.value;
+
+        if (defaultValue) {
+          if (getTypeName(propData) === 'elementType')
+            defaultValue = `<${defaultValue.replace(/('|")/g, '')}>`;
+
+          defaultValue = <code>{defaultValue}</code>;
+        }
+
         return (
-          <tr key={name} className="prop-table-row">
-            <td>
-              {name} {this.renderRequiredBadge(propData)}
-            </td>
-            <td>
+          <div key={name} className="prop-table-row">
+            <h4 className="mt-4 mb-3 border-bottom">
+              <span className="text-monospace">{name}</span>{' '}
+              {this.renderRequiredBadge(propData)}
+            </h4>
+            <div className="prop-table-row-details">
+              <strong>type</strong>
               <div>{this.getType(propData)}</div>
-            </td>
 
-            <td>{this.renderDefaultValue(propData)}</td>
-
-            <td>
-              {doclets.deprecated && (
-                <div className="mb-1">
-                  <strong className="text-danger">
-                    {`Deprecated: ${doclets.deprecated} `}
-                  </strong>
-                </div>
+              {defaultValue && (
+                <>
+                  <strong>default</strong>
+                  <div>{defaultValue}</div>
+                </>
               )}
-              {this.renderControllableNote(propData, name)}
-              <p dangerouslySetInnerHTML={{ __html: descHtml }} />
-            </td>
-          </tr>
+              <strong>description</strong>
+              <div>
+                {doclets.deprecated && (
+                  <div className="mb-1">
+                    <strong className="text-danger">
+                      {`Deprecated: ${doclets.deprecated} `}
+                    </strong>
+                  </div>
+                )}
+                {this.renderControllableNote(propData, name)}
+                <p dangerouslySetInnerHTML={{ __html: descHtml }} />
+              </div>
+            </div>
+          </div>
         );
       });
-  }
-
-  renderDefaultValue(prop) {
-    let value = prop.defaultValue && prop.defaultValue.value;
-    if (value == null) return null;
-    if (getTypeName(prop) === 'elementType')
-      value = `<${value.replace(/('|")/g, '')}>`;
-    return <code>{value}</code>;
   }
 
   renderControllableNote(prop, propName) {
@@ -163,7 +178,7 @@ export default class PropTable extends React.Component {
       return null;
     }
 
-    return <span className="badge">required</span>;
+    return <span className="badge badge-dark">required</span>;
   }
 
   render() {
@@ -171,25 +186,13 @@ export default class PropTable extends React.Component {
 
     if (!propsData.length) {
       return (
-        <div className="text-muted">
+        <div className="text-muted mb-5">
           <em>There are no public props for this component.</em>
         </div>
       );
     }
 
-    return (
-      <table className="table table-border">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>{this._renderRows(propsData)}</tbody>
-      </table>
-    );
+    return <div className="mb-5">{this.renderRows(propsData)}</div>;
   }
 }
 

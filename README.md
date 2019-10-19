@@ -1,10 +1,13 @@
 # react-overlays
 
-[![Travis Build Status][build-badge]][build]
+[![test status][test-badge]][actions]
+[![deploy docs status][deploy-docs-badge]][actions]
+[![codecov][codecov-badge]][codecov]
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e86fa356-4480-409e-9c24-52ea0660a923/deploy-status)](https://app.netlify.com/sites/react-overlays/deploys)
 
 Utilities for creating robust overlay components
 
-demos and docs at: https://react-bootstrap.github.io/react-overlays/
+demos and docs at: https://react-bootstrap.github.io/react-overlays/modal/
 
 ## Install
 
@@ -20,5 +23,8 @@ If you are looking for more complete overlays, modals, or tooltips--something yo
 
 Pre `1.0.0` breaking changes happen on the `minor` bump while feature and patches accompany a `patch` bump.
 
-[build-badge]: https://travis-ci.org/react-bootstrap/react-overlays.svg?branch=master
-[build]: https://travis-ci.org/react-bootstrap/react-overlays
+[actions]: https://github.com/react-bootstrap/react-overlays/actions
+[codecov]: https://codecov.io/gh/react-bootstrap/react-overlays
+[codecov-badge]: https://codecov.io/gh/react-bootstrap/react-overlays/branch/master/graph/badge.svg
+[test-badge]: https://github.com/react-bootstrap/react-overlays/workflows/Run%20Tests/badge.svg
+[deploy-docs-badge]: https://github.com/react-bootstrap/react-overlays/workflows/Deploy%20Documentation/badge.svg

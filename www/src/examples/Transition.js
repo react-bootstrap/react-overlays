@@ -6,7 +6,7 @@ injectCss(`
     transition: opacity ${FADE_DURATION}ms linear;
   }
 
-  .in {
+  .show {
     opacity: 1;
   }
 
@@ -39,8 +39,8 @@ injectCss(`
 `);
 
 const fadeStyles = {
-  entering: 'in',
-  entered: 'in'
+  entering: 'show',
+  entered: 'show'
 };
 
 const Fade = ({ children, ...props }) => (
@@ -75,7 +75,7 @@ class TransitionExample extends React.Component {
       <div className="transition-example">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary mr-3"
           onClick={this.toggleModal}
         >
           Show Animated Modal
@@ -97,7 +97,7 @@ class TransitionExample extends React.Component {
           modifiers={{ offset: { enabled: true, offset: '0 5px' } }}
           target={() => this.tooltipRef.current}
         >
-          {({ ref, style }) => (
+          {({ props: { ref, style } }) => (
             <div ref={ref} className="tooltip tooltip-inner" style={style}>
               Hello there
             </div>

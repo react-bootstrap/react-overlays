@@ -10,7 +10,6 @@
   },
   "globals": {
     "render": false,
-    "classNames": false,
     "React": false,
     "ReactDOM": false,
     "injectCss": false,
@@ -22,6 +21,8 @@
     "Modal": false,
     "Overlay": false,
     "Dropdown": false,
+    "useDropdownMenu": false,
+    "useDropdownToggle": false,
     "Portal": false,
     "useRootClose": false,
     "css": false,

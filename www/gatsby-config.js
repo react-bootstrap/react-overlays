@@ -1,6 +1,6 @@
 const path = require('path');
 const { resolver } = require('react-docgen');
-const annotationResolver = require('react-docgen-annotation-resolver').default;
+const annotationResolver = require('react-docgen-annotation-resolver');
 
 function combinedResolver(ast, recast) {
   const exportedComponents = resolver.findAllComponentDefinitions(ast, recast);
@@ -30,8 +30,11 @@ module.exports = {
         name: 'source',
       },
     },
-    // 'gatsby-plugin-emotion',
-    'gatsby-plugin-less',
+    'gatsby-plugin-sass',
+    {
+      resolve: 'gatsby-plugin-astroturf',
+      options: { extension: '.module.scss' },
+    },
     {
       resolve: 'gatsby-transformer-react-docgen',
       options: {

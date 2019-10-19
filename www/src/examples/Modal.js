@@ -1,78 +1,62 @@
 let rand = () => Math.floor(Math.random() * 20) - 10;
 
-const backdropStyle = {
-  position: 'fixed',
-  zIndex: 1040,
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: '#000',
-  opacity: 0.5
-};
+const Backdrop = styled('div')`
+  position: fixed;
+  z-index: 1040;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000;
+  opacity: 0.5;
+`;
 
-const modalStyle = () => {
-  // we use some psuedo random coords so nested modals
-  // don't sit right on top of each other.
-  let top = 50 + rand();
-  let left = 50 + rand();
+// we use some pseudo random coords so nested modals
+// don't sit right on top of each other.
+const RandomlyPositionedModal = styled(Modal)`
+  position: fixed;
+  width: 400px;
+  z-index: 1040;
+  top: ${() => 50 + rand()}%;
+  left: ${() => 50 + rand()}%;
+  border: 1px solid #e5e5e5;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+`;
 
-  return {
-    position: 'fixed',
-    width: 400,
-    zIndex: 1040,
-    top: `${top}%`,
-    left: `${left}%`,
-    border: '1px solid #e5e5e5',
-    backgroundColor: 'white',
-    boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-    padding: 20
-  };
-};
+function ModalExample() {
+  const [show, setShow] = useState(false);
 
-class ModalExample extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = { showModal: false };
+  const renderBackdrop = props => <Backdrop {...props} />;
 
-    this.close = () => {
-      this.setState({ showModal: false });
-    };
+  return (
+    <div className="modal-example">
+      <button
+        type="button"
+        className="btn btn-primary mb-4"
+        onClick={() => setShow(true)}
+      >
+        Open Modal
+      </button>
+      <p>Click to get the full Modal experience!</p>
 
-    this.open = () => {
-      this.setState({ showModal: true });
-    };
-  }
-
-  renderBackdrop(props) {
-    return <div {...props} style={backdropStyle} />;
-  }
-
-  render() {
-    return (
-      <div className="modal-example">
-        <button type="button" className="btn btn-primary" onClick={this.open}>
-          Open Modal
-        </button>
-        <p>Click to get the full Modal experience!</p>
-
-        <Modal
-          onHide={this.close}
-          style={modalStyle()}
-          aria-labelledby="modal-label"
-          show={this.state.showModal}
-          renderBackdrop={this.renderBackdrop}
-        >
-          <div>
-            <h4 id="modal-label">Text in a modal</h4>
-            <p>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </p>
-            <ModalExample />
-          </div>
-        </Modal>
-      </div>
-    );
-  }
+      <RandomlyPositionedModal
+        show={show}
+        onHide={() => setShow(false)}
+        renderBackdrop={renderBackdrop}
+        aria-labelledby="modal-label"
+      >
+        <div>
+          <h4 id="modal-label">Text in a modal</h4>
+          <p>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </p>
+          <ModalExample />
+        </div>
+      </RandomlyPositionedModal>
+    </div>
+  );
 }
+
 render(<ModalExample />);

@@ -44,3 +44,20 @@ exports.onCreateBabelConfig = ({ actions }) => {
     },
   });
 };
+
+exports.createPages = ({ actions }) => {
+  const { createRedirect } = actions;
+
+  createRedirect({
+    fromPath: `/`,
+    toPath: `/modal`,
+    isPermanent: true,
+    redirectInBrowser: true,
+  });
+  createRedirect({
+    fromPath: `/react-overlays`,
+    toPath: `/react-overlays/modal`,
+    isPermanent: true,
+    redirectInBrowser: true,
+  });
+};

@@ -1,5 +1,5 @@
-import css from 'dom-helpers/style';
-import getScrollbarSize from 'dom-helpers/util/scrollbarSize';
+import css from 'dom-helpers/css';
+import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
 import ModalContainer from '../src/Modal';
 import ModalManager from '../src/ModalManager';
@@ -110,6 +110,17 @@ describe('ModalManager', () => {
       manager.add(new Modal({}), container);
 
       expect(app.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should not add aria-hidden to modal', () => {
+      let modal = new Modal({});
+      let mount = document.createElement('div');
+
+      modal.dialog = mount;
+      container.appendChild(mount);
+      manager.add(modal, container);
+
+      expect(modal.dialog.getAttribute('aria-hidden')).to.equal(null);
     });
 
     it('should add aria-hidden to previous modals', () => {

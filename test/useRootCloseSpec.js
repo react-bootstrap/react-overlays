@@ -22,14 +22,17 @@ describe('RootCloseWrapper', () => {
   });
 
   describe('using default event', () => {
+    // eslint-disable-next-line mocha/no-setup-in-describe
     shouldCloseOn(undefined, 'click');
   });
 
   describe('using click event', () => {
+    // eslint-disable-next-line mocha/no-setup-in-describe
     shouldCloseOn('click', 'click');
   });
 
   describe('using mousedown event', () => {
+    // eslint-disable-next-line mocha/no-setup-in-describe
     shouldCloseOn('mousedown', 'mousedown');
   });
 
@@ -56,7 +59,7 @@ describe('RootCloseWrapper', () => {
       simulant.fire(document.getElementById('my-div'), eventName);
 
       expect(spy).to.not.have.been.called;
-      console.log(eventName);
+
       simulant.fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;

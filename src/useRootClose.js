@@ -1,5 +1,5 @@
-import contains from 'dom-helpers/query/contains';
-import listen from 'dom-helpers/events/listen';
+import contains from 'dom-helpers/contains';
+import listen from 'dom-helpers/listen';
 import { useCallback, useEffect, useRef } from 'react';
 
 import useEventCallback from '@restart/hooks/useEventCallback';
@@ -67,7 +67,7 @@ function useRootClose(
   });
 
   useEffect(() => {
-    if (disabled) return undefined;
+    if (disabled || ref == null) return undefined;
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
@@ -95,7 +95,14 @@ function useRootClose(
       removeKeyupListener();
       mobileSafariHackListeners.forEach(remove => remove());
     };
-  }, [disabled, clickTrigger, handleMouseCapture, handleMouse, handleKeyUp]);
+  }, [
+    ref,
+    disabled,
+    clickTrigger,
+    handleMouseCapture,
+    handleMouse,
+    handleKeyUp,
+  ]);
 }
 
 export default useRootClose;

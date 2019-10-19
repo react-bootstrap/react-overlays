@@ -1,24 +1,21 @@
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import styled from 'astroturf';
 import { graphql } from 'gatsby';
 import React from 'react';
 
 const Wrapper = styled('span')`
-  ${p =>
-    p.block &&
-    css`
-      display: block;
-      margin-top: 20px;
-    `}
+  &.block {
+    display: block;
+    margin-top: 20px;
+  }
 
-  :before,
-  :after {
+  &:before,
+  &:after {
     color: #969584;
   }
-  :before {
+  &:before {
     content: '{ ';
   }
-  :after {
+  &:after {
     content: ' }';
   }
 `;
@@ -178,7 +175,7 @@ function renderParam(definition) {
   }
 
   return (
-    <li>
+    <li key={definition.name}>
       <div className="prism-code">
         {titleElement}{' '}
         <SignatureElement
@@ -196,8 +193,8 @@ function renderParam(definition) {
 function HookDocumentation({ docs }) {
   const { params } = docs;
   return (
-    <section>
-      <h3>Parameters</h3>
+    <section className="mb-4">
+      <h3 className="h4">Parameters</h3>
       <ul>{params.map(renderParam)}</ul>
     </section>
   );
