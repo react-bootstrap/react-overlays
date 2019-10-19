@@ -12,8 +12,6 @@ import ModalManager from './ModalManager';
 import ownerDocument from './utils/ownerDocument';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
-let modalManager = new ModalManager();
-
 function omitProps(props, propTypes) {
   const keys = Object.keys(props);
   const newProps = {};
@@ -25,6 +23,8 @@ function omitProps(props, propTypes) {
 
   return newProps;
 }
+
+let manager;
 
 /**
  * Love them or hate them, `<Modal />` provides a solid foundation for creating dialogs, lightboxes, or whatever else.
@@ -202,7 +202,7 @@ class Modal extends React.Component {
      * A ModalManager instance used to track and manage the state of open
      * Modals. Useful when customizing how modals interact within a container
      */
-    manager: PropTypes.object.isRequired,
+    manager: PropTypes.object,
   };
 
   static defaultProps = {
@@ -214,7 +214,6 @@ class Modal extends React.Component {
     enforceFocus: true,
     restoreFocus: true,
     onHide: () => {},
-    manager: modalManager,
     renderBackdrop: props => <div {...props} />,
   };
 
@@ -267,9 +266,9 @@ class Modal extends React.Component {
   }
 
   onShow = () => {
-    let { container, containerClassName, manager, onShow } = this.props;
+    let { container, containerClassName, onShow } = this.props;
 
-    manager.add(this, container, containerClassName);
+    this.getModalManager().add(this, container, containerClassName);
 
     this.removeKeydownListener = listen(
       document,
@@ -296,7 +295,7 @@ class Modal extends React.Component {
   };
 
   onHide = () => {
-    this.props.manager.remove(this);
+    this.getModalManager().remove(this);
 
     this.removeKeydownListener();
     this.removeFocusListener();
@@ -313,6 +312,18 @@ class Modal extends React.Component {
   setBackdropRef = ref => {
     this.backdrop = ref && ReactDOM.findDOMNode(ref);
   };
+
+  getModalManager() {
+    if (this.props.manager) {
+      return this.props.manager;
+    }
+
+    if (!manager) {
+      manager = new ModalManager();
+    }
+
+    return manager;
+  }
 
   handleHidden = (...args) => {
     this.setState({ exited: true });
@@ -379,7 +390,7 @@ class Modal extends React.Component {
   }
 
   isTopModal() {
-    return this.props.manager.isTopModal(this);
+    return this.getModalManager().isTopModal(this);
   }
 
   renderBackdrop = () => {
