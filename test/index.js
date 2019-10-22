@@ -1,3 +1,5 @@
+/* eslint-disable mocha/no-hooks-for-single-case, mocha/no-top-level-hooks */
+
 import '@babel/polyfill';
 
 import chai from 'chai';
