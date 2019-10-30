@@ -58,7 +58,7 @@ class Portal extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.container !== this.props.container) {
       this.setContainer(nextProps.container)
     }

@@ -43,7 +43,7 @@ class Affix extends React.Component {
     this.onUpdate();
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this._needPositionUpdate = true;
   }
 

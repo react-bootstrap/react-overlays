@@ -36,7 +36,7 @@ class Portal extends React.Component {
     this._renderOverlay();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this._overlayTarget && nextProps.container !== this.props.container) {
       this._portalContainerNode.removeChild(this._overlayTarget);
       this._portalContainerNode = getContainer(nextProps.container, ownerDocument(this).body);
