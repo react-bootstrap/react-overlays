@@ -30,7 +30,7 @@ class Portal extends React.Component {
     onRendered: PropTypes.func,
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!canUseDom) {
       return;
     }
