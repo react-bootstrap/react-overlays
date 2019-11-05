@@ -36,7 +36,7 @@
     "react-emotion": "^10.0.0",
     "react-live": "^2.2.1",
     "react-transition-group": "^4.3.0",
-    "sass": "^1.23.1"
+    "sass": "^1.23.3"
   },
   "dependencies": {
     "@emotion/core": "^10.0.22",
