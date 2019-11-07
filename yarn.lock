@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@4c/cli-core@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@4c/cli-core/-/cli-core-2.0.1.tgz#8911805190ad5a87e03c8c12f16351d0086c1aa2"
-  integrity sha512-/EQN19rbbPTPz9y4GeayrHYKojAaXe+n8R2KuQBSjMSSYHRwWtogNxEcr4pKiAn4Aim4tZfozSlIHK1+4RTbjQ==
+"@4c/cli-core@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@4c/cli-core/-/cli-core-2.0.2.tgz#b15f53ab334faca1ee7753a88d92c4e366c3e891"
+  integrity sha512-1k8Zg08rzoQemFsPd0wTr8HSUVNWZG1r2m2lj9Vks942F0Q8sCly+KZ5mQrlF2Bje7Dh69pnvCTZbu1X5jFNyA==
   dependencies:
     chalk "^2.4.2"
-    execa "^2.0.4"
+    execa "^3.1.0"
     fs-extra "^8.1.0"
     globby "^10.0.1"
     inquirer "^7.0.0"
@@ -30,30 +30,30 @@
     cli-source-preview "^1.0.0"
     loader-utils "^1.1.0"
 
-"@4c/file-butler@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@4c/file-butler/-/file-butler-4.0.1.tgz#8a97ed09d9778bd676c7d5fcf4e32f22df4dc49b"
-  integrity sha512-6ti0ovqoXkGOQ1R0hauwh+DW5tILp/VHjVa4CxKzE0E0vA547cBQ5RrlRUxtUIzTBE2CvJ1KZHfkqOPyByjDOQ==
+"@4c/file-butler@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@4c/file-butler/-/file-butler-4.0.2.tgz#8bb8b24a10b10467d97b0463433adeaed5f7bbfb"
+  integrity sha512-sbTtUWrcv1rNrUNBhAFohL5Znz9v5MOF1ZAH2YCEVXUeKr0gRkBzIjfXxMLWduAYfOgSjhhd6H+nYzMU4bHETg==
   dependencies:
-    "@4c/cli-core" "^2.0.1"
+    "@4c/cli-core" "^2.0.2"
     cpy "^7.0.0"
     fs-extra "^8.1.0"
     globby "^10.0.1"
     yargs "^14.0.0"
 
 "@4c/rollout@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@4c/rollout/-/rollout-2.0.1.tgz#d8bddce9ffaa1e9e55d5d7cafa8da79f91d600ab"
-  integrity sha512-d8CBPiWIHKyCLLmoDW0GwEhkzv16KhvZaP+iU282rZ5J1Y8qytAyugsl7AdBjiBh45y7M3pilcmhlyhFf3rBcA==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@4c/rollout/-/rollout-2.0.2.tgz#45cf120f1f3e8968cf07712a75e7723329be472f"
+  integrity sha512-La6hStSN+JfWmj9NC5f9PN1YoObBQCZ71e7QxS2UjNMGcvXCCRD/HHrxP/Jm04WNq+hNRvWz+RQb0pCW/11Yaw==
   dependencies:
-    "@4c/cli-core" "^2.0.1"
-    "@4c/file-butler" "^4.0.1"
+    "@4c/cli-core" "^2.0.2"
+    "@4c/file-butler" "^4.0.2"
     chalk "^2.4.2"
     common-tags "^1.8.0"
     conventional-changelog "^3.0.6"
     conventional-changelog-angular "^5.0.3"
     conventional-recommended-bump "^6.0.0"
-    execa "^2.0.4"
+    execa "^3.1.0"
     fs-extra "^8.1.0"
     has-yarn "^2.1.0"
     listr "^0.14.3"
@@ -4331,7 +4331,7 @@ execa@^1.0.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@^2.0.3, execa@^2.0.4:
+execa@^2.0.3:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/execa/-/execa-2.0.5.tgz#5be3e2ea7e61bd038da5a0e11dc6ab2097357f2f"
   integrity sha512-SwmwZZyJjflcqLSgllk4EQlMLst2p9muyzwNugKGFlpAz6rZ7M+s2nBR97GAq4Vzjwx2y9rcMcmqzojwN+xwNA==
@@ -4341,6 +4341,22 @@ execa@^2.0.3, execa@^2.0.4:
     is-stream "^2.0.0"
     merge-stream "^2.0.0"
     npm-run-path "^3.0.0"
+    onetime "^5.1.0"
+    p-finally "^2.0.0"
+    signal-exit "^3.0.2"
+    strip-final-newline "^2.0.0"
+
+execa@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/execa/-/execa-3.2.0.tgz#18326b79c7ab7fbd6610fd900c1b9e95fa48f90a"
+  integrity sha512-kJJfVbI/lZE1PZYDI5VPxp8zXPO9rtxOkhpZ0jMKha56AI9y2gGVC6bkukStQf0ka5Rh15BA5m7cCCH4jmHqkw==
+  dependencies:
+    cross-spawn "^7.0.0"
+    get-stream "^5.0.0"
+    human-signals "^1.1.1"
+    is-stream "^2.0.0"
+    merge-stream "^2.0.0"
+    npm-run-path "^4.0.0"
     onetime "^5.1.0"
     p-finally "^2.0.0"
     signal-exit "^3.0.2"
@@ -5463,6 +5479,11 @@ https-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
+
+human-signals@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
+  integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
 
 humanize-url@^1.0.0:
   version "1.0.1"
@@ -7534,6 +7555,13 @@ npm-run-path@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-3.1.0.tgz#7f91be317f6a466efed3c9f2980ad8a4ee8b0fa5"
   integrity sha512-Dbl4A/VfiVGLgQv29URL9xshU8XDY1GeLy+fsaZ1AA8JDSfjvr5P5+pzRbWqRSBxk6/DW7MIh8lTM/PaGnP2kg==
+  dependencies:
+    path-key "^3.0.0"
+
+npm-run-path@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-4.0.0.tgz#d644ec1bd0569187d2a52909971023a0a58e8438"
+  integrity sha512-8eyAOAH+bYXFPSnNnKr3J+yoybe8O87Is5rtAQ8qRczJz1ajcsjg8l2oZqP+Ppx15Ii3S1vUTjQN2h4YO2tWWQ==
   dependencies:
     path-key "^3.0.0"
 
