@@ -22,18 +22,22 @@ const initialArrowStyles = {};
  * @param {String}      options.placement The popper element placement relative to the reference element
  * @param {Boolean}     options.positionFixed use fixed positioning
  * @param {Boolean}     options.eventsEnabled have Popper listen on window resize events to reposition the element
+ * @param {Function}    options.onCreate called when the popper is created
+ * @param {Function}    options.onUpdate called when the popper is updated
  */
 export default function usePopper(
   referenceElement,
   popperElement,
-  {
+  options = {},
+) {
+  const {
     enabled = true,
     placement = 'bottom',
     positionFixed = false,
     eventsEnabled = true,
     modifiers = {},
-  } = {},
-) {
+  } = options;
+
   const popperInstanceRef = useRef();
 
   const hasArrow = !!(modifiers.arrow && modifiers.arrow.element);
@@ -81,6 +85,7 @@ export default function usePopper(
     };
 
     popperInstanceRef.current = new PopperJS(referenceElement, popperElement, {
+      ...options,
       placement,
       positionFixed,
       modifiers: {

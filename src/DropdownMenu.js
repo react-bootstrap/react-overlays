@@ -40,6 +40,7 @@ export function useDropdownMenu(options = {}) {
   else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
 
   const popper = usePopper(toggleElement, menuElement, {
+    ...popperConfig,
     placement,
     enabled: !!(shouldUsePopper && show),
     eventsEnabled: !!show,
