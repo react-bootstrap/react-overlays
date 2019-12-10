@@ -5,6 +5,8 @@ import { useCallback, useEffect, useRef } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import warning from 'warning';
 
+import ownerDocument from './utils/ownerDocument';
+
 const escapeKeyCode = 27;
 const noop = () => {};
 
@@ -69,23 +71,25 @@ function useRootClose(
   useEffect(() => {
     if (disabled || ref == null) return undefined;
 
+    const doc = ownerDocument(ref.current);
+
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
     // element is removed in the React mouse callback.
     const removeMouseCaptureListener = listen(
-      document,
+      doc,
       clickTrigger,
       handleMouseCapture,
       true,
     );
 
-    const removeMouseListener = listen(document, clickTrigger, handleMouse);
-    const removeKeyupListener = listen(document, 'keyup', handleKeyUp);
+    const removeMouseListener = listen(doc, clickTrigger, handleMouse);
+    const removeKeyupListener = listen(doc, 'keyup', handleKeyUp);
 
     let mobileSafariHackListeners = [];
-    if ('ontouchstart' in document.documentElement) {
+    if ('ontouchstart' in doc.documentElement) {
       mobileSafariHackListeners = [].slice
-        .call(document.body.children)
+        .call(doc.body.children)
         .map(el => listen(el, 'mousemove', noop));
     }
 
