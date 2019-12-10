@@ -8,7 +8,7 @@ import useRootClose from '../src/useRootClose';
 
 const escapeKeyCode = 27;
 
-describe('RootCloseWrapper', () => {
+describe('useRootClose', () => {
   let attachTo;
 
   beforeEach(() => {
