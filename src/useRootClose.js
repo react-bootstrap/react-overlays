@@ -71,7 +71,7 @@ function useRootClose(
   useEffect(() => {
     if (disabled || ref == null) return undefined;
 
-    const doc = ownerDocument(ref && ref.current);
+    const doc = ownerDocument(ref.current);
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
