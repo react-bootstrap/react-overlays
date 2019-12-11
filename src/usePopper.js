@@ -28,16 +28,15 @@ const initialArrowStyles = {};
 export default function usePopper(
   referenceElement,
   popperElement,
-  options = {},
-) {
-  const {
+  {
     enabled = true,
     placement = 'bottom',
     positionFixed = false,
     eventsEnabled = true,
     modifiers = {},
-  } = options;
-
+    ...popperOptions
+  } = {},
+) {
   const popperInstanceRef = useRef();
 
   const hasArrow = !!(modifiers.arrow && modifiers.arrow.element);
@@ -85,7 +84,7 @@ export default function usePopper(
     };
 
     popperInstanceRef.current = new PopperJS(referenceElement, popperElement, {
-      ...options,
+      ...popperOptions,
       placement,
       positionFixed,
       modifiers: {
