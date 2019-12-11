@@ -33,7 +33,7 @@ const Overlay = React.forwardRef((props, outerRef) => {
   const { modifiers = {} } = popperConfig;
 
   const { styles, arrowStyles, ...popper } = usePopper(target, rootElement, {
-    popperConfig,
+    ...popperConfig,
     placement: placement || 'bottom',
     enableEvents: props.show,
     modifiers: {
