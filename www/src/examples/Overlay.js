@@ -40,6 +40,7 @@ const Arrow = styled('div')`
   opacity: 0.75;
 
   ${p => {
+    console.log(p);
     switch (p.placement) {
       case 'left':
         return css`
@@ -130,18 +131,21 @@ function OverlayExample() {
         container={containerRef}
         target={triggerRef}
       >
-        {({ props, arrowProps, placement }) => (
-          <Tooltip {...props} placement={placement}>
-            <Arrow
-              {...arrowProps}
-              placement={placement}
-              style={arrowProps.style}
-            />
-            <Body>
-              I&rsquo;m placed to the <strong>{placement}</strong>
-            </Body>
-          </Tooltip>
-        )}
+        {({ props, arrowProps, placement }) => {
+          console.log(props);
+          return (
+            <Tooltip {...props} placement={placement}>
+              <Arrow
+                {...arrowProps}
+                placement={placement}
+                style={arrowProps.style}
+              />
+              <Body>
+                I&rsquo;m placed to the <strong>{placement}</strong>
+              </Body>
+            </Tooltip>
+          );
+        }}
       </Overlay>
     </div>
   );

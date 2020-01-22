@@ -1,5 +1,25 @@
-import PopperJS from 'popper.js';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import arrow from '@popperjs/core/lib/modifiers/arrow';
+import computeStyles from '@popperjs/core/lib/modifiers/computeStyles';
+import eventListeners from '@popperjs/core/lib/modifiers/eventListeners';
+import flip from '@popperjs/core/lib/modifiers/flip';
+import hide from '@popperjs/core/lib/modifiers/hide';
+import popperOffsets from '@popperjs/core/lib/modifiers/popperOffsets';
+import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
+import { popperGenerator } from '@popperjs/core/lib/popper-base';
+import useSafeState from '@restart/hooks/useSafeState';
+
+const createPopper = popperGenerator({
+  defaultModifiers: [
+    hide,
+    popperOffsets,
+    computeStyles,
+    eventListeners,
+    flip,
+    preventOverflow,
+    arrow,
+  ],
+});
 
 const initialPopperStyles = {
   position: 'absolute',
@@ -10,6 +30,28 @@ const initialPopperStyles = {
 };
 
 const initialArrowStyles = {};
+
+export function toModifierMap(modifiers) {
+  const result = {};
+
+  if (!Array.isArray(modifiers)) {
+    return modifiers || result;
+  }
+
+  // eslint-disable-next-line no-unused-expressions
+  modifiers?.forEach(m => {
+    result[m.name] = m;
+  });
+  return result;
+}
+
+export function toModifierArray(map) {
+  if (Array.isArray(map)) return map;
+  return Object.keys(map).map(k => {
+    map[k].name = k;
+    return map[k];
+  });
+}
 
 /**
  * Position an element relative some reference element using Popper.js
@@ -29,28 +71,58 @@ export default function usePopper(
   {
     enabled = true,
     placement = 'bottom',
-    positionFixed = false,
+    strategy = 'absolute',
     eventsEnabled = true,
-    modifiers = {},
+    ...options
   } = {},
 ) {
   const popperInstanceRef = useRef();
 
-  const hasArrow = !!(modifiers.arrow && modifiers.arrow.element);
-
   const scheduleUpdate = useCallback(() => {
     if (popperInstanceRef.current) {
-      popperInstanceRef.current.scheduleUpdate();
+      popperInstanceRef.current.update();
     }
   }, []);
 
-  const [state, setState] = useState({
-    placement,
-    scheduleUpdate,
-    outOfBoundaries: false,
-    styles: initialPopperStyles,
-    arrowStyles: initialArrowStyles,
-  });
+  const [state, setState] = useSafeState(
+    useState({
+      placement,
+      scheduleUpdate,
+      outOfBoundaries: false,
+      styles: initialPopperStyles,
+      arrowStyles: initialArrowStyles,
+    }),
+  );
+
+  const updateModifier = useMemo(
+    () => ({
+      name: 'updateStateModifier',
+      enabled: true,
+      phase: 'afterWrite',
+      requires: ['computeStyles'],
+      fn(data) {
+        setState({
+          scheduleUpdate,
+          outOfBoundries: data.state.modifiersData.hide?.isReferenceHidden,
+          placement: data.state.placement,
+          styles: { ...data.state.styles?.popper },
+          arrowStyles: { ...data.state.styles?.arrow },
+          state: data.state,
+        });
+      },
+    }),
+    [scheduleUpdate, setState],
+  );
+  const modifiers = toModifierArray(options.modifiers);
+
+  let eventsModifier = modifiers.find(m => m.name === 'eventListeners');
+  if (!eventsModifier && eventsEnabled) {
+    eventsModifier = {
+      name: 'eventListeners',
+      enabled: true,
+    };
+    modifiers.push(eventsModifier);
+  }
 
   // A placement difference in state means popper determined a new placement
   // apart from the props value. By the time the popper element is rendered with
@@ -60,68 +132,43 @@ export default function usePopper(
     scheduleUpdate();
   }, [state.placement, scheduleUpdate]);
 
-  /** Toggle Events */
   useEffect(() => {
-    if (popperInstanceRef.current) {
-      // eslint-disable-next-line no-unused-expressions
-      eventsEnabled
-        ? popperInstanceRef.current.enableEventListeners()
-        : popperInstanceRef.current.disableEventListeners();
-    }
-  }, [eventsEnabled]);
+    if (!popperInstanceRef.current || !enabled) return;
+
+    popperInstanceRef.current.setOptions({
+      placement,
+      strategy,
+      modifiers: [...modifiers, updateModifier],
+    });
+    // intentionally NOT re-running on new modifiers
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strategy, placement, eventsModifier.enabled, updateModifier, enabled]);
 
   useEffect(() => {
     if (!enabled || referenceElement == null || popperElement == null) {
       return undefined;
     }
 
-    const arrow = modifiers.arrow && {
-      ...modifiers.arrow,
-      element: modifiers.arrow.element,
-    };
-
-    popperInstanceRef.current = new PopperJS(referenceElement, popperElement, {
+    popperInstanceRef.current = createPopper(referenceElement, popperElement, {
       placement,
-      positionFixed,
-      modifiers: {
-        ...modifiers,
-        arrow,
-        applyStyle: { enabled: false },
-        updateStateModifier: {
-          enabled: true,
-          order: 900,
-          fn(data) {
-            setState({
-              scheduleUpdate,
-              styles: {
-                position: data.offsets.popper.position,
-                ...data.styles,
-              },
-              arrowStyles: data.arrowStyles,
-              outOfBoundaries: data.hide,
-              placement: data.placement,
-            });
-          },
-        },
-      },
+      strategy,
+      modifiers: [...modifiers, updateModifier],
     });
 
     return () => {
       if (popperInstanceRef.current !== null) {
         popperInstanceRef.current.destroy();
         popperInstanceRef.current = null;
+        setState(s => ({
+          ...s,
+          styles: initialPopperStyles,
+          arrowStyles: initialArrowStyles,
+        }));
       }
     };
-    // intentionally NOT re-running on new modifiers
+    // This is only run once to _create_ the popper
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    enabled,
-    placement,
-    positionFixed,
-    referenceElement,
-    popperElement,
-    hasArrow,
-  ]);
+  }, [enabled, referenceElement, popperElement]);
 
   return state;
 }
