@@ -47,7 +47,7 @@ export function toModifierMap(modifiers) {
 
 export function toModifierArray(map) {
   if (Array.isArray(map)) return map;
-  return Object.keys(map).map(k => {
+  return Object.keys(map || {}).map(k => {
     map[k].name = k;
     return map[k];
   });
@@ -100,7 +100,7 @@ export default function usePopper(
       enabled: true,
       phase: 'afterWrite',
       requires: ['computeStyles'],
-      fn(data) {
+      fn: data => {
         setState({
           scheduleUpdate,
           outOfBoundries: data.state.modifiersData.hide?.isReferenceHidden,

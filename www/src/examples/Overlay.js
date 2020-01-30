@@ -130,20 +130,18 @@ function OverlayExample() {
         container={containerRef}
         target={triggerRef}
       >
-        {({ props, arrowProps, placement }) => {
-          return (
-            <Tooltip {...props} placement={placement}>
-              <Arrow
-                {...arrowProps}
-                placement={placement}
-                style={arrowProps.style}
-              />
-              <Body>
-                I&rsquo;m placed to the <strong>{placement}</strong>
-              </Body>
-            </Tooltip>
-          );
-        }}
+        {({ props, arrowProps, placement }) => (
+          <Tooltip {...props} placement={placement}>
+            <Arrow
+              {...arrowProps}
+              placement={placement}
+              style={arrowProps.style}
+            />
+            <Body>
+              I&rsquo;m placed to the <strong>{placement}</strong>
+            </Body>
+          </Tooltip>
+        )}
       </Overlay>
     </div>
   );
