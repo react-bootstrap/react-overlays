@@ -1,3 +1,14 @@
+## [2.1.1](https://github.com/react-bootstrap/react-overlays/compare/v2.1.0...v2.1.1) (2020-02-03)
+
+
+### Bug Fixes
+
+* Compute scrollbar size dynamically on need ([#297](https://github.com/react-bootstrap/react-overlays/issues/297)) ([e022e9c](https://github.com/react-bootstrap/react-overlays/commit/e022e9c2b66fb7a0f8ef0c172a1b12c986dbcc75))
+
+
+
+
+
 # [2.1.0](https://github.com/react-bootstrap/react-overlays/compare/v2.0.0...v2.1.0) (2019-10-11)
 
 
