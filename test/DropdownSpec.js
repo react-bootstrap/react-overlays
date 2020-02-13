@@ -361,6 +361,7 @@ describe('<Dropdown>', () => {
       // hence no assert on the input having focus.
     });
   });
+
   describe('popper config', () => {
     it('can add modifiers', done => {
       const spy = sinon.spy();

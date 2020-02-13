@@ -73,7 +73,7 @@ export default function usePopper(
     placement = 'bottom',
     strategy = 'absolute',
     eventsEnabled = true,
-    ...options
+    modifiers: userModifiers,
   } = {},
 ) {
   const popperInstanceRef = useRef();
@@ -113,15 +113,17 @@ export default function usePopper(
     }),
     [scheduleUpdate, setState],
   );
-  const modifiers = toModifierArray(options.modifiers);
+
+  let modifiers = toModifierArray(userModifiers);
 
   let eventsModifier = modifiers.find(m => m.name === 'eventListeners');
+
   if (!eventsModifier && eventsEnabled) {
     eventsModifier = {
       name: 'eventListeners',
       enabled: true,
     };
-    modifiers.push(eventsModifier);
+    modifiers = [...modifiers, eventsModifier];
   }
 
   // A placement difference in state means popper determined a new placement
