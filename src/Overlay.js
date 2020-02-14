@@ -1,10 +1,10 @@
-import PopperJS from 'popper.js';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+import { placements } from '@popperjs/core/lib/enums';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
-import usePopper from './usePopper';
+import usePopper, { toModifierMap } from './usePopper';
 import useRootClose from './useRootClose';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
 
@@ -30,26 +30,35 @@ const Overlay = React.forwardRef((props, outerRef) => {
 
   const [exited, setExited] = useState(!props.show);
 
-  const { modifiers = {} } = popperConfig;
+  const modifiers = toModifierMap(popperConfig.modifiers);
 
   const { styles, arrowStyles, ...popper } = usePopper(target, rootElement, {
     ...popperConfig,
     placement: placement || 'bottom',
-    enableEvents: props.show,
+
     modifiers: {
       ...modifiers,
+      eventListeners: {
+        enabled: !!props.show,
+      },
       preventOverflow: {
-        padding: containerPadding || 5,
         ...modifiers.preventOverflow,
+        options: {
+          padding: containerPadding || 5,
+          ...modifiers.preventOverflow?.options,
+        },
       },
       arrow: {
         ...modifiers.arrow,
         enabled: !!arrowElement,
-        element: arrowElement,
+        options: {
+          ...modifiers.arrow?.options,
+          element: arrowElement,
+        },
       },
       flip: {
         enabled: !!flip,
-        ...modifiers.preventOverflow,
+        ...modifiers.flip,
       },
     },
   });
@@ -125,7 +134,7 @@ Overlay.propTypes = {
   show: PropTypes.bool,
 
   /** Specify where the overlay element is positioned in relation to the target element */
-  placement: PropTypes.oneOf(PopperJS.placements),
+  placement: PropTypes.oneOf(placements),
 
   /**
    * A DOM Element, Ref to an element, or function that returns either. The `target` element is where

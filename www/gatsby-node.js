@@ -2,7 +2,7 @@ const path = require('path');
 
 exports.onCreateWebpackConfig = ({ actions, plugins, loaders, getConfig }) => {
   actions.setWebpackConfig({
-    // devtool: 'source-map',
+    devtool: 'source-map',
     module: {
       rules: [
         {
