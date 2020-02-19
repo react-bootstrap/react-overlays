@@ -1,3 +1,19 @@
+# [3.0.0](https://github.com/react-bootstrap/react-overlays/compare/v2.1.1...v3.0.0) (2020-02-19)
+
+
+### Features
+
+* upgrade popper to v2 ([#766](https://github.com/react-bootstrap/react-overlays/issues/766)) ([02c8e6d](https://github.com/react-bootstrap/react-overlays/commit/02c8e6dc3c2a692de1a87b7c985f82a08a4e8594))
+
+
+### BREAKING CHANGES
+
+* popper upgrade to v2, slightly different modifiers format now
+
+
+
+
+
 ## [2.1.1](https://github.com/react-bootstrap/react-overlays/compare/v2.1.0...v2.1.1) (2020-02-03)
 
 
