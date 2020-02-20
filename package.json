@@ -119,7 +119,7 @@
     "react-transition-group": "^4.3.0",
     "rimraf": "^3.0.2",
     "simulant": "^0.2.2",
-    "sinon": "^8.1.1",
+    "sinon": "^9.0.0",
     "sinon-chai": "^3.4.0",
     "webpack": "^4.41.6",
     "webpack-atoms": "^12.1.0",
