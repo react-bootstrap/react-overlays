@@ -1,6 +1,6 @@
 import styled from 'astroturf';
 import { Link } from 'gatsby';
-import React from 'react';
+import * as React from 'react';
 
 const NavList = styled('ul')`
   composes: nav d-flex flex-column from global;

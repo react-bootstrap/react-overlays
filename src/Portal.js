@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom';
 
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
 

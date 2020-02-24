@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import { useState } from 'react';
+import * as ReactDOM from 'react-dom';
 import { placements } from '@popperjs/core/lib/enums';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';

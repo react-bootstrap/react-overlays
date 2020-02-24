@@ -1,5 +1,5 @@
 import { graphql } from 'gatsby';
-import React from 'react';
+import * as React from 'react';
 import Anchor from '../components/Anchor';
 import HookDocumentation from '../components/HookDocumentation';
 import Page from '../components/Page';

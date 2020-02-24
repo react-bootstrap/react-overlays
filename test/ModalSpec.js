@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import jQuery from 'jquery';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import Transition from 'react-transition-group/Transition';
 import simulant from 'simulant';

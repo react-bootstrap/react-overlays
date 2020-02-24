@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Anchor from '../components/Anchor';
 import Page from '../components/Page';
 import Playground from '../components/Playground';

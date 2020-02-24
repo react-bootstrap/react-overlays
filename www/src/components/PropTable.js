@@ -1,7 +1,7 @@
 import { graphql } from 'gatsby';
 import capitalize from 'lodash/capitalize';
 import PropTypes from 'prop-types';
-import React from 'react';
+import * as React from 'react';
 
 function cleanDocletValue(str) {
   return str
