@@ -103,7 +103,7 @@ export default function usePopper(
       fn: data => {
         setState({
           scheduleUpdate,
-          outOfBoundries: data.state.modifiersData.hide?.isReferenceHidden,
+          outOfBoundaries: data.state.modifiersData.hide?.isReferenceHidden,
           placement: data.state.placement,
           styles: { ...data.state.styles?.popper },
           arrowStyles: { ...data.state.styles?.arrow },
