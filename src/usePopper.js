@@ -64,6 +64,8 @@ export function toModifierArray(map) {
  * @param {String}      options.placement The popper element placement relative to the reference element
  * @param {Boolean}     options.positionFixed use fixed positioning
  * @param {Boolean}     options.eventsEnabled have Popper listen on window resize events to reposition the element
+ * @param {Function}    options.onCreate called when the popper is created
+ * @param {Function}    options.onUpdate called when the popper is updated
  */
 export default function usePopper(
   referenceElement,
@@ -74,6 +76,7 @@ export default function usePopper(
     strategy = 'absolute',
     eventsEnabled = true,
     modifiers: userModifiers,
+    ...popperOptions
   } = {},
 ) {
   const popperInstanceRef = useRef();
@@ -152,6 +155,7 @@ export default function usePopper(
     }
 
     popperInstanceRef.current = createPopper(referenceElement, popperElement, {
+      ...popperOptions,
       placement,
       strategy,
       modifiers: [...modifiers, updateModifier],

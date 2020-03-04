@@ -42,6 +42,7 @@ export function useDropdownMenu(options = {}) {
   const modifiers = toModifierMap(popperConfig.modifiers);
 
   const popper = usePopper(toggleElement, menuElement, {
+    ...popperConfig,
     placement,
     enabled: !!(shouldUsePopper && show),
     modifiers: {
