@@ -2,11 +2,11 @@
 
 import '@babel/polyfill';
 
+import { format } from 'util';
 import chai from 'chai';
-import sinonChai from 'sinon-chai';
-
-import Enzyme, { ShallowWrapper, ReactWrapper } from 'enzyme';
+import Enzyme, { ReactWrapper, ShallowWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import sinonChai from 'sinon-chai';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -38,7 +38,8 @@ global.expect = chai.expect;
 global.assert = chai.assert;
 
 beforeEach(() => {
-  sinon.stub(console, 'error').callsFake(msg => {
+  sinon.stub(console, 'error').callsFake((...args) => {
+    const msg = format(...args);
     let expected = false;
 
     console.error.expected.forEach(about => {

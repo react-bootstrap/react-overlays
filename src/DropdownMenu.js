@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useContext, useRef } from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import DropdownContext from './DropdownContext';
-import usePopper from './usePopper';
+import usePopper, { toModifierMap } from './usePopper';
 import useRootClose from './useRootClose';
 
 export function useDropdownMenu(options = {}) {
@@ -39,19 +39,29 @@ export function useDropdownMenu(options = {}) {
   else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
   else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
 
+  const modifiers = toModifierMap(popperConfig.modifiers);
+
   const popper = usePopper(toggleElement, menuElement, {
     ...popperConfig,
     placement,
     enabled: !!(shouldUsePopper && show),
-    eventsEnabled: !!show,
     modifiers: {
-      flip: { enabled: !!flip },
-      arrow: {
-        ...(popperConfig.modifiers && popperConfig.modifiers.arrow),
-        enabled: !!arrowElement,
-        element: arrowElement,
+      ...modifiers,
+      eventListeners: {
+        enabled: !!show,
       },
-      ...popperConfig.modifiers,
+      arrow: {
+        ...modifiers.arrow,
+        enabled: !!arrowElement,
+        options: {
+          ...modifiers.arrow?.options,
+          element: arrowElement,
+        },
+      },
+      flip: {
+        enabled: !!flip,
+        ...modifiers.flip,
+      },
     },
   });
 

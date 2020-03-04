@@ -1,15 +1,24 @@
+import { mount } from 'enzyme';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
 import simulant from 'simulant';
-
 import Dropdown from '../src/Dropdown';
 
 describe('<Dropdown>', () => {
-  const Menu = ({ usePopper, rootCloseEvent, renderSpy, ...props }) => (
-    <Dropdown.Menu flip usePopper={usePopper} rootCloseEvent={rootCloseEvent}>
+  const Menu = ({
+    usePopper,
+    rootCloseEvent,
+    renderSpy,
+    popperConfig,
+    ...props
+  }) => (
+    <Dropdown.Menu
+      flip
+      popperConfig={popperConfig}
+      usePopper={usePopper}
+      rootCloseEvent={rootCloseEvent}
+    >
       {args => {
         renderSpy && renderSpy(args);
         const { show, close, props: menuProps } = args;
@@ -350,6 +359,41 @@ describe('<Dropdown>', () => {
       // simulating a tab event doesn't actually shift focus.
       // at least that seems to be the case according to SO.
       // hence no assert on the input having focus.
+    });
+  });
+
+  describe('popper config', () => {
+    it('can add modifiers', done => {
+      const spy = sinon.spy();
+      const popper = {
+        modifiers: [
+          {
+            name: 'test',
+            enabled: true,
+            phase: 'write',
+            fn: spy,
+          },
+        ],
+      };
+
+      mount(
+        <Dropdown show id="test-id">
+          {() => (
+            <div>
+              <Toggle>Child Title</Toggle>
+              <Menu popperConfig={popper}>
+                <button type="button">Item 1</button>
+                <button type="button">Item 2</button>
+              </Menu>
+            </div>
+          )}
+        </Dropdown>,
+      );
+
+      setTimeout(() => {
+        spy.should.have.been.calledOnce;
+        done();
+      });
     });
   });
 });
