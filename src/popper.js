@@ -8,6 +8,8 @@ import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
 import { placements } from '@popperjs/core/lib/enums';
 import { popperGenerator } from '@popperjs/core/lib/popper-base';
 
+// For the common JS build we will turn this file into a bundle with no imports.
+// This is b/c the Popper lib is all esm files, and would break in a common js only environment
 export const createPopper = popperGenerator({
   defaultModifiers: [
     hide,
