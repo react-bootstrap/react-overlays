@@ -1,25 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import arrow from '@popperjs/core/lib/modifiers/arrow';
-import computeStyles from '@popperjs/core/lib/modifiers/computeStyles';
-import eventListeners from '@popperjs/core/lib/modifiers/eventListeners';
-import flip from '@popperjs/core/lib/modifiers/flip';
-import hide from '@popperjs/core/lib/modifiers/hide';
-import popperOffsets from '@popperjs/core/lib/modifiers/popperOffsets';
-import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
-import { popperGenerator } from '@popperjs/core/lib/popper-base';
 import useSafeState from '@restart/hooks/useSafeState';
-
-const createPopper = popperGenerator({
-  defaultModifiers: [
-    hide,
-    popperOffsets,
-    computeStyles,
-    eventListeners,
-    flip,
-    preventOverflow,
-    arrow,
-  ],
-});
+import { createPopper } from './popper';
 
 const initialPopperStyles = {
   position: 'absolute',
