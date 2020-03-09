@@ -2,8 +2,10 @@
 
 import getOffset from 'dom-helpers/offset';
 import PropTypes from 'prop-types';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
-import ReactDOM, { findDOMNode } from 'react-dom';
+import * as React from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
+import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from 'react-live';
 import * as ReactOverlays from 'react-overlays';
 import Transition, {

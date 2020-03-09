@@ -1,6 +1,6 @@
 import styled from 'astroturf';
 import { graphql } from 'gatsby';
-import React from 'react';
+import * as React from 'react';
 
 const Wrapper = styled('span')`
   &.block {

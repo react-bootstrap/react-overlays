@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import simulant from 'simulant';
 import Dropdown from '../src/Dropdown';

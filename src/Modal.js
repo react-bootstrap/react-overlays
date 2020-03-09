@@ -5,8 +5,8 @@ import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
 import PropTypes from 'prop-types';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import ModalManager from './ModalManager';
 import ownerDocument from './utils/ownerDocument';

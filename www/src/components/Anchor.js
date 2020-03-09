@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import * as React from 'react';
 
 export default class Anchor extends React.Component {
   static propTypes = {
