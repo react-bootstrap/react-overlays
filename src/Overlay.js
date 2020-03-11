@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { placements } from '@popperjs/core/lib/enums';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
+import { placements } from './popper';
 import usePopper, { toModifierMap } from './usePopper';
 import useRootClose from './useRootClose';
 import useWaitForDOMRef from './utils/useWaitForDOMRef';
