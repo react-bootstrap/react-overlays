@@ -1,6 +1,6 @@
 {
   "name": "react-overlays",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Utilities for creating robust overlay components",
   "author": {
     "name": "Jason Quense",
@@ -132,5 +132,5 @@
   },
   "readme": "ERROR: No README data found!",
   "homepage": "https://github.com/react-bootstrap/react-overlays#readme",
-  "_id": "react-overlays@2.1.1"
+  "_id": "react-overlays@3.0.0"
 }

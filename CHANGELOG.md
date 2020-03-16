@@ -1,3 +1,15 @@
+## [3.0.1](https://github.com/react-bootstrap/react-overlays/compare/v3.0.0...v3.0.1) (2020-03-16)
+
+
+### Bug Fixes
+
+* popper imports for common js ([#781](https://github.com/react-bootstrap/react-overlays/issues/781)) ([c29dc76](https://github.com/react-bootstrap/react-overlays/commit/c29dc76f66c7eb74f5123ca9d5f531918ea7134a))
+* typo ([#777](https://github.com/react-bootstrap/react-overlays/issues/777)) ([edd278b](https://github.com/react-bootstrap/react-overlays/commit/edd278b585106729cfef2ed556cc4a9d97077b0d))
+
+
+
+
+
 # [3.0.0](https://github.com/react-bootstrap/react-overlays/compare/v2.1.1...v3.0.0) (2020-02-19)
 
 
