@@ -114,7 +114,7 @@
     "karma-webpack": "4.0.2",
     "lint-staged": "^10.0.8",
     "mocha": "^7.1.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-transition-group": "^4.3.0",
