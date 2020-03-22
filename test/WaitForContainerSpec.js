@@ -16,7 +16,7 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy(resolved => {
+    const onResolved = sinon.spy((resolved) => {
       expect(resolved).to.equal(container);
     });
 
@@ -39,7 +39,7 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy(resolved => {
+    const onResolved = sinon.spy((resolved) => {
       expect(resolved).to.equal(container.current);
     });
 
@@ -62,7 +62,7 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy(resolved => {
+    const onResolved = sinon.spy((resolved) => {
       expect(resolved).to.equal(div);
     });
 
@@ -82,7 +82,7 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy(resolved => {
+    const onResolved = sinon.spy((resolved) => {
       expect(resolved.tagName).to.equal('DIV');
     });
 

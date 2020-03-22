@@ -120,7 +120,7 @@ function Dropdown({
   const menuElement = menuRef.current;
 
   const setMenu = useCallback(
-    ref => {
+    (ref) => {
       menuRef.current = ref;
       // ensure that a menu set triggers an update for consumers
       forceUpdate();
@@ -133,7 +133,7 @@ function Dropdown({
   const focusInDropdown = useRef(false);
 
   const toggle = useCallback(
-    event => {
+    (event) => {
       onToggle(!show, event);
     },
     [onToggle, show],
@@ -218,7 +218,7 @@ function Dropdown({
     return items[index];
   };
 
-  const handleKeyDown = event => {
+  const handleKeyDown = (event) => {
     const { key, target } = event;
 
     // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400

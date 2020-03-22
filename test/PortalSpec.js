@@ -16,7 +16,7 @@ describe('Portal', () => {
         return (
           <Portal>
             <div
-              ref={c => {
+              ref={(c) => {
                 this.div = c;
               }}
               id="test1"
@@ -43,7 +43,7 @@ describe('Portal', () => {
         return (
           <Portal container={container}>
             <div
-              ref={c => {
+              ref={(c) => {
                 this.div = c;
               }}
               id="test1"
@@ -71,7 +71,7 @@ describe('Portal', () => {
           <div ref={this.container}>
             <Portal container={this.container}>
               <div
-                ref={c => {
+                ref={(c) => {
                   this.div = c;
                 }}
                 id="test1"
@@ -125,7 +125,7 @@ describe('Portal', () => {
         return (
           <div>
             <div
-              ref={c => {
+              ref={(c) => {
                 this.container = c;
               }}
             />

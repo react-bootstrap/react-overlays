@@ -28,7 +28,7 @@ const RandomlyPositionedModal = styled(Modal)`
 function ModalExample() {
   const [show, setShow] = useState(false);
 
-  const renderBackdrop = props => <Backdrop {...props} />;
+  const renderBackdrop = (props) => <Backdrop {...props} />;
 
   return (
     <div className="modal-example">

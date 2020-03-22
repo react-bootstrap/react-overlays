@@ -20,7 +20,7 @@ export function toModifierMap(modifiers) {
   }
 
   // eslint-disable-next-line no-unused-expressions
-  modifiers?.forEach(m => {
+  modifiers?.forEach((m) => {
     result[m.name] = m;
   });
   return result;
@@ -28,7 +28,7 @@ export function toModifierMap(modifiers) {
 
 export function toModifierArray(map) {
   if (Array.isArray(map)) return map;
-  return Object.keys(map || {}).map(k => {
+  return Object.keys(map || {}).map((k) => {
     map[k].name = k;
     return map[k];
   });
@@ -84,7 +84,7 @@ export default function usePopper(
       enabled: true,
       phase: 'afterWrite',
       requires: ['computeStyles'],
-      fn: data => {
+      fn: (data) => {
         setState({
           scheduleUpdate,
           outOfBoundaries: data.state.modifiersData.hide?.isReferenceHidden,
@@ -100,7 +100,7 @@ export default function usePopper(
 
   let modifiers = toModifierArray(userModifiers);
 
-  let eventsModifier = modifiers.find(m => m.name === 'eventListeners');
+  let eventsModifier = modifiers.find((m) => m.name === 'eventListeners');
 
   if (!eventsModifier && eventsEnabled) {
     eventsModifier = {
@@ -146,7 +146,7 @@ export default function usePopper(
       if (popperInstanceRef.current !== null) {
         popperInstanceRef.current.destroy();
         popperInstanceRef.current = null;
-        setState(s => ({
+        setState((s) => ({
           ...s,
           styles: initialPopperStyles,
           arrowStyles: initialArrowStyles,

@@ -27,7 +27,7 @@ export function useDropdownMenu(options = {}) {
     hasShownRef.current = true;
   }
 
-  const handleClose = e => {
+  const handleClose = (e) => {
     if (!context.toggle) return;
     context.toggle(false, e);
   };

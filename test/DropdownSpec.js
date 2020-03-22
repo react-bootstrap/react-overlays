@@ -19,7 +19,7 @@ describe('<Dropdown>', () => {
       usePopper={usePopper}
       rootCloseEvent={rootCloseEvent}
     >
-      {args => {
+      {(args) => {
         renderSpy && renderSpy(args);
         const { show, close, props: menuProps } = args;
         return (
@@ -36,7 +36,7 @@ describe('<Dropdown>', () => {
     </Dropdown.Menu>
   );
 
-  const Toggle = props => (
+  const Toggle = (props) => (
     <Dropdown.Toggle>
       {({ toggle, props: toggleProps }) => (
         <button
@@ -84,7 +84,7 @@ describe('<Dropdown>', () => {
   });
 
   it('forwards alignEnd to menu', () => {
-    const renderSpy = sinon.spy(args => {
+    const renderSpy = sinon.spy((args) => {
       args.alignEnd.should.equal(true);
     });
 
@@ -177,10 +177,7 @@ describe('<Dropdown>', () => {
 
     wrapper.assertSingle('ReactOverlaysDropdown[show=true]');
 
-    wrapper
-      .find('button')
-      .last()
-      .simulate('click');
+    wrapper.find('button').last().simulate('click');
 
     onToggle.should.have.been.calledWith(false);
   });
@@ -191,16 +188,10 @@ describe('<Dropdown>', () => {
     const wrapper = mount(<SimpleDropdown show onToggle={onToggle} />);
 
     wrapper.find('.toggle').simulate('click');
-    wrapper
-      .find('.menu > button')
-      .first()
-      .simulate('click');
+    wrapper.find('.menu > button').first().simulate('click');
 
     onToggle.should.have.been.calledWith(false);
-    wrapper
-      .find('ReactOverlaysDropdown')
-      .prop('show')
-      .should.equal(true);
+    wrapper.find('ReactOverlaysDropdown').prop('show').should.equal(true);
   });
 
   it('has aria-labelledby same id as toggle button', () => {
@@ -211,10 +202,7 @@ describe('<Dropdown>', () => {
       .getDOMNode()
       .getAttribute('id')
       .should.equal(
-        wrapper
-          .find('.menu')
-          .getDOMNode()
-          .getAttribute('aria-labelledby'),
+        wrapper.find('.menu').getDOMNode().getAttribute('aria-labelledby'),
       );
   });
 
@@ -246,10 +234,7 @@ describe('<Dropdown>', () => {
         { attachTo: focusableContainer },
       );
 
-      wrapper
-        .find('.toggle')
-        .getDOMNode()
-        .focus();
+      wrapper.find('.toggle').getDOMNode().focus();
 
       wrapper.find('.toggle').simulate('click');
 
@@ -272,18 +257,12 @@ describe('<Dropdown>', () => {
         { attachTo: focusableContainer },
       );
 
-      wrapper
-        .find('.toggle')
-        .getDOMNode()
-        .focus();
+      wrapper.find('.toggle').getDOMNode().focus();
 
       wrapper.find('.toggle').simulate('keyDown', { key: 'ArrowDown' });
 
       document.activeElement.should.equal(
-        wrapper
-          .find('.menu > button')
-          .first()
-          .getDOMNode(),
+        wrapper.find('.menu > button').first().getDOMNode(),
       );
     });
 
@@ -303,18 +282,12 @@ describe('<Dropdown>', () => {
         { attachTo: focusableContainer },
       );
 
-      wrapper
-        .find('.toggle')
-        .getDOMNode()
-        .focus();
+      wrapper.find('.toggle').getDOMNode().focus();
 
       wrapper.find('.toggle').simulate('click');
 
       document.activeElement.should.equal(
-        wrapper
-          .find('.menu > button')
-          .first()
-          .getDOMNode(),
+        wrapper.find('.menu > button').first().getDOMNode(),
       );
     });
 
@@ -333,7 +306,7 @@ describe('<Dropdown>', () => {
       document.activeElement.should.equal(wrapper.find('.toggle').getDOMNode());
     });
 
-    it('when open and the key "tab" is pressed the menu is closed and focus is progress to the next focusable element', done => {
+    it('when open and the key "tab" is pressed the menu is closed and focus is progress to the next focusable element', (done) => {
       const wrapper = mount(
         <div>
           <SimpleDropdown defaultShow />
@@ -363,7 +336,7 @@ describe('<Dropdown>', () => {
   });
 
   describe('popper config', () => {
-    it('can add modifiers', done => {
+    it('can add modifiers', (done) => {
       const spy = sinon.spy();
       const popper = {
         modifiers: [

@@ -1,5 +1,5 @@
 const MenuContainer = styled('ButtonToolbar')`
-  display: ${p => (p.show ? 'flex' : 'none')};
+  display: ${(p) => (p.show ? 'flex' : 'none')};
   min-width: 150px;
   position: absolute;
   flex-direction: column;
@@ -68,7 +68,7 @@ function DropdownExample() {
     <ButtonToolbar className="dropdown-example">
       <DropdownButton
         show={show}
-        onToggle={nextShow => setShow(nextShow)}
+        onToggle={(nextShow) => setShow(nextShow)}
         title={`${show ? 'Close' : 'Open'} Dropdown`}
       />
       <DropdownButton alignEnd title="Align right" />

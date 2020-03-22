@@ -15,7 +15,7 @@ import useWaitForDOMRef from './utils/useWaitForDOMRef';
 function omitProps(props, propTypes) {
   const keys = Object.keys(props);
   const newProps = {};
-  keys.forEach(prop => {
+  keys.forEach((prop) => {
     if (!Object.prototype.hasOwnProperty.call(propTypes, prop)) {
       newProps[prop] = props[prop];
     }
@@ -214,7 +214,7 @@ class Modal extends React.Component {
     enforceFocus: true,
     restoreFocus: true,
     onHide: () => {},
-    renderBackdrop: props => <div {...props} />,
+    renderBackdrop: (props) => <div {...props} />,
   };
 
   state = { exited: !this.props.show };
@@ -305,11 +305,11 @@ class Modal extends React.Component {
     }
   };
 
-  setDialogRef = ref => {
+  setDialogRef = (ref) => {
     this.dialog = ref;
   };
 
-  setBackdropRef = ref => {
+  setBackdropRef = (ref) => {
     this.backdrop = ref && ReactDOM.findDOMNode(ref);
   };
 
@@ -334,7 +334,7 @@ class Modal extends React.Component {
     }
   };
 
-  handleBackdropClick = e => {
+  handleBackdropClick = (e) => {
     if (e.target !== e.currentTarget) {
       return;
     }
@@ -348,7 +348,7 @@ class Modal extends React.Component {
     }
   };
 
-  handleDocumentKeyDown = e => {
+  handleDocumentKeyDown = (e) => {
     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
       if (this.props.onEscapeKeyDown) {
         this.props.onEscapeKeyDown(e);

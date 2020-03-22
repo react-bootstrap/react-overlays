@@ -10,7 +10,7 @@ import { mount } from 'enzyme';
 
 import Modal from '../src/Modal';
 
-const $ = componentOrNode => jQuery(ReactDOM.findDOMNode(componentOrNode));
+const $ = (componentOrNode) => jQuery(ReactDOM.findDOMNode(componentOrNode));
 
 describe('<Modal>', () => {
   let attachTo;
@@ -18,7 +18,7 @@ describe('<Modal>', () => {
 
   const mountWithRef = (el, options) => {
     const ref = React.createRef();
-    const Why = props => React.cloneElement(el, { ...props, ref });
+    const Why = (props) => React.cloneElement(el, { ...props, ref });
     wrapper = mount(<Why />, options);
     return ref;
   };
@@ -47,7 +47,7 @@ describe('<Modal>', () => {
     expect(ref.current.dialog.querySelectorAll('strong')).to.have.lengthOf(1);
   });
 
-  it('should disable scrolling on the modal container while open', done => {
+  it('should disable scrolling on the modal container while open', (done) => {
     class Container extends React.Component {
       ref = React.createRef();
 
@@ -146,7 +146,7 @@ describe('<Modal>', () => {
     expect(onClickSpy).to.have.been.calledOnce;
   });
 
-  it('should close the modal when the backdrop is clicked', done => {
+  it('should close the modal when the backdrop is clicked', (done) => {
     let doneOp = () => {
       done();
     };
@@ -179,7 +179,7 @@ describe('<Modal>', () => {
     expect(onHideSpy).to.not.have.been.called;
   });
 
-  it('should close the modal when the esc key is pressed', done => {
+  it('should close the modal when the esc key is pressed', (done) => {
     let doneOp = () => {
       done();
     };
@@ -201,7 +201,7 @@ describe('<Modal>', () => {
     wrapper = mount(
       <Modal show>
         <strong
-          ref={r => {
+          ref={(r) => {
             dialog = r;
           }}
         >
@@ -219,11 +219,11 @@ describe('<Modal>', () => {
     wrapper = mount(
       <Modal
         show
-        renderDialog={props => (
+        renderDialog={(props) => (
           <strong
             {...props}
             role="group"
-            ref={r => {
+            ref={(r) => {
               dialog = r;
             }}
           >
@@ -254,14 +254,14 @@ describe('<Modal>', () => {
     assert.ok(!document.body.classList.contains('modal-open'));
   });
 
-  it('should pass transition callbacks to Transition', done => {
+  it('should pass transition callbacks to Transition', (done) => {
     let count = 0;
     let increment = () => count++;
 
     wrapper = mount(
       <Modal
         show
-        transition={p => <Transition {...p} timeout={0} />}
+        transition={(p) => <Transition {...p} timeout={0} />}
         onExit={increment}
         onExiting={increment}
         onExited={() => {
@@ -413,7 +413,7 @@ describe('<Modal>', () => {
       expect(document.activeElement).to.equal(input);
     });
 
-    it('should return focus to the modal', done => {
+    it('should return focus to the modal', (done) => {
       expect(document.activeElement).to.equal(focusableContainer);
 
       mount(

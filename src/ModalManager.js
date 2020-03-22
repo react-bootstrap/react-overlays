@@ -46,7 +46,7 @@ class ModalManager {
   }
 
   containerIndexFromModal(modal) {
-    return findIndexOf(this.data, d => d.modals.indexOf(modal) !== -1);
+    return findIndexOf(this.data, (d) => d.modals.indexOf(modal) !== -1);
   }
 
   setContainerStyle(containerState, container) {
@@ -62,10 +62,9 @@ class ModalManager {
     if (containerState.overflowing) {
       // use computed style, here to get the real padding
       // to add our scrollbar width
-      style.paddingRight = `${parseInt(
-        css(container, 'paddingRight') || 0,
-        10,
-      ) + this.scrollbarSize}px`;
+      style.paddingRight = `${
+        parseInt(css(container, 'paddingRight') || 0, 10) + this.scrollbarSize
+      }px`;
     }
 
     css(container, style);
@@ -74,7 +73,7 @@ class ModalManager {
   removeContainerStyle(containerState, container) {
     const { style } = containerState;
 
-    Object.keys(style).forEach(key => {
+    Object.keys(style).forEach((key) => {
       container.style[key] = style[key];
     });
   }
