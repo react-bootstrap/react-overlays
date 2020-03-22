@@ -39,7 +39,7 @@ function useRootClose(
   const onClose = onRootClose || noop;
 
   const handleMouseCapture = useCallback(
-    e => {
+    (e) => {
       const currentTarget = ref && ('current' in ref ? ref.current : ref);
       warning(
         !!currentTarget,
@@ -56,13 +56,13 @@ function useRootClose(
     [ref],
   );
 
-  const handleMouse = useEventCallback(e => {
+  const handleMouse = useEventCallback((e) => {
     if (!preventMouseRootCloseRef.current) {
       onClose(e);
     }
   });
 
-  const handleKeyUp = useEventCallback(e => {
+  const handleKeyUp = useEventCallback((e) => {
     if (e.keyCode === escapeKeyCode) {
       onClose(e);
     }
@@ -90,14 +90,14 @@ function useRootClose(
     if ('ontouchstart' in doc.documentElement) {
       mobileSafariHackListeners = [].slice
         .call(doc.body.children)
-        .map(el => listen(el, 'mousemove', noop));
+        .map((el) => listen(el, 'mousemove', noop));
     }
 
     return () => {
       removeMouseCaptureListener();
       removeMouseListener();
       removeKeyupListener();
-      mobileSafariHackListeners.forEach(remove => remove());
+      mobileSafariHackListeners.forEach((remove) => remove());
     };
   }, [
     ref,

@@ -19,7 +19,7 @@ function assertLength(length) {
 }
 
 function print() {
-  return this.tap(f => console.log(f.debug()));
+  return this.tap((f) => console.log(f.debug()));
 }
 
 ReactWrapper.prototype.assertSingle = assertLength(1);
@@ -42,7 +42,7 @@ beforeEach(() => {
     const msg = format(...args);
     let expected = false;
 
-    console.error.expected.forEach(about => {
+    console.error.expected.forEach((about) => {
       if (msg.indexOf(about) !== -1) {
         console.error.warned[about] = true;
         expected = true;

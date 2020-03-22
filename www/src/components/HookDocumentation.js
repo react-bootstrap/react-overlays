@@ -92,7 +92,7 @@ const TypeExpression = ({ type }) => {
 const FunctionSignature = ({ definition, block, ignoreParams }) => {
   const params = definition.params
     ? definition.params
-        .filter(param => !ignoreParams.includes(param.name))
+        .filter((param) => !ignoreParams.includes(param.name))
         .map((param, index) => (
           <React.Fragment key={param.name}>
             {index > 0 && <Punctuation>, </Punctuation>}

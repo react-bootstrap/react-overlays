@@ -40,7 +40,7 @@ injectCss(`
 
 const fadeStyles = {
   entering: 'show',
-  entered: 'show'
+  entered: 'show',
 };
 
 const Fade = ({ children, ...props }) => (
@@ -48,7 +48,7 @@ const Fade = ({ children, ...props }) => (
     {(status, innerProps) =>
       React.cloneElement(children, {
         ...innerProps,
-        className: `fade ${fadeStyles[status]} ${children.props.className}`
+        className: `fade ${fadeStyles[status]} ${children.props.className}`,
       })
     }
   </Transition>
@@ -60,11 +60,11 @@ class TransitionExample extends React.Component {
 
     this.state = { showModal: false };
     this.toggleModal = () => {
-      this.setState(state => ({ showModal: !state.showModal }));
+      this.setState((state) => ({ showModal: !state.showModal }));
     };
 
     this.toggleTooltip = () => {
-      this.setState(state => ({ showTooltip: !state.showTooltip }));
+      this.setState((state) => ({ showTooltip: !state.showTooltip }));
     };
 
     this.tooltipRef = React.createRef();

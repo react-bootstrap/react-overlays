@@ -51,7 +51,7 @@ export default class Playground extends React.Component {
         mountStylesheet={false}
         code={this.props.codeText}
         noInline={this.props.codeText.includes('render(')}
-        transformCode={code =>
+        transformCode={(code) =>
           Babel.transform(code, {
             presets: [
               [

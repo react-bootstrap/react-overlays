@@ -4,10 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 function cleanDocletValue(str) {
-  return str
-    .trim()
-    .replace(/^\{/, '')
-    .replace(/\}$/, '');
+  return str.trim().replace(/^\{/, '').replace(/\}$/, '');
 }
 function getDisplayTypeName(typeName) {
   if (typeName === 'func') return 'function';
@@ -76,9 +73,9 @@ export default class PropTable extends React.Component {
   renderRows(propsData) {
     return propsData
       .filter(
-        prop => prop.type && !prop.doclets.private && !prop.doclets.ignore,
+        (prop) => prop.type && !prop.doclets.private && !prop.doclets.ignore,
       )
-      .map(propData => {
+      .map((propData) => {
         const { name, description, doclets } = propData;
         let descHtml = description && description.childMarkdownRemark.html;
 

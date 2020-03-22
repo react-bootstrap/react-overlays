@@ -1,6 +1,6 @@
 const { rules, plugins } = require('webpack-atoms');
 
-module.exports = config => {
+module.exports = (config) => {
   const { env } = process;
 
   config.set({

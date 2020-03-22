@@ -4,7 +4,7 @@ function RootCloseWrapperExample() {
   const handleRootClose = () => setShow(false);
 
   useRootClose(ref, handleRootClose, {
-    disabled: !show
+    disabled: !show,
   });
 
   return (

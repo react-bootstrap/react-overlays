@@ -5,7 +5,7 @@ let isHidable = ({ nodeType, tagName }) =>
 
 let siblings = (container, exclude, cb) => {
   exclude = [].concat(exclude);
-  [].forEach.call(container.children, node => {
+  [].forEach.call(container.children, (node) => {
     if (exclude.indexOf(node) === -1 && isHidable(node)) {
       cb(node);
     }
@@ -22,9 +22,9 @@ export function ariaHidden(show, node) {
 }
 
 export function hideSiblings(container, { dialog, backdrop }) {
-  siblings(container, [dialog, backdrop], node => ariaHidden(true, node));
+  siblings(container, [dialog, backdrop], (node) => ariaHidden(true, node));
 }
 
 export function showSiblings(container, { dialog, backdrop }) {
-  siblings(container, [dialog, backdrop], node => ariaHidden(false, node));
+  siblings(container, [dialog, backdrop], (node) => ariaHidden(false, node));
 }

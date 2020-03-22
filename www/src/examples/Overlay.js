@@ -4,7 +4,7 @@ const Tooltip = styled('div')`
   position: absolute;
   padding: 0 5px;
 
-  ${p => {
+  ${(p) => {
     switch (p.placement) {
       case 'left':
         return css`
@@ -39,7 +39,7 @@ const Arrow = styled('div')`
   border-style: solid;
   opacity: 0.75;
 
-  ${p => {
+  ${(p) => {
     switch (p.placement) {
       case 'left':
         return css`
@@ -84,7 +84,7 @@ const PLACEMENTS = ['left', 'top', 'right', 'bottom'];
 
 const initialSstate = {
   show: false,
-  placement: null
+  placement: null,
 };
 
 function reducer(state, [type, payload]) {
