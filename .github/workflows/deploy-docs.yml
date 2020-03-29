@@ -14,10 +14,11 @@ jobs:
         uses: actions/setup-node@v1
       - name: Install Dependencies
         run: yarn bootstrap
-      - name: Build and Deploy Production Files
-        uses: JamesIves/github-pages-deploy-action@master
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Build Production Files
+        run: yarn build-docs
+      - name: Deploy Production Files
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: www/public
-          BUILD_SCRIPT: yarn build-docs
