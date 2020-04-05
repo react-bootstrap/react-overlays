@@ -7,7 +7,7 @@
 
 Utilities for creating robust overlay components.
 
-## Demos and docs
+## Documentation
 
 https://react-bootstrap.github.io/react-overlays/modal/
 
