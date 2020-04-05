@@ -1,23 +1,23 @@
-name: Run Tests
+name: CI
 on:
   push:
     branches:
       - master
   pull_request:
     branches:
-      - master 
+      - master
 jobs:
-  test:
-    name: Run Testing Suite
+  ci:
+    name: CI
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         browser: [ChromeHeadless, FirefoxHeadless]
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      - name: Checking out Repository
+      - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Node.js
+      - name: Setup Node.js environment
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
@@ -36,11 +36,7 @@ jobs:
         run: yarn test
         env:
           BROWSER: ${{ matrix.browser }}
-      - name: Upload Test Coverage to CodeCov
-        # Container actions can only run on linux containers, which is sad.
-        if: matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v1.0.2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Codecov
+        uses: codecov/codecov-action@v1
       - name: Build Project
         run: yarn build
