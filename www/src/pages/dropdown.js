@@ -4,7 +4,7 @@ import Anchor from '../components/Anchor';
 import Page from '../components/Page';
 import Playground from '../components/Playground';
 import PropTable from '../components/PropTable';
-import DropdownSource from '../examples/Dropdown';
+import DropdownSource from '../code-examples/Dropdown';
 
 function DropdownPage({ location, data }) {
   const {

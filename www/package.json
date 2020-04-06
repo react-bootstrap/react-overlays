@@ -34,5 +34,8 @@
     "react-live": "^2.2.2",
     "react-transition-group": "^4.3.0",
     "sass": "^1.26.3"
+  },
+  "dependencies": {
+    "@docpocalypse/gatsby-theme": "^0.11.2"
   }
 }

@@ -21,26 +21,31 @@ module.exports = {
     ],
   },
   plugins: [
-    'gatsby-transformer-documentationjs',
-    'gatsby-plugin-sorted-assets',
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: '@docpocalypse/gatsby-theme',
       options: {
-        path: path.resolve(__dirname, '../src'),
-        name: 'source',
+        theming: 'none',
+        sources: [path.resolve(__dirname, '../src')],
+
+        ignore: (docNode) => {
+          console.log(docNode.tags);
+          return false;
+        },
+
+        getImportName(docNode, _) {
+          return `import ${docNode.name} from '${docNode.packageName}/${docNode.name}'`;
+        },
+
+        exampleCodeScope: {
+          Layout: require.resolve('@4c/layout'),
+        },
       },
     },
+
     'gatsby-plugin-sass',
     {
       resolve: 'gatsby-plugin-astroturf',
       options: { extension: '.module.scss' },
     },
-    {
-      resolve: 'gatsby-transformer-react-docgen',
-      options: {
-        resolver: combinedResolver,
-      },
-    },
-    'gatsby-transformer-remark',
   ],
 };
