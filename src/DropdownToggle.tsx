@@ -1,13 +1,27 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
-import DropdownContext from './DropdownContext';
+import DropdownContext, { DropdownContextValue } from './DropdownContext';
+
+export interface UseDropdownToggleProps {
+  ref: DropdownContextValue['setToggle'];
+  'aria-haspopup': boolean;
+  'aria-expanded': boolean;
+}
+
+export interface UseDropdownToggleHelpers {
+  show: DropdownContextValue['show'];
+  toggle: DropdownContextValue['toggle'];
+}
 
 /**
  * Wires up Dropdown toggle functinality, returning a set a props to attach
  * to the element that functions as the dropdown toggle (generally a button).
  */
-export function useDropdownToggle() {
-  const { show, toggle, setToggle } = useContext(DropdownContext);
+export function useDropdownToggle(): [
+  UseDropdownToggleProps,
+  UseDropdownToggleHelpers,
+] {
+  const { show, toggle, setToggle } = useContext(DropdownContext) || {};
   return [
     {
       ref: setToggle,
@@ -37,7 +51,13 @@ const propTypes = {
   children: PropTypes.func.isRequired,
 };
 
-function DropdownToggle({ children }) {
+export interface DropdownToggleProps {
+  children: (
+    args: UseDropdownToggleHelpers & { props: UseDropdownToggleProps },
+  ) => React.ReactNode;
+}
+
+function DropdownToggle({ children }: DropdownToggleProps) {
   const [props, { show, toggle }] = useDropdownToggle();
 
   return children({

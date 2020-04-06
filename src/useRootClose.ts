@@ -10,14 +10,28 @@ import ownerDocument from './utils/ownerDocument';
 const escapeKeyCode = 27;
 const noop = () => {};
 
-function isLeftClickEvent(event) {
+export type MouseEvents = {
+  [K in keyof GlobalEventHandlersEventMap]: GlobalEventHandlersEventMap[K] extends MouseEvent
+    ? K
+    : never;
+}[keyof GlobalEventHandlersEventMap];
+
+function isLeftClickEvent(event: MouseEvent) {
   return event.button === 0;
 }
 
-function isModifiedEvent(event) {
+function isModifiedEvent(event: MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
+const getRefTarget = (
+  ref: React.RefObject<Element> | Element | null | undefined,
+) => ref && ('current' in ref ? ref.current : ref);
+
+export interface RootCloseOptions {
+  disabled?: boolean;
+  clickTrigger?: MouseEvents;
+}
 /**
  * The `useRootClose` hook registers your callback on the document
  * when rendered. Powers the `<Overlay/>` component. This is used achieve modal
@@ -31,16 +45,17 @@ function isModifiedEvent(event) {
  * @param {string}  options.clickTrigger The DOM event name (click, mousedown, etc) to attach listeners on
  */
 function useRootClose(
-  ref,
-  onRootClose,
-  { disabled, clickTrigger = 'click' } = {},
+  ref: React.RefObject<Element> | Element | null | undefined,
+  onRootClose: (e: Event) => void,
+  { disabled, clickTrigger = 'click' }: RootCloseOptions = {},
 ) {
   const preventMouseRootCloseRef = useRef(false);
   const onClose = onRootClose || noop;
 
   const handleMouseCapture = useCallback(
     (e) => {
-      const currentTarget = ref && ('current' in ref ? ref.current : ref);
+      const currentTarget = getRefTarget(ref);
+
       warning(
         !!currentTarget,
         'RootClose captured a close event but does not have a ref to compare it to. ' +
@@ -51,18 +66,18 @@ function useRootClose(
         !currentTarget ||
         isModifiedEvent(e) ||
         !isLeftClickEvent(e) ||
-        contains(currentTarget, e.target);
+        !!contains(currentTarget, e.target);
     },
     [ref],
   );
 
-  const handleMouse = useEventCallback((e) => {
+  const handleMouse = useEventCallback((e: MouseEvent) => {
     if (!preventMouseRootCloseRef.current) {
       onClose(e);
     }
   });
 
-  const handleKeyUp = useEventCallback((e) => {
+  const handleKeyUp = useEventCallback((e: KeyboardEvent) => {
     if (e.keyCode === escapeKeyCode) {
       onClose(e);
     }
@@ -71,22 +86,22 @@ function useRootClose(
   useEffect(() => {
     if (disabled || ref == null) return undefined;
 
-    const doc = ownerDocument(ref.current);
+    const doc = ownerDocument(getRefTarget(ref));
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
     // element is removed in the React mouse callback.
     const removeMouseCaptureListener = listen(
-      doc,
+      doc as any,
       clickTrigger,
       handleMouseCapture,
       true,
     );
 
-    const removeMouseListener = listen(doc, clickTrigger, handleMouse);
-    const removeKeyupListener = listen(doc, 'keyup', handleKeyUp);
+    const removeMouseListener = listen(doc as any, clickTrigger, handleMouse);
+    const removeKeyupListener = listen(doc as any, 'keyup', handleKeyUp);
 
-    let mobileSafariHackListeners = [];
+    let mobileSafariHackListeners = [] as Array<() => void>;
     if ('ontouchstart' in doc.documentElement) {
       mobileSafariHackListeners = [].slice
         .call(doc.body.children)

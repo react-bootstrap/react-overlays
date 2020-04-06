@@ -2,13 +2,13 @@ import matches from 'dom-helpers/matches';
 import qsa from 'dom-helpers/querySelectorAll';
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useUncontrolled } from 'uncontrollable';
+import { useUncontrolled, useUncontrolledProp } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useForceUpdate from '@restart/hooks/useForceUpdate';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
-import DropdownContext from './DropdownContext';
+import DropdownContext, { DropDirection } from './DropdownContext';
 import DropdownMenu from './DropdownMenu';
 import DropdownToggle from './DropdownToggle';
 
@@ -85,6 +85,21 @@ const defaultProps = {
   itemSelector: '* > *',
 };
 
+export interface DropdownInjectedProps {
+  onKeyDown: React.KeyboardEventHandler;
+}
+
+export interface DropdownProps {
+  drop?: DropDirection;
+  alignEnd?: boolean;
+  defaultShow?: boolean;
+  show?: boolean;
+  onToggle: (nextShow: boolean, event?: React.SyntheticEvent) => void;
+  itemSelector?: string;
+  focusFirstItemOnShow?: false | true | 'keyboard';
+  children: (arg: { props: DropdownInjectedProps }) => React.ReactNode;
+}
+
 /**
  * `Dropdown` is set of structural components for building, accessible dropdown menus with close-on-click,
  * keyboard navigation, and correct focus handling. As with all the react-overlay's
@@ -101,26 +116,27 @@ function Dropdown({
   defaultShow,
   show: rawShow,
   onToggle: rawOnToggle,
-  itemSelector,
+  itemSelector = '* > *',
   focusFirstItemOnShow,
   children,
-}) {
+}: DropdownProps) {
   const forceUpdate = useForceUpdate();
-  const { show, onToggle } = useUncontrolled(
-    { defaultShow, show: rawShow, onToggle: rawOnToggle },
-    { show: 'onToggle' },
+  const [show, onToggle] = useUncontrolledProp(
+    rawShow,
+    defaultShow!,
+    rawOnToggle,
   );
 
-  const [toggleElement, setToggle] = useCallbackRef();
+  const [toggleElement, setToggle] = useCallbackRef<HTMLElement>();
 
   // We use normal refs instead of useCallbackRef in order to populate the
   // the value as quickly as possible, otherwise the effect to focus the element
   // may run before the state value is set
-  const menuRef = useRef();
+  const menuRef = useRef<HTMLElement | null>(null);
   const menuElement = menuRef.current;
 
   const setMenu = useCallback(
-    (ref) => {
+    (ref: null | HTMLElement) => {
       menuRef.current = ref;
       // ensure that a menu set triggers an update for consumers
       forceUpdate();
@@ -129,7 +145,7 @@ function Dropdown({
   );
 
   const lastShow = usePrevious(show);
-  const lastSourceEvent = useRef(null);
+  const lastSourceEvent = useRef<string | null>(null);
   const focusInDropdown = useRef(false);
 
   const toggle = useCallback(
@@ -185,12 +201,12 @@ function Dropdown({
 
     if (
       focusType === false ||
-      (focusType === 'keyboard' && !/^key.+$/.test(type))
+      (focusType === 'keyboard' && !/^key.+$/.test(type!))
     ) {
       return;
     }
 
-    let first = qsa(menuRef.current, itemSelector)[0];
+    let first = qsa(menuRef.current!, itemSelector)[0];
     if (first && first.focus) first.focus();
   });
 
@@ -207,7 +223,7 @@ function Dropdown({
     lastSourceEvent.current = null;
   });
 
-  const getNextFocusedChild = (current, offset) => {
+  const getNextFocusedChild = (current: HTMLElement, offset: number) => {
     if (!menuRef.current) return null;
 
     let items = qsa(menuRef.current, itemSelector);
@@ -218,8 +234,9 @@ function Dropdown({
     return items[index];
   };
 
-  const handleKeyDown = (event) => {
-    const { key, target } = event;
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    const { key } = event;
+    const target = event.target as HTMLElement;
 
     // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400
     // in inscrutability
@@ -271,7 +288,6 @@ function Dropdown({
 Dropdown.displayName = 'ReactOverlaysDropdown';
 
 Dropdown.propTypes = propTypes;
-Dropdown.defaultProps = defaultProps;
 
 Dropdown.Menu = DropdownMenu;
 Dropdown.Toggle = DropdownToggle;

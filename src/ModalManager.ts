@@ -10,7 +10,7 @@ import {
   showSiblings,
 } from './utils/manageAriaHidden';
 
-function findIndexOf(arr, cb) {
+function findIndexOf<T>(arr: T[], cb: (item: T, idx: number) => boolean) {
   let idx = -1;
   arr.some((d, i) => {
     if (cb(d, i)) {
@@ -22,12 +22,30 @@ function findIndexOf(arr, cb) {
   return idx;
 }
 
+export interface ModalInstance {
+  dialog: Element;
+  backdrop: Element;
+}
+
+export type ContainerState = Record<string, any> & {
+  isOverflowing?: boolean;
+  style?: Partial<CSSStyleDeclaration>;
+  modals: ModalInstance[];
+};
 /**
  * Proper state management for containers and the modals in those containers.
  *
  * @internal Used by the Modal to ensure proper styling of containers.
  */
 class ModalManager {
+  readonly hideSiblingNodes: boolean;
+  readonly handleContainerOverflow: boolean;
+
+  readonly modals: ModalInstance[];
+  readonly containers: HTMLElement[];
+  readonly data: ContainerState[];
+  readonly scrollbarSize: number;
+
   constructor({
     hideSiblingNodes = true,
     handleContainerOverflow = true,
@@ -40,17 +58,17 @@ class ModalManager {
     this.scrollbarSize = getScrollbarSize();
   }
 
-  isContainerOverflowing(modal) {
+  isContainerOverflowing(modal: ModalInstance) {
     const data = this.data[this.containerIndexFromModal(modal)];
     return data && data.overflowing;
   }
 
-  containerIndexFromModal(modal) {
+  containerIndexFromModal(modal: ModalInstance) {
     return findIndexOf(this.data, (d) => d.modals.indexOf(modal) !== -1);
   }
 
-  setContainerStyle(containerState, container) {
-    let style = { overflow: 'hidden' };
+  setContainerStyle(containerState: ContainerState, container: HTMLElement) {
+    let style: Partial<CSSStyleDeclaration> = { overflow: 'hidden' };
 
     // we are only interested in the actual `style` here
     // because we will override it
@@ -63,22 +81,22 @@ class ModalManager {
       // use computed style, here to get the real padding
       // to add our scrollbar width
       style.paddingRight = `${
-        parseInt(css(container, 'paddingRight') || 0, 10) + this.scrollbarSize
+        parseInt(css(container, 'paddingRight') || '0', 10) + this.scrollbarSize
       }px`;
     }
 
-    css(container, style);
+    css(container, style as any);
   }
 
-  removeContainerStyle(containerState, container) {
+  removeContainerStyle(containerState: ContainerState, container: HTMLElement) {
     const { style } = containerState;
 
-    Object.keys(style).forEach((key) => {
-      container.style[key] = style[key];
+    Object.keys(style!).forEach((key: string) => {
+      container.style[key as any] = style![key as keyof CSSStyleDeclaration];
     });
   }
 
-  add(modal, container, className) {
+  add(modal: ModalInstance, container: HTMLElement, className?: string) {
     let modalIdx = this.modals.indexOf(modal);
     let containerIdx = this.containers.indexOf(container);
 
@@ -117,7 +135,7 @@ class ModalManager {
     return modalIdx;
   }
 
-  remove(modal) {
+  remove(modal: Modal) {
     let modalIdx = this.modals.indexOf(modal);
 
     if (modalIdx === -1) {
@@ -154,7 +172,7 @@ class ModalManager {
     }
   }
 
-  isTopModal(modal) {
+  isTopModal(modal: ModalInstance) {
     return (
       !!this.modals.length && this.modals[this.modals.length - 1] === modal
     );

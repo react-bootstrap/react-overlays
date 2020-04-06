@@ -1,5 +1,11 @@
 {
-  "extends": ["@react-bootstrap"],
+  "extends": [
+    "@react-bootstrap",
+    "4catalyzer-typescript",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint"
+  ],
   "plugins": ["prettier"],
   "rules": {
     "jsx-a11y/no-autofocus": "off",

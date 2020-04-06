@@ -4,24 +4,61 @@ import ReactDOM from 'react-dom';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import { placements } from './popper';
-import usePopper, { toModifierMap } from './usePopper';
-import useRootClose from './useRootClose';
-import useWaitForDOMRef from './utils/useWaitForDOMRef';
+import usePopper, {
+  toModifierMap,
+  Placement,
+  UsePopperOptions,
+} from './usePopper';
+import useRootClose, { RootCloseOptions } from './useRootClose';
+import useWaitForDOMRef, { DOMContainer } from './utils/useWaitForDOMRef';
+import { TransitionCallbacks } from './types';
+
+export interface OverlayProps extends TransitionCallbacks {
+  flip?: boolean;
+  placement?: Placement;
+  containerPadding?: number;
+  popperConfig?: Omit<UsePopperOptions, 'placement'>;
+  container?: DOMContainer;
+  target: DOMContainer;
+  show?: boolean;
+  transition?: React.ComponentType<
+    { in?: boolean; appear?: boolean } & TransitionCallbacks
+  >;
+  onHide?: (e: Event) => void;
+  rootClose?: boolean;
+  rootCloseDisabled?: boolean;
+  rootCloseEvent?: RootCloseOptions['clickTrigger'];
+  children: (value: {
+    show: boolean;
+    placement: Placement;
+    outOfBoundaries: boolean;
+    scheduleUpdate: () => void;
+    props: {
+      ref: React.RefCallback<HTMLElement>;
+      style: React.CSSProperties;
+      'aria-labelledby'?: string;
+    };
+    arrowProps: {
+      ref: React.RefCallback<HTMLElement>;
+      style: React.CSSProperties;
+    };
+  }) => React.ReactNode;
+}
 
 /**
  * Built on top of `Popper.js`, the overlay component is
  * great for custom tooltip overlays.
  */
-const Overlay = React.forwardRef((props, outerRef) => {
+const Overlay = React.forwardRef((props: OverlayProps, outerRef) => {
   const {
     flip,
     placement,
-    containerPadding,
+    containerPadding = 5,
     popperConfig = {},
     transition: Transition,
   } = props;
 
-  const [rootElement, attachRef] = useCallbackRef();
+  const [rootElement, attachRef] = useCallbackRef<HTMLElement>();
   const [arrowElement, attachArrowRef] = useCallbackRef();
   const mergedRef = useMergedRefs(attachRef, outerRef);
 
@@ -69,7 +106,7 @@ const Overlay = React.forwardRef((props, outerRef) => {
     setExited(true);
   }
 
-  const handleHidden = (...args) => {
+  const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
     setExited(true);
 
     if (props.onExited) {
@@ -80,7 +117,7 @@ const Overlay = React.forwardRef((props, outerRef) => {
   // Don't un-render the overlay while it's transitioning out.
   const mountOverlay = props.show || (Transition && !exited);
 
-  useRootClose(rootElement, props.onHide, {
+  useRootClose(rootElement, props.onHide!, {
     disabled: !props.rootClose || props.rootCloseDisabled,
     clickTrigger: props.rootCloseEvent,
   });
@@ -92,13 +129,13 @@ const Overlay = React.forwardRef((props, outerRef) => {
 
   let child = props.children({
     ...popper,
-    show: props.show,
+    show: !!props.show,
     props: {
-      style: styles,
+      style: styles as any,
       ref: mergedRef,
     },
     arrowProps: {
-      style: arrowStyles,
+      style: arrowStyles as any,
       ref: attachArrowRef,
     },
   });
@@ -210,18 +247,18 @@ Overlay.propTypes = {
    * @type func
    */
   onHide(props, ...args) {
-    let propType = PropTypes.func;
     if (props.rootClose) {
-      propType = propType.isRequired;
+      return PropTypes.func.isRequired(props, ...args);
     }
 
-    return propType(props, ...args);
+    return PropTypes.func(props, ...args);
   },
 
   /**
    * A `react-transition-group@2.0.0` `<Transition/>` component
    * used to animate the overlay as it changes visibility.
    */
+  // @ts-ignore
   transition: PropTypes.elementType,
 
   /**
@@ -253,10 +290,6 @@ Overlay.propTypes = {
    * Callback fired after the Overlay finishes transitioning out
    */
   onExited: PropTypes.func,
-};
-
-Overlay.defaultProps = {
-  containerPadding: 5,
 };
 
 export default Overlay;

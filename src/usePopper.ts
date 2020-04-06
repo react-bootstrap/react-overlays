@@ -1,8 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useSafeState from '@restart/hooks/useSafeState';
 import { createPopper } from './popper';
+import {
+  Modifier,
+  Options,
+  Instance,
+  Placement,
+  VirtualElement,
+  State,
+} from '@popperjs/core';
 
-const initialPopperStyles = {
+const initialPopperStyles: Partial<CSSStyleDeclaration> = {
   position: 'absolute',
   top: '0',
   left: '0',
@@ -12,8 +20,15 @@ const initialPopperStyles = {
 
 const initialArrowStyles = {};
 
-export function toModifierMap(modifiers) {
-  const result = {};
+export type { Modifier, Options, Instance, Placement, VirtualElement, State };
+
+export type ModifierMap = Record<string, Partial<Modifier<any>>>;
+export type Modifiers =
+  | Partial<Modifier<any>>[]
+  | Record<string, Partial<Modifier<any>>>;
+
+export function toModifierMap(modifiers: Modifiers | undefined) {
+  const result: Modifiers = {};
 
   if (!Array.isArray(modifiers)) {
     return modifiers || result;
@@ -21,19 +36,38 @@ export function toModifierMap(modifiers) {
 
   // eslint-disable-next-line no-unused-expressions
   modifiers?.forEach((m) => {
-    result[m.name] = m;
+    result[m.name!] = m;
   });
   return result;
 }
 
-export function toModifierArray(map) {
+export function toModifierArray(map: Modifiers | undefined = {}) {
   if (Array.isArray(map)) return map;
-  return Object.keys(map || {}).map((k) => {
+  return Object.keys(map).map((k) => {
     map[k].name = k;
     return map[k];
   });
 }
 
+export type UsePopperOptions = Omit<
+  Options,
+  'modifiers' | 'placement' | 'strategy'
+> & {
+  placement?: Options['placement'];
+  strategy?: Options['strategy'];
+  modifiers?: Modifiers;
+  eventsEnabled?: boolean;
+  enabled?: boolean;
+};
+
+export interface UsePopperState {
+  placement: Placement;
+  outOfBoundaries: boolean;
+  scheduleUpdate: () => void;
+  styles: Partial<CSSStyleDeclaration>;
+  arrowStyles: Partial<CSSStyleDeclaration>;
+  state?: State;
+}
 /**
  * Position an element relative some reference element using Popper.js
  *
@@ -49,8 +83,8 @@ export function toModifierArray(map) {
  * @param {Function}    options.onUpdate called when the popper is updated
  */
 export default function usePopper(
-  referenceElement,
-  popperElement,
+  referenceElement: VirtualElement | null | undefined,
+  popperElement: HTMLElement | null | undefined,
   {
     enabled = true,
     placement = 'bottom',
@@ -58,9 +92,9 @@ export default function usePopper(
     eventsEnabled = true,
     modifiers: userModifiers,
     ...popperOptions
-  } = {},
+  }: UsePopperOptions = {},
 ) {
-  const popperInstanceRef = useRef();
+  const popperInstanceRef = useRef<Instance>();
 
   const scheduleUpdate = useCallback(() => {
     if (popperInstanceRef.current) {
@@ -69,7 +103,7 @@ export default function usePopper(
   }, []);
 
   const [state, setState] = useSafeState(
-    useState({
+    useState<UsePopperState>({
       placement,
       scheduleUpdate,
       outOfBoundaries: false,
@@ -78,7 +112,7 @@ export default function usePopper(
     }),
   );
 
-  const updateModifier = useMemo(
+  const updateModifier = useMemo<Modifier<any>>(
     () => ({
       name: 'updateStateModifier',
       enabled: true,
@@ -107,7 +141,7 @@ export default function usePopper(
       name: 'eventListeners',
       enabled: true,
     };
-    modifiers = [...modifiers, eventsModifier];
+    modifiers = [...modifiers, eventsModifier!];
   }
 
   // A placement difference in state means popper determined a new placement
@@ -128,7 +162,7 @@ export default function usePopper(
     });
     // intentionally NOT re-running on new modifiers
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategy, placement, eventsModifier.enabled, updateModifier, enabled]);
+  }, [strategy, placement, eventsModifier!.enabled, updateModifier, enabled]);
 
   useEffect(() => {
     if (!enabled || referenceElement == null || popperElement == null) {
@@ -143,9 +177,10 @@ export default function usePopper(
     });
 
     return () => {
-      if (popperInstanceRef.current !== null) {
+      if (popperInstanceRef.current != null) {
         popperInstanceRef.current.destroy();
-        popperInstanceRef.current = null;
+        popperInstanceRef.current = undefined;
+
         setState((s) => ({
           ...s,
           styles: initialPopperStyles,
