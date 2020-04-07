@@ -34,7 +34,7 @@
     "build:esm": "babel src -d lib/esm --env-name esm",
     "build:pick": "cherry-pick ../src --cjs-dir=cjs --esm-dir=esm --cwd=lib",
     "deploy-docs": "yarn --cwd www build --prefix-paths && gh-pages -d www/public",
-    "lint": "eslint www/*.js www/src src test *.js",
+    "lint": "eslint www/*.js www/src src test *.js  --ext .js,.ts,.tsx",
     "prepublishOnly": "yarn build",
     "release": "rollout",
     "start": "yarn --cwd www start",
@@ -48,7 +48,7 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint --fix"
+    "*.js,*.tsx": "eslint --fix --ext .js,.ts,.tsx"
   },
   "prettier": {
     "singleQuote": true,
