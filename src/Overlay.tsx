@@ -10,7 +10,7 @@ import usePopper, {
   UsePopperOptions,
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
-import useWaitForDOMRef, { DOMContainer } from './utils/useWaitForDOMRef';
+import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
 
 export interface OverlayProps extends TransitionCallbacks {
@@ -141,7 +141,7 @@ const Overlay = React.forwardRef((props: OverlayProps, outerRef) => {
   });
 
   if (Transition) {
-    let { onExit, onExiting, onEnter, onEntering, onEntered } = props;
+    const { onExit, onExiting, onEnter, onEntering, onEntered } = props;
 
     child = (
       <Transition

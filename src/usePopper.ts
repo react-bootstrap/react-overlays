@@ -1,14 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useSafeState from '@restart/hooks/useSafeState';
+import * as Popper from '@popperjs/core';
 import { createPopper } from './popper';
-import {
-  Modifier,
-  Options,
-  Instance,
-  Placement,
-  VirtualElement,
-  State,
-} from '@popperjs/core';
 
 const initialPopperStyles: Partial<CSSStyleDeclaration> = {
   position: 'absolute',
@@ -20,7 +13,13 @@ const initialPopperStyles: Partial<CSSStyleDeclaration> = {
 
 const initialArrowStyles = {};
 
-export type { Modifier, Options, Instance, Placement, VirtualElement, State };
+// until docjs supports type exports...
+export type Modifier<T> = Popper.Modifier<T>;
+export type Options = Popper.Options;
+export type Instance = Popper.Instance;
+export type Placement = Popper.Placement;
+export type VirtualElement = Popper.VirtualElement;
+export type State = Popper.State;
 
 export type ModifierMap = Record<string, Partial<Modifier<any>>>;
 export type Modifiers =
@@ -68,21 +67,24 @@ export interface UsePopperState {
   arrowStyles: Partial<CSSStyleDeclaration>;
   state?: State;
 }
+
 /**
  * Position an element relative some reference element using Popper.js
  *
- * @param {HTMLElement} referenceElement The element
- * @param {HTMLElement} popperElement
- * @param {Object}      options
- * @param {Object}      options.modifiers Popper.js modifiers
- * @param {Boolean}     options.enabled toggle the popper functionality on/off
- * @param {String}      options.placement The popper element placement relative to the reference element
- * @param {Boolean}     options.positionFixed use fixed positioning
- * @param {Boolean}     options.eventsEnabled have Popper listen on window resize events to reposition the element
- * @param {Function}    options.onCreate called when the popper is created
- * @param {Function}    options.onUpdate called when the popper is updated
+ * @param referenceElement
+ * @param popperElement
+ * @param {object}      options
+ * @param {object=}     options.modifiers Popper.js modifiers
+ * @param {boolean=}    options.enabled toggle the popper functionality on/off
+ * @param {string=}     options.placement The popper element placement relative to the reference element
+ * @param {string=}     options.strategy the positioning strategy
+ * @param {boolean=}    options.eventsEnabled have Popper listen on window resize events to reposition the element
+ * @param {function=}   options.onCreate called when the popper is created
+ * @param {function=}   options.onUpdate called when the popper is updated
+ *
+ * @returns {UsePopperState} The popper state
  */
-export default function usePopper(
+function usePopper(
   referenceElement: VirtualElement | null | undefined,
   popperElement: HTMLElement | null | undefined,
   {
@@ -93,7 +95,7 @@ export default function usePopper(
     modifiers: userModifiers,
     ...popperOptions
   }: UsePopperOptions = {},
-) {
+): UsePopperState {
   const popperInstanceRef = useRef<Instance>();
 
   const scheduleUpdate = useCallback(() => {
@@ -194,3 +196,5 @@ export default function usePopper(
 
   return state;
 }
+
+export default usePopper;

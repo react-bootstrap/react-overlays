@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom';
-import ownerDocument from 'dom-helpers/ownerDocument';
 
 export default function safeFindDOMNode(
   componentOrElement: React.ComponentClass | Element | null | undefined,

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import warning from 'warning';
 
-import ownerDocument from './utils/ownerDocument';
+import ownerDocument from './ownerDocument';
 
 const escapeKeyCode = 27;
 const noop = () => {};
@@ -38,11 +38,11 @@ export interface RootCloseOptions {
  * style behavior where your callback is triggered when the user tries to
  * interact with the rest of the document or hits the `esc` key.
  *
- * @param {Ref<HTMLElement>|HTMLElement} ref  The element boundary
+ * @param {Ref<HTMLElement>| HTMLElement} ref  The element boundary
  * @param {function} onRootClose
- * @param {object}  options
- * @param {boolean} options.disabled
- * @param {string}  options.clickTrigger The DOM event name (click, mousedown, etc) to attach listeners on
+ * @param {object=}  options
+ * @param {boolean=} options.disabled
+ * @param {string=}  options.clickTrigger The DOM event name (click, mousedown, etc) to attach listeners on
  */
 function useRootClose(
   ref: React.RefObject<Element> | Element | null | undefined,

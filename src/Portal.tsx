@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
-import useWaitForDOMRef, { DOMContainer } from './utils/useWaitForDOMRef';
+import React from 'react';
+import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 
 const propTypes = {
   /**
@@ -20,18 +21,14 @@ export interface PortalProps {
 }
 
 /**
- * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
- * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
- * The children of `<Portal/>` component will be appended to the `container` specified.
- *
  * @public
  */
 const Portal = ({ container, children, onRendered }: PortalProps) => {
   const resolvedContainer = useWaitForDOMRef(container, onRendered);
 
-  return resolvedContainer
-    ? ReactDOM.createPortal(children, resolvedContainer)
-    : null;
+  return resolvedContainer ? (
+    <>{ReactDOM.createPortal(children, resolvedContainer)}</>
+  ) : null;
 };
 
 Portal.displayName = 'Portal';

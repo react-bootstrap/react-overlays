@@ -1,0 +1,17 @@
+.btn {
+  @apply border border-primary text-primary rounded px-8 mt-4 appearance-none text-center whitespace-no-wrap;
+  height: 40px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn:focus {
+  @apply outline-none shadow-outline;
+}
+
+.btn:hover {
+  @apply bg-primary text-white;
+}
+.btn:active {
+  @apply bg-brand-600 text-white;
+}

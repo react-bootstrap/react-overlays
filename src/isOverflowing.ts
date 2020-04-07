@@ -6,14 +6,14 @@ function isBody(node: Element): node is HTMLBodyElement {
 }
 
 function bodyIsOverflowing(node: Element | Document | Window) {
-  let doc = isWindow(node) ? ownerDocument() : ownerDocument(node as Element);
-  let win = isWindow(node) || doc.defaultView!;
+  const doc = isWindow(node) ? ownerDocument() : ownerDocument(node as Element);
+  const win = isWindow(node) || doc.defaultView!;
 
   return doc.body.clientWidth < win.innerWidth;
 }
 
 export default function isOverflowing(container: Element) {
-  let win = isWindow(container);
+  const win = isWindow(container);
   return win || isBody(container)
     ? bodyIsOverflowing(container)
     : container.scrollHeight > container.clientHeight;

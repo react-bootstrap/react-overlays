@@ -3,6 +3,7 @@ import computeStyles from '@popperjs/core/lib/modifiers/computeStyles';
 import eventListeners from '@popperjs/core/lib/modifiers/eventListeners';
 import flip from '@popperjs/core/lib/modifiers/flip';
 import hide from '@popperjs/core/lib/modifiers/hide';
+import offset from '@popperjs/core/lib/modifiers/offset';
 import popperOffsets from '@popperjs/core/lib/modifiers/popperOffsets';
 import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
 import { placements } from '@popperjs/core/lib/enums';
@@ -16,6 +17,7 @@ export const createPopper = popperGenerator({
     popperOffsets,
     computeStyles,
     eventListeners,
+    offset,
     flip,
     preventOverflow,
     arrow,

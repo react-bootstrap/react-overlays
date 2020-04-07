@@ -14,6 +14,6 @@ export type DropdownContextValue = {
   drop?: DropDirection;
 };
 
-const DropdownContext = React.createContext<DropdownContextValue>(null as any);
+const DropdownContext = React.createContext<DropdownContextValue | null>(null);
 
 export default DropdownContext;

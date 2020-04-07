@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import DropdownContext from './DropdownContext';
 import usePopper, {
@@ -34,6 +34,17 @@ export interface UseDropdownMenuValue {
   };
 }
 
+const noop: any = () => {};
+
+/**
+ * @memberOf Dropdown
+ * @param {object}  options
+ * @param {boolean} options.flip Automatically adjust the menu `drop` position based on viewport edge detection
+ * @param {boolean} options.show Display the menu manually, ignored in the context of a `Dropdown`
+ * @param {boolean} options.usePopper opt in/out of using PopperJS to position menus. When disabled you must position it yourself.
+ * @param {string}  options.rootCloseEvent The pointer event to listen for when determining "clicks outside" the menu for triggering a close.
+ * @param {object}  options.popperConfig Options passed to the [`usePopper`](/api/usePopper) hook.
+ */
 export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
   const context = useContext(DropdownContext);
 
@@ -45,22 +56,22 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     flip,
     rootCloseEvent,
     popperConfig = {},
-    usePopper: shouldUsePopper = true,
+    usePopper: shouldUsePopper = !!context,
   } = options;
 
-  const show = context.show == null ? options.show : context.show;
+  const show = context?.show == null ? options.show : context.show;
   const alignEnd =
-    context.alignEnd == null ? options.alignEnd : context.alignEnd;
+    context?.alignEnd == null ? options.alignEnd : context.alignEnd;
 
   if (show && !hasShownRef.current) {
     hasShownRef.current = true;
   }
 
   const handleClose = (e: React.SyntheticEvent | Event) => {
-    context.toggle?.(false, e);
+    context?.toggle(false, e);
   };
 
-  const { drop, setMenu, menuElement, toggleElement } = context;
+  const { drop, setMenu, menuElement, toggleElement } = context || {};
 
   let placement: Placement = alignEnd ? 'bottom-end' : 'bottom-start';
   if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
@@ -96,7 +107,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
   let menu: Partial<UseDropdownMenuValue>;
 
   const menuProps = {
-    ref: setMenu,
+    ref: setMenu || noop,
     'aria-labelledby': toggleElement?.id,
   };
   const childArgs = {
@@ -198,10 +209,16 @@ export interface DropdownMenuProps extends UseDropdownMenuOptions {
   children: (args: UseDropdownMenuValue) => React.ReactNode;
 }
 
+/**
+ * Also exported as `<Dropdown.Menu>` from `Dropdown`.
+ *
+ * @displayName DropdownMenu
+ * @memberOf Dropdown
+ */
 function DropdownMenu({ children, ...options }: DropdownMenuProps) {
   const args = useDropdownMenu(options);
 
-  return args.hasShown ? children(args) : null;
+  return <>{args.hasShown ? children(args) : null}</>;
 }
 
 DropdownMenu.displayName = 'ReactOverlaysDropdownMenu';

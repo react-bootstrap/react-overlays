@@ -1,9 +1,9 @@
 const BLACKLIST = ['template', 'script', 'style'];
 
-let isHidable = ({ nodeType, tagName }: Element) =>
+const isHidable = ({ nodeType, tagName }: Element) =>
   nodeType === 1 && BLACKLIST.indexOf(tagName.toLowerCase()) === -1;
 
-let siblings = (
+const siblings = (
   container: Element,
   exclude: Element[],
   cb: (el: Element) => any,
@@ -15,7 +15,7 @@ let siblings = (
   });
 };
 
-export function ariaHidden(show: boolean, node: Element) {
+export function ariaHidden(show: boolean, node: Element | null | undefined) {
   if (!node) return;
   if (show) {
     node.setAttribute('aria-hidden', 'true');

@@ -1,17 +1,9 @@
 const path = require('path');
-const { resolver } = require('react-docgen');
-const annotationResolver = require('react-docgen-annotation-resolver');
-
-function combinedResolver(ast, recast) {
-  const exportedComponents = resolver.findAllComponentDefinitions(ast, recast);
-  const annotated = annotationResolver(ast, recast);
-  return exportedComponents.concat(annotated);
-}
 
 module.exports = {
   pathPrefix: '/react-overlays',
   siteMetadata: {
-    title: 'react-overlays Documentation',
+    title: 'React Overlays',
     author: 'Jason Quense',
     browsers: [
       'last 4 Chrome versions',
@@ -24,24 +16,21 @@ module.exports = {
     {
       resolve: '@docpocalypse/gatsby-theme',
       options: {
-        theming: 'none',
         sources: [path.resolve(__dirname, '../src')],
 
-        ignore: (docNode) => {
-          console.log(docNode.tags);
-          return false;
-        },
-
         getImportName(docNode, _) {
-          return `import ${docNode.name} from '${docNode.packageName}/${docNode.name}'`;
+          return `import ${docNode.name} from '${docNode.packageName}/${docNode.fileName}'`;
         },
 
+        propsLayout: 'list',
+        tailwindConfig: require.resolve('./tailwind.config'),
         exampleCodeScope: {
-          Layout: require.resolve('@4c/layout'),
+          css: require.resolve('./src/css'),
+          styled: '@emotion/styled',
+          injectCss: require.resolve('./src/injectCss'),
         },
       },
     },
-
     'gatsby-plugin-sass',
     {
       resolve: 'gatsby-plugin-astroturf',

@@ -3,12 +3,8 @@ import removeClass from 'dom-helpers/removeClass';
 import css from 'dom-helpers/css';
 import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
-import isOverflowing from './utils/isOverflowing';
-import {
-  ariaHidden,
-  hideSiblings,
-  showSiblings,
-} from './utils/manageAriaHidden';
+import isOverflowing from './isOverflowing';
+import { ariaHidden, hideSiblings, showSiblings } from './manageAriaHidden';
 
 function findIndexOf<T>(arr: T[], cb: (item: T, idx: number) => boolean) {
   let idx = -1;
@@ -39,11 +35,15 @@ export type ContainerState = Record<string, any> & {
  */
 class ModalManager {
   readonly hideSiblingNodes: boolean;
+
   readonly handleContainerOverflow: boolean;
 
   readonly modals: ModalInstance[];
+
   readonly containers: HTMLElement[];
+
   readonly data: ContainerState[];
+
   readonly scrollbarSize: number;
 
   constructor({
@@ -68,7 +68,7 @@ class ModalManager {
   }
 
   setContainerStyle(containerState: ContainerState, container: HTMLElement) {
-    let style: Partial<CSSStyleDeclaration> = { overflow: 'hidden' };
+    const style: Partial<CSSStyleDeclaration> = { overflow: 'hidden' };
 
     // we are only interested in the actual `style` here
     // because we will override it
@@ -98,7 +98,7 @@ class ModalManager {
 
   add(modal: ModalInstance, container: HTMLElement, className?: string) {
     let modalIdx = this.modals.indexOf(modal);
-    let containerIdx = this.containers.indexOf(container);
+    const containerIdx = this.containers.indexOf(container);
 
     if (modalIdx !== -1) {
       return modalIdx;
@@ -116,7 +116,7 @@ class ModalManager {
       return modalIdx;
     }
 
-    let data = {
+    const data = {
       modals: [modal],
       // right now only the first modal of a container will have its classes applied
       classes: className ? className.split(/\s+/) : [],
@@ -135,16 +135,16 @@ class ModalManager {
     return modalIdx;
   }
 
-  remove(modal: Modal) {
-    let modalIdx = this.modals.indexOf(modal);
+  remove(modal: ModalInstance) {
+    const modalIdx = this.modals.indexOf(modal);
 
     if (modalIdx === -1) {
       return;
     }
 
-    let containerIdx = this.containerIndexFromModal(modal);
-    let data = this.data[containerIdx];
-    let container = this.containers[containerIdx];
+    const containerIdx = this.containerIndexFromModal(modal);
+    const data = this.data[containerIdx];
+    const container = this.containers[containerIdx];
 
     data.modals.splice(data.modals.indexOf(modal), 1);
 

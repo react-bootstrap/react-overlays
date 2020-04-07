@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export interface UseDropdownToggleProps {
@@ -13,18 +13,23 @@ export interface UseDropdownToggleHelpers {
   toggle: DropdownContextValue['toggle'];
 }
 
+const noop: any = () => {};
+
 /**
  * Wires up Dropdown toggle functinality, returning a set a props to attach
  * to the element that functions as the dropdown toggle (generally a button).
+ *
+ * @memberOf Dropdown
  */
 export function useDropdownToggle(): [
   UseDropdownToggleProps,
   UseDropdownToggleHelpers,
 ] {
-  const { show, toggle, setToggle } = useContext(DropdownContext) || {};
+  const { show = false, toggle = noop, setToggle } =
+    useContext(DropdownContext) || {};
   return [
     {
-      ref: setToggle,
+      ref: setToggle || noop,
       'aria-haspopup': true,
       'aria-expanded': !!show,
     },
@@ -57,14 +62,24 @@ export interface DropdownToggleProps {
   ) => React.ReactNode;
 }
 
+/**
+ * Also exported as `<Dropdown.Toggle>` from `Dropdown`.
+ *
+ * @displayName DropdownToggle
+ * @memberOf Dropdown
+ */
 function DropdownToggle({ children }: DropdownToggleProps) {
   const [props, { show, toggle }] = useDropdownToggle();
 
-  return children({
-    show,
-    toggle,
-    props,
-  });
+  return (
+    <>
+      {children({
+        show,
+        toggle,
+        props,
+      })}
+    </>
+  );
 }
 
 DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';

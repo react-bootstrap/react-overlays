@@ -9,6 +9,8 @@
   "plugins": ["prettier"],
   "rules": {
     "jsx-a11y/no-autofocus": "off",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "import/extensions": "off",
+    "@typescript-eslint/no-empty-function": "off"
   }
 }

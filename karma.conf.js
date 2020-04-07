@@ -15,7 +15,16 @@ module.exports = (config) => {
     webpack: {
       mode: 'development',
       module: {
-        rules: [rules.js()],
+        rules: [
+          {
+            ...rules.js(),
+            test: /\.[jt]sx?$/,
+          },
+        ],
+      },
+      resolve: {
+        symlinks: false,
+        extensions: ['.mjs', '.js', '.ts', '.tsx', '.json'],
       },
       plugins: [
         plugins.define({

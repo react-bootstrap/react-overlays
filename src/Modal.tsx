@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react/prop-types */
 
 import activeElement from 'dom-helpers/activeElement';
@@ -5,22 +6,23 @@ import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from 'react';
 import ReactDOM from 'react-dom';
 import useMounted from '@restart/hooks/useMounted';
-import useMountEffect from '@restart/hooks/useMountEffect';
-import useImmediateUpdateEffect from '@restart/hooks/useImmediateUpdateEffect';
+import useWillUnmount from '@restart/hooks/useWillUnmount';
 
-import ModalManager from './ModalManager';
-import ownerDocument from './utils/ownerDocument';
-import useWaitForDOMRef, {
-  DOMContainer,
-  resolveContainerRef,
-} from './utils/useWaitForDOMRef';
-import { TransitionCallbacks } from './types';
-import safeFindDOMNode from './utils/safeFindDOMNode';
 import usePrevious from '@restart/hooks/esm/usePrevious';
 import useEventCallback from '@restart/hooks/esm/useEventCallback';
+import ModalManager from './ModalManager';
+import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
+import { TransitionCallbacks } from './types';
 
 let manager: ModalManager;
 
@@ -90,8 +92,7 @@ function useModalManager(provided?: ModalManager) {
     backdrop: (null as any) as HTMLElement,
   });
 
-  return {
-    ...modal.current,
+  return Object.assign(modal.current, {
     add: (container: HTMLElement, className?: string) =>
       modalManager.add(modal.current, container, className),
 
@@ -106,271 +107,262 @@ function useModalManager(provided?: ModalManager) {
     setBackdropRef: useCallback((ref: HTMLElement | null) => {
       modal.current.backdrop = ref!;
     }, []),
-  };
+  });
 }
 
-/**
- * Love them or hate them, `<Modal />` provides a solid foundation for creating dialogs, lightboxes, or whatever else.
- * The Modal component renders its `children` node in front of a backdrop component.
- *
- * The Modal offers a few helpful features over using just a `<Portal/>` component and some styles:
- *
- * - Manages dialog stacking when one-at-a-time just isn't enough.
- * - Creates a backdrop, for disabling interaction below the modal.
- * - It properly manages focus; moving to the modal content, and keeping it there until the modal is closed.
- * - It disables scrolling of the page content while open.
- * - Adds the appropriate ARIA roles are automatically.
- * - Easily pluggable animations via a `<Transition/>` component.
- *
- * Note that, in the same way the backdrop element prevents users from clicking or interacting
- * with the page content underneath the Modal, Screen readers also need to be signaled to not to
- * interact with page content while the Modal is open. To do this, we use a common technique of applying
- * the `aria-hidden='true'` attribute to the non-Modal elements in the Modal `container`. This means that for
- * a Modal to be truly modal, it should have a `container` that is _outside_ your app's
- * React hierarchy (such as the default: document.body).
- */
-function Modal({
-  show,
-  role = 'dialog',
-  className,
-  style,
-  children,
-  backdrop,
-  keyboard,
-  onBackdropClick,
-  onEscapeKeyDown,
-  transition,
-  backdropTransition,
-  autoFocus,
-  enforceFocus,
-  restoreFocus,
-  restoreFocusOptions,
-  renderDialog,
-  renderBackdrop = (props: RenderModalBackdropProps) => <div {...props} />,
-  manager: providedManager,
-  container: containerRef,
-  containerClassName,
-  onShow,
-  onHide,
+export interface ModalHandle {
+  dialog: HTMLElement | null;
+  backdrop: HTMLElement | null;
+}
 
-  onExit,
-  onExited,
-  onExiting,
-  onEnter,
-  onEntering,
-  onEntered,
+const Modal = forwardRef<ModalHandle, ModalProps>(
+  (
+    {
+      show = false,
+      role = 'dialog',
+      className,
+      style,
+      children,
+      backdrop = true,
+      keyboard = true,
+      onBackdropClick,
+      onEscapeKeyDown,
+      transition,
+      backdropTransition,
+      autoFocus = true,
+      enforceFocus = true,
+      restoreFocus = true,
+      restoreFocusOptions,
+      renderDialog,
+      renderBackdrop = (props: RenderModalBackdropProps) => <div {...props} />,
+      manager: providedManager,
+      container: containerRef,
+      containerClassName,
+      onShow,
+      onHide = () => {},
 
-  ...rest
-}: ModalProps) {
-  // const [manager] = useModalManager(providedManager);
-  const container = useWaitForDOMRef(containerRef);
-  const modal = useModalManager(providedManager);
+      onExit,
+      onExited,
+      onExiting,
+      onEnter,
+      onEntering,
+      onEntered,
 
-  const isMounted = useMounted();
-  const prevShow = usePrevious(show);
-  const [exited, setExited] = useState(!show);
-  const lastFocusRef = useRef<HTMLElement | null>(null);
+      ...rest
+    }: ModalProps,
+    ref,
+  ) => {
+    // const [manager] = useModalManager(providedManager);
+    const container = useWaitForDOMRef(containerRef);
+    const modal = useModalManager(providedManager);
 
-  if (canUseDOM && !prevShow && show) {
-    lastFocusRef.current = activeElement() as HTMLElement;
-  }
+    const isMounted = useMounted();
+    const prevShow = usePrevious(show);
+    const [exited, setExited] = useState(!show);
+    const lastFocusRef = useRef<HTMLElement | null>(null);
 
-  useImmediateUpdateEffect(() => {
-    if (show && exited) return setExited(false);
-    if (!transition && !exited) return setExited(true);
-  }, [show, transition]);
+    useImperativeHandle(ref, () => modal, [modal]);
 
-  // TODO: can we turn these into a more idiomatic effect?
-  useMountEffect(() => {
-    if (show) handleShow();
+    if (canUseDOM && !prevShow && show) {
+      lastFocusRef.current = activeElement() as HTMLElement;
+    }
 
-    return () => {
-      if (show || (transition && !exited)) {
-        handleHide();
+    if (!transition && !show && !exited) {
+      setExited(true);
+    } else if (show && exited) {
+      setExited(false);
+    }
+
+    const handleShow = useEventCallback(() => {
+      modal.add(container!, containerClassName);
+
+      removeKeydownListenerRef.current = listen(
+        document as any,
+        'keydown',
+        handleDocumentKeyDown,
+      );
+
+      removeFocusListenerRef.current = listen(
+        document as any,
+        'focus',
+        // the timeout is necessary b/c this will run before the new modal is mounted
+        // and so steals focus from it
+        () => setTimeout(handleEnforceFocus),
+        true,
+      );
+
+      if (onShow) {
+        onShow();
       }
-    };
-  });
 
-  useEffect(() => {
-    if (prevShow && !show && !transition) {
-      handleHide();
-    } else if (!prevShow && show) {
-      handleShow();
-    }
-  });
+      // autofocus after onShow to not trigger a focus event for previous
+      // modals before this one is shown.
+      if (autoFocus) {
+        const currentActiveElement = activeElement(document) as HTMLElement;
 
-  const handleEnforceFocus = useEventCallback(() => {
-    if (!enforceFocus || !isMounted() || !modal.isTopModal()) {
-      return;
-    }
-
-    const currentActiveElement = activeElement();
-
-    if (
-      modal.dialog &&
-      currentActiveElement &&
-      !contains(modal.dialog, currentActiveElement)
-    ) {
-      modal.dialog.focus();
-    }
-  });
-
-  const restoreLastFocus = () => {
-    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
-    lastFocusRef.current?.focus?.(restoreFocusOptions);
-    lastFocusRef.current = null;
-  };
-
-  const autoFocusModal = () => {
-    if (!autoFocus) return;
-
-    const currentActiveElement = activeElement(document) as HTMLElement;
-
-    if (
-      modal.dialog &&
-      currentActiveElement &&
-      !contains(modal.dialog, currentActiveElement)
-    ) {
-      lastFocusRef.current = currentActiveElement;
-      modal.dialog.focus();
-    }
-  };
-
-  const handleBackdropClick = useEventCallback((e: React.SyntheticEvent) => {
-    if (e.target !== e.currentTarget) {
-      return;
-    }
-
-    onBackdropClick?.(e);
-
-    if (backdrop === true) {
-      onHide();
-    }
-  });
-
-  const handleDocumentKeyDown = (e: KeyboardEvent) => {
-    if (keyboard && e.keyCode === 27 && modal.isTopModal()) {
-      onEscapeKeyDown?.(e);
-      onHide();
-    }
-  };
-
-  const removeFocusListenerRef = useRef<ReturnType<typeof listen> | null>();
-  const removeKeydownListenerRef = useRef<ReturnType<typeof listen> | null>();
-
-  const handleShow = () => {
-    modal.add(container!, containerClassName);
-
-    removeKeydownListenerRef.current = listen(
-      document as any,
-      'keydown',
-      handleDocumentKeyDown,
-    );
-
-    removeFocusListenerRef.current = listen(
-      document as any,
-      'focus',
-      // the timeout is necessary b/c this will run before the new modal is mounted
-      // and so steals focus from it
-      () => setTimeout(handleEnforceFocus),
-      true,
-    );
-
-    if (onShow) {
-      onShow();
-    }
-
-    // autofocus after onShow, to not trigger a focus event for previous
-    // modals before this one is shown.
-    autoFocusModal();
-  };
-
-  const handleHide = () => {
-    modal.remove();
-
-    removeKeydownListenerRef.current!();
-    removeFocusListenerRef.current!();
-
-    if (restoreFocus) {
-      restoreLastFocus();
-    }
-  };
-
-  const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
-    setExited(true);
-    handleHide();
-
-    onExited?.(...args);
-  };
-
-  const Transition = transition;
-  if (!container || !(show || (Transition && !exited))) {
-    return null;
-  }
-
-  const dialogProps = {
-    role,
-    ref: modal.setDialogRef,
-    // apparently only works on the dialog role element
-    'aria-modal': role === 'dialog' ? true : undefined,
-    ...rest,
-    style,
-    className,
-    tabIndex: -1,
-  };
-
-  let dialog = renderDialog ? (
-    renderDialog(dialogProps)
-  ) : (
-    <div {...dialogProps}>
-      {React.cloneElement(children!, { role: 'document' })}
-    </div>
-  );
-
-  if (Transition) {
-    dialog = (
-      <Transition
-        appear
-        unmountOnExit
-        in={!!show}
-        onExit={onExit}
-        onExiting={onExiting}
-        onExited={handleHidden}
-        onEnter={onEnter}
-        onEntering={onEntering}
-        onEntered={onEntered}
-      >
-        {dialog}
-      </Transition>
-    );
-  }
-
-  let backdropElement = null;
-  if (backdrop) {
-    const BackdropTransition = backdropTransition;
-
-    backdropElement = renderBackdrop({
-      ref: modal.setBackdropRef,
-      onClick: handleBackdropClick,
+        if (
+          modal.dialog &&
+          currentActiveElement &&
+          !contains(modal.dialog, currentActiveElement)
+        ) {
+          lastFocusRef.current = currentActiveElement;
+          modal.dialog.focus();
+        }
+      }
     });
 
-    if (BackdropTransition) {
-      backdropElement = (
-        <BackdropTransition appear in={!!show}>
-          {backdrop}
-        </BackdropTransition>
+    const handleHide = useEventCallback(() => {
+      modal.remove();
+
+      removeKeydownListenerRef.current?.();
+      removeFocusListenerRef.current?.();
+
+      if (restoreFocus) {
+        // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
+        lastFocusRef.current?.focus?.(restoreFocusOptions);
+        lastFocusRef.current = null;
+      }
+    });
+
+    // Show logic when:
+    //  - show is `true` _and_ `container` has resolved
+    useEffect(() => {
+      if (!show || !container) return;
+
+      handleShow();
+    }, [show, container, /* show never change: */ handleShow]);
+
+    // Hide cleanup logic when:
+    //  - `exited` switches to true
+    //  - component unmounts;
+    useEffect(() => {
+      if (!exited) return;
+
+      handleHide();
+    }, [exited, handleHide]);
+
+    useWillUnmount(() => {
+      handleHide();
+    });
+
+    // --------------------------------
+
+    const handleEnforceFocus = useEventCallback(() => {
+      if (!enforceFocus || !isMounted() || !modal.isTopModal()) {
+        return;
+      }
+
+      const currentActiveElement = activeElement();
+
+      if (
+        modal.dialog &&
+        currentActiveElement &&
+        !contains(modal.dialog, currentActiveElement)
+      ) {
+        modal.dialog.focus();
+      }
+    });
+
+    const handleBackdropClick = useEventCallback((e: React.SyntheticEvent) => {
+      if (e.target !== e.currentTarget) {
+        return;
+      }
+
+      onBackdropClick?.(e);
+
+      if (backdrop === true) {
+        onHide();
+      }
+    });
+
+    const handleDocumentKeyDown = (e: KeyboardEvent) => {
+      if (keyboard && e.keyCode === 27 && modal.isTopModal()) {
+        onEscapeKeyDown?.(e);
+        onHide();
+      }
+    };
+
+    const removeFocusListenerRef = useRef<ReturnType<typeof listen> | null>();
+    const removeKeydownListenerRef = useRef<ReturnType<typeof listen> | null>();
+
+    const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
+      setExited(true);
+      onExited?.(...args);
+    };
+
+    const Transition = transition;
+    if (!container || !(show || (Transition && !exited))) {
+      return null;
+    }
+
+    const dialogProps = {
+      role,
+      ref: modal.setDialogRef,
+      // apparently only works on the dialog role element
+      'aria-modal': role === 'dialog' ? true : undefined,
+      ...rest,
+      style,
+      className,
+      tabIndex: -1,
+    };
+
+    let dialog = renderDialog ? (
+      renderDialog(dialogProps)
+    ) : (
+      <div {...dialogProps}>
+        {React.cloneElement(children!, { role: 'document' })}
+      </div>
+    );
+
+    if (Transition) {
+      dialog = (
+        <Transition
+          appear
+          unmountOnExit
+          in={!!show}
+          onExit={onExit}
+          onExiting={onExiting}
+          onExited={handleHidden}
+          onEnter={onEnter}
+          onEntering={onEntering}
+          onEntered={onEntered}
+        >
+          {dialog}
+        </Transition>
       );
     }
-  }
 
-  return ReactDOM.createPortal(
-    <>
-      {backdropElement}
-      {dialog}
-    </>,
-    container,
-  );
-}
+    let backdropElement = null;
+    if (backdrop) {
+      const BackdropTransition = backdropTransition;
+
+      backdropElement = renderBackdrop({
+        ref: modal.setBackdropRef,
+        onClick: handleBackdropClick,
+      });
+
+      if (BackdropTransition) {
+        backdropElement = (
+          <BackdropTransition appear in={!!show}>
+            {backdropElement}
+          </BackdropTransition>
+        );
+      }
+    }
+
+    return (
+      <>
+        {ReactDOM.createPortal(
+          <>
+            {backdropElement}
+            {dialog}
+          </>,
+          container,
+        )}
+      </>
+    );
+  },
+);
 
 const propTypes = {
   /**
@@ -408,8 +400,8 @@ const propTypes = {
    * A function that returns the dialog component. Useful for custom
    * rendering. **Note:** the component should make sure to apply the provided ref.
    *
-   * ```js
-   *  renderDialog={props => <MyDialog {...props} />}
+   * ```js static
+   * renderDialog={props => <MyDialog {...props} />}
    * ```
    */
   renderDialog: PropTypes.func,
@@ -526,302 +518,10 @@ const propTypes = {
    */
   manager: PropTypes.object,
 };
-// class Modal extends React.Component<ModalProps> {
 
-//   static defaultProps = {
-//     show: false,
-//     role: 'dialog',
-//     backdrop: true,
-//     keyboard: true,
-//     autoFocus: true,
-//     enforceFocus: true,
-//     restoreFocus: true,
-//     onHide: () => {},
-//     renderBackdrop: (props: RenderModalBackdropProps) => <div {...props} />,
-//   };
-
-//   state = { exited: !this.props.show };
-
-//   private _isMounted: boolean = false;
-//   private lastFocus: Element | null = null;
-//   private removeKeydownListener?: () => void;
-//   private removeFocusListener?: () => void;
-
-//   dialog!: HTMLElement;
-//   backdrop!: HTMLElement;
-
-//   static getDerivedStateFromProps(nextProps: ModalProps) {
-//     if (nextProps.show) {
-//       return { exited: false };
-//     }
-//     if (!nextProps.transition) {
-//       // Otherwise let handleHidden take care of marking exited.
-//       return { exited: true };
-//     }
-//     return null;
-//   }
-
-//   componentDidMount() {
-//     this._isMounted = true;
-//     if (this.props.show) {
-//       this.onShow();
-//     }
-//   }
-
-//   componentDidUpdate(prevProps: ModalProps) {
-//     let { transition } = this.props;
-
-//     if (prevProps.show && !this.props.show && !transition) {
-//       // Otherwise handleHidden will call this.
-//       this.onHide();
-//     } else if (!prevProps.show && this.props.show) {
-//       this.onShow();
-//     }
-//   }
-
-//   componentWillUnmount() {
-//     let { show, transition } = this.props;
-
-//     this._isMounted = false;
-
-//     if (show || (transition && !this.state.exited)) {
-//       this.onHide();
-//     }
-//   }
-
-//   getSnapshotBeforeUpdate(prevProps: ModalProps) {
-//     if (canUseDOM && !prevProps.show && this.props.show) {
-//       this.lastFocus = activeElement();
-//     }
-//     return null;
-//   }
-
-//   onShow = () => {
-//     let { container, containerClassName, onShow } = this.props;
-//     let resolvedContainer = resolveContainerRef(container);
-
-//     this.getModalManager().add(this, resolvedContainer!, containerClassName);
-
-//     this.removeKeydownListener = listen(
-//       document as any,
-//       'keydown',
-//       this.handleDocumentKeyDown,
-//     );
-
-//     this.removeFocusListener = listen(
-//       document as any,
-//       'focus',
-//       // the timeout is necessary b/c this will run before the new modal is mounted
-//       // and so steals focus from it
-//       () => setTimeout(this.enforceFocus),
-//       true,
-//     );
-
-//     if (onShow) {
-//       onShow();
-//     }
-
-//     // autofocus after onShow, to not trigger a focus event for previous
-//     // modals before this one is shown.
-//     this.autoFocus();
-//   };
-
-//   onHide = () => {
-//     this.getModalManager().remove(this);
-
-//     this.removeKeydownListener!();
-//     this.removeFocusListener!();
-
-//     if (this.props.restoreFocus) {
-//       this.restoreLastFocus();
-//     }
-//   };
-
-//   setDialogRef = (ref: HTMLElement | null) => {
-//     this.dialog = ref!;
-//   };
-
-//   setBackdropRef = (ref: HTMLElement | null) => {
-//     // FIXME: Why is this inconsistent with setDialogRef
-//     this.backdrop = safeFindDOMNode(ref) as HTMLElement;
-//   };
-
-//   getModalManager() {
-//     if (this.props.manager) {
-//       return this.props.manager;
-//     }
-
-//     if (!manager) {
-//       manager = new ModalManager();
-//     }
-
-//     return manager;
-//   }
-
-//   handleHidden: TransitionCallbacks['onExited'] = (...args) => {
-//     this.setState({ exited: true });
-//     this.onHide();
-
-//     if (this.props.onExited) {
-//       this.props.onExited(...args);
-//     }
-//   };
-
-//   handleBackdropClick = (e: React.SyntheticEvent) => {
-//     if (e.target !== e.currentTarget) {
-//       return;
-//     }
-
-//     if (this.props.onBackdropClick) {
-//       this.props.onBackdropClick(e);
-//     }
-
-//     if (this.props.backdrop === true) {
-//       this.props.onHide();
-//     }
-//   };
-
-//   handleDocumentKeyDown = (e: KeyboardEvent) => {
-//     if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
-//       this.props.onEscapeKeyDown?.(e);
-//       this.props.onHide();
-//     }
-//   };
-
-//   enforceFocus = () => {
-//     if (!this.props.enforceFocus || !this._isMounted || !this.isTopModal()) {
-//       return;
-//     }
-
-//     const currentActiveElement = activeElement();
-
-//     if (
-//       this.dialog &&
-//       currentActiveElement &&
-//       !contains(this.dialog, currentActiveElement)
-//     ) {
-//       this.dialog.focus();
-//     }
-//   };
-
-//   restoreLastFocus() {
-//     // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
-//     if (this.lastFocus) {
-//       // @ts-ignore
-//       this.lastFocus.focus?.(this.props.restoreFocusOptions);
-//       this.lastFocus = null;
-//     }
-//   }
-
-//   autoFocus() {
-//     if (!this.props.autoFocus) return;
-
-//     const currentActiveElement = activeElement(document);
-
-//     if (
-//       this.dialog &&
-//       currentActiveElement &&
-//       !contains(this.dialog, currentActiveElement)
-//     ) {
-//       this.lastFocus = currentActiveElement;
-//       this.dialog.focus();
-//     }
-//   }
-
-//   isTopModal() {
-//     return this.getModalManager().isTopModal(this);
-//   }
-
-//   renderBackdrop = () => {
-//     let { renderBackdrop, backdropTransition: Transition } = this.props;
-
-//     let backdrop = renderBackdrop!({
-//       ref: this.setBackdropRef,
-//       onClick: this.handleBackdropClick,
-//     });
-
-//     if (Transition) {
-//       backdrop = (
-//         <Transition appear in={!!this.props.show}>
-//           {backdrop}
-//         </Transition>
-//       );
-//     }
-
-//     return backdrop;
-//   };
-
-//   render() {
-//     const {
-//       show,
-//       container,
-//       children,
-//       renderDialog,
-//       role = 'dialog',
-//       transition: Transition,
-//       backdrop,
-//       className,
-//       style,
-//       onExit,
-//       onExiting,
-//       onEnter,
-//       onEntering,
-//       onEntered,
-//       ...props
-//     } = this.props;
-
-//     if (!(show || (Transition && !this.state.exited))) {
-//       return null;
-//     }
-
-//     const dialogProps = {
-//       role,
-//       ref: this.setDialogRef,
-//       // apparently only works on the dialog role element
-//       'aria-modal': role === 'dialog' ? true : undefined,
-//       ...omitProps(props, Modal.propTypes),
-//       style,
-//       className,
-//       tabIndex: '-1',
-//     };
-
-//     let dialog = renderDialog ? (
-//       renderDialog(dialogProps)
-//     ) : (
-//       <div {...dialogProps}>
-//         {React.cloneElement(children, { role: 'document' })}
-//       </div>
-//     );
-
-//     if (Transition) {
-//       dialog = (
-//         <Transition
-//           appear
-//           unmountOnExit
-//           in={show}
-//           onExit={onExit}
-//           onExiting={onExiting}
-//           onExited={this.handleHidden}
-//           onEnter={onEnter}
-//           onEntering={onEntering}
-//           onEntered={onEntered}
-//         >
-//           {dialog}
-//         </Transition>
-//       );
-//     }
-
-//     return ReactDOM.createPortal(
-//       <>
-//         {backdrop && this.renderBackdrop()}
-//         {dialog}
-//       </>,
-//       container,
-//     );
-//   }
-// }
-
+Modal.displayName = 'Modal';
 Modal.propTypes = propTypes;
-Modal.Manager = ModalManager;
 
-export default Modal;
+export default Object.assign(Modal, {
+  Manager: ModalManager,
+});

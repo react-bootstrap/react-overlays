@@ -2,7 +2,7 @@ import matches from 'dom-helpers/matches';
 import qsa from 'dom-helpers/querySelectorAll';
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useUncontrolled, useUncontrolledProp } from 'uncontrollable';
+import { useUncontrolledProp } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useForceUpdate from '@restart/hooks/useForceUpdate';
@@ -46,7 +46,7 @@ const propTypes = {
    * Selectors should be relative to the menu component:
    * e.g. ` > li:not('.disabled')`
    */
-  itemSelector: PropTypes.string.isRequired,
+  itemSelector: PropTypes.string,
 
   /**
    * Align the menu to the 'end' side of the placement side of the Dropdown toggle. The default placement is `top-start` or `bottom-start`.
@@ -69,7 +69,7 @@ const propTypes = {
    * A callback fired when the Dropdown wishes to change visibility. Called with the requested
    * `show` value, the DOM event, and the source that fired it: `'click'`,`'keydown'`,`'rootClose'`, or `'select'`.
    *
-   * ```js
+   * ```ts static
    * function(
    *   isOpen: boolean,
    *   event: SyntheticEvent,
@@ -79,10 +79,6 @@ const propTypes = {
    * @controllable show
    */
   onToggle: PropTypes.func,
-};
-
-const defaultProps = {
-  itemSelector: '* > *',
 };
 
 export interface DropdownInjectedProps {
@@ -101,14 +97,7 @@ export interface DropdownProps {
 }
 
 /**
- * `Dropdown` is set of structural components for building, accessible dropdown menus with close-on-click,
- * keyboard navigation, and correct focus handling. As with all the react-overlay's
- * components its BYOS (bring your own styles). Dropdown is primarily
- * built from three base components, you should compose to build your Dropdowns.
- *
- * - `Dropdown`, which wraps the menu and toggle, and handles keyboard navigation
- * - `Dropdown.Toggle` generally a button that triggers the menu opening
- * - `Dropdown.Menu` The overlaid, menu, positioned to the toggle with PopperJs
+ * @displayName Dropdown
  */
 function Dropdown({
   drop,
@@ -206,7 +195,7 @@ function Dropdown({
       return;
     }
 
-    let first = qsa(menuRef.current!, itemSelector)[0];
+    const first = qsa(menuRef.current!, itemSelector)[0];
     if (first && first.focus) first.focus();
   });
 
@@ -226,7 +215,7 @@ function Dropdown({
   const getNextFocusedChild = (current: HTMLElement, offset: number) => {
     if (!menuRef.current) return null;
 
-    let items = qsa(menuRef.current, itemSelector);
+    const items = qsa(menuRef.current, itemSelector);
 
     let index = items.indexOf(current) + offset;
     index = Math.max(0, Math.min(index, items.length));
@@ -255,7 +244,7 @@ function Dropdown({
 
     switch (key) {
       case 'ArrowUp': {
-        let next = getNextFocusedChild(target, -1);
+        const next = getNextFocusedChild(target, -1);
         if (next && next.focus) next.focus();
         event.preventDefault();
 
@@ -266,7 +255,7 @@ function Dropdown({
         if (!show) {
           toggle(event);
         } else {
-          let next = getNextFocusedChild(target, 1);
+          const next = getNextFocusedChild(target, 1);
           if (next && next.focus) next.focus();
         }
         return;
