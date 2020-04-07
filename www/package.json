@@ -26,6 +26,6 @@
     "sass": "^1.26.3"
   },
   "dependencies": {
-    "@docpocalypse/gatsby-theme": "^0.11.4"
+    "@docpocalypse/gatsby-theme": "^0.11.6"
   }
 }
