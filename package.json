@@ -66,8 +66,7 @@
     "@restart/hooks": "^0.3.12",
     "dom-helpers": "^5.1.0",
     "prop-types": "^15.7.2",
-    "uncontrollable": "^7.0.0",
-    "warning": "^4.0.3"
+    "uncontrollable": "^7.0.0"
   },
   "peerDependencies": {
     "react": ">=16.3.0",
