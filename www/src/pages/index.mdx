@@ -26,14 +26,14 @@ import Dropdown from 'react-overlays/Dropdown';
 
 ## Styling
 
-React Overlays toolkit for creating functional overlays, tooltips, modals, and dropdowns.
-It is not a ui framework, but meant to be incorporated _into_ frameworks. To make those integrations
-possible React Overlays is style agnostic and **does not** come with any CSS.
+React Overlays is a toolkit for creating functional overlays, tooltips, modals, and dropdowns.
+It is not a UI framework but is meant to be incorporated _into_ frameworks. To make those integrations
+possible, React Overlays is style-agnostic and **does not** come with any CSS.
 You should provide your own styles, and the documentation provides some simple examples
-for how to do that. For more complex integrations check out [React Bootstrap](https://github.com/react-bootstrap/react-bootstrap).
+for how to do that. For more complex integrations, check out [React Bootstrap](https://github.com/react-bootstrap/react-bootstrap).
 
-There are a few places where inline `style`s are applied however. They are functionally
+There are a few places where inline `style`s are applied, however. They are functionally
 required and very minimal. Specifically `PopperJs` injects it's own styles in order
 to position overlays and dropdowns, and `Modal` applies `overflow: hidden` to the
-document body. These can technically be overridden but it's very unlikely that should
+document body. These can technically be overridden but it's very unlikely to be
 required.
