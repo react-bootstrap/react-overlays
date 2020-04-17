@@ -152,7 +152,6 @@ const Modal = forwardRef<ModalHandle, ModalProps>(
     }: ModalProps,
     ref,
   ) => {
-    // const [manager] = useModalManager(providedManager);
     const container = useWaitForDOMRef(containerRef);
     const modal = useModalManager(providedManager);
 
