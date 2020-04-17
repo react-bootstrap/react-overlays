@@ -13,7 +13,7 @@ export interface UseDropdownToggleHelpers {
   toggle: DropdownContextValue['toggle'];
 }
 
-const noop: any = () => {};
+const noop = () => {};
 
 /**
  * Wires up Dropdown toggle functionality, returning a set a props to attach

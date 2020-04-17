@@ -224,13 +224,15 @@ const Modal = forwardRef<ModalHandle, ModalProps>(
       }
     });
 
+    // TODO: try and combine these effects: https://github.com/react-bootstrap/react-overlays/pull/794#discussion_r409954120
+
     // Show logic when:
     //  - show is `true` _and_ `container` has resolved
     useEffect(() => {
       if (!show || !container) return;
 
       handleShow();
-    }, [show, container, /* show never change: */ handleShow]);
+    }, [show, container, /* should never change: */ handleShow]);
 
     // Hide cleanup logic when:
     //  - `exited` switches to true
