@@ -16,7 +16,7 @@ export interface UseDropdownToggleHelpers {
 const noop: any = () => {};
 
 /**
- * Wires up Dropdown toggle functinality, returning a set a props to attach
+ * Wires up Dropdown toggle functionality, returning a set a props to attach
  * to the element that functions as the dropdown toggle (generally a button).
  *
  * @memberOf Dropdown

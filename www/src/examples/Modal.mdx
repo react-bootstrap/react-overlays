@@ -8,10 +8,10 @@ The Modal offers a few helpful features over using just a `<Portal/>` component 
 - It properly manages focus; moving to the modal content, and keeping it there until the modal is closed.
 - It disables scrolling of the page content while open.
 - Adds the appropriate ARIA roles are automatically.
-- Easily pluggable animations via a `<Transition/>` component.
+- Easily-pluggable animations via a `<Transition/>` component.
 
 Note that, in the same way the backdrop element prevents users from clicking or interacting
-with the page content underneath the Modal, Screen readers also need to be signaled to not to
+with the page content underneath the Modal, screen readers also need to be signaled to not to
 interact with page content while the Modal is open. To do this, we use a common technique of applying
 the `aria-hidden='true'` attribute to the non-Modal elements in the Modal `container`. This means that for
 a Modal to be truly modal, it should have a `container` that is _outside_ your app's
