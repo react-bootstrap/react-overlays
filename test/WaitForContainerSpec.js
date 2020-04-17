@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 
-import useWaitForDOMRef from '../src/utils/useWaitForDOMRef';
+import useWaitForDOMRef from '../src/useWaitForDOMRef';
 
 describe('useWaitForDOMRef', () => {
   it('should resolve on first render if possible (element)', () => {

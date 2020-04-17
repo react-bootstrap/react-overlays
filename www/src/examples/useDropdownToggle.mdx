@@ -1,0 +1,25 @@
+Create custom dropdown toggles without the extra component with `useDropdownToggle`.
+Make sure to spread through the returned props. Accessible `Toggle`s should
+also provide an `id` to the HTML element that is rendered.
+
+```jsx showImports
+import { useDropdownToggle } from "react-overlays";
+
+const Toggle = ({ id, children }) => {
+  const [props, { show, toggle }] = useDropdownToggle();
+
+  return (
+    <button
+      id={id}
+      type="button"
+      className="btn"
+      {...props}
+      onClick={toggle}
+    >
+      I'm a toggle ⌄
+    </button>
+  );
+};
+
+<Toggle />;
+```

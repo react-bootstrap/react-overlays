@@ -1,0 +1,32 @@
+```js renderAsComponent
+import { useRootClose } from "react-overlays";
+
+const ref = useRef();
+const [show, setShow] = useState(false);
+const handleRootClose = () => setShow(false);
+
+useRootClose(ref, handleRootClose, {
+  disabled: !show,
+});
+
+return (
+  <div className="flex flex-col items-center">
+    <button
+      type="button"
+      className="btn"
+      onClick={() => setShow(true)}
+    >
+      Render RootCloseWrapper
+    </button>
+
+    {show && (
+      <div
+        ref={ref}
+        className="rounded shadow bg-white p-6"
+      >
+        <span>Click anywhere to dismiss me!</span>
+      </div>
+    )}
+  </div>
+);
+```

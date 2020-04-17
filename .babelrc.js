@@ -1,4 +1,4 @@
-module.exports = api => ({
+module.exports = (api) => ({
   presets: [
     [
       '@babel/env',
@@ -11,6 +11,7 @@ module.exports = api => ({
       },
     ],
     '@babel/react',
+    '@babel/preset-typescript',
   ],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],

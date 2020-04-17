@@ -1,3 +1,3 @@
-import './src/styles.scss';
+import './src/styles.css';
 
 export const onClientEntry = () => {};

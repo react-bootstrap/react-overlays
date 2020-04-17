@@ -48,6 +48,8 @@ describe('<Modal>', () => {
   });
 
   it('should disable scrolling on the modal container while open', (done) => {
+    const modal = React.createRef();
+
     class Container extends React.Component {
       ref = React.createRef();
 
@@ -63,6 +65,7 @@ describe('<Modal>', () => {
         return (
           <div ref={this.ref}>
             <Modal
+              ref={modal}
               show={this.state.modalOpen}
               onHide={this.handleCloseModal}
               container={this.ref}
@@ -78,8 +81,8 @@ describe('<Modal>', () => {
 
     setTimeout(() => {
       const container = wrapper.instance().ref.current;
-      let modal = wrapper.find('Modal').instance();
-      let backdrop = modal.backdrop;
+
+      let backdrop = modal.current.backdrop;
 
       expect($(container).css('overflow')).to.equal('hidden');
 
@@ -92,6 +95,8 @@ describe('<Modal>', () => {
   });
 
   it('should add and remove container classes', () => {
+    const modal = React.createRef();
+
     class Container extends React.Component {
       state = { modalOpen: true };
 
@@ -105,6 +110,7 @@ describe('<Modal>', () => {
         return (
           <div ref={this.ref}>
             <Modal
+              ref={modal}
               show={this.state.modalOpen}
               onHide={this.handleCloseModal}
               containerClassName="test test2"
@@ -120,8 +126,8 @@ describe('<Modal>', () => {
     wrapper = mount(<Container />, { attachTo });
 
     const container = wrapper.instance().ref.current;
-    let modal = wrapper.find('Modal').instance();
-    let backdrop = modal.backdrop;
+
+    let backdrop = modal.current.backdrop;
 
     expect($(container).hasClass('test test2')).to.be.true;
 

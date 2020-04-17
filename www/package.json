@@ -9,8 +9,6 @@
     "build": "gatsby build"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/standalone": "^7.9.5",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "astroturf": "^0.10.3",
@@ -20,19 +18,14 @@
     "gatsby": "^2.20.18",
     "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-sass": "^2.2.1",
-    "gatsby-plugin-sorted-assets": "^1.0.2",
-    "gatsby-source-filesystem": "2.2.2",
-    "gatsby-transformer-documentationjs": "^4.2.2",
-    "gatsby-transformer-react-docgen": "^5.1.1",
-    "gatsby-transformer-remark": "^2.7.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
-    "react-docgen": "^5.3.0",
-    "react-docgen-annotation-resolver": "^2.0.0",
     "react-dom": "^16.13.1",
-    "react-live": "^2.2.2",
     "react-transition-group": "^4.3.0",
     "sass": "^1.26.3"
+  },
+  "dependencies": {
+    "@docpocalypse/gatsby-theme": "^0.11.6"
   }
 }

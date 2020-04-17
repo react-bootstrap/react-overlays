@@ -1,12 +1,11 @@
 import css from 'dom-helpers/css';
 import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
-import ModalContainer from '../src/Modal';
 import ModalManager from '../src/ModalManager';
 
 import { injectCss } from './helpers';
 
-const Modal = ModalContainer._Inner;
+const createModal = () => ({ dialog: null, backdrop: null });
 
 describe('ModalManager', () => {
   let container, manager;
@@ -25,7 +24,7 @@ describe('ModalManager', () => {
   });
 
   it('should add Modal', () => {
-    let modal = new Modal({});
+    let modal = createModal();
 
     manager.add(modal, container);
 
@@ -45,7 +44,7 @@ describe('ModalManager', () => {
   });
 
   it('should not add a modal twice', () => {
-    let modal = new Modal({});
+    let modal = createModal();
     manager.add(modal, container);
     manager.add(modal, container);
 
@@ -55,8 +54,8 @@ describe('ModalManager', () => {
   });
 
   it('should not add a container twice', () => {
-    let modalA = new Modal({});
-    let modalB = new Modal({});
+    let modalA = createModal();
+    let modalB = createModal();
 
     manager.add(modalA, container);
     manager.add(modalB, container);
@@ -67,8 +66,8 @@ describe('ModalManager', () => {
   });
 
   it('should remove modal', () => {
-    let modalA = new Modal({});
-    let modalB = new Modal({});
+    let modalA = createModal();
+    let modalB = createModal();
 
     manager.add(modalA, container);
     manager.add(modalB, container);
@@ -81,8 +80,8 @@ describe('ModalManager', () => {
   });
 
   it('should remove container when there are no more modals associated with it', () => {
-    let modalA = new Modal({});
-    let modalB = new Modal({});
+    let modalA = createModal();
+    let modalB = createModal();
 
     manager.add(modalA, container);
     manager.add(modalB, container);
@@ -107,13 +106,13 @@ describe('ModalManager', () => {
     });
 
     it('should add aria-hidden to container siblings', () => {
-      manager.add(new Modal({}), container);
+      manager.add(createModal(), container);
 
       expect(app.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should not add aria-hidden to modal', () => {
-      let modal = new Modal({});
+      let modal = createModal();
       let mount = document.createElement('div');
 
       modal.dialog = mount;
@@ -124,22 +123,22 @@ describe('ModalManager', () => {
     });
 
     it('should add aria-hidden to previous modals', () => {
-      let modalA = new Modal({});
+      let modalA = createModal();
       let mount = document.createElement('div');
 
       modalA.dialog = mount;
       container.appendChild(mount);
 
       manager.add(modalA, container);
-      manager.add(new Modal({}), container);
+      manager.add(createModal(), container);
 
       expect(app.getAttribute('aria-hidden')).to.equal('true');
       expect(mount.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should remove aria-hidden on americas next top modal', () => {
-      let modalA = new Modal({});
-      let modalB = new Modal({});
+      let modalA = createModal();
+      let modalB = createModal();
       let mount = document.createElement('div');
 
       modalA.dialog = mount;
@@ -156,7 +155,7 @@ describe('ModalManager', () => {
     });
 
     it('should remove aria-hidden on siblings', () => {
-      let modal = new Modal({});
+      let modal = createModal();
 
       manager.add(modal, container);
 
@@ -187,7 +186,7 @@ describe('ModalManager', () => {
     afterEach(() => injectCss.reset());
 
     it('should set container overflow to hidden ', () => {
-      let modal = new Modal({});
+      let modal = createModal();
 
       expect(container.style.overflow).to.equal('');
 
@@ -197,7 +196,7 @@ describe('ModalManager', () => {
     });
 
     it('should respect handleContainerOverflow', () => {
-      let modal = new Modal({});
+      let modal = createModal();
 
       expect(container.style.overflow).to.equal('');
 
@@ -210,7 +209,7 @@ describe('ModalManager', () => {
     });
 
     it('should set add to existing container padding', () => {
-      let modal = new Modal({});
+      let modal = createModal();
       manager.add(modal, container);
 
       expect(container.style.paddingRight).to.equal(
@@ -219,7 +218,7 @@ describe('ModalManager', () => {
     });
 
     it('should add container classes ', () => {
-      let modal = new Modal({});
+      let modal = createModal();
 
       expect(container.className).to.equal('');
 
@@ -229,7 +228,7 @@ describe('ModalManager', () => {
     });
 
     it('should restore container overflow style', () => {
-      let modal = new Modal({});
+      let modal = createModal();
 
       container.style.overflow = 'scroll';
 
@@ -242,7 +241,7 @@ describe('ModalManager', () => {
     });
 
     it('should reset overflow style to the computed one', () => {
-      let modal = new Modal({});
+      let modal = createModal();
 
       expect(css(container, 'overflow')).to.equal('scroll');
 
@@ -254,8 +253,8 @@ describe('ModalManager', () => {
     });
 
     it('should only remove styles when there are no associated modals', () => {
-      let modalA = new Modal({});
-      let modalB = new Modal({});
+      let modalA = createModal();
+      let modalB = createModal();
 
       expect(container.style.overflow).to.equal('');
 
