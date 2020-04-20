@@ -14,17 +14,17 @@ const initialPopperStyles: Partial<CSSStyleDeclaration> = {
 const initialArrowStyles = {};
 
 // until docjs supports type exports...
-export type Modifier<T> = Popper.Modifier<T>;
+export type Modifier<Name, Options> = Popper.Modifier<Name, Options>;
 export type Options = Popper.Options;
 export type Instance = Popper.Instance;
 export type Placement = Popper.Placement;
 export type VirtualElement = Popper.VirtualElement;
 export type State = Popper.State;
 
-export type ModifierMap = Record<string, Partial<Modifier<any>>>;
+export type ModifierMap = Record<string, Partial<Modifier<any, any>>>;
 export type Modifiers =
-  | Partial<Modifier<any>>[]
-  | Record<string, Partial<Modifier<any>>>;
+  | Popper.Options['modifiers']
+  | Record<string, Partial<Modifier<any, any>>>;
 
 export function toModifierMap(modifiers: Modifiers | undefined) {
   const result: Modifiers = {};
@@ -114,7 +114,7 @@ function usePopper(
     }),
   );
 
-  const updateModifier = useMemo<Modifier<any>>(
+  const updateModifier = useMemo<Modifier<'updateStateModifier', any>>(
     () => ({
       name: 'updateStateModifier',
       enabled: true,
@@ -123,7 +123,7 @@ function usePopper(
       fn: (data) => {
         setState({
           scheduleUpdate,
-          outOfBoundaries: data.state.modifiersData.hide?.isReferenceHidden,
+          outOfBoundaries: !!data.state.modifiersData.hide?.isReferenceHidden,
           placement: data.state.placement,
           styles: { ...data.state.styles?.popper },
           arrowStyles: { ...data.state.styles?.arrow },
