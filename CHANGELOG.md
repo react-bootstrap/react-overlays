@@ -1,3 +1,19 @@
+# [3.1.0](https://github.com/react-bootstrap/react-overlays/compare/v3.0.1...v3.1.0) (2020-04-20)
+
+
+### Bug Fixes
+
+* build output ([#799](https://github.com/react-bootstrap/react-overlays/issues/799)) ([8bf269e](https://github.com/react-bootstrap/react-overlays/commit/8bf269e42e8a3df249dd8cbff736874b6a23f35c))
+
+
+### Features
+
+* typescript and docs ([#794](https://github.com/react-bootstrap/react-overlays/issues/794)) ([9c9b441](https://github.com/react-bootstrap/react-overlays/commit/9c9b44144e3c2899b77335546c7484bbf5469b3e))
+
+
+
+
+
 ## [3.0.1](https://github.com/react-bootstrap/react-overlays/compare/v3.0.0...v3.0.1) (2020-03-16)
 
 
