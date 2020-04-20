@@ -1,3 +1,14 @@
+## [3.1.1](https://github.com/react-bootstrap/react-overlays/compare/v3.1.0...v3.1.1) (2020-04-20)
+
+
+### Bug Fixes
+
+* **types:** onHide is optional ([#800](https://github.com/react-bootstrap/react-overlays/issues/800)) ([bdc10d1](https://github.com/react-bootstrap/react-overlays/commit/bdc10d12d2020ef9430a07cf959018fa4d2ce926))
+
+
+
+
+
 # [3.1.0](https://github.com/react-bootstrap/react-overlays/compare/v3.0.1...v3.1.0) (2020-04-20)
 
 
