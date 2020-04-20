@@ -56,7 +56,7 @@ export interface ModalProps extends TransitionCallbacks {
   show?: boolean;
   container?: DOMContainer;
   onShow?: () => void;
-  onHide: () => void;
+  onHide?: () => void;
   manager?: ModalManager;
   backdrop?: true | false | 'static';
 
