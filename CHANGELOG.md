@@ -1,3 +1,14 @@
+## [3.1.2](https://github.com/react-bootstrap/react-overlays/compare/v3.1.1...v3.1.2) (2020-04-20)
+
+
+### Bug Fixes
+
+* esm imports in cjs build ([933b159](https://github.com/react-bootstrap/react-overlays/commit/933b159bb5e3e7fe99636b49c488ec249f7bd8dd))
+
+
+
+
+
 ## [3.1.1](https://github.com/react-bootstrap/react-overlays/compare/v3.1.0...v3.1.1) (2020-04-20)
 
 
