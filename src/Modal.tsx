@@ -18,8 +18,8 @@ import ReactDOM from 'react-dom';
 import useMounted from '@restart/hooks/useMounted';
 import useWillUnmount from '@restart/hooks/useWillUnmount';
 
-import usePrevious from '@restart/hooks/esm/usePrevious';
-import useEventCallback from '@restart/hooks/esm/useEventCallback';
+import usePrevious from '@restart/hooks/usePrevious';
+import useEventCallback from '@restart/hooks/useEventCallback';
 import ModalManager from './ModalManager';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
