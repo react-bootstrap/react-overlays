@@ -1,3 +1,14 @@
+## [3.1.3](https://github.com/react-bootstrap/react-overlays/compare/v3.1.2...v3.1.3) (2020-04-22)
+
+
+### Bug Fixes
+
+* **types:** fix Modal prop types ([#802](https://github.com/react-bootstrap/react-overlays/issues/802)) ([caa0531](https://github.com/react-bootstrap/react-overlays/commit/caa05316151953eb839a6fe75cb4a36064f76720))
+
+
+
+
+
 ## [3.1.2](https://github.com/react-bootstrap/react-overlays/compare/v3.1.1...v3.1.2) (2020-04-20)
 
 
