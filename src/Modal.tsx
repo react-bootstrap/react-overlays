@@ -115,7 +115,9 @@ export interface ModalHandle {
   backdrop: HTMLElement | null;
 }
 
-const Modal = forwardRef<ModalHandle, ModalProps>(
+const Modal: React.ForwardRefExoticComponent<
+  ModalProps & React.RefAttributes<ModalHandle>
+> = forwardRef(
   (
     {
       show = false,
@@ -150,7 +152,7 @@ const Modal = forwardRef<ModalHandle, ModalProps>(
 
       ...rest
     }: ModalProps,
-    ref,
+    ref: React.Ref<ModalHandle>,
   ) => {
     const container = useWaitForDOMRef(containerRef);
     const modal = useModalManager(providedManager);
@@ -517,11 +519,11 @@ const propTypes = {
    * A ModalManager instance used to track and manage the state of open
    * Modals. Useful when customizing how modals interact within a container
    */
-  manager: PropTypes.object,
+  manager: PropTypes.instanceOf(ModalManager),
 };
 
 Modal.displayName = 'Modal';
-Modal.propTypes = propTypes;
+Modal.propTypes = propTypes as any;
 
 export default Object.assign(Modal, {
   Manager: ModalManager,
