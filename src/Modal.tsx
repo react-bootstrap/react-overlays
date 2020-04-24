@@ -278,12 +278,12 @@ const Modal: React.ForwardRefExoticComponent<
       }
     });
 
-    const handleDocumentKeyDown = (e: KeyboardEvent) => {
+    const handleDocumentKeyDown = useEventCallback((e: KeyboardEvent) => {
       if (keyboard && e.keyCode === 27 && modal.isTopModal()) {
         onEscapeKeyDown?.(e);
         onHide();
       }
-    };
+    });
 
     const removeFocusListenerRef = useRef<ReturnType<typeof listen> | null>();
     const removeKeydownListenerRef = useRef<ReturnType<typeof listen> | null>();
