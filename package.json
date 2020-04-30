@@ -134,7 +134,7 @@
     "sinon-chai": "^3.5.0",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
-    "webpack-atoms": "^12.1.0",
+    "webpack-atoms": "^13.0.1",
     "webpack-cli": "^3.3.11"
   },
   "bugs": {
