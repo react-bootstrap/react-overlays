@@ -100,7 +100,7 @@
     "cross-env": "^7.0.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "eslint-config-4catalyzer-typescript": "^1.1.8",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",

@@ -1,5 +1,4 @@
 {
-  "extends": "../.eslintrc",
   "rules": {
     "import/prefer-default-export": "off",
     "react/prop-types": "off",
