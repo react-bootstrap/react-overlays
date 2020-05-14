@@ -281,7 +281,10 @@ const Modal: React.ForwardRefExoticComponent<
     const handleDocumentKeyDown = useEventCallback((e: KeyboardEvent) => {
       if (keyboard && e.keyCode === 27 && modal.isTopModal()) {
         onEscapeKeyDown?.(e);
-        onHide();
+
+        if (!e.defaultPrevented) {
+          onHide();
+        }
       }
     });
 
@@ -421,6 +424,8 @@ const propTypes = {
 
   /**
    * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+   *
+   * If preventDefault() is called on the keyboard event, closing the modal will be cancelled.
    */
   onEscapeKeyDown: PropTypes.func,
 
