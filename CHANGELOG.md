@@ -1,3 +1,19 @@
+# [3.2.0](https://github.com/react-bootstrap/react-overlays/compare/v3.1.3...v3.2.0) (2020-05-14)
+
+
+### Bug Fixes
+
+* Adding missing useEventCallback ([#804](https://github.com/react-bootstrap/react-overlays/issues/804)) ([cb7e2ab](https://github.com/react-bootstrap/react-overlays/commit/cb7e2ab299f450ef342fb572cafa355c0108eb26))
+
+
+### Features
+
+* **Modal:** Prevent onHide when keyboard event defaultPrevented is true ([#816](https://github.com/react-bootstrap/react-overlays/issues/816)) ([b4ffcec](https://github.com/react-bootstrap/react-overlays/commit/b4ffcecc7a1c25af9d2525a5704b2320e0509fb8))
+
+
+
+
+
 ## [3.1.3](https://github.com/react-bootstrap/react-overlays/compare/v3.1.2...v3.1.3) (2020-04-22)
 
 
