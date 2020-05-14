@@ -202,6 +202,25 @@ describe('<Modal>', () => {
     simulant.fire(backdrop, 'keydown', { keyCode: 27 });
   });
 
+  it('should not trigger onHide if e.preventDefault() called', () => {
+    const onHideSpy = sinon.spy();
+    const onEscapeKeyDown = (e) => {
+      e.preventDefault();
+    };
+
+    let ref = mountWithRef(
+      <Modal show onHide={onHideSpy} onEscapeKeyDown={onEscapeKeyDown}>
+        <strong>Message</strong>
+      </Modal>,
+      { attachTo },
+    );
+
+    let { backdrop } = ref.current;
+
+    simulant.fire(backdrop, 'keydown', { keyCode: 27 });
+    expect(onHideSpy).to.not.have.been.called;
+  });
+
   it('should add role to child', () => {
     let dialog;
     wrapper = mount(
