@@ -89,11 +89,7 @@ class ModalManager {
   }
 
   removeContainerStyle(containerState: ContainerState, container: HTMLElement) {
-    const { style } = containerState;
-
-    Object.keys(style!).forEach((key: string) => {
-      container.style[key as any] = style![key as keyof CSSStyleDeclaration];
-    });
+    Object.assign(container.style, containerState.style);
   }
 
   add(modal: ModalInstance, container: HTMLElement, className?: string) {
