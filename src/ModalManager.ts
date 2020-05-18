@@ -92,7 +92,7 @@ class ModalManager {
     const { style } = containerState;
 
     Object.keys(style!).forEach((key: string) => {
-      container.style[key as any] = style![key as keyof CSSStyleDeclaration];
+      container.style[key as any] = style![key as keyof CSSStyleDeclaration]!;
     });
   }
 
