@@ -4825,10 +4825,10 @@ escape-string-regexp@2.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
   integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
 
-eslint-config-4catalyzer-typescript@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/eslint-config-4catalyzer-typescript/-/eslint-config-4catalyzer-typescript-1.1.8.tgz#e5acfbc720dee664bb17474e09458f88f56c6c09"
-  integrity sha512-JWuI28v0ujjOyK65UIDAJbyUVhk3Fi8LJt+MyYDNkA9Hnn03yDMS0pM0aeKdRuTNO9nsnGZPsZX5WkOYS0w1OQ==
+eslint-config-4catalyzer-typescript@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-4catalyzer-typescript/-/eslint-config-4catalyzer-typescript-2.0.1.tgz#eb0c0d179ee4d90e31ab98bd70611433ef03a176"
+  integrity sha512-OqSCOhEihRoEwL/99qo4q523ijkZBWObYeyctIdmAJeCoYVnK+714D92Xza8urfJG29xcdkcvAxuPYZKNRfqMQ==
   dependencies:
     babel-eslint "^10.0.3"
     eslint-import-resolver-typescript "^2.0.0"

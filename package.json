@@ -101,7 +101,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.0.0",
-    "eslint-config-4catalyzer-typescript": "^1.1.8",
+    "eslint-config-4catalyzer-typescript": "^2.0.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
