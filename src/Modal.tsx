@@ -1,5 +1,4 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-use-before-define, react/prop-types */
 
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/contains';
