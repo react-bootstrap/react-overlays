@@ -9,13 +9,14 @@
     "build": "gatsby build"
   },
   "devDependencies": {
+    "@docpocalypse/gatsby-theme": "^0.11.30",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "astroturf": "^0.10.4",
     "bootstrap": "^4.5.0",
     "dom-helpers": "^5.1.4",
     "emotion": "^10.0.27",
-    "gatsby": "^2.23.1",
+    "gatsby": "^2.22.15",
     "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-sass": "^2.3.3",
     "lodash": "^4.17.15",
@@ -24,8 +25,5 @@
     "react-dom": "^16.13.1",
     "react-transition-group": "^4.4.1",
     "sass": "^1.26.8"
-  },
-  "dependencies": {
-    "@docpocalypse/gatsby-theme": "^0.11.6"
   }
 }
