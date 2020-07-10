@@ -118,12 +118,12 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       ...popper,
       show: !!props.show,
       props: {
-        ...(attributes.popper || {}),
+        ...attributes.popper,
         style: styles.popper as any,
         ref: mergedRef,
       },
       arrowProps: {
-        ...(attributes.arrow || {}),
+        ...attributes.arrow,
         style: styles.arrow as any,
         ref: attachArrowRef,
       },

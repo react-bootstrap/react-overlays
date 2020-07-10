@@ -116,12 +116,12 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
       ...childArgs,
       props: {
         ...menuProps,
-        ...(attributes.popper || {}),
+        ...attributes.popper,
         style: styles.popper as any,
       },
       arrowProps: {
         ref: attachArrowRef,
-        ...(attributes.arrow || {}),
+        ...attributes.arrow,
         style: styles.arrow as any,
       },
     };

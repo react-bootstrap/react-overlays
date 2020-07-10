@@ -23,15 +23,17 @@ export type Placement = Popper.Placement;
 export type VirtualElement = Popper.VirtualElement;
 export type State = Popper.State;
 
-export type OffsetsFunction = (details: {
+export type OffsetValue = [
+  number | null | undefined,
+  number | null | undefined,
+];
+export type OffsetFunction = (details: {
   popper: Popper.Rect;
   reference: Popper.Rect;
   placement: Placement;
-}) => [number | null | undefined, number | null | undefined];
+}) => OffsetValue;
 
-export type Offset =
-  | OffsetsFunction
-  | [number | null | undefined, number | null | undefined];
+export type Offset = OffsetFunction | OffsetValue;
 
 export type ModifierMap = Record<string, Partial<Modifier<any, any>>>;
 export type Modifiers =
