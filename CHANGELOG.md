@@ -1,3 +1,23 @@
+# [4.0.0](https://github.com/react-bootstrap/react-overlays/compare/v3.2.0...v4.0.0) (2020-07-10)
+
+
+### Features
+
+* improve popper integration ([#837](https://github.com/react-bootstrap/react-overlays/issues/837)) ([362128f](https://github.com/react-bootstrap/react-overlays/commit/362128f66baab0bfbc611204e5de5c86fc264fb0))
+
+
+### BREAKING CHANGES
+
+* popperConfig longer accept object forms of modifiers, pass an array instead
+* overlay and dropdown menu injected values are different
+* overlay no longer triggers an update when placement change due to auto or flip placements
+
+* address feedback
+
+
+
+
+
 # [3.2.0](https://github.com/react-bootstrap/react-overlays/compare/v3.1.3...v3.2.0) (2020-05-14)
 
 
