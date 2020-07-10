@@ -28,6 +28,7 @@ const MenuContainer = styled("div")`
 const Menu = ({ role }) => {
   const { show, onClose, props } = useDropdownMenu({
     flip: true,
+    offset: [0, 8],
   });
   return (
     <MenuContainer {...props} role={role} show={show}>

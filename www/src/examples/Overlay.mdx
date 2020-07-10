@@ -3,77 +3,34 @@ A powerful and flexible overlay component for showing things over, and next to, 
 ```jsx
 import { Overlay } from "react-overlays";
 
-// Styles mostly from Bootstrap.
-
 const Tooltip = styled("div")`
   position: absolute;
-  padding: 0 5px;
-
-  ${(p) => {
-    switch (p.placement) {
-      case "left":
-        return css`
-          padding: 0 5px;
-        `;
-      case "right":
-        return css`
-          padding: 0 5px;
-        `;
-      case "top":
-        return css`
-          padding: 5px 0;
-        `;
-      case "bottom":
-        return css`
-          padding: 5px 0;
-        `;
-      default:
-        return "";
-    }
-  }}
 `;
 
 const Arrow = styled("div")`
   position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  opacity: 0.75;
+  width: 10px;
+  height: 10px;
+  z-index: -1;
 
-  ${(p) => {
-    switch (p.placement) {
-      case "left":
-        return css`
-          right: 0;
-          border-width: 5px 0 5px 5px;
-          border-color: transparent transparent transparent
-            #000;
-        `;
-      case "right":
-        return css`
-          left: 0;
-          border-width: 5px 5px 5px 0;
-          border-color: transparent #232323 transparent
-            transparent;
-        `;
-      case "top":
-        return css`
-          bottom: 0;
-          border-width: 5px 5px 0;
-          border-color: #232323 transparent transparent
-            transparent;
-        `;
-      case "bottom":
-        return css`
-          top: 0;
-          border-width: 0 5px 5px;
-          border-color: transparent transparent #232323
-            transparent;
-        `;
-      default:
-        return "";
-    }
-  }}
+  &::before {
+    content: "";
+    position: absolute;
+    transform: rotate(45deg);
+    background: #000;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    left: 0;
+  }
+
+  ${(p) =>
+    ({
+      left: "right: -4px;",
+      right: "left: -4px;",
+      top: "bottom: -4px;",
+      bottom: "top: -4px;",
+    }[p.placement])}
 `;
 
 const Body = styled("div")`
@@ -82,7 +39,6 @@ const Body = styled("div")`
   text-align: center;
   border-radius: 3px;
   background-color: #000;
-  opacity: 0.75;
 `;
 
 const PLACEMENTS = ["left", "top", "right", "bottom"];
@@ -137,6 +93,7 @@ function OverlayExample() {
       <Overlay
         show={show}
         rootClose
+        offset={[0, 10]}
         onHide={() => dispatch("hide")}
         placement={placement}
         container={containerRef}

@@ -2,18 +2,16 @@ import PropTypes from 'prop-types';
 import React, { useContext, useRef } from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import DropdownContext from './DropdownContext';
-import usePopper, {
-  toModifierMap,
-  UsePopperOptions,
-  Placement,
-} from './usePopper';
+import usePopper, { UsePopperOptions, Placement, Offset } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
+import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
 
 export interface UseDropdownMenuOptions {
   flip?: boolean;
   show?: boolean;
   alignEnd?: boolean;
   usePopper?: boolean;
+  offset?: Offset;
   rootCloseEvent?: RootCloseOptions['clickTrigger'];
   popperConfig?: Omit<UsePopperOptions, 'enabled' | 'placement'>;
 }
@@ -23,14 +21,16 @@ export interface UseDropdownMenuValue {
   alignEnd?: boolean;
   hasShown: boolean;
   close: (e: Event) => void;
-  props: {
+  update: () => void;
+  forceUpdate: () => void;
+  props: Record<string, any> & {
     ref: React.RefCallback<HTMLElement>;
     style?: React.CSSProperties;
     'aria-labelledby'?: string;
   };
-  arrowProps: {
+  arrowProps: Record<string, any> & {
     ref: React.RefCallback<HTMLElement>;
-    style?: React.CSSProperties;
+    style: React.CSSProperties;
   };
 }
 
@@ -40,6 +40,7 @@ const noop: any = () => {};
  * @memberOf Dropdown
  * @param {object}  options
  * @param {boolean} options.flip Automatically adjust the menu `drop` position based on viewport edge detection
+ * @param {[number, number]} options.offset Define an offset distance between the Menu and the Toggle
  * @param {boolean} options.show Display the menu manually, ignored in the context of a `Dropdown`
  * @param {boolean} options.usePopper opt in/out of using PopperJS to position menus. When disabled you must position it yourself.
  * @param {string}  options.rootCloseEvent The pointer event to listen for when determining "clicks outside" the menu for triggering a close.
@@ -48,12 +49,13 @@ const noop: any = () => {};
 export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
   const context = useContext(DropdownContext);
 
-  const [arrowElement, attachArrowRef] = useCallbackRef();
+  const [arrowElement, attachArrowRef] = useCallbackRef<Element>();
 
   const hasShownRef = useRef(false);
 
   const {
     flip,
+    offset,
     rootCloseEvent,
     popperConfig = {},
     usePopper: shouldUsePopper = !!context,
@@ -78,31 +80,19 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
   else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
   else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
 
-  const modifiers = toModifierMap(popperConfig.modifiers);
-
-  const popper = usePopper(toggleElement, menuElement, {
-    ...popperConfig,
-    placement,
-    enabled: !!(shouldUsePopper && show),
-    modifiers: {
-      ...modifiers,
-      eventListeners: {
-        enabled: !!show,
-      },
-      arrow: {
-        ...modifiers.arrow,
-        enabled: !!arrowElement,
-        options: {
-          ...modifiers.arrow?.options,
-          element: arrowElement,
-        },
-      },
-      flip: {
-        enabled: !!flip,
-        ...modifiers.flip,
-      },
-    },
-  });
+  const { styles, attributes, ...popper } = usePopper(
+    toggleElement,
+    menuElement,
+    mergeOptionsWithPopperConfig({
+      placement,
+      enabled: !!(shouldUsePopper && show),
+      enableEvents: show,
+      offset,
+      flip,
+      arrowElement,
+      popperConfig,
+    }),
+  );
 
   let menu: Partial<UseDropdownMenuValue>;
 
@@ -110,6 +100,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     ref: setMenu || noop,
     'aria-labelledby': toggleElement?.id,
   };
+
   const childArgs = {
     show,
     alignEnd,
@@ -125,11 +116,13 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
       ...childArgs,
       props: {
         ...menuProps,
-        style: popper.styles as any,
+        ...(attributes.popper || {}),
+        style: styles.popper as any,
       },
       arrowProps: {
         ref: attachArrowRef,
-        style: popper.arrowStyles as any,
+        ...(attributes.arrow || {}),
+        style: styles.arrow as any,
       },
     };
   }
@@ -152,8 +145,8 @@ const propTypes = {
    *   alignEnd: boolean,
    *   close: (?SyntheticEvent) => void,
    *   placement: Placement,
-   *   outOfBoundaries: ?boolean,
-   *   scheduleUpdate: () => void,
+   *   update: () => void,
+   *   forceUpdate: () => void,
    *   props: {
    *     ref: (?HTMLElement) => void,
    *     style: { [string]: string | number },
