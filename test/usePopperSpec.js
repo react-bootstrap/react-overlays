@@ -31,7 +31,7 @@ describe('usePopper', () => {
     elements.mount.parentNode.removeChild(elements.mount);
   });
 
-  it('allows enabledEvents shortcut', (done) => {
+  it('should return state', (done) => {
     const result = renderHook(() =>
       usePopper(elements.reference, elements.popper, {
         eventsEnabled: true,
@@ -39,27 +39,10 @@ describe('usePopper', () => {
     );
 
     setTimeout(() => {
-      expect(result.current.state.modifiersData.eventListeners).to.be.ok;
-      done();
-    });
-  });
-
-  it('accepts a modifiers object', (done) => {
-    const spy = sinon.spy();
-    renderHook(() =>
-      usePopper(elements.reference, elements.popper, {
-        modifiers: {
-          test: {
-            enabled: true,
-            phase: 'write',
-            fn: spy,
-          },
-        },
-      }),
-    );
-
-    setTimeout(() => {
-      expect(spy).to.have.been.calledOnce;
+      expect(result.current.update).to.be.a('function');
+      expect(result.current.forceUpdate).to.be.a('function');
+      expect(result.current.styles).to.have.any.key('popper');
+      expect(result.current.attributes).to.have.any.key('popper');
       done();
     });
   });
