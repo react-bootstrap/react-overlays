@@ -15,9 +15,9 @@ const siblings = (
   });
 };
 
-export function ariaHidden(show: boolean, node: Element | null | undefined) {
+export function ariaHidden(hide: boolean, node: Element | null | undefined) {
   if (!node) return;
-  if (show) {
+  if (hide) {
     node.setAttribute('aria-hidden', 'true');
   } else {
     node.removeAttribute('aria-hidden');
