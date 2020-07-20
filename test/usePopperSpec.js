@@ -46,4 +46,31 @@ describe('usePopper', () => {
       done();
     });
   });
+
+  it('should add aria-describedBy for tooltips', (done) => {
+    elements.popper.setAttribute('role', 'tooltip');
+    elements.popper.setAttribute('id', 'example123');
+
+    renderHook(() => usePopper(elements.reference, elements.popper));
+
+    setTimeout(() => {
+      expect(
+        document.querySelector('[aria-describedby="example123"]'),
+      ).to.equal(elements.reference);
+
+      done();
+    });
+  });
+
+  it('should not aria-describedBy any other role', (done) => {
+    renderHook(() => usePopper(elements.reference, elements.popper));
+
+    setTimeout(() => {
+      expect(
+        document.querySelector('[aria-describedby="example123"]'),
+      ).to.equal(null);
+
+      done();
+    });
+  });
 });
