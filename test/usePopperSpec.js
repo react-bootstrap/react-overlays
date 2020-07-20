@@ -3,15 +3,16 @@ import React from 'react';
 import usePopper from '../src/usePopper';
 
 describe('usePopper', () => {
-  function renderHook(fn) {
+  function renderHook(fn, initialProps) {
     let result = { current: null };
 
-    function Wrapper() {
-      result.current = fn();
+    function Wrapper(props) {
+      result.current = fn(props);
       return null;
     }
 
-    result.mount = mount(<Wrapper />);
+    result.mount = mount(<Wrapper {...initialProps} />);
+    result.update = (props) => result.mount.setProps(props);
 
     return result;
   }
@@ -43,6 +44,67 @@ describe('usePopper', () => {
       expect(result.current.forceUpdate).to.be.a('function');
       expect(result.current.styles).to.have.any.key('popper');
       expect(result.current.attributes).to.have.any.key('popper');
+      done();
+    });
+  });
+
+  it('should add aria-describedBy for tooltips', (done) => {
+    elements.popper.setAttribute('role', 'tooltip');
+    elements.popper.setAttribute('id', 'example123');
+
+    const result = renderHook(() =>
+      usePopper(elements.reference, elements.popper),
+    );
+
+    setTimeout(() => {
+      expect(
+        document.querySelector('[aria-describedby="example123"]'),
+      ).to.equal(elements.reference);
+
+      result.mount.unmount();
+
+      expect(
+        document.querySelector('[aria-describedby="example123"]'),
+      ).to.equal(null);
+
+      done();
+    });
+  });
+
+  it('should add to existing describedBy', (done) => {
+    elements.popper.setAttribute('role', 'tooltip');
+    elements.popper.setAttribute('id', 'example123');
+    elements.reference.setAttribute('aria-describedby', 'foo, bar , baz ');
+
+    const result = renderHook(() =>
+      usePopper(elements.reference, elements.popper),
+    );
+
+    setTimeout(() => {
+      expect(
+        document.querySelector(
+          '[aria-describedby="foo, bar , baz ,example123"]',
+        ),
+      ).to.equal(elements.reference);
+
+      result.mount.unmount();
+
+      expect(
+        document.querySelector('[aria-describedby="foo, bar , baz "]'),
+      ).to.equal(elements.reference);
+
+      done();
+    });
+  });
+
+  it('should not aria-describedBy any other role', (done) => {
+    renderHook(() => usePopper(elements.reference, elements.popper));
+
+    setTimeout(() => {
+      expect(
+        document.querySelector('[aria-describedby="example123"]'),
+      ).to.equal(null);
+
       done();
     });
   });

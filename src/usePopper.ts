@@ -59,6 +59,38 @@ export interface UsePopperState {
   state?: State;
 }
 
+const ariaDescribedByModifier: Modifier<'ariaDescribedBy', undefined> = {
+  name: 'ariaDescribedBy',
+  enabled: true,
+  phase: 'afterWrite',
+  effect: ({ state }) => {
+    return () => {
+      const { reference, popper } = state.elements;
+      if ('removeAttribute' in reference) {
+        const ids = (reference.getAttribute('aria-describedby') || '')
+          .split(',')
+          .filter((id) => id.trim() !== popper.id);
+
+        if (!ids.length) reference.removeAttribute('aria-describedby');
+        else reference.setAttribute('aria-describedby', ids.join(','));
+      }
+    };
+  },
+  fn: ({ state }) => {
+    const { popper, reference } = state.elements;
+
+    const role = popper.getAttribute('role')?.toLowerCase();
+
+    if (popper.id && role === 'tooltip' && 'setAttribute' in reference) {
+      const ids = reference.getAttribute('aria-describedby');
+      reference.setAttribute(
+        'aria-describedby',
+        ids ? `${ids},${popper.id}` : popper.id,
+      );
+    }
+  },
+};
+
 const EMPTY_MODIFIERS = [] as any;
 /**
  * Position an element relative some reference element using Popper.js
@@ -159,7 +191,7 @@ function usePopper(
       ...config,
       placement,
       strategy,
-      modifiers: [...modifiers, updateModifier],
+      modifiers: [...modifiers, ariaDescribedByModifier, updateModifier],
     });
 
     return () => {
