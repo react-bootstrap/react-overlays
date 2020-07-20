@@ -1,3 +1,19 @@
+# [4.1.0](https://github.com/react-bootstrap/react-overlays/compare/v4.0.0...v4.1.0) (2020-07-20)
+
+
+### Bug Fixes
+
+* **deps:** bump lodash from 4.17.15 to 4.17.19 ([#840](https://github.com/react-bootstrap/react-overlays/issues/840)) ([e718175](https://github.com/react-bootstrap/react-overlays/commit/e718175eb4ea35d8bbe656d19ec0769bb2363653))
+
+
+### Features
+
+* add aria-describedby modifier for tooltips ([#842](https://github.com/react-bootstrap/react-overlays/issues/842)) ([941a5dc](https://github.com/react-bootstrap/react-overlays/commit/941a5dca181c36db891bffd5abdbd7c83759a704))
+
+
+
+
+
 # [4.0.0](https://github.com/react-bootstrap/react-overlays/compare/v3.2.0...v4.0.0) (2020-07-10)
 
 
