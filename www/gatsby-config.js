@@ -28,6 +28,7 @@ module.exports = {
           css: require.resolve('./src/css'),
           styled: '@emotion/styled',
           injectCss: require.resolve('./src/injectCss'),
+          ReactDOM: 'react-dom',
         },
       },
     },

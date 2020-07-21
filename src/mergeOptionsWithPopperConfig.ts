@@ -2,7 +2,7 @@ import { UsePopperOptions, Offset, Placement, Modifiers } from './usePopper';
 
 export type Config = {
   flip?: boolean;
-  show?: boolean;
+  fixed?: boolean;
   alignEnd?: boolean;
   enabled?: boolean;
   containerPadding?: number;
@@ -41,6 +41,7 @@ export default function mergeOptionsWithPopperConfig({
   placement,
   flip,
   offset,
+  fixed,
   containerPadding,
   arrowElement,
   popperConfig = {},
@@ -51,6 +52,7 @@ export default function mergeOptionsWithPopperConfig({
     ...popperConfig,
     placement,
     enabled,
+    strategy: fixed ? 'fixed' : popperConfig.strategy,
     modifiers: toModifierArray({
       ...modifiers,
       eventListeners: {

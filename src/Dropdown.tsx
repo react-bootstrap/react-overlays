@@ -4,8 +4,8 @@ import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
-import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useForceUpdate from '@restart/hooks/useForceUpdate';
+import useGlobalListener from '@restart/hooks/useGlobalListener';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
 import DropdownContext, { DropDirection } from './DropdownContext';
@@ -90,10 +90,24 @@ export interface DropdownProps {
   alignEnd?: boolean;
   defaultShow?: boolean;
   show?: boolean;
-  onToggle: (nextShow: boolean, event?: React.SyntheticEvent) => void;
+  onToggle: (nextShow: boolean, event?: React.SyntheticEvent | Event) => void;
   itemSelector?: string;
   focusFirstItemOnShow?: false | true | 'keyboard';
-  children: (arg: { props: DropdownInjectedProps }) => React.ReactNode;
+  children: React.ReactNode;
+}
+
+function useRefWithUpdate() {
+  const forceUpdate = useForceUpdate();
+  const ref = useRef<HTMLElement | null>(null);
+  const attachRef = useCallback(
+    (element: null | HTMLElement) => {
+      ref.current = element;
+      // ensure that a menu set triggers an update for consumers
+      forceUpdate();
+    },
+    [forceUpdate],
+  );
+  return [ref, attachRef] as const;
 }
 
 /**
@@ -109,39 +123,30 @@ function Dropdown({
   focusFirstItemOnShow,
   children,
 }: DropdownProps) {
-  const forceUpdate = useForceUpdate();
   const [show, onToggle] = useUncontrolledProp(
     rawShow,
     defaultShow!,
     rawOnToggle,
   );
 
-  const [toggleElement, setToggle] = useCallbackRef<HTMLElement>();
-
   // We use normal refs instead of useCallbackRef in order to populate the
   // the value as quickly as possible, otherwise the effect to focus the element
   // may run before the state value is set
-  const menuRef = useRef<HTMLElement | null>(null);
+  const [menuRef, setMenu] = useRefWithUpdate();
   const menuElement = menuRef.current;
 
-  const setMenu = useCallback(
-    (ref: null | HTMLElement) => {
-      menuRef.current = ref;
-      // ensure that a menu set triggers an update for consumers
-      forceUpdate();
-    },
-    [forceUpdate],
-  );
+  const [toggleRef, setToggle] = useRefWithUpdate();
+  const toggleElement = toggleRef.current;
 
   const lastShow = usePrevious(show);
   const lastSourceEvent = useRef<string | null>(null);
   const focusInDropdown = useRef(false);
 
   const toggle = useCallback(
-    (event) => {
-      onToggle(!show, event);
+    (nextShow: boolean, event?: Event | React.SyntheticEvent) => {
+      onToggle(nextShow, event);
     },
-    [onToggle, show],
+    [onToggle],
   );
 
   const context = useMemo(
@@ -223,20 +228,21 @@ function Dropdown({
     return items[index];
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  useGlobalListener('keydown', (event: KeyboardEvent) => {
     const { key } = event;
     const target = event.target as HTMLElement;
+
+    const fromMenu = menuRef.current?.contains(target);
+    const fromToggle = toggleRef.current?.contains(target);
 
     // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400
     // in inscrutability
     const isInput = /input|textarea/i.test(target.tagName);
-    if (
-      isInput &&
-      (key === ' ' ||
-        (key !== 'Escape' &&
-          menuRef.current &&
-          menuRef.current.contains(target)))
-    ) {
+    if (isInput && (key === ' ' || (key !== 'Escape' && fromMenu))) {
+      return;
+    }
+
+    if (!fromMenu && !fromToggle) {
       return;
     }
 
@@ -253,7 +259,7 @@ function Dropdown({
       case 'ArrowDown':
         event.preventDefault();
         if (!show) {
-          toggle(event);
+          onToggle(true, event);
         } else {
           const next = getNextFocusedChild(target, 1);
           if (next && next.focus) next.focus();
@@ -265,11 +271,11 @@ function Dropdown({
         break;
       default:
     }
-  };
+  });
 
   return (
     <DropdownContext.Provider value={context}>
-      {children({ props: { onKeyDown: handleKeyDown } })}
+      {children}
     </DropdownContext.Provider>
   );
 }

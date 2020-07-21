@@ -1,14 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useRef } from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
-import DropdownContext from './DropdownContext';
-import usePopper, { UsePopperOptions, Placement, Offset } from './usePopper';
+import DropdownContext, { DropdownContextValue } from './DropdownContext';
+import usePopper, {
+  UsePopperOptions,
+  Placement,
+  Offset,
+  UsePopperState,
+} from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
 
 export interface UseDropdownMenuOptions {
   flip?: boolean;
   show?: boolean;
+  fixed?: boolean;
   alignEnd?: boolean;
   usePopper?: boolean;
   offset?: Offset;
@@ -16,22 +22,24 @@ export interface UseDropdownMenuOptions {
   popperConfig?: Omit<UsePopperOptions, 'enabled' | 'placement'>;
 }
 
-export interface UseDropdownMenuValue {
+export type UserDropdownMenuProps = Record<string, any> & {
+  ref: React.RefCallback<HTMLElement>;
+  style?: React.CSSProperties;
+  'aria-labelledby'?: string;
+};
+
+export type UserDropdownMenuArrowProps = Record<string, any> & {
+  ref: React.RefCallback<HTMLElement>;
+  style: React.CSSProperties;
+};
+
+export interface UseDropdownMenuMetadata {
   show: boolean;
   alignEnd?: boolean;
   hasShown: boolean;
-  close: (e: Event) => void;
-  update: () => void;
-  forceUpdate: () => void;
-  props: Record<string, any> & {
-    ref: React.RefCallback<HTMLElement>;
-    style?: React.CSSProperties;
-    'aria-labelledby'?: string;
-  };
-  arrowProps: Record<string, any> & {
-    ref: React.RefCallback<HTMLElement>;
-    style: React.CSSProperties;
-  };
+  toggle?: DropdownContextValue['toggle'];
+  popper: UsePopperState | null;
+  arrowProps: Partial<UserDropdownMenuArrowProps>;
 }
 
 const noop: any = () => {};
@@ -57,11 +65,12 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     flip,
     offset,
     rootCloseEvent,
+    fixed = false,
     popperConfig = {},
     usePopper: shouldUsePopper = !!context,
   } = options;
 
-  const show = context?.show == null ? options.show : context.show;
+  const show = context?.show == null ? !!options.show : context.show;
   const alignEnd =
     context?.alignEnd == null ? options.alignEnd : context.alignEnd;
 
@@ -80,7 +89,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
   else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
   else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
 
-  const { styles, attributes, ...popper } = usePopper(
+  const popper = usePopper(
     toggleElement,
     menuElement,
     mergeOptionsWithPopperConfig({
@@ -89,50 +98,40 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
       enableEvents: show,
       offset,
       flip,
+      fixed,
       arrowElement,
       popperConfig,
     }),
   );
 
-  let menu: Partial<UseDropdownMenuValue>;
-
-  const menuProps = {
+  const menuProps: UserDropdownMenuProps = {
     ref: setMenu || noop,
     'aria-labelledby': toggleElement?.id,
+    ...popper.attributes.popper,
+    style: popper.styles.popper as any,
   };
 
-  const childArgs = {
+  const metadata: UseDropdownMenuMetadata = {
     show,
     alignEnd,
     hasShown: hasShownRef.current,
-    close: handleClose,
+    toggle: context?.toggle,
+    popper: shouldUsePopper ? popper : null,
+    arrowProps: shouldUsePopper
+      ? {
+          ref: attachArrowRef,
+          ...popper.attributes.arrow,
+          style: popper.styles.arrow as any,
+        }
+      : {},
   };
-
-  if (!shouldUsePopper) {
-    menu = { ...childArgs, props: menuProps };
-  } else {
-    menu = {
-      ...popper,
-      ...childArgs,
-      props: {
-        ...menuProps,
-        ...attributes.popper,
-        style: styles.popper as any,
-      },
-      arrowProps: {
-        ref: attachArrowRef,
-        ...attributes.arrow,
-        style: styles.arrow as any,
-      },
-    };
-  }
 
   useRootClose(menuElement, handleClose, {
     clickTrigger: rootCloseEvent,
-    disabled: !(menu && show),
+    disabled: !show,
   });
 
-  return menu as UseDropdownMenuValue;
+  return [menuProps, metadata] as const;
 }
 
 const propTypes = {
@@ -199,7 +198,10 @@ const defaultProps = {
 };
 
 export interface DropdownMenuProps extends UseDropdownMenuOptions {
-  children: (args: UseDropdownMenuValue) => React.ReactNode;
+  children: (
+    props: UserDropdownMenuProps,
+    meta: UseDropdownMenuMetadata,
+  ) => React.ReactNode;
 }
 
 /**
@@ -209,9 +211,9 @@ export interface DropdownMenuProps extends UseDropdownMenuOptions {
  * @memberOf Dropdown
  */
 function DropdownMenu({ children, ...options }: DropdownMenuProps) {
-  const args = useDropdownMenu(options);
+  const [props, meta] = useDropdownMenu(options);
 
-  return <>{args.hasShown ? children(args) : null}</>;
+  return <>{meta.hasShown ? children(props, meta) : null}</>;
 }
 
 DropdownMenu.displayName = 'ReactOverlaysDropdownMenu';
