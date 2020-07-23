@@ -24,7 +24,7 @@ const propTypes = {
    *   },
    * }) => React.Element}
    */
-  children: PropTypes.func.isRequired,
+  children: PropTypes.node,
 
   /**
    * Determines the direction and location of the Menu in relation to it's Toggle.

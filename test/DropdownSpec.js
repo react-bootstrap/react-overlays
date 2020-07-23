@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import simulant from 'simulant';
+import { activeElement } from 'dom-helpers';
 import Dropdown from '../src/Dropdown';
 
 describe('<Dropdown>', () => {
@@ -15,20 +16,21 @@ describe('<Dropdown>', () => {
   }) => (
     <Dropdown.Menu
       flip
-      popperConfig={popperConfig}
       usePopper={usePopper}
+      popperConfig={popperConfig}
       rootCloseEvent={rootCloseEvent}
     >
-      {(args) => {
-        renderSpy && renderSpy(args);
-        const { show, close, props: menuProps } = args;
+      {(menuProps, meta) => {
+        const { show, toggle } = meta;
+        renderSpy && renderSpy(meta);
+
         return (
           <div
             {...props}
             {...menuProps}
             data-show={show}
             className="menu"
-            onClick={close}
+            onClick={() => toggle(false)}
             style={{ display: show ? 'flex' : 'none' }}
           />
         );
@@ -38,14 +40,13 @@ describe('<Dropdown>', () => {
 
   const Toggle = (props) => (
     <Dropdown.Toggle>
-      {({ toggle, props: toggleProps }) => (
+      {(toggleProps) => (
         <button
           {...props}
           {...toggleProps}
           id="test-id"
           type="button"
           className="toggle"
-          onClick={toggle}
         />
       )}
     </Dropdown.Toggle>
@@ -53,23 +54,31 @@ describe('<Dropdown>', () => {
 
   const SimpleDropdown = ({ children, menuSpy, usePopper, ...outer }) => (
     <Dropdown {...outer}>
-      {({ props }) => (
-        <div tabIndex="-1" {...props}>
-          {children || (
-            <>
-              <Toggle key="toggle">Child Title</Toggle>,
-              <Menu key="menu" renderSpy={menuSpy} usePopper={usePopper}>
-                <button type="button">Item 1</button>
-                <button type="button">Item 2</button>
-                <button type="button">Item 3</button>
-                <button type="button">Item 4</button>
-              </Menu>
-            </>
-          )}
-        </div>
+      {children || (
+        <>
+          <Toggle key="toggle">Child Title</Toggle>,
+          <Menu key="menu" renderSpy={menuSpy} usePopper={usePopper}>
+            <button type="button">Item 1</button>
+            <button type="button">Item 2</button>
+            <button type="button">Item 3</button>
+            <button type="button">Item 4</button>
+          </Menu>
+        </>
       )}
     </Dropdown>
   );
+
+  let focusableContainer;
+
+  beforeEach(() => {
+    focusableContainer = document.createElement('div');
+    document.body.appendChild(focusableContainer);
+  });
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(focusableContainer);
+    document.body.removeChild(focusableContainer);
+  });
 
   it('renders toggle with Dropdown.Toggle', () => {
     const buttonNode = mount(<SimpleDropdown />)
@@ -84,8 +93,8 @@ describe('<Dropdown>', () => {
   });
 
   it('forwards alignEnd to menu', () => {
-    const renderSpy = sinon.spy((args) => {
-      args.alignEnd.should.equal(true);
+    const renderSpy = sinon.spy((meta) => {
+      meta.alignEnd.should.equal(true);
     });
 
     mount(
@@ -108,6 +117,7 @@ describe('<Dropdown>', () => {
     wrapper.assertSingle('ReactOverlaysDropdown');
 
     wrapper.assertSingle('div[data-show=true]');
+
     wrapper.assertSingle('button[aria-expanded=true]').simulate('click');
 
     wrapper.assertNone('.show');
@@ -135,15 +145,13 @@ describe('<Dropdown>', () => {
 
     const wrapper = mount(
       <Dropdown onToggle={closeSpy} id="test-id">
-        {() => (
-          <div>
-            <Toggle>Child Title</Toggle>,
-            <Menu rootCloseEvent="mousedown">
-              <button type="button">Item 1</button>
-              <button type="button">Item 2</button>
-            </Menu>
-          </div>
-        )}
+        <div>
+          <Toggle>Child Title</Toggle>,
+          <Menu rootCloseEvent="mousedown">
+            <button type="button">Item 1</button>
+            <button type="button">Item 2</button>
+          </Menu>
+        </div>
       </Dropdown>,
     );
 
@@ -160,11 +168,13 @@ describe('<Dropdown>', () => {
   });
 
   it('when focused and closed toggles open when the key "down" is pressed', () => {
-    const wrapper = mount(<SimpleDropdown />);
+    const wrapper = mount(<SimpleDropdown />, { attachTo: focusableContainer });
 
-    wrapper.find('.toggle').simulate('keyDown', { key: 'ArrowDown' });
+    simulant.fire(wrapper.find('.toggle').getDOMNode(), 'keydown', {
+      key: 'ArrowDown',
+    });
 
-    wrapper.assertSingle('ReactOverlaysDropdownMenu div');
+    wrapper.update().assertSingle('ReactOverlaysDropdownMenu div');
   });
 
   it('closes when item is clicked', () => {
@@ -207,29 +217,15 @@ describe('<Dropdown>', () => {
   });
 
   describe('focusable state', () => {
-    let focusableContainer;
-
-    beforeEach(() => {
-      focusableContainer = document.createElement('div');
-      document.body.appendChild(focusableContainer);
-    });
-
-    afterEach(() => {
-      ReactDOM.unmountComponentAtNode(focusableContainer);
-      document.body.removeChild(focusableContainer);
-    });
-
     it('when focus should not be moved to first item when focusFirstItemOnShow is `false`', () => {
       const wrapper = mount(
         <Dropdown focusFirstItemOnShow={false}>
-          {({ props }) => (
-            <div {...props}>
-              <Toggle>Child Title</Toggle>,
-              <Menu>
-                <button type="button">Item 1</button>
-              </Menu>
-            </div>
-          )}
+          <div>
+            <Toggle>Child Title</Toggle>,
+            <Menu>
+              <button type="button">Item 1</button>
+            </Menu>
+          </div>
         </Dropdown>,
         { attachTo: focusableContainer },
       );
@@ -244,40 +240,39 @@ describe('<Dropdown>', () => {
     it('when focused and closed sets focus on first menu item when the key "down" is pressed for role="menu"', () => {
       const wrapper = mount(
         <Dropdown>
-          {({ props }) => (
-            <div {...props}>
-              <Toggle>Child Title</Toggle>,
-              <Menu role="menu">
-                <button type="button">Item 1</button>
-                <button type="button">Item 2</button>
-              </Menu>
-            </div>
-          )}
+          <div>
+            <Toggle>Child Title</Toggle>,
+            <Menu role="menu">
+              <button type="button">Item 1</button>
+              <button type="button">Item 2</button>
+            </Menu>
+          </div>
         </Dropdown>,
         { attachTo: focusableContainer },
       );
 
-      wrapper.find('.toggle').getDOMNode().focus();
+      const toggle = wrapper.find('.toggle').getDOMNode();
+      toggle.focus();
 
-      wrapper.find('.toggle').simulate('keyDown', { key: 'ArrowDown' });
+      simulant.fire(toggle, 'keydown', {
+        key: 'ArrowDown',
+      });
 
       document.activeElement.should.equal(
-        wrapper.find('.menu > button').first().getDOMNode(),
+        wrapper.update().find('.menu > button').first().getDOMNode(),
       );
     });
 
     it('when focused and closed sets focus on first menu item when the focusFirstItemOnShow is true', () => {
       const wrapper = mount(
         <Dropdown focusFirstItemOnShow>
-          {({ props }) => (
-            <div {...props}>
-              <Toggle>Child Title</Toggle>,
-              <Menu>
-                <button type="button">Item 1</button>
-                <button type="button">Item 2</button>
-              </Menu>
-            </div>
-          )}
+          <div>
+            <Toggle>Child Title</Toggle>,
+            <Menu>
+              <button type="button">Item 1</button>
+              <button type="button">Item 2</button>
+            </Menu>
+          </div>
         </Dropdown>,
         { attachTo: focusableContainer },
       );
@@ -296,38 +291,41 @@ describe('<Dropdown>', () => {
         attachTo: focusableContainer,
       });
 
-      const firstItem = wrapper.find('.menu > button').first();
+      const firstItem = wrapper.find('.menu > button').first().getDOMNode();
 
-      firstItem.getDOMNode().focus();
-      document.activeElement.should.equal(firstItem.getDOMNode());
+      firstItem.focus();
+      document.activeElement.should.equal(firstItem);
 
-      firstItem.simulate('keyDown', { key: 'Escape' });
+      act(() => {
+        simulant.fire(firstItem, 'keydown', {
+          key: 'Escape',
+        });
+      });
 
-      document.activeElement.should.equal(wrapper.find('.toggle').getDOMNode());
+      console.log(document.activeElement);
+      document.activeElement.should.equal(
+        wrapper.update().find('.toggle').getDOMNode(),
+      );
     });
 
-    it('when open and the key "tab" is pressed the menu is closed and focus is progress to the next focusable element', (done) => {
+    it('when open and the key "tab" is pressed the menu is closed and focus is progress to the next focusable element', () => {
       const wrapper = mount(
         <div>
           <SimpleDropdown defaultShow />
           <input type="text" id="next-focusable" />
         </div>,
-        focusableContainer,
+        { attachTo: focusableContainer },
       );
 
-      // Need to use Container instead of div above to make instance a composite
-      // element, to make this call legal.
+      const toggle = wrapper.find('.toggle').getDOMNode();
 
-      wrapper.find('.toggle').simulate('keyDown', { key: 'Tab' });
+      toggle.focus();
 
-      setTimeout(() => {
-        wrapper
-          .find('.toggle')
-          .getDOMNode()
-          .getAttribute('aria-expanded')
-          .should.equal('false');
-        done();
+      simulant.fire(toggle, 'keydown', {
+        key: 'Tab',
       });
+
+      toggle.getAttribute('aria-expanded').should.equal('false');
 
       // simulating a tab event doesn't actually shift focus.
       // at least that seems to be the case according to SO.
@@ -351,15 +349,13 @@ describe('<Dropdown>', () => {
 
       mount(
         <Dropdown show id="test-id">
-          {() => (
-            <div>
-              <Toggle>Child Title</Toggle>
-              <Menu popperConfig={popper}>
-                <button type="button">Item 1</button>
-                <button type="button">Item 2</button>
-              </Menu>
-            </div>
-          )}
+          <div>
+            <Toggle>Child Title</Toggle>
+            <Menu popperConfig={popper}>
+              <button type="button">Item 1</button>
+              <button type="button">Item 2</button>
+            </Menu>
+          </div>
         </Dropdown>,
       );
 
