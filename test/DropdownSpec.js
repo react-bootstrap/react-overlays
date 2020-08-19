@@ -88,7 +88,7 @@ describe('<Dropdown>', () => {
     });
 
     mount(
-      <SimpleDropdown show alignEnd usePopper={false} menuSpy={renderSpy} />
+      <SimpleDropdown show alignEnd usePopper={false} menuSpy={renderSpy} />,
     );
 
     renderSpy.should.have.been.called;
@@ -143,7 +143,7 @@ describe('<Dropdown>', () => {
             </Menu>
           </div>
         )}
-      </Dropdown>
+      </Dropdown>,
     );
 
     act(() => {
@@ -171,7 +171,7 @@ describe('<Dropdown>', () => {
 
     const wrapper = mount(<SimpleDropdown />).setProps({
       show: true,
-      onToggle
+      onToggle,
     });
 
     wrapper.assertSingle('ReactOverlaysDropdown[show=true]');
@@ -201,7 +201,7 @@ describe('<Dropdown>', () => {
       .getDOMNode()
       .getAttribute('id')
       .should.equal(
-        wrapper.find('.menu').getDOMNode().getAttribute('aria-labelledby')
+        wrapper.find('.menu').getDOMNode().getAttribute('aria-labelledby'),
       );
   });
 
@@ -230,7 +230,7 @@ describe('<Dropdown>', () => {
             </div>
           )}
         </Dropdown>,
-        { attachTo: focusableContainer }
+        { attachTo: focusableContainer },
       );
 
       wrapper.find('.toggle').getDOMNode().focus();
@@ -253,7 +253,7 @@ describe('<Dropdown>', () => {
             </div>
           )}
         </Dropdown>,
-        { attachTo: focusableContainer }
+        { attachTo: focusableContainer },
       );
 
       wrapper.find('.toggle').getDOMNode().focus();
@@ -261,7 +261,7 @@ describe('<Dropdown>', () => {
       wrapper.find('.toggle').simulate('keyDown', { key: 'ArrowDown' });
 
       document.activeElement.should.equal(
-        wrapper.find('.menu > button').first().getDOMNode()
+        wrapper.find('.menu > button').first().getDOMNode(),
       );
     });
 
@@ -278,7 +278,7 @@ describe('<Dropdown>', () => {
             </div>
           )}
         </Dropdown>,
-        { attachTo: focusableContainer }
+        { attachTo: focusableContainer },
       );
 
       wrapper.find('.toggle').getDOMNode().focus();
@@ -286,13 +286,13 @@ describe('<Dropdown>', () => {
       wrapper.find('.toggle').simulate('click');
 
       document.activeElement.should.equal(
-        wrapper.find('.menu > button').first().getDOMNode()
+        wrapper.find('.menu > button').first().getDOMNode(),
       );
     });
 
     it('when open and the key "Escape" is pressed the menu is closed and focus is returned to the button', () => {
       const wrapper = mount(<SimpleDropdown defaultShow />, {
-        attachTo: focusableContainer
+        attachTo: focusableContainer,
       });
 
       const firstItem = wrapper.find('.menu > button').first();
@@ -311,7 +311,7 @@ describe('<Dropdown>', () => {
           <SimpleDropdown defaultShow />
           <input type="text" id="next-focusable" />
         </div>,
-        focusableContainer
+        focusableContainer,
       );
 
       // Need to use Container instead of div above to make instance a composite
@@ -343,9 +343,9 @@ describe('<Dropdown>', () => {
             name: 'test',
             enabled: true,
             phase: 'write',
-            fn: spy
-          }
-        ]
+            fn: spy,
+          },
+        ],
       };
 
       mount(
@@ -359,7 +359,7 @@ describe('<Dropdown>', () => {
               </Menu>
             </div>
           )}
-        </Dropdown>
+        </Dropdown>,
       );
 
       setTimeout(() => {

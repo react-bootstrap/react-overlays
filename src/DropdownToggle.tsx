@@ -22,16 +22,16 @@ const noop = () => {};
  */
 export function useDropdownToggle(): [
   UseDropdownToggleProps,
-  UseDropdownToggleHelpers
+  UseDropdownToggleHelpers,
 ] {
   const { show = false, toggle = noop, setToggle } =
     useContext(DropdownContext) || {};
   return [
     {
       ref: setToggle || noop,
-      'aria-expanded': !!show
+      'aria-expanded': !!show,
     },
-    { show, toggle }
+    { show, toggle },
   ];
 }
 
@@ -50,12 +50,12 @@ const propTypes = {
    *   },
    * }) => React.Element}
    */
-  children: PropTypes.func.isRequired
+  children: PropTypes.func.isRequired,
 };
 
 export interface DropdownToggleProps {
   children: (
-    args: UseDropdownToggleHelpers & { props: UseDropdownToggleProps }
+    args: UseDropdownToggleHelpers & { props: UseDropdownToggleProps },
   ) => React.ReactNode;
 }
 
@@ -73,7 +73,7 @@ function DropdownToggle({ children }: DropdownToggleProps) {
       {children({
         show,
         toggle,
-        props
+        props,
       })}
     </>
   );
