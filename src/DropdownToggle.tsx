@@ -1,15 +1,15 @@
-import PropTypes from "prop-types";
-import React, { useContext } from "react";
-import DropdownContext, { DropdownContextValue } from "./DropdownContext";
+import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
+import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export interface UseDropdownToggleProps {
-  ref: DropdownContextValue["setToggle"];
-  "aria-expanded": boolean;
+  ref: DropdownContextValue['setToggle'];
+  'aria-expanded': boolean;
 }
 
 export interface UseDropdownToggleHelpers {
-  show: DropdownContextValue["show"];
-  toggle: DropdownContextValue["toggle"];
+  show: DropdownContextValue['show'];
+  toggle: DropdownContextValue['toggle'];
 }
 
 const noop = () => {};
@@ -29,7 +29,7 @@ export function useDropdownToggle(): [
   return [
     {
       ref: setToggle || noop,
-      "aria-expanded": !!show
+      'aria-expanded': !!show
     },
     { show, toggle }
   ];
@@ -79,7 +79,7 @@ function DropdownToggle({ children }: DropdownToggleProps) {
   );
 }
 
-DropdownToggle.displayName = "ReactOverlaysDropdownToggle";
+DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';
 DropdownToggle.propTypes = propTypes;
 
 /** @component */
