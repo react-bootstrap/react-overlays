@@ -1,16 +1,15 @@
-import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
-import DropdownContext, { DropdownContextValue } from './DropdownContext';
+import PropTypes from "prop-types";
+import React, { useContext } from "react";
+import DropdownContext, { DropdownContextValue } from "./DropdownContext";
 
 export interface UseDropdownToggleProps {
-  ref: DropdownContextValue['setToggle'];
-  'aria-haspopup': boolean;
-  'aria-expanded': boolean;
+  ref: DropdownContextValue["setToggle"];
+  "aria-expanded": boolean;
 }
 
 export interface UseDropdownToggleHelpers {
-  show: DropdownContextValue['show'];
-  toggle: DropdownContextValue['toggle'];
+  show: DropdownContextValue["show"];
+  toggle: DropdownContextValue["toggle"];
 }
 
 const noop = () => {};
@@ -23,17 +22,16 @@ const noop = () => {};
  */
 export function useDropdownToggle(): [
   UseDropdownToggleProps,
-  UseDropdownToggleHelpers,
+  UseDropdownToggleHelpers
 ] {
   const { show = false, toggle = noop, setToggle } =
     useContext(DropdownContext) || {};
   return [
     {
       ref: setToggle || noop,
-      'aria-haspopup': true,
-      'aria-expanded': !!show,
+      "aria-expanded": !!show
     },
-    { show, toggle },
+    { show, toggle }
   ];
 }
 
@@ -48,17 +46,16 @@ const propTypes = {
    *   toggle: (show: boolean) => void,
    *   props: {
    *     ref: (?HTMLElement) => void,
-   *     aria-haspopup: true
    *     aria-expanded: boolean
    *   },
    * }) => React.Element}
    */
-  children: PropTypes.func.isRequired,
+  children: PropTypes.func.isRequired
 };
 
 export interface DropdownToggleProps {
   children: (
-    args: UseDropdownToggleHelpers & { props: UseDropdownToggleProps },
+    args: UseDropdownToggleHelpers & { props: UseDropdownToggleProps }
   ) => React.ReactNode;
 }
 
@@ -76,13 +73,13 @@ function DropdownToggle({ children }: DropdownToggleProps) {
       {children({
         show,
         toggle,
-        props,
+        props
       })}
     </>
   );
 }
 
-DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';
+DropdownToggle.displayName = "ReactOverlaysDropdownToggle";
 DropdownToggle.propTypes = propTypes;
 
 /** @component */
