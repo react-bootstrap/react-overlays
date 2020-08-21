@@ -138,7 +138,7 @@ class ModalManager {
     }
     else if (this.hideSiblingNodes) {
       //otherwise make sure the next top modal is visible to a SR
-      ariaHidden(false, data.modals[data.modals.length - 1].mountNode);
+      ariaHidden(false, data.modals[data.modals.length - 1].modalNode);
     }
   }
 

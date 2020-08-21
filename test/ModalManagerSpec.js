@@ -140,7 +140,7 @@ describe('ModalManager', ()=> {
       let modalB = new Modal({});
       let mount = document.createElement('div');
 
-      modalA.mountNode = mount;
+      modalA.modalNode = mount;
       container.appendChild(mount);
 
       manager.add(modalA, container);
