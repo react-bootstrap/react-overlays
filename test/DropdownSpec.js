@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import simulant from 'simulant';
-import { activeElement } from 'dom-helpers';
 import Dropdown from '../src/Dropdown';
 
 describe('<Dropdown>', () => {

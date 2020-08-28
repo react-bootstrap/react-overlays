@@ -267,6 +267,11 @@ function Dropdown({
         return;
       case 'Escape':
       case 'Tab':
+        if (key === 'Escape') {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
         onToggle(false, event);
         break;
       default:
