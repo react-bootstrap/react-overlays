@@ -75,7 +75,7 @@ class ModalManager {
     this.modals.push(modal);
 
     if (this.hideSiblingNodes) {
-      hideSiblings(container, modal.mountNode);
+      hideSiblings(container, modal.modalNode);
     }
 
     if (containerIdx !== -1) {
@@ -131,14 +131,14 @@ class ModalManager {
       }
 
       if (this.hideSiblingNodes) {
-        showSiblings(container, modal.mountNode);
+        showSiblings(container, modal.modalNode);
       }
       this.containers.splice(containerIdx, 1);
       this.data.splice(containerIdx, 1);
     }
     else if (this.hideSiblingNodes) {
       //otherwise make sure the next top modal is visible to a SR
-      ariaHidden(false, data.modals[data.modals.length - 1].mountNode);
+      ariaHidden(false, data.modals[data.modals.length - 1].modalNode);
     }
   }
 
