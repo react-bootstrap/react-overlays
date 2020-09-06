@@ -33,3 +33,6 @@ node_modules
 # Build artifacts
 /examples/static
 /lib
+
+# ide
+.idea

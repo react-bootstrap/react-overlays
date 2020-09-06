@@ -12,6 +12,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
   useEffect,
+  ReactNode,
 } from 'react';
 import ReactDOM from 'react-dom';
 import useMounted from '@restart/hooks/useMounted';
@@ -46,6 +47,11 @@ export interface RenderModalBackdropProps {
   ref: React.RefCallback<Element>;
   onClick: (event: React.SyntheticEvent) => void;
 }
+
+export interface RenderModalWrapperProps {
+  children: React.ReactNode;
+}
+
 export interface ModalProps extends TransitionCallbacks {
   children?: React.ReactElement;
   role?: string;
@@ -61,6 +67,7 @@ export interface ModalProps extends TransitionCallbacks {
 
   renderDialog?: (props: RenderModalDialogProps) => React.ReactNode;
   renderBackdrop?: (props: RenderModalBackdropProps) => React.ReactNode;
+  renderWrapper?: (props: RenderModalWrapperProps) => React.ReactNode;
 
   onEscapeKeyDown?: (e: KeyboardEvent) => void;
   onBackdropClick?: (e: React.SyntheticEvent) => void;
@@ -141,6 +148,7 @@ const Modal: React.ForwardRefExoticComponent<
       containerClassName,
       onShow,
       onHide = () => {},
+      renderWrapper,
 
       onExit,
       onExited,
@@ -355,17 +363,20 @@ const Modal: React.ForwardRefExoticComponent<
       }
     }
 
-    return (
+    const modalView = (
       <>
-        {ReactDOM.createPortal(
-          <>
-            {backdropElement}
-            {dialog}
-          </>,
-          container,
-        )}
+        {backdropElement}
+        {dialog}
       </>
     );
+
+    const content = renderWrapper
+      ? renderWrapper({
+          children: modalView,
+        })
+      : modalView;
+
+    return <>{ReactDOM.createPortal(content, container)}</>;
   },
 );
 
@@ -420,6 +431,16 @@ const propTypes = {
    * ```
    */
   renderBackdrop: PropTypes.func,
+
+  /**
+   * A function that returns the wrapper component. Useful for custom
+   * rendering. **Note:** the component should make sure to apply the provided ref.
+   *
+   * ```js
+   * renderWrapper={props => <MyWrapper {...props} />}
+   * ```
+   */
+  renderWrapper: PropTypes.func,
 
   /**
    * A callback fired when the escape key, if specified in `keyboard`, is pressed.
