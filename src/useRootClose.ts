@@ -86,6 +86,10 @@ function useRootClose(
   useEffect(() => {
     if (disabled || ref == null) return undefined;
 
+    // Store the current event to avoid triggering handlers immediately
+    // https://github.com/facebook/react/issues/20074
+    let currentEvent = window.event;
+
     const doc = ownerDocument(getRefTarget(ref));
 
     // Use capture for this listener so it fires before React's listener, to
@@ -98,8 +102,23 @@ function useRootClose(
       true,
     );
 
-    const removeMouseListener = listen(doc as any, clickTrigger, handleMouse);
-    const removeKeyupListener = listen(doc as any, 'keyup', handleKeyUp);
+    const removeMouseListener = listen(doc as any, clickTrigger, (e) => {
+      // skip if this event is the same as the one running when we added the handlers
+      if (e === currentEvent) {
+        currentEvent = undefined;
+        return;
+      }
+      handleMouse(e);
+    });
+
+    const removeKeyupListener = listen(doc as any, 'keyup', (e) => {
+      // skip if this event is the same as the one running when we added the handlers
+      if (e === currentEvent) {
+        currentEvent = undefined;
+        return;
+      }
+      handleKeyUp(e);
+    });
 
     let mobileSafariHackListeners = [] as Array<() => void>;
     if ('ontouchstart' in doc.documentElement) {
