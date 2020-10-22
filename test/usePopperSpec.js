@@ -108,4 +108,30 @@ describe('usePopper', () => {
       done();
     });
   });
+
+  it('should not add add duplicates to aria-describedby', (done) => {
+    elements.popper.setAttribute('role', 'tooltip');
+    elements.popper.setAttribute('id', 'example123');
+    elements.reference.setAttribute('aria-describedby', 'foo');
+
+    const result = renderHook(() =>
+      usePopper(elements.reference, elements.popper),
+    );
+
+    window.dispatchEvent(new Event('resize'));
+
+    setTimeout(() => {
+      expect(
+        document.querySelector('[aria-describedby="foo,example123"]'),
+      ).to.equal(elements.reference);
+
+      result.mount.unmount();
+
+      expect(document.querySelector('[aria-describedby="foo"]')).to.equal(
+        elements.reference,
+      );
+
+      done();
+    });
+  });
 });
