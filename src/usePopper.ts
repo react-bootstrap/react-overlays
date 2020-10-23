@@ -83,6 +83,10 @@ const ariaDescribedByModifier: Modifier<'ariaDescribedBy', undefined> = {
 
     if (popper.id && role === 'tooltip' && 'setAttribute' in reference) {
       const ids = reference.getAttribute('aria-describedby');
+      if (ids && ids.split(',').indexOf(popper.id) !== -1) {
+        return;
+      }
+
       reference.setAttribute(
         'aria-describedby',
         ids ? `${ids},${popper.id}` : popper.id,
