@@ -1,3 +1,15 @@
+## [4.1.1](https://github.com/react-bootstrap/react-overlays/compare/v4.1.0...v4.1.1) (2020-10-29)
+
+
+### Bug Fixes
+
+* **Popper:** Prevent duplicate ids in aria-describedby ([#883](https://github.com/react-bootstrap/react-overlays/issues/883)) ([48bb128](https://github.com/react-bootstrap/react-overlays/commit/48bb1285916b6c0b49e02f07bcf1a603b77de15e))
+* root-close firing immediately in react 17 ([#880](https://github.com/react-bootstrap/react-overlays/issues/880)) ([fa8c878](https://github.com/react-bootstrap/react-overlays/commit/fa8c878daba92ff7852aa8245d08df31d9ed17ab))
+
+
+
+
+
 # [4.1.0](https://github.com/react-bootstrap/react-overlays/compare/v4.0.0...v4.1.0) (2020-07-20)
 
 
