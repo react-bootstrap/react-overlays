@@ -10,20 +10,20 @@
   },
   "devDependencies": {
     "@docpocalypse/gatsby-theme": "^0.11.30",
-    "@emotion/core": "^10.0.35",
+    "@emotion/core": "^10.1.1",
     "@emotion/styled": "^10.0.27",
-    "astroturf": "^0.10.4",
+    "astroturf": "^0.10.5",
     "bootstrap": "^4.5.3",
     "dom-helpers": "^5.2.0",
     "emotion": "^10.0.27",
-    "gatsby": "^2.24.80",
+    "gatsby": "^2.24.92",
     "gatsby-plugin-astroturf": "^0.2.1",
-    "gatsby-plugin-sass": "^2.3.17",
+    "gatsby-plugin-sass": "^2.3.22",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-transition-group": "^4.4.1",
-    "sass": "^1.27.0"
+    "sass": "^1.28.0"
   }
 }
