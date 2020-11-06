@@ -50,6 +50,10 @@ class RootCloseWrapper extends React.Component {
   }
 
   addEventListeners = () => {
+    // Store the current event to avoid triggering handlers immediately
+    // https://github.com/facebook/react/issues/20074
+    this.currentEvent = window.event;
+
     const { event } = this.props;
     const doc = ownerDocument(this);
 
@@ -89,12 +93,24 @@ class RootCloseWrapper extends React.Component {
   };
 
   handleMouse = (e) => {
+    // skip if this event is the same as the one running when we added the handlers
+    if (e === this.currentEvent) {
+      this.currentEvent = undefined;
+      return;
+    }
+
     if (!this.preventMouseRootClose && this.props.onRootClose) {
       this.props.onRootClose(e);
     }
   };
 
   handleKeyUp = (e) => {
+    // skip if this event is the same as the one running when we added the handlers
+    if (e === this.currentEvent) {
+      this.currentEvent = undefined;
+      return;
+    }
+
     if (e.keyCode === escapeKeyCode && this.props.onRootClose) {
       this.props.onRootClose(e);
     }
