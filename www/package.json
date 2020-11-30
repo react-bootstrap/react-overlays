@@ -16,7 +16,7 @@
     "bootstrap": "^4.5.3",
     "dom-helpers": "^5.2.0",
     "emotion": "^10.0.27",
-    "gatsby": "^2.27.0",
+    "gatsby": "^2.27.5",
     "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-sass": "^2.6.0",
     "lodash": "^4.17.20",
