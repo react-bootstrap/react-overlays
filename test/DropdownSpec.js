@@ -78,7 +78,6 @@ describe('<Dropdown>', () => {
 
     buttonNode.textContent.should.match(/Child Title/);
 
-    buttonNode.getAttribute('aria-haspopup').should.equal('true');
     buttonNode.getAttribute('aria-expanded').should.equal('false');
     buttonNode.getAttribute('id').should.be.ok;
   });

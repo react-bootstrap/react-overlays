@@ -4,7 +4,6 @@ import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export interface UseDropdownToggleProps {
   ref: DropdownContextValue['setToggle'];
-  'aria-haspopup': boolean;
   'aria-expanded': boolean;
 }
 
@@ -30,7 +29,6 @@ export function useDropdownToggle(): [
   return [
     {
       ref: setToggle || noop,
-      'aria-haspopup': true,
       'aria-expanded': !!show,
     },
     { show, toggle },
@@ -48,7 +46,6 @@ const propTypes = {
    *   toggle: (show: boolean) => void,
    *   props: {
    *     ref: (?HTMLElement) => void,
-   *     aria-haspopup: true
    *     aria-expanded: boolean
    *   },
    * }) => React.Element}
