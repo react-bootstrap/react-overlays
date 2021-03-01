@@ -25,5 +25,8 @@
     "react-dom": "^16.14.0",
     "react-transition-group": "^4.4.1",
     "sass": "^1.32.8"
+  },
+  "resolutions": {
+    "ast-types": "^0.14.2"
   }
 }

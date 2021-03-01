@@ -4,7 +4,7 @@ module.exports = (config) => {
   const { env } = process;
 
   config.set({
-    frameworks: ['mocha', 'sinon-chai'],
+    frameworks: ['mocha', 'webpack', 'sinon-chai'],
 
     files: ['test/index.js'],
 
@@ -25,6 +25,11 @@ module.exports = (config) => {
       resolve: {
         symlinks: false,
         extensions: ['.mjs', '.js', '.ts', '.tsx', '.json'],
+        fallback: {
+          util: require.resolve('util/'),
+          // for Enzyme/Cheerio
+          stream: require.resolve('stream-browserify'),
+        },
       },
       plugins: [
         plugins.define({
@@ -32,11 +37,7 @@ module.exports = (config) => {
           __DEV__: true,
         }),
       ],
-      devtool: 'cheap-module-inline-source-map',
-    },
-
-    webpackMiddleware: {
-      noInfo: true,
+      devtool: 'inline-cheap-module-source-map',
     },
 
     reporters: ['mocha', 'coverage'],
