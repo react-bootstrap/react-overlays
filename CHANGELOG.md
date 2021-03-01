@@ -1,3 +1,17 @@
+# [5.0.0](https://github.com/react-bootstrap/react-overlays/compare/v4.1.1...v5.0.0) (2021-03-01)
+
+
+* feat!: Make DropdownAPI consistent and fix keyboard handling (#843) ([3ed2d85](https://github.com/react-bootstrap/react-overlays/commit/3ed2d853180db7325ab090ebdd4b2ef1096d20b4)), closes [#843](https://github.com/react-bootstrap/react-overlays/issues/843)
+
+
+### BREAKING CHANGES
+
+* Dropdown does not inject props or accept a children render function (it just works)
+
+
+
+
+
 ## [4.1.1](https://github.com/react-bootstrap/react-overlays/compare/v4.1.0...v4.1.1) (2020-10-29)
 
 
