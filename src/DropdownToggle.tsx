@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export interface UseDropdownToggleProps {
   ref: DropdownContextValue['setToggle'];
+  onClick: React.MouseEventHandler;
   'aria-haspopup': boolean;
   'aria-expanded': boolean;
 }
 
-export interface UseDropdownToggleHelpers {
+export interface UseDropdownToggleMetadata {
   show: DropdownContextValue['show'];
   toggle: DropdownContextValue['toggle'];
 }
@@ -23,13 +24,21 @@ const noop = () => {};
  */
 export function useDropdownToggle(): [
   UseDropdownToggleProps,
-  UseDropdownToggleHelpers,
+  UseDropdownToggleMetadata,
 ] {
   const { show = false, toggle = noop, setToggle } =
     useContext(DropdownContext) || {};
+  const handleClick = useCallback(
+    (e) => {
+      toggle(!show, e);
+    },
+    [show, toggle],
+  );
+
   return [
     {
       ref: setToggle || noop,
+      onClick: handleClick,
       'aria-haspopup': true,
       'aria-expanded': !!show,
     },
@@ -58,7 +67,8 @@ const propTypes = {
 
 export interface DropdownToggleProps {
   children: (
-    args: UseDropdownToggleHelpers & { props: UseDropdownToggleProps },
+    props: UseDropdownToggleProps,
+    meta: UseDropdownToggleMetadata,
   ) => React.ReactNode;
 }
 
@@ -69,17 +79,9 @@ export interface DropdownToggleProps {
  * @memberOf Dropdown
  */
 function DropdownToggle({ children }: DropdownToggleProps) {
-  const [props, { show, toggle }] = useDropdownToggle();
+  const [props, meta] = useDropdownToggle();
 
-  return (
-    <>
-      {children({
-        show,
-        toggle,
-        props,
-      })}
-    </>
-  );
+  return <>{children(props, meta)}</>;
 }
 
 DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';

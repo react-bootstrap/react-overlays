@@ -7,46 +7,40 @@ built from three base components, you should compose to build your Dropdowns.
 - `Dropdown.Toggle`: generally a button that triggers the menu opening
 - `Dropdown.Menu`: the overlaid, menu, positioned to the toggle with PopperJS
 
-```jsx renderAsComponent
+```jsx
 import {
   useDropdownMenu,
   useDropdownToggle,
   Dropdown,
 } from "react-overlays";
 
-const MenuContainer = styled("div")`
-  display: ${(p) => (p.show ? "flex" : "none")};
-  min-width: 150px;
-  position: absolute;
-  z-index: 1000;
-  flex-direction: column;
-  border: 1px solid #e5e5e5;
-  background-color: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-`;
-
 const Menu = ({ role }) => {
-  const { show, onClose, props } = useDropdownMenu({
+  const [props, { toggle, show }] = useDropdownMenu({
     flip: true,
     offset: [0, 8],
   });
+  const display = show ? "flex" : "none";
   return (
-    <MenuContainer {...props} role={role} show={show}>
+    <div
+      {...props}
+      role={role}
+      className={`${display} w-48 py-2 flex-col shadow-lg border-gray-200 bg-white z-10 rounded`}
+    >
       <button
         type="button"
-        onClick={onClose}
+        onClick={() => toggle(false)}
         className="text-left hover:bg-brand-100 px-6 py-2"
       >
         Item 1
       </button>
       <button
         type="button"
-        onClick={onClose}
+        onClick={() => toggle(false)}
         className="text-left hover:bg-brand-100 px-6 py-2"
       >
         Item 2
       </button>
-    </MenuContainer>
+    </div>
   );
 };
 
@@ -58,7 +52,6 @@ const Toggle = ({ id, children }) => {
       className="btn"
       id={id}
       {...props}
-      onClick={toggle}
     >
       {children}
     </button>
@@ -80,12 +73,10 @@ const DropdownButton = ({
     alignEnd={alignEnd}
     itemSelector="button:not(:disabled)"
   >
-    {({ props }) => (
-      <div {...props} className="relative inline-block">
-        <Toggle id="example-toggle">{title}</Toggle>
-        <Menu role={role} />
-      </div>
-    )}
+    <span>
+      <Toggle id="example-toggle">{title}</Toggle>
+      <Menu role={role} />
+    </span>
   </Dropdown>
 );
 
@@ -95,17 +86,60 @@ const ButtonToolbar = styled("div")`
   }
 `;
 
-const [show, setShow] = useState(false);
+function DropdownExample() {
+  const [show, setShow] = useState(false);
 
-<ButtonToolbar className="dropdown-example">
-  <DropdownButton
-    show={show}
-    onToggle={(nextShow) => setShow(nextShow)}
-    title={`${show ? "Close" : "Open"} Dropdown`}
-  />
-  <DropdownButton alignEnd title="Align right" />
+  return (
+    <ButtonToolbar className="dropdown-example">
+      <DropdownButton
+        show={show}
+        onToggle={(nextShow) => setShow(nextShow)}
+        title={`${show ? "Close" : "Open"} Dropdown`}
+      />
+      <DropdownButton alignEnd title="Align right" />
 
-  <DropdownButton drop="up" title="Drop up" />
-  <DropdownButton role="menu" title="Role 'menu'" />
-</ButtonToolbar>;
+      <DropdownButton drop="up" title="Drop up" />
+      <DropdownButton role="menu" title="Role 'menu'" />
+    </ButtonToolbar>
+  );
+}
+
+<DropdownExample />;
+```
+
+## Different containers
+
+Dropdowns use `PopperJS` by default to position Menu's to Toggles. PopperJS is a
+powerful positioning library that lets you easily construct Dropdown markup to suit
+your app's needs.
+
+The example here positions the Menu to the `document` body via a Portal.
+
+```js
+import { Dropdown } from "react-overlays";
+
+<Dropdown drop="down">
+  <Dropdown.Toggle id="example-toggle">
+    {(props) => (
+      <button type="button" className="btn" {...props}>
+        Click to open
+      </button>
+    )}
+  </Dropdown.Toggle>
+  <Dropdown.Menu offset={[0, 12]}>
+    {(props, { show }) =>
+      ReactDOM.createPortal(
+        <div
+          {...props}
+          className={`${
+            show ? "flex" : "hidden"
+          } p-3 shadow-lg border-grey-200 bg-white z-10 rounded`}
+        >
+          <p>I am rendered into the document body</p>
+        </div>,
+        document.body
+      )
+    }
+  </Dropdown.Menu>
+</Dropdown>;
 ```
