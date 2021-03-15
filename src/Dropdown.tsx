@@ -112,6 +112,7 @@ function useRefWithUpdate() {
 
 /**
  * @displayName Dropdown
+ * @public
  */
 function Dropdown({
   drop,
