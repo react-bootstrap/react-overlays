@@ -1,4 +1,5 @@
 const { rules, plugins } = require('webpack-atoms');
+const webpack = require('webpack');
 
 module.exports = (config) => {
   const { env } = process;
@@ -35,6 +36,9 @@ module.exports = (config) => {
         plugins.define({
           'process.env.NODE_ENV': JSON.stringify('test'),
           __DEV__: true,
+        }),
+        new webpack.ProvidePlugin({
+          process: 'process/browser',
         }),
       ],
       devtool: 'inline-cheap-module-source-map',
