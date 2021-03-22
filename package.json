@@ -29,7 +29,7 @@
     "modal"
   ],
   "scripts": {
-    "bootstrap": "yarn && yarn --cwd www",
+    "bootstrap": "yarn --network-timeout 100000 && yarn --cwd www --network-timeout 100000",
     "build": "rimraf lib && 4c build src && yarn build:popper && yarn build:pick",
     "build:pick": "cherry-pick --cwd=lib --input-dir=../src --cjs-dir=cjs --esm-dir=esm",
     "build:popper": "rollup src/popper.ts --file lib/cjs/popper.js --format cjs --name popper --plugin @rollup/plugin-node-resolve",
