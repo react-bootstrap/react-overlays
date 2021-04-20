@@ -267,7 +267,6 @@ function Dropdown({
           if (next && next.focus) next.focus();
         }
         return;
-        return;
       case 'Tab':
         // on keydown the target is the element being tabbed FROM, we need that
         // to know if this event is relevant to this dropdown (e.g. in this menu).
