@@ -1,3 +1,14 @@
+## [5.0.1](https://github.com/react-bootstrap/react-overlays/compare/v5.0.0...v5.0.1) (2021-04-21)
+
+
+### Bug Fixes
+
+* allow internal tabbing in dropdown menu ([#939](https://github.com/react-bootstrap/react-overlays/issues/939)) ([30fb517](https://github.com/react-bootstrap/react-overlays/commit/30fb51753e7f763029fb75ddd4bc7333de8bc4e0))
+
+
+
+
+
 # [5.0.0](https://github.com/react-bootstrap/react-overlays/compare/v4.1.1...v5.0.0) (2021-03-01)
 
 
