@@ -324,6 +324,9 @@ describe('<Dropdown>', () => {
         key: 'Tab',
       });
 
+      simulant.fire(document, 'keyup', {
+        key: 'Tab',
+      });
       toggle.getAttribute('aria-expanded').should.equal('false');
 
       // simulating a tab event doesn't actually shift focus.

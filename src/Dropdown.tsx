@@ -1,5 +1,6 @@
 import matches from 'dom-helpers/matches';
 import qsa from 'dom-helpers/querySelectorAll';
+import addEventListener from 'dom-helpers/addEventListener';
 import React, { useCallback, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
@@ -266,12 +267,28 @@ function Dropdown({
           if (next && next.focus) next.focus();
         }
         return;
-      case 'Escape':
       case 'Tab':
-        if (key === 'Escape') {
-          event.preventDefault();
-          event.stopPropagation();
-        }
+        // on keydown the target is the element being tabbed FROM, we need that
+        // to know if this event is relevant to this dropdown (e.g. in this menu).
+        // On `keyup` the target is the element being tagged TO which we use to check
+        // if focus has left the menu
+        addEventListener(
+          document as any,
+          'keyup',
+          (e) => {
+            if (
+              (e.key === 'Tab' && !e.target) ||
+              !menuRef.current!.contains(e.target as HTMLElement)
+            ) {
+              onToggle(false, event);
+            }
+          },
+          { once: true },
+        );
+        break;
+      case 'Escape':
+        event.preventDefault();
+        event.stopPropagation();
 
         onToggle(false, event);
         break;
