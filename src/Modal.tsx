@@ -46,7 +46,12 @@ export interface RenderModalBackdropProps {
   ref: React.RefCallback<Element>;
   onClick: (event: React.SyntheticEvent) => void;
 }
-export interface ModalProps extends TransitionCallbacks {
+
+/*
+  Modal props are split into a version with and without index signature so that you can fully use them in another projects
+  This is due to Typescript not playing well with index singatures e.g. when using Omit
+*/
+export interface BaseModalProps extends TransitionCallbacks {
   children?: React.ReactElement;
   role?: string;
   style?: React.CSSProperties;
@@ -74,7 +79,9 @@ export interface ModalProps extends TransitionCallbacks {
   restoreFocusOptions?: {
     preventScroll: boolean;
   };
+}
 
+export interface ModalProps extends BaseModalProps {
   [other: string]: any;
 }
 
