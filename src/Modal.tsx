@@ -47,10 +47,6 @@ export interface RenderModalBackdropProps {
   onClick: (event: React.SyntheticEvent) => void;
 }
 
-interface IndexSignature {
-  [other: string]: any;
-}
-
 /*
   Modal props are split into a version with and without index signature so that you can fully use them in another projects
   This is due to Typescript not playing well with index singatures e.g. when using Omit
@@ -85,7 +81,9 @@ export interface ModalPropsWithoutIndexSignaure extends TransitionCallbacks {
   };
 }
 
-export type ModalProps = ModalPropsWithoutIndexSignaure & IndexSignature;
+export interface ModalProps extends ModalPropsWithoutIndexSignaure {
+  [other: string]: any;
+}
 
 function getManager() {
   if (!manager) manager = new ModalManager();
