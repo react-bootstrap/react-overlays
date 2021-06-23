@@ -278,7 +278,10 @@ function Dropdown({
           (e) => {
             if (
               (e.key === 'Tab' && !e.target) ||
-              !menuRef.current!.contains(e.target as HTMLElement)
+              !(
+                menuRef.current &&
+                menuRef.current.contains(e.target as HTMLElement)
+              )
             ) {
               onToggle(false, event);
             }
