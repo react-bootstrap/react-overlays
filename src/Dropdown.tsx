@@ -248,6 +248,10 @@ function Dropdown({
       return;
     }
 
+    if (!menuRef.current && key === 'Tab') {
+      return;
+    }
+
     lastSourceEvent.current = event.type;
 
     switch (key) {

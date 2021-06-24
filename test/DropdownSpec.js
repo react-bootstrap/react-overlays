@@ -335,6 +335,26 @@ describe('<Dropdown>', () => {
     });
   });
 
+  it('should not call onToggle if the menu is not open and "tab" is pressed', () => {
+    const onToggleSpy = sinon.spy();
+    const wrapper = mount(<SimpleDropdown onToggle={onToggleSpy} />, {
+      attachTo: focusableContainer,
+    });
+
+    const toggle = wrapper.find('.toggle').getDOMNode();
+    toggle.focus();
+
+    simulant.fire(toggle, 'keydown', {
+      key: 'Tab',
+    });
+
+    simulant.fire(document, 'keyup', {
+      key: 'Tab',
+    });
+
+    onToggleSpy.should.not.be.called;
+  });
+
   describe('popper config', () => {
     it('can add modifiers', (done) => {
       const spy = sinon.spy();
