@@ -1,3 +1,21 @@
+# [5.1.0](https://github.com/react-bootstrap/react-overlays/compare/v5.0.0...v5.1.0) (2021-06-25)
+
+
+### Bug Fixes
+
+* **Dropdown:** add checking if ref exists on dropdown ([#958](https://github.com/react-bootstrap/react-overlays/issues/958)) ([b0363c0](https://github.com/react-bootstrap/react-overlays/commit/b0363c0b2350a842f13e5ab38e1e33490e1c5d70))
+* **Dropdown:** avoid calling onToggle when tabbing if menu ref not set ([#959](https://github.com/react-bootstrap/react-overlays/issues/959)) ([1c23c7d](https://github.com/react-bootstrap/react-overlays/commit/1c23c7d03a4bb3edaed55acc6abecd995b67ae0a))
+* allow internal tabbing in dropdown menu ([#939](https://github.com/react-bootstrap/react-overlays/issues/939)) ([30fb517](https://github.com/react-bootstrap/react-overlays/commit/30fb51753e7f763029fb75ddd4bc7333de8bc4e0))
+
+
+### Features
+
+* **Modal:** split modal types for ease of export ([#956](https://github.com/react-bootstrap/react-overlays/issues/956)) ([849ab56](https://github.com/react-bootstrap/react-overlays/commit/849ab56b181d16215ce850ea1e13c3859c40fba3))
+
+
+
+
+
 ## [5.0.1](https://github.com/react-bootstrap/react-overlays/compare/v5.0.0...v5.0.1) (2021-04-21)
 
 
