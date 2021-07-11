@@ -1,3 +1,14 @@
+## [5.1.1](https://github.com/react-bootstrap/react-overlays/compare/v5.1.0...v5.1.1) (2021-07-11)
+
+
+### Bug Fixes
+
+* **types:** fixed TransitionCallbacks interface to reflect react-transition-group args ([#962](https://github.com/react-bootstrap/react-overlays/issues/962)) ([282161c](https://github.com/react-bootstrap/react-overlays/commit/282161c74ddc129668cc7e536cce13e36ecf62de))
+
+
+
+
+
 # [5.1.0](https://github.com/react-bootstrap/react-overlays/compare/v5.0.0...v5.1.0) (2021-06-25)
 
 
