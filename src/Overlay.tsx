@@ -9,6 +9,7 @@ import usePopper, {
   UsePopperOptions,
   Offset,
   State,
+  VirtualElement,
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
@@ -22,7 +23,7 @@ export interface OverlayProps extends TransitionCallbacks {
   containerPadding?: number;
   popperConfig?: Omit<UsePopperOptions, 'placement'>;
   container?: DOMContainer;
-  target: DOMContainer;
+  target: DOMContainer<HTMLElement | VirtualElement>;
   show?: boolean;
   transition?: React.ComponentType<
     { in?: boolean; appear?: boolean } & TransitionCallbacks
@@ -69,7 +70,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
     const mergedRef = useMergedRefs<HTMLElement | null>(attachRef, outerRef);
 
     const container = useWaitForDOMRef(props.container);
-    const target = useWaitForDOMRef(props.target);
+    const target = useWaitForDOMRef<HTMLElement | VirtualElement>(props.target);
 
     const [exited, setExited] = useState(!props.show);
 
@@ -164,8 +165,8 @@ Overlay.propTypes = {
   placement: PropTypes.oneOf(placements),
 
   /**
-   * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
-   * the overlay is positioned relative to.
+   * A DOM Element, [Virtual Element](https://popper.js.org/docs/v2/virtual-elements/), Ref to an element, or
+   * function that returns either. The `target` element is where the overlay is positioned relative to.
    */
   target: PropTypes.any,
 

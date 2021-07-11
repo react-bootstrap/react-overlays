@@ -1,13 +1,12 @@
 import ownerDocument from 'dom-helpers/ownerDocument';
 import { useState, useEffect } from 'react';
+import { VirtualElement } from './usePopper';
 
-export type DOMContainer<T extends HTMLElement = HTMLElement> =
-  | T
-  | React.RefObject<T>
-  | null
-  | (() => T | React.RefObject<T> | null);
+export type DOMContainer<
+  T extends HTMLElement | VirtualElement = HTMLElement
+> = T | React.RefObject<T> | null | (() => T | React.RefObject<T> | null);
 
-export const resolveContainerRef = <T extends HTMLElement>(
+export const resolveContainerRef = <T extends HTMLElement | VirtualElement>(
   ref: DOMContainer<T> | undefined,
 ): T | HTMLBodyElement | null => {
   if (typeof document === 'undefined') return null;
@@ -15,12 +14,14 @@ export const resolveContainerRef = <T extends HTMLElement>(
   if (typeof ref === 'function') ref = ref();
 
   if (ref && 'current' in ref) ref = ref.current;
-  if (ref?.nodeType) return ref || null;
+  if (ref && ('nodeType' in ref || ref.getBoundingClientRect)) return ref;
 
   return null;
 };
 
-export default function useWaitForDOMRef<T extends HTMLElement = HTMLElement>(
+export default function useWaitForDOMRef<
+  T extends HTMLElement | VirtualElement = HTMLElement
+>(
   ref: DOMContainer<T> | undefined,
   onResolved?: (element: T | HTMLBodyElement) => void,
 ) {

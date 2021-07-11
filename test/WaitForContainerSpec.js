@@ -28,10 +28,59 @@ describe('useWaitForDOMRef', () => {
     onResolved.should.have.been.calledOnce;
   });
 
-  it('should resolve on first render if possible (ref)', () => {
+  it('should resolve on first render if possible (Virtual Element)', () => {
+    let renderCount = 0;
+    const container = {
+      getBoundingClientRect: () => new DOMRect(),
+    };
+
+    function Test({ container, onResolved }) {
+      useWaitForDOMRef(container, onResolved);
+      renderCount++;
+      return null;
+    }
+
+    const onResolved = sinon.spy((resolved) => {
+      expect(resolved).to.equal(container);
+    });
+
+    act(() => {
+      mount(<Test container={container} onResolved={onResolved} />);
+    });
+
+    renderCount.should.equal(1);
+    onResolved.should.have.been.calledOnce;
+  });
+
+  it('should resolve on first render if possible (element ref)', () => {
     let renderCount = 0;
     const container = React.createRef();
     container.current = document.createElement('div');
+
+    function Test({ container, onResolved }) {
+      useWaitForDOMRef(container, onResolved);
+      renderCount++;
+      return null;
+    }
+
+    const onResolved = sinon.spy((resolved) => {
+      expect(resolved).to.equal(container.current);
+    });
+
+    act(() => {
+      mount(<Test container={container} onResolved={onResolved} />);
+    });
+
+    renderCount.should.equal(1);
+    onResolved.should.have.been.calledOnce;
+  });
+
+  it('should resolve on first render if possible (Virtual Element ref)', () => {
+    let renderCount = 0;
+    const container = React.createRef();
+    container.current = {
+      getBoundingClientRect: () => new DOMRect(),
+    };
 
     function Test({ container, onResolved }) {
       useWaitForDOMRef(container, onResolved);
