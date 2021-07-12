@@ -14,17 +14,17 @@
     "@emotion/styled": "^10.0.27",
     "astroturf": "^0.10.5",
     "bootstrap": "^4.6.0",
-    "dom-helpers": "^5.2.0",
+    "dom-helpers": "^5.2.1",
     "emotion": "^10.0.27",
-    "gatsby": "^2.32.11",
+    "gatsby": "^2.32.13",
     "gatsby-plugin-astroturf": "^0.2.1",
     "gatsby-plugin-sass": "^2.8.0",
     "lodash": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-transition-group": "^4.4.1",
-    "sass": "^1.32.8"
+    "react-transition-group": "^4.4.2",
+    "sass": "^1.35.2"
   },
   "resolutions": {
     "ast-types": "^0.14.2"
