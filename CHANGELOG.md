@@ -1,3 +1,14 @@
+## [5.1.2](https://github.com/react-bootstrap/react-overlays/compare/v5.1.1...v5.1.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* update @restart/hooks to 0.4.7 ([#999](https://github.com/react-bootstrap/react-overlays/issues/999)) ([82d9bf9](https://github.com/react-bootstrap/react-overlays/commit/82d9bf9ffe6c6055d4a1f31c74822f82bb24b3b2))
+
+
+
+
+
 ## [5.1.1](https://github.com/react-bootstrap/react-overlays/compare/v5.1.0...v5.1.1) (2021-07-11)
 
 
