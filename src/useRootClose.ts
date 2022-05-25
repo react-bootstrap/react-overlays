@@ -66,7 +66,7 @@ function useRootClose(
         !currentTarget ||
         isModifiedEvent(e) ||
         !isLeftClickEvent(e) ||
-        !!contains(currentTarget, e.target);
+        !!contains(currentTarget, typeof e.composedPath === 'function' ? e.composedPath()[0] : e.target);
     },
     [ref],
   );

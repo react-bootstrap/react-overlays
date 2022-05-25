@@ -7,18 +7,51 @@ import { mount } from 'enzyme';
 import useRootClose from '../src/useRootClose';
 
 const escapeKeyCode = 27;
+const configs = [
+  {
+    description: '',
+    useShadowRoot: false
+  },
+  {
+    description: 'with shadow root',
+    useShadowRoot: true
+  },
+]
+// Wrap simulant's created event to add composed: true, which is the default
+// for most events.
+const fire = (node, event, params) => {
+  const simulatedEvent = simulant(event, params);
+  const fixedEvent = new simulatedEvent.constructor(
+    simulatedEvent.type,
+    {
+      bubbles: simulatedEvent.bubbles,
+      button: simulatedEvent.button,
+      cancelable: simulatedEvent.cancelable,
+      composed: true,
+    },
+  );
+  fixedEvent.keyCode = simulatedEvent.keyCode;
+  node.dispatchEvent(fixedEvent);
+  return fixedEvent;
+}
 
-describe('useRootClose', () => {
-  let attachTo;
+// eslint-disable-next-line mocha/no-setup-in-describe
+configs.map((config) => describe(`useRootClose ${config.description}`, () => {
+  let attachTo, renderRoot, myDiv;
 
   beforeEach(() => {
-    attachTo = document.createElement('div');
-    document.body.appendChild(attachTo);
+    renderRoot = document.createElement('div');
+    if (config.useShadowRoot) {
+      renderRoot.attachShadow({ mode: 'open' })
+    }
+    document.body.appendChild(renderRoot);
+    attachTo = config.useShadowRoot ? renderRoot.shadowRoot : renderRoot;
+    myDiv = () => attachTo.querySelector('#my-div');
   });
 
   afterEach(() => {
-    ReactDOM.unmountComponentAtNode(attachTo);
-    document.body.removeChild(attachTo);
+    ReactDOM.unmountComponentAtNode(renderRoot);
+    document.body.removeChild(renderRoot);
   });
 
   describe('using default event', () => {
@@ -56,11 +89,11 @@ describe('useRootClose', () => {
 
       mount(<Wrapper onRootClose={spy} />, { attachTo });
 
-      simulant.fire(document.getElementById('my-div'), eventName);
+      fire(myDiv(), eventName);
 
       expect(spy).to.not.have.been.called;
 
-      simulant.fire(document.body, eventName);
+      fire(document.body, eventName);
 
       expect(spy).to.have.been.calledOnce;
 
@@ -71,13 +104,11 @@ describe('useRootClose', () => {
       let spy = sinon.spy();
       mount(<Wrapper onRootClose={spy} />, { attachTo });
 
-      simulant.fire(document.getElementById('my-div'), eventName, {
-        button: 1,
-      });
+      fire(myDiv(), eventName, { button: 1, });
 
       expect(spy).to.not.have.been.called;
 
-      simulant.fire(document.body, eventName, { button: 1 });
+      fire(document.body, eventName, { button: 1 });
 
       expect(spy).to.not.have.been.called;
     });
@@ -86,11 +117,11 @@ describe('useRootClose', () => {
       let spy = sinon.spy();
       mount(<Wrapper onRootClose={spy} disabled />, { attachTo });
 
-      simulant.fire(document.getElementById('my-div'), eventName);
+      fire(myDiv(), eventName);
 
       expect(spy).to.not.have.been.called;
 
-      simulant.fire(document.body, eventName);
+      fire(document.body, eventName);
 
       expect(spy).to.not.have.been.called;
     });
@@ -124,7 +155,7 @@ describe('useRootClose', () => {
 
       mount(<Outer />, { attachTo });
 
-      simulant.fire(document.getElementById('my-div'), eventName);
+      fire(myDiv(), eventName);
 
       expect(outerSpy).to.have.not.been.called;
       expect(innerSpy).to.have.been.calledOnce;
@@ -158,7 +189,7 @@ describe('useRootClose', () => {
 
       expect(spy).to.not.have.been.called;
 
-      simulant.fire(document.body, 'keyup', { keyCode: escapeKeyCode });
+      fire(document.body, 'keyup', { keyCode: escapeKeyCode });
 
       expect(spy).to.have.been.calledOnce;
 
@@ -182,7 +213,7 @@ describe('useRootClose', () => {
         </Wrapper>,
       );
 
-      simulant.fire(document.body, 'keyup', { keyCode: escapeKeyCode });
+      fire(document.body, 'keyup', { keyCode: escapeKeyCode });
 
       // TODO: Update to match expectations.
       // expect(outerSpy).to.have.not.been.called;
@@ -193,4 +224,4 @@ describe('useRootClose', () => {
       expect(innerSpy.getCall(0).args[0].type).to.be.equal('keyup');
     });
   });
-});
+}));
