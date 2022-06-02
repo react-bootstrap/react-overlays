@@ -1,3 +1,14 @@
+# [5.2.0](https://github.com/react-bootstrap/react-overlays/compare/v5.1.2...v5.2.0) (2022-06-02)
+
+
+### Features
+
+* **useRootClose:** add support for open shadow roots ([#1004](https://github.com/react-bootstrap/react-overlays/issues/1004)) ([3b7fb53](https://github.com/react-bootstrap/react-overlays/commit/3b7fb53d4b2141bbffa476608dfa1c0f694fa429))
+
+
+
+
+
 ## [5.1.2](https://github.com/react-bootstrap/react-overlays/compare/v5.1.1...v5.1.2) (2022-05-10)
 
 
