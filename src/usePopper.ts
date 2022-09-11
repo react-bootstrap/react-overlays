@@ -16,7 +16,7 @@ const initialPopperStyles = (
 const disabledApplyStylesModifier = { name: 'applyStyles', enabled: false };
 
 // until docjs supports type exports...
-export type Modifier<Name, Options> = Popper.Modifier<Name, Options>;
+export type Modifier<Name, Options extends Popper.Obj> = Popper.Modifier<Name, Options>;
 export type Options = Popper.Options;
 export type Instance = Popper.Instance;
 export type Placement = Popper.Placement;
