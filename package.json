@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.13.8",
-    "@popperjs/core": "^2.8.6",
+    "@popperjs/core": "^2.11.6",
     "@restart/hooks": "^0.4.7",
     "@types/warning": "^3.0.0",
     "dom-helpers": "^5.2.0",
