@@ -1,3 +1,14 @@
+## [5.2.1](https://github.com/react-bootstrap/react-overlays/compare/v5.2.0...v5.2.1) (2022-09-16)
+
+
+### Bug Fixes
+
+* **usePopper:** fix exported Modifier type ([#1013](https://github.com/react-bootstrap/react-overlays/issues/1013)) ([96b3425](https://github.com/react-bootstrap/react-overlays/commit/96b34251baf534d146a6cf84bb3f20dda451db5b))
+
+
+
+
+
 # [5.2.0](https://github.com/react-bootstrap/react-overlays/compare/v5.1.2...v5.2.0) (2022-06-02)
 
 
