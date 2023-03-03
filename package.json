@@ -1,9 +1,13 @@
 {
-  "name": "react-overlays",
+  "name": "react-overlays-1.x-react17",
+  "author": "Jason Quense <monastic.panic@gmail.com>",
   "version": "1.2.0",
   "description": "Utilities for creating robust overlay components",
-  "author": "Jason Quense <monastic.panic@gmail.com>",
-  "repository": "react-bootstrap/react-overlays",
+  "homepage": "https://github.com/landbased/react-overlays",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/landbased/react-overlays"
+  }, 
   "license": "MIT",
   "main": "lib/index.js",
   "module": "lib/es/index.js",
