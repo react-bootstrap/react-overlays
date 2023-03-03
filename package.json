@@ -1,7 +1,7 @@
 {
   "name": "react-overlays-1.x-react17",
   "author": "Jason Quense <monastic.panic@gmail.com>",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Utilities for creating robust overlay components",
   "homepage": "https://github.com/landbased/react-overlays",
   "repository": {
