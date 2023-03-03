@@ -1,8 +1,8 @@
 {
-  "name": "react-overlays-1.x-react17",
+  "name": "gbst-react-overlays",
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "version": "1.2.1",
-  "description": "Utilities for creating robust overlay components",
+  "description": "A fork of react-overlays for GBST needs",
   "homepage": "https://github.com/landbased/react-overlays",
   "repository": {
     "type": "git",
