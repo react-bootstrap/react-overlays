@@ -1,5 +1,5 @@
 
-> **HEADS UP!** this repo is deprecated and not receicing any more updates. 
+> **HEADS UP!** this repo is deprecated and not receiving any more updates. 
 > 
 > Don't worry though, that's because it's been succeeded by https://github.com/react-restart/ui which is built off of react-overlays by the same 
 team.
