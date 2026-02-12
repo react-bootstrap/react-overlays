@@ -11,7 +11,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 12.x
+          node-version: 12.22.12
       - name: Install Dependencies
         run: yarn bootstrap
       - name: Build and Deploy Production Files
